@@ -49,7 +49,7 @@ module.exports = (_env, argv) =>
       ],
     },
     resolve: {
-      extensions: ['.ts', '.tsx'],
+      extensions: ['.ts', '.tsx', '.js'],
       symlinks: false,
     },
     // Set appropriate process.env.NODE_ENV

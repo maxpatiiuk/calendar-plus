@@ -13,7 +13,6 @@
   "bugs": {
     "url": "https://github.com/maxxxxxdlp/calendar-stats/issues"
   },
-  "type": "module",
   "scripts": {
     "build": "npx webpack --mode production",
     "watch": "npx webpack --mode development --watch",
