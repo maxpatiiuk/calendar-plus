@@ -1,9 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+/src/dist
 /src/node_modules
-/src/.pnp
-/src/.pnp.js
 
 # testing
 /src/coverage

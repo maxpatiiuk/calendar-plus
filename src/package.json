@@ -1,41 +1,94 @@
 {
-  "name": "web-dev",
-  "version": "0.1.0",
+  "name": "calendar-stats",
+  "version": "1.0.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+  "description": "A Chrome extension for Google Calendar that allows to easily see what you spend your time, get insights on and set goals",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxxxxxdlp/calendar-stats.git"
+  },
+  "author": "EECS 581 Team 19",
+  "homepage": "https://github.com/maxxxxxdlp/calendar-stats#readme",
+  "bugs": {
+    "url": "https://github.com/maxxxxxdlp/calendar-stats/issues"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npx webpack --mode production",
+    "watch": "npx webpack --mode development --watch",
+    "test": "npm run typeCheck && npm run unitTests",
+    "typeCheck": "tsc",
+    "unitTests": "jest",
+    "unitTests:coverage": "jest --coverage",
+    "unitTests:watch": "jest --watch"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "@headlessui/react": "^1.6.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typesafe-reducer": "^1.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/plugin-transform-modules-commonjs": "^7.18.6",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@maxxxxxdlp/eslint-config-react": "^1.0.2",
+    "@maxxxxxdlp/prettier-config": "^1.0.4",
+    "@maxxxxxdlp/stylelint-config": "^1.0.0",
+    "@rushstack/eslint-patch": "^1.1.4",
+    "@stylelint/postcss-css-in-js": "^0.38.0",
+    "@tailwindcss/forms": "^0.5.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.7.9",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "autoprefixer": "10.4.5",
+    "babel-loader": "^8.2.5",
+    "core-js": "^3.23.4",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.20.0",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
+    "jest-fail-on-console": "^2.4.2",
+    "jest-silent-reporter": "^0.5.0",
+    "jest-skipped-reporter": "^0.0.5",
+    "jsdom-global": "^3.0.2",
+    "loader-utils": "^3.2.0",
+    "node-notifier": "^10.0.1",
+    "postcss": "^8.4.14",
+    "postcss-loader": "^7.0.1",
+    "postcss-preset-env": "^7.7.2",
+    "prettier": "^2.7.1",
+    "regenerator-runtime": "^0.13.9",
+    "style-loader": "^3.3.1",
+    "stylelint": "^14.1.0",
+    "tailwindcss": "^3.1.6",
+    "ts-jest": "^28.0.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.6.2",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 2 years",
+      "> 1% in US",
+      "not ie <= 11",
+      "not dead"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 2 Chrome versions",
+      "last 2 Firefox versions",
+      "last 1 Safari version"
     ]
   },
-  "devDependencies": {
-    "tailwindcss": "^3.1.8"
-  }
+  "directories": {
+    "test": "tests"
+  },
+  "prettier": "@maxxxxxdlp/prettier-config"
 }
