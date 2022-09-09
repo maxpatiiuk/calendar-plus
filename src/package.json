@@ -15,8 +15,10 @@
   },
   "type": "module",
   "scripts": {
+    "build": "npx webpack --mode production",
+    "watch": "npx webpack --mode development --watch",
     "test": "npm run typecheck && npm run unitTests",
-    "typecheck": "tsc",
+    "typeCheck": "tsc",
     "unitTests": "jest",
     "unitTests:coverage": "jest --coverage",
     "unitTests:watch": "jest --watch"

@@ -1,0 +1,33 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: src/package-lock.json
+
+      - name: Build front-end
+        working-directory: src
+        run: npx webpack --mode production
+
+      - name: TypeCheck front-end
+        working-directory: src
+        run: npm run typeCheck
+
+        # See https://jestjs.io/docs/troubleshooting#tests-are-extremely-slow-on-docker-andor-continuous-integration-ci-server
+      - name: Get number of CPU cores
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
+      - name: Run JS test suite
+        working-directory: src
+        run: |
+          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }} && \
