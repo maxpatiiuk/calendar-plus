@@ -1,3 +1,4 @@
+{
   /* File Inclusion */
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],

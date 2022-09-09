@@ -1,19 +1,4 @@
-/**
- * Jest currently has two solutions for running TypeScript files:
- *   - babel-jest
- *   - ts-ject
- *
- * ts-jest has great source map support and does TypeChecking
- * It would have been a preferered option, except for the fact that
- * ESModule style imports are not currently well supported by Jest (
- * support for jest.mock() in ESM is not full (see
- * https://github.com/facebook/jest/issues/9430).
- *
- * Thus, we mush use "babel-jest", which transpiles ESM into CommonJS and TypeScript
- * into JavaScript (without type checking).
- */
-
-import type { Config } from '@jest/types';
+import type { InitialOptionsTsJest } from 'ts-jest'
 
 /* eslint-disable multiline-comment-style */
 /* eslint-disable capitalized-comments */
@@ -23,7 +8,7 @@ import type { Config } from '@jest/types';
  * https://jestjs.io/docs/configuration
  */
 
-const config: Config.InitialOptions = {
+const config: InitialOptionsTsJest = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -86,7 +71,11 @@ const config: Config.InitialOptions = {
 
   // A set of global variables that need to be available in all test environments
   // NOTE: these must be JSON serializable
-  // globals: {},
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    }
+  },
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: "50%",
@@ -112,6 +101,7 @@ const config: Config.InitialOptions = {
   // moduleNameMapper: {},
   // See https://jestjs.io/docs/webpack
   moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
     '\\.(jpg|jpeg|png|webp|svg|ttf|webm)$':
       '<rootDir>/src/tests/__mocks__/fileMock.ts',
     '\\.(css)$': '<rootDir>/src/tests/__mocks__/styleFileMock.ts',
@@ -127,7 +117,7 @@ const config: Config.InitialOptions = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  preset: 'ts-jest/presets/default-esm',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -196,13 +186,15 @@ const config: Config.InitialOptions = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    '**/__tests__/**/*.test.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[tj]s?(x)',
-  ],
+  // testMatch: [
+  //   '**/__tests__/**/*.test.[jt]s?(x)',
+  //   '**/?(*.)+(spec|test).[tj]s?(x)',
+  // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [],
+  // testPathIgnorePatterns: [
+  //   "/node_modules/"
+  // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -214,7 +206,7 @@ const config: Config.InitialOptions = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  // transform: {},
+  transform: {},
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
