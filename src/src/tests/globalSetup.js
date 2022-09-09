@@ -1,4 +1,4 @@
 /** Make all tests use UTC, rather than local time zone */
-export default function globalSetup() {
+module.exports = () => {
   process.env.TZ = 'UTC';
 }

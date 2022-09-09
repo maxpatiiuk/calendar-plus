@@ -16,7 +16,7 @@
   "scripts": {
     "build": "npx webpack --mode production",
     "watch": "npx webpack --mode development --watch",
-    "test": "npm run typecheck && npm run unitTests",
+    "test": "npm run typeCheck && npm run unitTests",
     "typeCheck": "tsc",
     "unitTests": "jest",
     "unitTests:coverage": "jest --coverage",
