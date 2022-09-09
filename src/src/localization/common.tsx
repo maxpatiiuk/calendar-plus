@@ -7,6 +7,8 @@ import { createDictionary } from './utils';
 // REFACTOR: get rid of "exampleDialogText" in favor of just "example" ?
 export const commonText = createDictionary({
   calendarStats: { 'en-us': 'Calendar Stats' },
+  fullDate: { 'en-us': 'Full Date' },
+  loading: { 'en-us': 'Loading...' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

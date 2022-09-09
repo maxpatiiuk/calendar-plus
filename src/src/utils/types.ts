@@ -52,3 +52,13 @@ export type Writable<T> = {
  * way, don't have to manually specify the generic type
  */
 export const writable = <T>(value: T): Writable<T> => value;
+
+/**
+ * "typeof value === 'function'" does not narrow the type in some cases where
+ * a generic is involed
+ * See more: https://github.com/microsoft/TypeScript/issues/37663
+ */
+export const isFunction = <T>(
+  value: T
+): value is T & ((...args: RA<unknown>) => unknown) =>
+  typeof value === 'function';

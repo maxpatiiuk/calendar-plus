@@ -4,10 +4,10 @@
  * @module
  */
 
-import { f } from '../utils/functools';
 import { camelToHuman } from '../utils/utils';
 import type { IR, RA, RR } from '../utils/types';
 import { isFunction } from '../utils/types';
+import {f} from '../utils/functools';
 
 export const languages = ['en-us'] as const;
 
@@ -101,7 +101,7 @@ export const whitespaceSensitive = (string: string): string =>
   string
     .trim()
     .split('\n')
-    .map(f.trim)
+    .map((line) => line.trim())
     .filter(Boolean)
     .join(' ')
     .replace(/<br>\s?/u, '\n');
