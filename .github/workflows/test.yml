@@ -34,4 +34,4 @@ jobs:
 
       - name: Run JS test suite
         run: |
-          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }} && \
+          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}
