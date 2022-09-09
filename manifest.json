@@ -1,0 +1,60 @@
+{
+  "name": "Google Calendar Stats",
+  "short_name": "GCal Stats",
+  "version": "1.0.0",
+  "description": "A Chrome extension for Google Calendar that allows to easily see what you spend your time, get insights on and set goals",
+  "author": "EECS 581 Team 19",
+  "key": "TODO: provide a key",
+  "oauth": {
+    "client_id": "TODO: provide client id",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly"
+    ]
+  },
+  "manifest_version": 3,
+  "icons": {
+    "//": "TODO: provide icons",
+    "16": "./images/extension_icon_16x16.png",
+    "32": "./images/extension_icon_32x32.png",
+    "48": "./images/extension_icon_48x48.png",
+    "128": "./images/extension_icon_128x128.png"
+  },
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "action": {
+    "default_popup": "./popup.html",
+    "default_title": "See Stats",
+    "default_icons": {
+      "16": "./images/extension_icon_16x16.png",
+      "32": "./images/extension_icon_32x32.png",
+      "48": "./images/extension_icon_48x48.png",
+      "128": "./images/extension_icon_128x128.png"
+    }
+  },
+  "current_locale": "en",
+  "options_page": "./options.html",
+  "permissions": [
+    "identity",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://calendar.google.com/calendar/u/0/r/*"
+      ],
+      "css": [
+        "./foreground_styles.css"
+      ],
+      "js": [
+        "./foreground.js"
+      ]
+    }
+  ],
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  }
+}
