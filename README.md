@@ -1,7 +1,33 @@
-# EECS 581 Team 19 Project
+# Calendar Stats
 
-## /web-dev/ Folder Basic Usage:
-- `npm start` to run the development server
-- `npm test` to run the Jest test suite
+A Chrome extension for Google Calendar that allows to easily see what you spend
+your time, get insights on and set goals
 
-// TODO: update this
+## Installation
+
+Pre-requisites:
+
+```
+Node.js 18
+Npm 8
+```
+
+Install dependencies:
+
+```
+npm install
+```
+
+## Running
+
+Build the front-end for production:
+
+```
+npx webpack --mode production 
+```
+
+Or, start the watcher script in development mode
+
+```
+npx webpack --mode development --watch
+```
