@@ -23,7 +23,7 @@
     "unitTests:watch": "jest --watch"
   },
   "dependencies": {
-    "@headlessui/react": "^1.6.6",
+    "@headlessui/react": "^1.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typesafe-reducer": "^1.0.3"
