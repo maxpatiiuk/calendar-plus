@@ -9,6 +9,7 @@ export const commonText = createDictionary({
   calendarStats: { 'en-us': 'Calendar Stats' },
   fullDate: { 'en-us': 'Full Date' },
   loading: { 'en-us': 'Loading...' },
+  close: { 'en-us': 'Close' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */
