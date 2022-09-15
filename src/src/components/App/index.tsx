@@ -9,7 +9,7 @@ export function App() {
   return (
     <>
       <button type="button" onClick={handleToggle} aria-pressed={isOpen}>
-        {commonText('calendarStats')}
+        {commonText('calendarPlus')}
       </button>
       {isOpen && (
         <Portal>

@@ -1,4 +1,4 @@
-# Calendar Stats
+# Calendar Plus 
 
 A Chrome extension for Google Calendar that allows to easily see what you spend
 your time, get insights on and set goals

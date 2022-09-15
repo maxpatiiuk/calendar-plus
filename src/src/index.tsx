@@ -20,4 +20,4 @@ if (typeof container === 'object') {
       </Contexts>
     </React.StrictMode>
   );
-} else console.error('Failed to attach Calendar Stats plugin');
+} else console.error('Failed to attach Calendar Plus plugin');
