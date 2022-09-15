@@ -8,6 +8,8 @@ module.exports = {
   content: ['./src/**/*.{ts,tsx,js}'],
   // Disable unneeded components to reduce performance impact
   corePlugins: {
+    // Tailwind style reset breaks Google Calendar styling
+    preflight: false,
     float: false,
     clear: false,
     skew: false,
@@ -68,10 +70,8 @@ module.exports = {
           '0%': { filter: 'hue-rotate(0deg)' },
           '100%': { filter: 'hue-rotate(360deg)' },
         },
-      }
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 };
