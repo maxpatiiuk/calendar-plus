@@ -3,7 +3,7 @@ import './css/main.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { App } from './components';
+import { App } from './components/App';
 import { Contexts } from './components/Core/Contexts';
 
 const container =

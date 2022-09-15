@@ -1,21 +1,24 @@
 import React from 'react';
 import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { Portal } from '../Molecules/Portal';
 
 export function App() {
-  const [isOpen, handleOpen, handleClose] = useBooleanState();
+  const [isOpen, _, handleClose, handleToggle] = useBooleanState();
 
   return (
     <>
-      <button type="button" onClick={handleOpen}>
+      <button type="button" onClick={handleToggle} aria-pressed={isOpen}>
         {commonText('calendarStats')}
       </button>
       {isOpen && (
-        <div className="absolute inset-0 z-10 h-screen w-screen bg-white">
-          <button type="button" onClick={handleClose}>
-            {commonText('close')}
-          </button>
-        </div>
+        <Portal>
+          <div>
+            <button type="button" onClick={handleClose}>
+              {commonText('close')}
+            </button>
+          </div>
+        </Portal>
       )}
     </>
   );

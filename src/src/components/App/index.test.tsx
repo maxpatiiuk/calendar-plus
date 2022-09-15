@@ -1,9 +1,12 @@
 import React from 'react';
-import { App } from './App';
-import {mount} from '../../tests/reactUtils';
+import { App } from './index';
+import { mount } from '../../tests/reactUtils';
+import { commonText } from '../../localization/common';
 
 test('renders a button', () => {
-  const {getByRole } = mount(<App />);
-  const linkElement = getByRole('button', { name: /Click me/u });
+  const { getByRole } = mount(<App />);
+  const linkElement = getByRole('button', {
+    name: commonText('calendarStats'),
+  });
   expect(linkElement).toBeInTheDocument();
 });
