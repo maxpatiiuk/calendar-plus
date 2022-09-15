@@ -54,8 +54,12 @@ module.exports = (_env, argv) =>
     },
     // Set appropriate process.env.NODE_ENV
     mode: argv.mode,
-    // User recommended source map types appropriate for each mode
-    devtool: argv.mode === 'development' ? 'eval-source-map' : 'source-map',
+    /*
+     * User recommended source map type in production
+     * Can't use the recommended "eval-source-map" in development due to
+     * https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
+     */
+    devtool: argv.mode === 'development' ? 'cheap-module-source-map' : 'source-map',
     entry: {
       main: './src/index.tsx',
     },
@@ -63,7 +67,7 @@ module.exports = (_env, argv) =>
       path: outputPath,
       clean: true,
       publicPath: '/public/',
-      filename: '[name].[contenthash].bundle.js',
+      filename: '[name].bundle.js',
       environment: {
         arrowFunction: true,
         const: true,
