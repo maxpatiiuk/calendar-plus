@@ -31,7 +31,7 @@ module.exports = (_env, argv) =>
                     {
                       useBuiltIns: 'usage',
                       corejs: {
-                        version: '3.23.4',
+                        version: '3.25.2',
                         proposals: true,
                       },
                       bugfixes: true,
