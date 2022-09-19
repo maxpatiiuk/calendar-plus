@@ -1,10 +1,11 @@
 import React from 'react';
 
-import {crash, error} from '../Errors/assert';
+import { crash, error } from '../Errors/assert';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { ErrorBoundary } from '../Errors/ErrorBoundary';
-import {useBooleanState} from '../../hooks/useBooleanState';
+import { useBooleanState } from '../../hooks/useBooleanState';
+import { TrackCurrentView } from './CurrentViewContext';
 
 /**
  * Provide contexts used by other components
@@ -43,15 +44,17 @@ export function Contexts({
   );
 
   return (
-      <ErrorBoundary>
-          <LoadingContext.Provider key="loadingContext" value={loadingHandler}>
-            {/* FEATURE: replace this with a toast, dialog, or status line*/}
-            {isLoading && commonText('loading')}
-              <React.Suspense fallback={<>{commonText('loading')}</>}>
-                {children}
-              </React.Suspense>
-          </LoadingContext.Provider>
-      </ErrorBoundary>
+    <ErrorBoundary>
+      <LoadingContext.Provider key="loadingContext" value={loadingHandler}>
+        <TrackCurrentView>
+          {/* FEATURE: replace this with a toast, dialog, or status line*/}
+          {isLoading && commonText('loading')}
+          <React.Suspense fallback={<>{commonText('loading')}</>}>
+            {children}
+          </React.Suspense>
+        </TrackCurrentView>
+      </LoadingContext.Provider>
+    </ErrorBoundary>
   );
 }
 

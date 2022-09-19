@@ -59,9 +59,11 @@ module.exports = (_env, argv) =>
      * Can't use the recommended "eval-source-map" in development due to
      * https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
      */
-    devtool: argv.mode === 'development' ? 'cheap-module-source-map' : 'source-map',
+    devtool:
+      argv.mode === 'development' ? 'cheap-module-source-map' : 'source-map',
     entry: {
       main: './src/index.tsx',
+      background: './src/components/Background/index.ts',
     },
     output: {
       path: outputPath,
