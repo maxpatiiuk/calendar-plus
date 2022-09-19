@@ -12,10 +12,15 @@ import { Contexts } from './components/Core/Contexts';
  * like header and aria-label.
  * Currently, the selector finds the search button in the header, and selects
  * one of the parent containers of that button.
+ *
+ * Can't look for the search button by [aria-label] attribute, as that attribute
+ * is localizable (has different value depending on user's language).
  */
 const container =
-  document.querySelector('header div[aria-label="Search"]')?.parentElement
-    ?.parentElement ?? undefined;
+  Array.from(
+    document.querySelectorAll('header div[aria-label][role="button"]')
+  ).find((item) => item.querySelector('i')?.textContent === 'search')
+    ?.parentElement?.parentElement ?? undefined;
 if (typeof container === 'object') {
   const reactContainer = document.createElement('div');
   container.prepend(reactContainer);

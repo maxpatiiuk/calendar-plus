@@ -30,11 +30,11 @@ export function App() {
       </button>
       {isOpen && (
         <Portal>
-          <div>
+          <main>
             <button type="button" onClick={handleClose}>
               {commonText('close')}
             </button>
-          </div>
+          </main>
         </Portal>
       )}
     </>
