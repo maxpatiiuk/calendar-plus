@@ -2,9 +2,26 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { Portal } from '../Molecules/Portal';
+import { useEffect } from "react";
+
 
 export function App() {
   const [isOpen, _, handleClose, handleToggle] = useBooleanState();
+
+  useEffect(() => {
+
+    const escFunction = (event: { key: string; }) => {
+      if (event.key === "Escape") {
+        handleClose()
+      }
+    };
+
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
 
   return (
     <>
@@ -21,5 +38,6 @@ export function App() {
         </Portal>
       )}
     </>
+    
   );
 }
