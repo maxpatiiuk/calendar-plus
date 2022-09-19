@@ -16,6 +16,9 @@
     "identity",
     "storage"
   ],
+  "background": {
+    "service_worker":"./src/dist/background.bundle.js"
+  },
   "content_scripts": [
     {
       "matches": [

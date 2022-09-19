@@ -2,9 +2,29 @@ import React from 'react';
 import { App } from './index';
 import { mount } from '../../tests/reactUtils';
 import { commonText } from '../../localization/common';
+import { CurrentViewContext } from '../Core/CurrentViewContext';
+import { testTime } from '../../tests/helpers';
 
-test('renders a button', () => {
-  const { getByRole } = mount(<App />);
+test('does not render until current date is extracted', () => {
+  const { container } = mount(
+    <CurrentViewContext.Provider value={undefined}>
+      <App />
+    </CurrentViewContext.Provider>
+  );
+  expect(container.textContent).toEqual('');
+});
+
+test('renders a button after current date is extracted', () => {
+  const { getByRole } = mount(
+    <CurrentViewContext.Provider
+      value={{
+        view: 'day',
+        date: testTime,
+      }}
+    >
+      <App />
+    </CurrentViewContext.Provider>
+  );
   const linkElement = getByRole('button', {
     name: commonText('calendarPlus'),
   });
