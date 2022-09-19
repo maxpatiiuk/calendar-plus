@@ -24,13 +24,7 @@ export function Portal({
     const portalId = {};
     portalStack.add(portalId);
 
-    const header = document.querySelector('header');
-    if (header === null) throw new Error('Unable to find app header');
-
-    // Nearest parent for header, main content and portal container
-    const commonContainer = header.parentElement!;
-
-    const mainContainer = findMainContainer(commonContainer);
+    const mainContainer = findMainContainer();
     if (mainContainer === undefined)
       throw new Error('Unable to find main container');
 
@@ -40,6 +34,9 @@ export function Portal({
     // Create a container that would house the React portal
     if (portalRoot === undefined) {
       portalRoot = document.createElement('div');
+
+      // Nearest parent for both main content and portal container
+      const commonContainer = mainContainer.parentElement!;
       commonContainer.appendChild(portalRoot);
     }
     portalRoot.append(element);
@@ -57,7 +54,5 @@ export function Portal({
 /**
  * Find container that shows Google Calendar's main content
  */
-const findMainContainer = (parent: HTMLElement): Element | undefined =>
-  Array.from(parent.children).find(
-    (container) => container.querySelector('[aria-label="Side panel"') !== null
-  );
+const findMainContainer = (): Element | undefined =>
+  document.querySelector('[role="main"]') ?? undefined;
