@@ -5,15 +5,15 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Core/CurrentViewContext';
 
-const testWidgets = [
-  ["Header 1", "Body 1"],
-  ["Header 2", "Body 2"],
-  ["Header 3", "Body 3"],
-  ["Header 4", "Body 4"],
-  ["Header 5", "Body 5"],
-  ["Header 6", "Body 6"],
-  ["Header 7", "Body 7"],
-  ["Header 8", "Body 8"],
+const testWidgets : Array<WidgetObj> = [
+  { header: "Header 1", body: "Body 1", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 2", body: "Body 2", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 3", body: "Body 3", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 4", body: "Body 4", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 5", body: "Body 5", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 6", body: "Body 6", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 7", body: "Body 7", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
+  { header: "Header 8", body: "Body 8", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" }
 ]
 
 export function App(): JSX.Element | null {

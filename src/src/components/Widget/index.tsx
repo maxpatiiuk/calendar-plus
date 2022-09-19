@@ -1,12 +1,11 @@
 import React from 'react';
-import "./widget.css"
 
-export const Widget = (props: { headerText: string ; bodyText: string; }) => {
+export const Widget = (props: { widgObj: WidgetObj }) => {
 
     return (
-        <div className='widget'>
-            <h2>Widget Header: {props.headerText}</h2>
-            <h6>Widget Body: {props.bodyText}</h6>
+        <div className={props.widgObj.class} >
+            <h2>Widget Header: {props.widgObj.header}</h2>
+            <h6>Widget Body: {props.widgObj.body}</h6>
         </div>
     );
 }

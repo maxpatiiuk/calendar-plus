@@ -2,21 +2,21 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { Widget } from '../Widget';
 
-export const Dashboard = (props: { closeHandler: () => void; widgets: Array<Array<string>> }) => {
+export const Dashboard = (props: { closeHandler: () => void; widgets: Array<WidgetObj> }) => {
     
     // NOTE: We might need to change the spacing a bit to center header better
     return (
         <> 
-            <div id="dash-header" style={{ display: "flex", flexDirection: "row", width: "100%"}}>
+            <div className='flex flex-row' >
                 
-                <h1 style={{margin: "0 auto", textAlign: "center"}}>DASHBOARD</h1>
+                <h1 className='mx-auto my-0 text-center'>DASHBOARD</h1>
                 <button type="button" onClick={props.closeHandler}>
                     {commonText('close')}
                 </button>
             </div>
-            <div style={{ width: "100%", opacity: "90%", height: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                {props.widgets.map(([header, body]) => 
-                    <Widget headerText={header} bodyText={body} />)
+            <div className='flex flex-row flex-wrap w-full h-full opacity-90 text-center'>
+                {props.widgets.map((widgObj) => 
+                    <Widget widgObj={widgObj} />)
                 }
             </div>
         </>

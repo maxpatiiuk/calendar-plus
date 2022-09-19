@@ -17,6 +17,13 @@ import type { IR, RA, RR } from './utils/types';
 /* eslint-disable functional/prefer-readonly-type */
 
 declare global {
+
+  type WidgetObj = {
+    header: string;
+    body: string;
+    class: string;
+  }
+
   /**
    * Workaround for https://github.com/microsoft/TypeScript/issues/17002
    * Fix for Array.isArray() narrowing RA<T> to any[]
