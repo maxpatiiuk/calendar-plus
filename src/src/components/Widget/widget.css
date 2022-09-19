@@ -1,0 +1,29 @@
+/* CSS for only width < 480 px 
+    - We want 1 widgets wide
+*/
+.widget {
+    width: 90%;
+    min-height: 400px;
+    height: auto;
+    margin: 5px auto;
+    text-align: center;
+    border: 1px gray solid;
+    border-radius: 5px;
+    box-shadow: 2.5px 2.5px lightgray;
+}
+
+.widget:hover {
+    box-shadow: 5px 5px lightgray;
+}
+
+@media screen and (min-width: 600px) and (max-width: 1080px) {
+    .widget {
+        width: 240px;
+    }
+}
+
+@media screen and (min-width: 1080px) {
+    .widget {
+        width: 360px;
+    }
+}
