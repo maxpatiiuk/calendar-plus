@@ -2,28 +2,24 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { Portal } from '../Molecules/Portal';
-import { useEffect } from "react";
+import { CurrentViewContext } from '../Core/CurrentViewContext';
 
-
-export function App() {
+export function App(): JSX.Element | null {
   const [isOpen, _, handleClose, handleToggle] = useBooleanState();
 
-  useEffect(() => {
+  React.useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent): void =>
+      event.key === "Escape"
+        ? handleClose()
+        : undefined;
 
-    const escFunction = (event: { key: string; }) => {
-      if (event.key === "Escape") {
-        handleClose()
-      }
-    };
-
-    document.addEventListener("keydown", escFunction, false);
-
-    return () => {
-      document.removeEventListener("keydown", escFunction, false);
-    };
+    document.addEventListener("keydown", handleEscKey, false);
+    return () => document.removeEventListener("keydown", handleEscKey, false);
   }, []);
 
-  return (
+  const currentView = React.useContext(CurrentViewContext);
+
+  return typeof currentView === 'object' ? (
     <>
       <button type="button" onClick={handleToggle} aria-pressed={isOpen}>
         {commonText('calendarPlus')}
@@ -34,10 +30,10 @@ export function App() {
             <button type="button" onClick={handleClose}>
               {commonText('close')}
             </button>
+            <pre>Debug: {JSON.stringify(currentView)}</pre>
           </main>
         </Portal>
       )}
     </>
-    
-  );
+  ) : null;
 }

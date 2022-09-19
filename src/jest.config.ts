@@ -1,4 +1,4 @@
-import type { InitialOptionsTsJest } from 'ts-jest'
+import type { InitialOptionsTsJest } from 'ts-jest';
 
 /* eslint-disable multiline-comment-style */
 /* eslint-disable capitalized-comments */
@@ -71,11 +71,7 @@ const config: InitialOptionsTsJest = {
 
   // A set of global variables that need to be available in all test environments
   // NOTE: these must be JSON serializable
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    }
-  },
+  // globals: {}
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: "50%",
@@ -206,7 +202,14 @@ const config: InitialOptionsTsJest = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  transform: {},
+  transform: {
+    '.[jt]x?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
