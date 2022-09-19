@@ -21,7 +21,7 @@ declare global {
   type WidgetObj = {
     header: string;
     body: string;
-    class: string;
+    class?: string;
   }
 
   /**

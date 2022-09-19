@@ -14,9 +14,9 @@ export const Dashboard = (props: { closeHandler: () => void; widgets: Array<Widg
                     {commonText('close')}
                 </button>
             </div>
-            <div className='flex flex-row flex-wrap w-full h-full opacity-90 text-center'>
+            <div className='flex flex-row flex-wrap w-full h-full opacity-90 text-center scroll-auto overflow-y-scroll'>
                 {props.widgets.map((widgObj) => 
-                    <Widget widgObj={widgObj} />)
+                    <Widget key={widgObj.header} widgObj={widgObj} />)
                 }
             </div>
         </>

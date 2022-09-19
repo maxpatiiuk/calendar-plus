@@ -5,15 +5,16 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Core/CurrentViewContext';
 
+// Allowing for the class to me overriden from here
 const testWidgets : Array<WidgetObj> = [
-  { header: "Header 1", body: "Body 1", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 2", body: "Body 2", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 3", body: "Body 3", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 4", body: "Body 4", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 5", body: "Body 5", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 6", body: "Body 6", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 7", body: "Body 7", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" },
-  { header: "Header 8", body: "Body 8", class: "rounded-xl shadow-lg bg-slate-300 hover:shadow-slate-400 hover:shadow-xl mx-auto my-5" }
+  { header: "Header 1", body: "Body 1" },
+  { header: "Header 2", body: "Body 2" },
+  { header: "Header 3", body: "Body 3" },
+  { header: "Header 4", body: "Body 4" },
+  { header: "Header 5", body: "Body 5" },
+  { header: "Header 6", body: "Body 6" },
+  { header: "Header 7", body: "Body 7" },
+  { header: "Header 8", body: "Body 8" }
 ]
 
 export function App(): JSX.Element | null {
@@ -38,7 +39,7 @@ export function App(): JSX.Element | null {
       </button>
       {isOpen && (
         <Portal>
-          <main>
+          <main className="h-full">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
             <pre>Debug: {JSON.stringify(currentView)}</pre>
           </main>
