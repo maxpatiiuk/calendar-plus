@@ -2,7 +2,20 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { Portal } from '../Molecules/Portal';
+import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Core/CurrentViewContext';
+
+// Allowing for the class to be overriden from here
+const testWidgets : Array<WidgetObj> = [
+  { header: "Header 1", body: "Body 1" },
+  { header: "Header 2", body: "Body 2" },
+  { header: "Header 3", body: "Body 3" },
+  { header: "Header 4", body: "Body 4" },
+  { header: "Header 5", body: "Body 5" },
+  { header: "Header 6", body: "Body 6" },
+  { header: "Header 7", body: "Body 7" },
+  { header: "Header 8", body: "Body 8" }
+]
 
 export function App(): JSX.Element | null {
   const [isOpen, _, handleClose, handleToggle] = useBooleanState();
@@ -26,10 +39,8 @@ export function App(): JSX.Element | null {
       </button>
       {isOpen && (
         <Portal>
-          <main>
-            <button type="button" onClick={handleClose}>
-              {commonText('close')}
-            </button>
+          <main className="h-full">
+            <Dashboard closeHandler={handleClose} widgets={testWidgets} />
             <pre>Debug: {JSON.stringify(currentView)}</pre>
           </main>
         </Portal>
