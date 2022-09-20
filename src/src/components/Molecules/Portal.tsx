@@ -19,9 +19,9 @@ export function Portal({
   readonly children: JSX.Element;
 }): JSX.Element {
   const element = React.useMemo(() => {
-    let element = document.createElement('div');
-    element.className = "h-full"
-    return element
+    const element = document.createElement('div');
+    element.className = 'h-full';
+    return element;
   }, []);
 
   React.useEffect(() => {
@@ -38,7 +38,7 @@ export function Portal({
     // Create a container that would house the React portal
     if (portalRoot === undefined) {
       portalRoot = document.createElement('div');
-      portalRoot.className = "h-full"
+      portalRoot.className = 'h-full';
 
       // Nearest parent for both main content and portal container
       const commonContainer = mainContainer.parentElement!;

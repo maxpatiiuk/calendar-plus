@@ -10,6 +10,7 @@ export const commonText = createDictionary({
   fullDate: { 'en-us': 'Full Date' },
   loading: { 'en-us': 'Loading...' },
   close: { 'en-us': 'Close' },
+  dashboard: {'en-us': "Dashboard" }
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

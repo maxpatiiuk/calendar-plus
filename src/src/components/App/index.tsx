@@ -5,7 +5,7 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Core/CurrentViewContext';
 
-// Allowing for the class to me overriden from here
+// Allowing for the class to be overriden from here
 const testWidgets : Array<WidgetObj> = [
   { header: "Header 1", body: "Body 1" },
   { header: "Header 2", body: "Body 2" },
