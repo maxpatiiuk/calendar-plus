@@ -1,4 +1,4 @@
-import {f} from '../functools';
+import { f } from '../functools';
 
 describe('f.includes', () => {
   test('positive case', () => expect(f.includes([1, 2, 3], 1)).toBe(true));

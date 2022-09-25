@@ -6,6 +6,7 @@ import type { RA } from '../../utils/types';
 import { ErrorBoundary } from '../Errors/ErrorBoundary';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { TrackCurrentView } from './CurrentViewContext';
+import { AuthenticationProvider } from './AuthContext';
 
 /**
  * Provide contexts used by other components
@@ -47,11 +48,13 @@ export function Contexts({
     <ErrorBoundary>
       <LoadingContext.Provider key="loadingContext" value={loadingHandler}>
         <TrackCurrentView>
-          {/* FEATURE: replace this with a toast, dialog, or status line*/}
-          {isLoading && commonText('loading')}
-          <React.Suspense fallback={<>{commonText('loading')}</>}>
-            {children}
-          </React.Suspense>
+          <AuthenticationProvider>
+            {/* FEATURE: replace this with a toast, dialog, or status line*/}
+            {isLoading && commonText('loading')}
+            <React.Suspense fallback={<>{commonText('loading')}</>}>
+              {children}
+            </React.Suspense>
+          </AuthenticationProvider>
         </TrackCurrentView>
       </LoadingContext.Provider>
     </ErrorBoundary>
