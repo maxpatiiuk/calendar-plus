@@ -1,9 +1,9 @@
 import React from 'react';
-import { App } from './index';
-import { mount } from '../../tests/reactUtils';
-import { commonText } from '../../localization/common';
-import { CurrentViewContext } from '../Core/CurrentViewContext';
-import { testTime } from '../../tests/helpers';
+import { App } from '../index';
+import { mount } from '../../../tests/reactUtils';
+import { commonText } from '../../../localization/common';
+import { CurrentViewContext } from '../../Core/CurrentViewContext';
+import { testTime } from '../../../tests/helpers';
 
 test('does not render until current date is extracted', () => {
   const { container } = mount(

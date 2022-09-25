@@ -11,11 +11,21 @@
     "48": "./src/public/images/extension_icon_48x48.png",
     "128": "./src/public/images/extension_icon_128x128.png"
   },
+  "action": {
+    "default_title": "See where your time went"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuldA6s8qQKAdu33VanYX4yhBYnTbMwARskX7rcwvuIKgRPbY41X1mcIDUHKV7pC5sWQ2QuL0EN5U6M57dJhe+veTDDktpWNXeGJtwvPM6HFbwICgD93TkzwBl4Fs+67eFlsmpoHIdWeryyEfIUAgUwsb8DxvQ8OYhVKet1xkqJRRo112iLZ1bn/ZI8P39jT4cc9pMIXSvEKmtzyqNb9l/5WS8F6reqsRGIwZqmr/9fb7CEhyKPzEtXokcfaTygMwF6rJ6530cLUegofpJed4wZfFCCRtok63aqCwQgfypOKWlXCrExTdD6QKP4941dYQMuCg9+wp/GslGwTUd+odGQIDAQAB",
   "current_locale": "en",
   "permissions": [
     "identity",
     "storage"
   ],
+  "oauth2": {
+    "client_id": "626996674772-iegg1iono3q4g3u8e3ajcp37fbuauuh1.apps.googleusercontent.com",
+    "scopes":[
+      "https://www.googleapis.com/auth/calendar.readonly"
+    ]
+  },
   "background": {
     "service_worker":"./src/dist/background.bundle.js"
   },

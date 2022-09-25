@@ -1,4 +1,5 @@
 import React from 'react';
+import { listenEvent } from '../Background/messages';
 
 /*
  * "customday" is a user-customizable view (they can change the number of days
@@ -43,16 +44,11 @@ function useCurrentTracker(
     // Parse initial URL
     parseUrl();
 
-    function handleUpdate(request: { readonly message: string }) {
-      if (request.message !== 'tabUpdate') return;
+    return listenEvent('TabUpdate', () => {
       if (window.location.pathname === lastPath) return;
       lastPath = window.location.pathname;
       parseUrl();
-    }
-
-    // Listen for message from ../Background/index.ts
-    chrome.runtime.onMessage.addListener(handleUpdate);
-    return (): void => chrome.runtime.onMessage.removeListener(handleUpdate);
+    });
   }, [setCurrentView]);
 }
 
