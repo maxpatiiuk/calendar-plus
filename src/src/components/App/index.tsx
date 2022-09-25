@@ -5,6 +5,7 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Core/CurrentViewContext';
 import { AuthContext } from '../Core/AuthContext';
+import { ListCalendars } from '../Dashboard/ListCalendars';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -51,9 +52,11 @@ export function App(): JSX.Element | null {
       </button>
       {isOpen && (
         <Portal>
-          <main className="h-full">
-            <pre>{JSON.stringify({ currentView, auth }, null, 4)}</pre>
+          <main className="h-full overflow-y-auto">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
+            <pre>{JSON.stringify({ currentView, auth }, null, 4)}</pre>
+            {/* This is used just an example of how to make an API call: */}
+            <ListCalendars />
           </main>
         </Portal>
       )}

@@ -15,7 +15,7 @@ export const Dashboard = (props: {
           {commonText('close')}
         </button>
       </div>
-      <div className="flex h-full w-full flex-row flex-wrap overflow-y-scroll scroll-auto text-center opacity-90">
+      <div className="flex flex-row flex-wrap scroll-auto text-center opacity-90">
         {props.widgets.map((widgObj) => (
           <Widget key={widgObj.header} widgObj={widgObj} />
         ))}

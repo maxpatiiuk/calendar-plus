@@ -13,6 +13,9 @@ type NotAuthenticated = {
 
 type Auth = Authenticated | NotAuthenticated;
 
+let unsafeToken: string | undefined = undefined;
+export const unsafeGetToken = () => unsafeToken;
+
 export function AuthenticationProvider({
   children,
 }: {
@@ -21,14 +24,15 @@ export function AuthenticationProvider({
   const handleAuthenticate = React.useCallback(
     (interactive = true) =>
       sendRequest('Authenticate', { interactive })
-        .then(({ token }) =>
-          typeof token === 'string'
-            ? setAuth({
-                authenticated: true,
-                token,
-              })
-            : console.warn('Authentication canceled')
-        )
+        .then(({ token }) => {
+          if (typeof token === 'string') {
+            unsafeToken = token;
+            setAuth({
+              authenticated: true,
+              token,
+            });
+          } else console.warn('Authentication canceled');
+        })
         .catch(console.error),
     []
   );
