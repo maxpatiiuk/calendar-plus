@@ -45,7 +45,10 @@
     "skipLibCheck": true,
     "types": [
       "jest",
-      "node"
+      "node",
+      "chrome",
+      "gapi",
+      "gapi.client"
     ]
   },
   "typedocOptions" : {
