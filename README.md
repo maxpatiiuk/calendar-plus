@@ -1,4 +1,4 @@
-# Calendar Plus 
+# Calendar Plus
 
 A Chrome extension for Google Calendar that allows to easily see what you spend
 your time, get insights on and set goals
@@ -39,6 +39,19 @@ instructions](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-c
 
 Note, on any code change, you will have to press the `Reload Extension` button
 in the top left corner of Google Calendar in order to see the newest changes.
+
+## React DevTools
+
+You may have noticed that despite our app being built with React,
+React DevTools browser extension does not work for debugging it.
+
+Instead, a standalone React DevTools (an Electron app) needs to be
+used. [Installation
+Instructions](https://github.com/facebook/react/tree/main/packages/react-devtools#installation),
+
+Note, this will only work for when WebPack is run in development mode
+as we disabled react DevTools integration in production to reduce
+bundle size.
 
 ## Testing
 

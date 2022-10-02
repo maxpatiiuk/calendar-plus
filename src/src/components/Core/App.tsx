@@ -3,8 +3,8 @@ import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
-import { CurrentViewContext } from '../Core/CurrentViewContext';
-import { AuthContext } from '../Core/AuthContext';
+import { CurrentViewContext } from './CurrentViewContext';
+import { AuthContext } from './AuthContext';
 import { ListCalendars } from '../Dashboard/ListCalendars';
 import { useAsyncState } from '../../hooks/useAsyncState';
 
