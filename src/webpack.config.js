@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const webpack = require('webpack');
 
 const outputPath = path.resolve(__dirname, 'dist');
 
@@ -68,6 +69,14 @@ module.exports = (_env, argv) =>
           : './src/components/Core/index.tsx',
       background: './src/components/Background/index.ts',
     },
+    plugins:
+      argv.mode === 'development'
+        ? [
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 1,
+            }),
+          ]
+        : undefined,
     output: {
       path: outputPath,
       clean: true,

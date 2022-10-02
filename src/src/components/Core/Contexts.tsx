@@ -24,7 +24,7 @@ import { AuthenticationProvider } from './AuthContext';
 export function Contexts({
   children,
 }: {
-  readonly children: JSX.Element | RA<JSX.Element>;
+  readonly children: React.ReactNode;
 }): JSX.Element {
   // Loading Context
   const holders = React.useRef<RA<number>>([]);
