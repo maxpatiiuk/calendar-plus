@@ -39,6 +39,9 @@
       ]
     }
   ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self' http://localhost"
+  },
   "cross_origin_embedder_policy": {
     "value": "require-corp"
   },
