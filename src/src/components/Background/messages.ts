@@ -16,7 +16,15 @@ type AuthenticateRequest = State<
   }
 >;
 
-export type Requests = AuthenticateRequest;
+type ReloadExtension = State<
+  'ReloadExtension',
+  {
+    readonly request: undefined;
+    readonly response: undefined;
+  }
+>;
+
+export type Requests = AuthenticateRequest | ReloadExtension;
 
 /**
  * Send a request to the background script and await the response.
