@@ -1,5 +1,5 @@
 import { IR, RA } from './types';
-import { unsafeGetToken } from '../components/Core/AuthContext';
+import { unsafeGetToken } from '../components/Contexts/AuthContext';
 
 /**
  * All front-end network requests should go through this utility.

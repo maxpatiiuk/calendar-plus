@@ -15,35 +15,36 @@ theories(parsePath, [
     in: ['/calendar/u/0/r/week/'],
     out: {
       view: 'week',
-      date: new Date(year, month, day),
+      selectedDay: new Date(year, month, day),
+      firstDay: new Date(year, month, day - 3),
+      lastDay: new Date(year, month, day + 3),
     },
   },
   {
     in: ['/calendar/u/0/r/week/2022/12/31/'],
     out: {
       view: 'week',
-      date: new Date(2022, 12, 31),
+      selectedDay: new Date(2022, 11, 31),
+      firstDay: new Date(2022, 11, 25),
+      lastDay: new Date(2022, 11, 31),
     },
   },
   {
     in: ['/calendar/u/0/r/month/2020/12/31/'],
     out: {
       view: 'month',
-      date: new Date(2020, 12, 31),
+      selectedDay: new Date(2020, 11, 31),
+      firstDay: new Date(2020, 11, 1),
+      lastDay: new Date(2020, 11, 31),
     },
   },
   {
     in: ['/calendar/u/0/r/year/2023/'],
     out: {
       view: 'year',
-      date: new Date(2023, month, day),
-    },
-  },
-  {
-    in: ['/calendar/u/0/r/customday/2024/'],
-    out: {
-      view: 'customday',
-      date: new Date(2024, month, day),
+      selectedDay: new Date(2023, month, day),
+      firstDay: new Date(2023, 0, 1),
+      lastDay: new Date(2023, 11, 31),
     },
   },
 ]);
