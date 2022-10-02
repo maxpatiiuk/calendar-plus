@@ -32,12 +32,13 @@ export type Requests = AuthenticateRequest | ReloadExtension;
  */
 export const sendRequest = async <TYPE extends Requests['type']>(
   type: TYPE,
-  request: (Requests & State<TYPE>)['request']
-): Promise<(Requests & State<TYPE>)['response']> =>
-  chrome.runtime.sendMessage({
+  request: Extract<Requests, State<TYPE>>['request']
+): Promise<Extract<Requests, State<TYPE>>['response']> =>
+  // This function has a lot of overloads, which confuses TypeScript
+  chrome.runtime.sendMessage<unknown, void>({
     type,
     request,
-  });
+  }) as unknown as Promise<Extract<Requests, State<TYPE>>['response']>;
 
 type TabUpdate = State<'TabUpdate'>;
 type BackgroundEvents = TabUpdate;
