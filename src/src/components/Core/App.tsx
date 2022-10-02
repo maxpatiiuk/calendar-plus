@@ -5,7 +5,7 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { AuthContext } from '../Contexts/AuthContext';
-import { ListCalendars } from '../Dashboard/ListCalendars';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
 
 // Allowing for the class to be overridden from here
@@ -44,6 +44,8 @@ export function App(): JSX.Element | null {
     false
   );
 
+  const calendars = React.useContext(CalendarsContext);
+
   return typeof currentView === 'object' ? (
     <>
       {debugOverlay}
@@ -66,12 +68,20 @@ export function App(): JSX.Element | null {
         <Portal>
           <main className="h-full overflow-y-auto">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
-            <pre>{JSON.stringify({ currentView, auth }, null, 4)}</pre>
-            {/* This is used just an example of how to make an API call: */}
-            <ListCalendars />
+            <pre>
+              {JSON.stringify({ currentView, auth }, null, 4)}
+              {JSON.stringify(
+                calendars?.map(({ summary }) => summary) ??
+                  commonText('loading'),
+                null,
+                4
+              )}
+            </pre>
           </main>
         </Portal>
       )}
     </>
-  ) : null;
+  ) : (
+    debugOverlay ?? null
+  );
 }
