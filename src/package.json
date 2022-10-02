@@ -49,7 +49,7 @@
     "@types/react": "^18.0.20",
     "@types/react-devtools": "^3.6.0",
     "@types/react-dom": "^18.0.6",
-    "autoprefixer": "10.4.11",
+    "autoprefixer": "10.4.12",
     "babel-loader": "^8.2.5",
     "core-js": "^3.25.2",
     "crx-hotreload": "^1.0.6",
