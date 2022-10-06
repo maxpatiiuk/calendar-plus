@@ -4,7 +4,8 @@ import { commonText } from '../../localization/common';
 import React from 'react';
 import { RA } from '../../utils/types';
 
-type CalendarListEntry = any; // gapi.client.calendar.CalendarListEntry;
+type CalendarListEntry = any;
+// gapi.client.calendar.CalendarListEntry has a type problem
 
 export function ListCalendars(): JSX.Element {
   const [calendars] = useAsyncState<RA<CalendarListEntry>>(
