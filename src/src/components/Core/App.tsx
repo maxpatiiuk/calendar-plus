@@ -3,9 +3,10 @@ import { commonText } from '../../localization/common';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
-import { CurrentViewContext } from '../Core/CurrentViewContext';
-import { AuthContext } from '../Core/AuthContext';
+import { CurrentViewContext } from './CurrentViewContext';
+import { AuthContext } from './AuthContext';
 import { ListCalendars } from '../Dashboard/ListCalendars';
+import { useAsyncState } from '../../hooks/useAsyncState';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -18,6 +19,11 @@ const testWidgets: Array<WidgetObj> = [
   { header: 'Header 7', body: 'Body 7' },
   { header: 'Header 8', body: 'Body 8' },
 ];
+
+const debugOverlayPromise =
+  process.env.NODE_ENV === 'development'
+    ? import('../DebugOverlay').then(({ DebugOverlay }) => <DebugOverlay />)
+    : undefined;
 
 export function App(): JSX.Element | null {
   const [isOpen, _, handleClose, handleToggle] = useBooleanState();
@@ -33,8 +39,14 @@ export function App(): JSX.Element | null {
   const currentView = React.useContext(CurrentViewContext);
   const auth = React.useContext(AuthContext);
 
+  const [debugOverlay] = useAsyncState(
+    React.useCallback(() => debugOverlayPromise, []),
+    false
+  );
+
   return typeof currentView === 'object' ? (
     <>
+      {debugOverlay}
       <button
         type="button"
         onClick={

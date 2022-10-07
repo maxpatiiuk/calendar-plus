@@ -16,7 +16,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     request !== null &&
     request.type in requestHandlers
   ) {
-    requestHandlers[request.type as Requests['type']](request.request)
+    requestHandlers[request.type as 'ReloadExtension'](
+      request.request as undefined
+    )
       .then(sendResponse)
       .catch(console.error);
     return true;
@@ -29,8 +31,8 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
  */
 const requestHandlers: {
   readonly [TYPE in Requests['type']]: (
-    request: (State<TYPE> & Requests)['request']
-  ) => Promise<(State<TYPE> & Requests)['response']>;
+    request: Extract<Requests, State<TYPE>>['request']
+  ) => Promise<Extract<Requests, State<TYPE>>['response']>;
 } = {
   Authenticate: ({ interactive }) =>
     new Promise((resolve, reject) =>
@@ -40,6 +42,12 @@ const requestHandlers: {
           : reject(chrome.runtime.lastError)
       )
     ),
+  ReloadExtension: () =>
+    new Promise((resolve) => {
+      chrome.tabs.reload();
+      chrome.runtime.reload();
+      resolve(undefined);
+    }),
 };
 
 export {};

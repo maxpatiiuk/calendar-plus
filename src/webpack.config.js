@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const webpack = require('webpack');
 
 const outputPath = path.resolve(__dirname, 'dist');
 
@@ -62,9 +63,20 @@ module.exports = (_env, argv) =>
     devtool:
       argv.mode === 'development' ? 'cheap-module-source-map' : 'source-map',
     entry: {
-      main: './src/index.tsx',
+      main:
+        argv.mode === 'development'
+          ? './src/components/Core/development.tsx'
+          : './src/components/Core/index.tsx',
       background: './src/components/Background/index.ts',
     },
+    plugins:
+      argv.mode === 'development'
+        ? [
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 1,
+            }),
+          ]
+        : undefined,
     output: {
       path: outputPath,
       clean: true,
