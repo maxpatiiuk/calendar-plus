@@ -9,41 +9,43 @@ import { AuthContext } from './AuthContext';
 
 type CalendarListEntry = gapi.client.calendar.CalendarListEntry;
 
+const calendarIdResolver: Set<string> = new Set();
+
 export function CalendarsSpy({
   children,
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { authenticated } = React.useContext(AuthContext);
-  const [calendars] = useAsyncState<RA<CalendarListEntry>>(
-    React.useCallback(
-      () =>
-        authenticated
-          ? ajax(
-              formatUrl(
-                'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-                {
-                  minAccessRole: 'reader',
-                  showHidden: true.toString(),
-                }
-              )
-            )
-              .then((response) => response.json())
-              .then((results) => {
-                const calendars = results.items as RA<CalendarListEntry>;
-                const [secondary, primary] = split(
-                  calendars,
-                  ({ primary }) => primary === true
-                ).map((calendars) =>
-                  Array.from(calendars).sort(
-                    sortFunction(({ summary }) => summary)
-                  )
-                );
-                return [...primary, ...secondary];
-              })
-          : undefined,
-      [authenticated]
-    ),
+  const [calendars] = useAsyncState<
+    RA<CalendarListEntry & { readonly shortId: number }>
+  >(
+    React.useCallback(async () => {
+      if (!authenticated) return undefined;
+      const response = await ajax(
+        formatUrl(
+          'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+          {
+            minAccessRole: 'reader',
+            showHidden: true.toString(),
+          }
+        )
+      );
+      const results = await response.json();
+      const rawCalendars = results.items as RA<CalendarListEntry>;
+      const calendars = rawCalendars.map((calendar) => {
+        calendarIdResolver.add(calendar.id);
+        const shortId = Array.from(calendarIdResolver).indexOf(calendar.id);
+        return { ...calendar, shortId };
+      });
+      const [secondary, primary] = split(
+        calendars,
+        ({ primary }) => primary === true
+      ).map((calendars) =>
+        Array.from(calendars).sort(sortFunction(({ summary }) => summary))
+      );
+      return [...primary, ...secondary];
+    }, [authenticated]),
     false
   );
 
@@ -78,7 +80,7 @@ export function CalendarsSpy({
 }
 
 export const CalendarsContext = React.createContext<
-  RA<CalendarListEntry> | undefined
+  RA<CalendarListEntry & { readonly shortId: number }> | undefined
 >(undefined);
 CalendarsContext.displayName = 'CalendarsContext';
 
