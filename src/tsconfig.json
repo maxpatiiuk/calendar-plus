@@ -48,7 +48,8 @@
       "node",
       "chrome",
       "gapi",
-      "gapi.client"
+      "gapi.client",
+      "gapi.calendar"
     ]
   },
   "typedocOptions" : {
