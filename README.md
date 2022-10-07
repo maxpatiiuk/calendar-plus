@@ -74,3 +74,10 @@ Alternatively, you can start Jest in watch mode:
 ```
 npm run unitTests:watch
 ```
+
+## Generating Docs
+
+```
+cd src
+npx typedoc --out docs src
+```

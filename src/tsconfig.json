@@ -42,7 +42,18 @@
     /* Advanced */
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "jest",
+      "node",
+      "chrome",
+      "gapi",
+      "gapi.client",
+      "gapi.calendar"
+    ]
   },
-  "noPropertyAccessFromIndexSignature": true
+  "typedocOptions" : {
+    "entryPoints" : ["src"],
+    "out": "docs"
+  }
 }
