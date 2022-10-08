@@ -1,6 +1,7 @@
 import {
   camelToHuman,
   capitalize,
+  findLastIndex,
   sortFunction,
   split,
   toggleItem,
@@ -61,3 +62,17 @@ theories(toggleItem, {
   'remove an item that is present': { in: [[1, 2, 3, 4], 4], out: [1, 2, 3] },
   'remove duplicate item': { in: [[1, 2, 3, 1], 1], out: [2, 3] },
 });
+
+theories(findLastIndex, [
+  {
+    in: [[1, 2, 3, 4, 5, 6, 7, 8], (value: number) => value % 2 === 1],
+    out: 6,
+  },
+  {
+    in: [
+      [1, 2, 3, 4, 5, 6, 7, 8],
+      (_value: number, index: number) => index === 4,
+    ],
+    out: 4,
+  },
+]);

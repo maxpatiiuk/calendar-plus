@@ -59,3 +59,12 @@ export const toggleItem = <T>(array: RA<T>, item: T): RA<T> =>
   array.includes(item)
     ? array.filter((value) => value !== item)
     : [...array, item];
+
+export function findLastIndex<T>(
+  array: RA<T>,
+  mapping: (item: T, index: number) => boolean
+): number {
+  for (let index = array.length - 1; index >= 0; index--)
+    if (mapping(array[index], index)) return index;
+  return -1;
+}
