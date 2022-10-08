@@ -32,6 +32,7 @@ export function CalendarsSpy({
             minAccessRole: 'reader',
             showHidden: true.toString(),
             fields: 'items(id,summary,hidden,primary)',
+            prettyPrint: false.toString(),
           }
         )
       );

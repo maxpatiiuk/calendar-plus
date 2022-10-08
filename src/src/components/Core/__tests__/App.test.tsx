@@ -19,7 +19,9 @@ test('renders a button after current date is extracted', () => {
     <CurrentViewContext.Provider
       value={{
         view: 'day',
-        date: testTime,
+        selectedDay: testTime,
+        firstDay: testTime,
+        lastDay: testTime,
       }}
     >
       <App />

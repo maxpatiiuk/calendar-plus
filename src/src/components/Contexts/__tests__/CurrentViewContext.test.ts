@@ -17,7 +17,7 @@ theories(parsePath, [
       view: 'week',
       selectedDay: new Date(year, month, day),
       firstDay: new Date(year, month, day - 3),
-      lastDay: new Date(year, month, day + 3),
+      lastDay: new Date(year, month, day + 4),
     },
   },
   {
@@ -26,7 +26,7 @@ theories(parsePath, [
       view: 'week',
       selectedDay: new Date(2022, 11, 31),
       firstDay: new Date(2022, 11, 25),
-      lastDay: new Date(2022, 11, 31),
+      lastDay: new Date(2023, 0, 1),
     },
   },
   {
@@ -44,7 +44,7 @@ theories(parsePath, [
       view: 'year',
       selectedDay: new Date(2023, month, day),
       firstDay: new Date(2023, 0, 1),
-      lastDay: new Date(2023, 11, 31),
+      lastDay: new Date(2024, 0, 1),
     },
   },
 ]);

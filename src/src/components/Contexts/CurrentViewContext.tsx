@@ -106,7 +106,7 @@ function resolveBoundaries(
       lastDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        dayOffset + 6
+        dayOffset + 7
       ),
     };
   } else if (viewName === 'month')
@@ -121,7 +121,7 @@ function resolveBoundaries(
   else if (viewName === 'year')
     return {
       firstDay: new Date(selectedDay.getFullYear(), 0, 1),
-      lastDay: new Date(selectedDay.getFullYear(), 11, 31),
+      lastDay: new Date(selectedDay.getFullYear() + 1, 0, 1),
     };
   else throw new Error('unknown view');
 }
