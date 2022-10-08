@@ -48,7 +48,9 @@ export function useEvents(
           const [timeMin, timeMax] = bounds;
           const response = await ajax(
             formatUrl(
-              `https://www.googleapis.com/calendar/v3/calendars/${id}/events`,
+              `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
+                id
+              )}/events`,
               {
                 maxAttendees: (1).toString(),
                 // FEATURE: handle pagination (pageToken)
