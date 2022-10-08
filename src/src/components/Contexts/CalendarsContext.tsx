@@ -1,7 +1,7 @@
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
 import React from 'react';
-import { GetOrSet, RA } from '../../utils/types';
+import { filterArray, GetOrSet, RA } from '../../utils/types';
 import { formatUrl } from '../../utils/queryString';
 import { sortFunction, split, toggleItem } from '../../utils/utils';
 import { listen } from '../../utils/events';
@@ -9,7 +9,7 @@ import { AuthContext } from './AuthContext';
 
 type CalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
-  'id' | 'summary' | 'hidden' | 'primary'
+  'id' | 'summary' | 'primary'
 >;
 
 const calendarIdResolver: Set<string> = new Set();
@@ -30,8 +30,7 @@ export function CalendarsSpy({
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
           {
             minAccessRole: 'reader',
-            showHidden: true.toString(),
-            fields: 'items(id,summary,hidden,primary)',
+            fields: 'items(id,summary,primary)',
             prettyPrint: false.toString(),
           }
         )
@@ -58,23 +57,10 @@ export function CalendarsSpy({
     []
   );
 
-  React.useEffect(
-    () =>
-      setVisibleCalendars(
-        calendars?.filter(({ hidden }) => !hidden).map(({ id }) => id) ?? []
-      ),
-    [calendars]
-  );
-
   useVisibilityChangeSpy(calendars, setVisibleCalendars);
 
   const filteredCalendars = React.useMemo(
-    () =>
-      calendars?.filter(
-        Array.isArray(visibleCalendars)
-          ? ({ id }) => visibleCalendars.includes(id)
-          : ({ hidden }) => !hidden
-      ),
+    () => calendars?.filter(({ id }) => visibleCalendars.includes(id)),
     [calendars, visibleCalendars]
   );
   return (
@@ -90,20 +76,42 @@ export const CalendarsContext = React.createContext<
 CalendarsContext.displayName = 'CalendarsContext';
 
 function useVisibilityChangeSpy(
-  calendars: RA<CalendarListEntry> | undefined,
+  calendars: React.ContextType<typeof CalendarsContext>,
   handleChange: GetOrSet<RA<string>>[1]
 ): void {
+  const [sideBar] = useAsyncState(
+    React.useCallback(async () => {
+      const sideBar = await awaitElement(
+        () => document.querySelector('[role="complementary"]') ?? undefined
+      );
+      if (sideBar === undefined) console.error('Unable to locate the sidebar');
+      else
+        await awaitElement(
+          () => sideBar.querySelector('input[type="checkbox"]') ?? undefined
+        );
+      return sideBar;
+    }, []),
+    false
+  );
   React.useEffect(() => {
-    if (calendars === undefined) return;
-    const sideBar = document.querySelector('[role="complementary"]');
-    if (sideBar === null) {
-      console.error('Unable to locate the sidebar');
-      return;
-    }
-    return listen(sideBar, 'click', ({ target }) => {
-      const element = target as HTMLInputElement;
-      if (element.tagName !== 'INPUT' || element.type !== 'checkbox') return;
-      const calendarName = element.ariaLabel;
+    if (calendars === undefined || sideBar === undefined) return;
+
+    handleChange(
+      filterArray(
+        Array.from(
+          sideBar.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'),
+          parseCheckbox
+        )
+      )
+        .filter(([_calendarId, checked]) => checked)
+        .map(([calendarId]) => calendarId)
+    );
+
+    function parseCheckbox(
+      checkbox: HTMLInputElement
+    ): readonly [id: string, checked: boolean] | undefined {
+      if (calendars === undefined) return undefined;
+      const calendarName = checkbox.ariaLabel;
       const calendar =
         calendars.find(({ summary }) => summary === calendarName) ??
         /*
@@ -115,9 +123,37 @@ function useVisibilityChangeSpy(
         console.error('Unable to locate the calendar', calendarName);
         return;
       }
+      return [calendar.id, checkbox.checked];
+    }
+
+    return listen(sideBar, 'click', ({ target }) => {
+      const element = target as HTMLInputElement;
+      if (element.tagName !== 'INPUT' || element.type !== 'checkbox') return;
+      const calendarId = parseCheckbox(element)?.[0];
+      if (calendarId === undefined) return;
       handleChange((visibleCalendars) =>
-        toggleItem(visibleCalendars, calendar.id)
+        toggleItem(visibleCalendars, calendarId)
       );
     });
-  }, [calendars]);
+  }, [calendars, sideBar]);
+}
+
+/**
+ * Poll regularly until a desired element has been added to the DOM
+ */
+async function awaitElement<T>(
+  callback: () => T | undefined,
+  pollInterval = 10,
+  limit = 100
+): Promise<T | undefined> {
+  const result = callback();
+  if (limit === 0) return undefined;
+  if (result === undefined)
+    return new Promise((resolve) =>
+      setTimeout(
+        () => resolve(awaitElement(callback, pollInterval, limit - 1)),
+        pollInterval
+      )
+    );
+  return result;
 }
