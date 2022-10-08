@@ -7,7 +7,10 @@ import { sortFunction, split, toggleItem } from '../../utils/utils';
 import { listen } from '../../utils/events';
 import { AuthContext } from './AuthContext';
 
-type CalendarListEntry = gapi.client.calendar.CalendarListEntry;
+type CalendarListEntry = Pick<
+  gapi.client.calendar.CalendarListEntry,
+  'id' | 'summary' | 'hidden' | 'primary'
+>;
 
 const calendarIdResolver: Set<string> = new Set();
 
@@ -28,6 +31,7 @@ export function CalendarsSpy({
           {
             minAccessRole: 'reader',
             showHidden: true.toString(),
+            fields: 'items(id,summary,hidden,primary)',
           }
         )
       );
