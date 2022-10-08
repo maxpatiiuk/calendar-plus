@@ -7,6 +7,7 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
+import { EventsStore, useEvents } from '../EventsStore';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -37,7 +38,13 @@ export function App(): JSX.Element | null {
   }, []);
 
   const currentView = React.useContext(CurrentViewContext);
-  const auth = React.useContext(AuthContext);
+  const eventsStore = React.useRef<EventsStore>({});
+  const durations = useEvents(
+    eventsStore,
+    // Don't fetch until the overlay is opened
+    isOpen ? currentView?.firstDay : undefined,
+    currentView?.lastDay
+  );
 
   const [debugOverlay] = useAsyncState(
     React.useCallback(() => debugOverlayPromise, []),
@@ -45,6 +52,7 @@ export function App(): JSX.Element | null {
   );
 
   const calendars = React.useContext(CalendarsContext);
+  const auth = React.useContext(AuthContext);
 
   return typeof currentView === 'object' ? (
     <>
@@ -69,7 +77,7 @@ export function App(): JSX.Element | null {
           <main className="h-full overflow-y-auto">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
             <pre>
-              {JSON.stringify({ currentView, auth }, null, 4)}
+              {JSON.stringify({ currentView, auth, durations }, null, 4)}
               {JSON.stringify(
                 calendars?.map(({ summary }) => summary) ??
                   commonText('loading'),
