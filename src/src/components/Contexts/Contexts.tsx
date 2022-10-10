@@ -7,6 +7,7 @@ import { ErrorBoundary } from '../Errors/ErrorBoundary';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { TrackCurrentView } from './CurrentViewContext';
 import { AuthenticationProvider } from './AuthContext';
+import { CalendarsSpy } from './CalendarsContext';
 
 /**
  * Provide contexts used by other components
@@ -47,15 +48,15 @@ export function Contexts({
   return (
     <ErrorBoundary>
       <LoadingContext.Provider key="loadingContext" value={loadingHandler}>
-        <TrackCurrentView>
-          <AuthenticationProvider>
-            {/* FEATURE: replace this with a toast, dialog, or status line*/}
-            {isLoading && commonText('loading')}
-            <React.Suspense fallback={<>{commonText('loading')}</>}>
-              {children}
-            </React.Suspense>
-          </AuthenticationProvider>
-        </TrackCurrentView>
+        {/* FEATURE: replace this with a toast, dialog, or status line*/}
+        {isLoading && commonText('loading')}
+        <React.Suspense fallback={<>{commonText('loading')}</>}>
+          <TrackCurrentView>
+            <AuthenticationProvider>
+              <CalendarsSpy>{children}</CalendarsSpy>
+            </AuthenticationProvider>
+          </TrackCurrentView>
+        </React.Suspense>
       </LoadingContext.Provider>
     </ErrorBoundary>
   );

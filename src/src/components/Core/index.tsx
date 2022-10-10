@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { App } from './App';
-import { Contexts } from './Contexts';
+import { Contexts } from '../Contexts/Contexts';
 
 /**
  * Find a place where to mount our app. To make extension resilient to Google
@@ -20,10 +20,7 @@ const container =
     document.querySelectorAll('header div[aria-label][role="button"]')
   ).find((item) => item.querySelector('i')?.textContent === 'search')
     ?.parentElement?.parentElement ?? undefined;
-if (typeof container === 'object') startApp(container).catch(console.error);
-else console.error('Failed to attach Calendar Plus plugin');
-
-async function startApp(container: Element) {
+if (typeof container === 'object') {
   const reactContainer = document.createElement('div');
   container.prepend(reactContainer);
 
@@ -36,3 +33,5 @@ async function startApp(container: Element) {
     </React.StrictMode>
   );
 }
+else console.error('Failed to attach Calendar Plus plugin');
+

@@ -2,7 +2,7 @@ import React from 'react';
 import { App } from '../App';
 import { mount } from '../../../tests/reactUtils';
 import { commonText } from '../../../localization/common';
-import { CurrentViewContext } from '../CurrentViewContext';
+import { CurrentViewContext } from '../../Contexts/CurrentViewContext';
 import { testTime } from '../../../tests/helpers';
 
 test('does not render until current date is extracted', () => {
@@ -19,7 +19,9 @@ test('renders a button after current date is extracted', () => {
     <CurrentViewContext.Provider
       value={{
         view: 'day',
-        date: testTime,
+        selectedDay: testTime,
+        firstDay: testTime,
+        lastDay: testTime,
       }}
     >
       <App />

@@ -1,4 +1,8 @@
-/** Make all tests use UTC, rather than local time zone */
+/**
+ * Make all tests use CDT, rather than local time zone
+ * The choice of CDT is almost arbitrary, but it's a time zone that is not UTC
+ * to better reflect the real world.
+ */
 module.exports = () => {
-  process.env.TZ = 'UTC';
-}
+  process.env.TZ = 'UTC-5:00';
+};
