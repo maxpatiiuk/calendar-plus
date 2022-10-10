@@ -32,6 +32,13 @@ jobs:
         id: cpu-cores
         uses: SimenB/github-actions-cpu-cores@v1
 
+      - name: Set time zone to America/Chicago
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "America/Chicago"
+          timezoneMacos: "America/Chicago"
+          timezoneWindows: "America/Chicago"
+
       - name: Run JS test suite
         run: |
           npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}

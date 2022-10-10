@@ -92,8 +92,16 @@ function resolveBoundaries(
 ): { firstDay: Date; lastDay: Date } {
   if (viewName === 'day')
     return {
-      firstDay: selectedDay,
-      lastDay: selectedDay,
+      firstDay: new Date(
+        selectedDay.getFullYear(),
+        selectedDay.getMonth(),
+        selectedDay.getDate()
+      ),
+      lastDay: new Date(
+        selectedDay.getFullYear(),
+        selectedDay.getMonth(),
+        selectedDay.getDate() + 1
+      ),
     };
   else if (viewName === 'week') {
     const dayOffset = selectedDay.getDate() - selectedDay.getDay();

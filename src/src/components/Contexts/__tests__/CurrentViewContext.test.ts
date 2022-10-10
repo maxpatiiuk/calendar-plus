@@ -12,6 +12,15 @@ const day = testTime.getDate();
 
 theories(parsePath, [
   {
+    in: ['/calendar/u/0/r/day/'],
+    out: {
+      view: 'day',
+      selectedDay: new Date(year, month, day),
+      firstDay: new Date(year, month, day),
+      lastDay: new Date(year, month, day + 1),
+    },
+  },
+  {
     in: ['/calendar/u/0/r/week/'],
     out: {
       view: 'week',
