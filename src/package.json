@@ -47,7 +47,7 @@
     "@types/gapi": "^0.0.42",
     "@types/gapi.calendar": "^3.0.6",
     "@types/gapi.client": "^1.0.5",
-    "@types/jest": "^29.1.1",
+    "@types/jest": "^29.1.2",
     "@types/node": "^18.7.23",
     "@types/react": "^18.0.21",
     "@types/react-devtools": "^3.6.0",
