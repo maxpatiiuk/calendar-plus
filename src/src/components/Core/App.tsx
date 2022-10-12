@@ -8,6 +8,7 @@ import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
 import {
+  cacheEvents,
   EventsStore,
   setCachedEvents,
   useCachedEvents,
@@ -52,9 +53,10 @@ export function App(): JSX.Element | null {
     currentView?.lastDay
   );
 
-  React.useEffect(() => {
-    setCachedEvents(eventsStore.current);
-  }, [eventsStore.current]);
+  React.useEffect(
+    () => cacheEvents.on('changed', () => setCachedEvents(eventsStore.current)),
+    []
+  );
 
   const [debugOverlay] = useAsyncState(
     React.useCallback(() => debugOverlayPromise, []),

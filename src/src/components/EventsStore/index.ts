@@ -11,9 +11,12 @@ import {
   MINUTE,
   MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
+import { eventListener } from '../../utils/events';
 
 export type EventsStore = R<Record<number, number>>;
 type CalendarEvent = Pick<gapi.client.calendar.Event, 'start' | 'end'>;
+
+export const cacheEvents = eventListener<{ changed: undefined }>();
 
 // TEST: test daylight savings time switch and back
 /**
@@ -84,6 +87,7 @@ export function useEvents(
           });
         })
       );
+      cacheEvents.trigger('changed');
       return true;
     }, [calendars, startDate, endDate]),
     false
