@@ -65,6 +65,21 @@ const commonPrefix = `/calendar/u/0/r/`;
  * Extract current date from the Google Calendar URL
  */
 function parsePath(path: string): CurrentView | undefined {
+  if (path === '/calendar/u/0/r') {
+    const viewMode = document.querySelector('header div[data-active-view]');
+    const viewName = viewMode?.getAttribute(
+      'data-active-view'
+    ) as SupportedView;
+    if (viewName && supportedViews.includes(viewName)) {
+      // Used to center on current date (always centered if basic path)
+      const today = new Date();
+      return {
+        view: viewName,
+        selectedDay: today,
+        ...resolveBoundaries('day', today),
+      };
+    }
+  }
   if (!path.startsWith(commonPrefix)) return undefined;
   const [rawView, ...date] = path.slice(commonPrefix.length).split('/');
   // Make it more type safe
