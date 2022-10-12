@@ -7,6 +7,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     emitEvent(tabId, { type: 'TabUpdate' }).catch(console.trace);
 });
 
+chrome.action.onClicked.addListener(function () {
+  chrome.tabs.create({ url: 'https://calendar.google.com' });
+});
+
 /**
  * Listen for a message from the front-end and send back the response
  */
