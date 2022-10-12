@@ -65,6 +65,15 @@ const commonPrefix = `/calendar/u/0/r/`;
  * Extract current date from the Google Calendar URL
  */
 function parsePath(path: string): CurrentView | undefined {
+  if (path === '/calendar/u/0/r') {
+    // There is possibly more nuance to this, but I am not 100% sure. I think a sufficient fix for now
+    const today = new Date();
+    return {
+      view: 'day',
+      selectedDay: today,
+      ...resolveBoundaries('day', today),
+    };
+  }
   if (!path.startsWith(commonPrefix)) return undefined;
   const [rawView, ...date] = path.slice(commonPrefix.length).split('/');
   // Make it more type safe
