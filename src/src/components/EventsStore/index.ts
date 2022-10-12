@@ -101,6 +101,18 @@ export function useEvents(
   );
 }
 
+export function useCachedEvents(): EventsStore | undefined {
+  const cachedEventsStr = window.localStorage.getItem('events');
+  if (!cachedEventsStr) return undefined;
+  const cachedEvents = JSON.parse(cachedEventsStr) as EventsStore;
+  if (!cachedEvents) return undefined;
+  return cachedEvents;
+}
+
+export function setCachedEvents(events: EventsStore): void {
+  window.localStorage.setItem('events', JSON.stringify(events));
+}
+
 /**
  * Find the smallest continuous subset of time in the provided range for which
  * events haven't been fetched yet.
