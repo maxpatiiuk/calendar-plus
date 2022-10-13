@@ -105,16 +105,16 @@ export function useEvents(
   );
 }
 
-export function useCachedEvents(): EventsStore | undefined {
-  const cachedEventsStr = window.localStorage.getItem('events');
-  if (!cachedEventsStr) return undefined;
-  const cachedEvents = JSON.parse(cachedEventsStr) as EventsStore;
+export async function useCachedEvents(): Promise<EventsStore | undefined> {
+  const cachedEvents = await chrome.storage.local
+    .get('events')
+    .then((events) => events as EventsStore);
   if (!cachedEvents) return undefined;
   return cachedEvents;
 }
 
-export function setCachedEvents(events: EventsStore): void {
-  window.localStorage.setItem('events', JSON.stringify(events));
+export async function setCachedEvents(events: EventsStore): Promise<void> {
+  await chrome.storage.local.set({ events: JSON.stringify(events) });
 }
 
 /**
