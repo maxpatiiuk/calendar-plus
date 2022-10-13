@@ -1,4 +1,4 @@
-import { theories } from '../../tests/utils';
+import { theories } from '../../../tests/utils';
 import {
   countDaysBetween,
   dateToDateTime,
@@ -6,7 +6,7 @@ import {
   exportsForTests,
   getDatesBetween,
   isMidnight,
-} from './index';
+} from '../index';
 
 const {
   calculateBounds,
