@@ -3,7 +3,7 @@ import { ajax } from '../../utils/ajax';
 import React from 'react';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { formatUrl } from '../../utils/queryString';
-import { R, RA, WritableArray } from '../../utils/types';
+import { R, RA, setDevelopmentGlobal, WritableArray } from '../../utils/types';
 import { findLastIndex } from '../../utils/utils';
 import {
   DAY,
@@ -25,7 +25,7 @@ export const cacheEvents = eventListener<{ changed: undefined }>();
  * calendar, and cache the computations for future use.
  */
 export function useEvents(
-  eventsStore: React.MutableRefObject<EventsStore>,
+  eventsStore: React.MutableRefObject<EventsStore> | undefined,
   startDate: Date | undefined,
   endDate: Date | undefined
 ): EventsStore | undefined {
@@ -33,6 +33,7 @@ export function useEvents(
   const [loaded] = useAsyncState(
     React.useCallback(async () => {
       if (
+        eventsStore === undefined ||
         calendars === undefined ||
         startDate === undefined ||
         endDate === undefined
@@ -89,13 +90,14 @@ export function useEvents(
       );
       cacheEvents.trigger('changed');
       return true;
-    }, [calendars, startDate, endDate]),
+    }, [eventsStore, calendars, startDate, endDate]),
     false
   );
 
   return React.useMemo(
     () =>
       loaded === true &&
+      typeof eventsStore === 'object' &&
       typeof calendars === 'object' &&
       typeof startDate === 'object' &&
       typeof endDate === 'object'
@@ -105,16 +107,40 @@ export function useEvents(
   );
 }
 
-export async function useCachedEvents(): Promise<EventsStore | undefined> {
-  const cachedEvents = await chrome.storage.local
-    .get('events')
-    .then((events) => events as EventsStore);
-  if (!cachedEvents) return undefined;
-  return cachedEvents;
-}
+/**
+ * Fetch computed event durations from cache and update cache on any changes
+ */
+export function useEventsStore():
+  | React.MutableRefObject<EventsStore>
+  | undefined {
+  const [cachedEvents] = useAsyncState(
+    React.useCallback(
+      () =>
+        chrome.storage.local.get('events').then((events) => {
+          eventsStoreRef.current =
+            (events.events as EventsStore | undefined) ?? {};
+          setDevelopmentGlobal('_eventsStore', eventsStoreRef.current);
+          return eventsStoreRef.current;
+        }),
+      []
+    ),
+    false
+  );
 
-export async function setCachedEvents(events: EventsStore): Promise<void> {
-  await chrome.storage.local.set({ events: JSON.stringify(events) });
+  React.useEffect(
+    () =>
+      cacheEvents.on('changed', () =>
+        chrome.storage.local
+          .set({
+            events: eventsStoreRef.current,
+          })
+          .catch(console.error)
+      ),
+    []
+  );
+
+  const eventsStoreRef = React.useRef<EventsStore>({});
+  return cachedEvents === undefined ? undefined : eventsStoreRef;
 }
 
 /**

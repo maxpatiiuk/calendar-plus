@@ -7,13 +7,7 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
-import {
-  cacheEvents,
-  EventsStore,
-  setCachedEvents,
-  useCachedEvents,
-  useEvents,
-} from '../EventsStore';
+import { useEventsStore, useEvents } from '../EventsStore';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -45,17 +39,12 @@ export function App(): JSX.Element | null {
   }, []);
 
   const currentView = React.useContext(CurrentViewContext);
-  const eventsStore = React.useRef<EventsStore>(useCachedEvents() ?? {});
+  const eventsStore = useEventsStore();
   const durations = useEvents(
     eventsStore,
     // Don't fetch until the overlay is opened
     isOpen ? currentView?.firstDay : undefined,
     currentView?.lastDay
-  );
-
-  React.useEffect(
-    () => cacheEvents.on('changed', () => setCachedEvents(eventsStore.current)),
-    []
   );
 
   const [debugOverlay] = useAsyncState(
