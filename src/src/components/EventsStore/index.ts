@@ -3,7 +3,7 @@ import { ajax } from '../../utils/ajax';
 import React from 'react';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { formatUrl } from '../../utils/queryString';
-import { R, RA, WritableArray } from '../../utils/types';
+import { R, RA, setDevelopmentGlobal, WritableArray } from '../../utils/types';
 import { findLastIndex } from '../../utils/utils';
 import {
   DAY,
@@ -11,9 +11,12 @@ import {
   MINUTE,
   MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
+import { eventListener } from '../../utils/events';
 
 export type EventsStore = R<Record<number, number>>;
 type CalendarEvent = Pick<gapi.client.calendar.Event, 'start' | 'end'>;
+
+export const cacheEvents = eventListener<{ changed: undefined }>();
 
 // TEST: test daylight savings time switch and back
 /**
@@ -22,7 +25,7 @@ type CalendarEvent = Pick<gapi.client.calendar.Event, 'start' | 'end'>;
  * calendar, and cache the computations for future use.
  */
 export function useEvents(
-  eventsStore: React.MutableRefObject<EventsStore>,
+  eventsStore: React.MutableRefObject<EventsStore> | undefined,
   startDate: Date | undefined,
   endDate: Date | undefined
 ): EventsStore | undefined {
@@ -30,6 +33,7 @@ export function useEvents(
   const [loaded] = useAsyncState(
     React.useCallback(async () => {
       if (
+        eventsStore === undefined ||
         calendars === undefined ||
         startDate === undefined ||
         endDate === undefined
@@ -84,14 +88,16 @@ export function useEvents(
           });
         })
       );
+      cacheEvents.trigger('changed');
       return true;
-    }, [calendars, startDate, endDate]),
+    }, [eventsStore, calendars, startDate, endDate]),
     false
   );
 
   return React.useMemo(
     () =>
       loaded === true &&
+      typeof eventsStore === 'object' &&
       typeof calendars === 'object' &&
       typeof startDate === 'object' &&
       typeof endDate === 'object'
@@ -99,6 +105,42 @@ export function useEvents(
         : undefined,
     [loaded, calendars, startDate, endDate]
   );
+}
+
+/**
+ * Fetch computed event durations from cache and update cache on any changes
+ */
+export function useEventsStore():
+  | React.MutableRefObject<EventsStore>
+  | undefined {
+  const [cachedEvents] = useAsyncState(
+    React.useCallback(
+      () =>
+        chrome.storage.local.get('events').then((events) => {
+          eventsStoreRef.current =
+            (events.events as EventsStore | undefined) ?? {};
+          setDevelopmentGlobal('_eventsStore', eventsStoreRef.current);
+          return eventsStoreRef.current;
+        }),
+      []
+    ),
+    false
+  );
+
+  React.useEffect(
+    () =>
+      cacheEvents.on('changed', () =>
+        chrome.storage.local
+          .set({
+            events: eventsStoreRef.current,
+          })
+          .catch(console.error)
+      ),
+    []
+  );
+
+  const eventsStoreRef = React.useRef<EventsStore>({});
+  return cachedEvents === undefined ? undefined : eventsStoreRef;
 }
 
 /**

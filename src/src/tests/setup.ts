@@ -3,6 +3,7 @@
  */
 
 import '@testing-library/jest-dom';
+import './__mocks__/chrome.ts';
 
 import { configure } from '@testing-library/dom';
 import failOnConsole from 'jest-fail-on-console';
