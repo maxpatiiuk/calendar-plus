@@ -13,7 +13,7 @@ import { EventsStore } from '../EventsStore';
 import { commonText } from '../../localization/common';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { RA, WritableArray } from '../../utils/types';
-import { CurrentView } from '../Contexts/CurrentViewContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { formatLabel } from '../Atoms/Internationalization';
 
 ChartJS.register(
@@ -28,13 +28,11 @@ ChartJS.register(
 
 export function StackedChart({
   durations,
-  view,
 }: {
   readonly durations: EventsStore | undefined;
-  readonly view: CurrentView;
 }): JSX.Element {
   const calendars = React.useContext(CalendarsContext);
-  const labels = useLabels(durations, view);
+  const labels = useLabels(durations);
   const dataSets = useDataSets(durations, calendars);
   return (
     <Bar
@@ -72,16 +70,14 @@ export function StackedChart({
   );
 }
 
-function useLabels(
-  durations: EventsStore | undefined,
-  view: CurrentView
-): WritableArray<string> {
+function useLabels(durations: EventsStore | undefined): WritableArray<string> {
+  const currentView = React.useContext(CurrentViewContext)!;
   return React.useMemo(
     () =>
       Object.keys(Object.values(durations ?? {})[0] ?? {}).map((duration) =>
-        formatLabel(new Date(duration), view)
+        formatLabel(new Date(duration), currentView)
       ),
-    [durations]
+    [durations, currentView]
   );
 }
 
