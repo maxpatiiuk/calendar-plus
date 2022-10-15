@@ -20,7 +20,6 @@ type RawCalendarListEntry = Pick<
 >;
 
 type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
-  readonly shortId: number;
   readonly backgroundColor: string;
   readonly borderColor: string;
 };
@@ -33,9 +32,7 @@ export function CalendarsSpy({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { authenticated } = React.useContext(AuthContext);
-  const [calendars] = useAsyncState<
-    RA<CalendarListEntry & { readonly shortId: number }>
-  >(
+  const [calendars] = useAsyncState<RA<CalendarListEntry>>(
     React.useCallback(async () => {
       if (!authenticated) return undefined;
       const response = await ajax(
@@ -52,13 +49,11 @@ export function CalendarsSpy({
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
       const calendars = rawCalendars.map((calendar) => {
         calendarIdResolver.add(calendar.id);
-        const shortId = Array.from(calendarIdResolver).indexOf(calendar.id);
         const rgbColor = hexToRgb(calendar.backgroundColor ?? randomColor());
         return {
           ...calendar,
           backgroundColor: rgbToString(generateBackground(rgbColor)),
           borderColor: rgbToString(generateBorder(rgbColor)),
-          shortId,
         };
       });
       const [secondary, primary] = split(
@@ -90,7 +85,7 @@ export function CalendarsSpy({
 }
 
 export const CalendarsContext = React.createContext<
-  RA<CalendarListEntry & { readonly shortId: number }> | undefined
+  RA<CalendarListEntry> | undefined
 >(undefined);
 CalendarsContext.displayName = 'CalendarsContext';
 

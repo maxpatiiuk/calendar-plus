@@ -53,4 +53,4 @@ export const rgbToString = (color: ColorTuple): string =>
   `rgb(${color.join(',')})`;
 
 export const average = (array: RA<number>): number =>
-  array.reduce((total, item) => total + item, 0) / array.length;
+  array.reduce((total, item) => total + item, 0) / Math.max(1, array.length);

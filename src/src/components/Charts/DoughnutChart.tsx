@@ -15,11 +15,10 @@ Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 export function DoughnutChart({
   durations,
-  calendars,
 }: {
   readonly durations: EventsStore | undefined;
-  readonly calendars: React.ContextType<typeof CalendarsContext>;
 }): JSX.Element {
+  const calendars = React.useContext(CalendarsContext);
   const labels = useLabels(calendars);
   const dataSets = useDataSets(durations, calendars);
   return (
@@ -59,9 +58,9 @@ function useDataSets(
       data:
         durations === undefined
           ? []
-          : calendars?.map(({ shortId }) =>
-              Object.values(durations).reduce(
-                (total, durations) => total + (durations[shortId] ?? 0),
+          : calendars?.map(({ id }) =>
+              Object.values(durations[id]).reduce(
+                (total, durations) => total + durations,
                 0
               )
             ) ?? [],

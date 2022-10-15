@@ -7,8 +7,9 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { useEventsStore, useEvents } from '../EventsStore';
+import { useEvents } from '../EventsStore';
 import { DoughnutChart } from '../Charts/DoughnutChart';
+import { useEventsStore } from '../EventsStore/useEventsStore';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
