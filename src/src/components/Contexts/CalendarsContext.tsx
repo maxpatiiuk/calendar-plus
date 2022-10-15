@@ -22,6 +22,7 @@ type RawCalendarListEntry = Pick<
 type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
   readonly backgroundColor: string;
   readonly borderColor: string;
+  readonly originalColor: string;
 };
 
 const calendarIdResolver: Set<string> = new Set();
@@ -49,9 +50,11 @@ export function CalendarsSpy({
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
       const calendars = rawCalendars.map((calendar) => {
         calendarIdResolver.add(calendar.id);
-        const rgbColor = hexToRgb(calendar.backgroundColor ?? randomColor());
+        const originalColor = calendar.backgroundColor ?? randomColor();
+        const rgbColor = hexToRgb(originalColor);
         return {
           ...calendar,
+          originalColor,
           backgroundColor: rgbToString(generateBackground(rgbColor)),
           borderColor: rgbToString(generateBorder(rgbColor)),
         };

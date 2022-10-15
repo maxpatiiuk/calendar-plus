@@ -52,9 +52,14 @@ function useLabels(
 function useDataSets(
   durations: EventsStore | undefined,
   calendars: React.ContextType<typeof CalendarsContext>
-): { readonly data: RA<number>; readonly backgroundColor: RA<string> } {
+): {
+  readonly label: string;
+  readonly data: RA<number>;
+  readonly backgroundColor: RA<string>;
+} {
   return React.useMemo(
     () => ({
+      label: '',
       data:
         durations === undefined
           ? []
@@ -64,7 +69,8 @@ function useDataSets(
                 0
               )
             ) ?? [],
-      backgroundColor: calendars?.map(({ borderColor }) => borderColor) ?? [],
+      backgroundColor:
+        calendars?.map(({ originalColor }) => originalColor) ?? [],
     }),
     [durations, calendars]
   );

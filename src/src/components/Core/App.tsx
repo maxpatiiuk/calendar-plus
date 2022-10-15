@@ -10,6 +10,7 @@ import { useAsyncState } from '../../hooks/useAsyncState';
 import { useEvents } from '../EventsStore';
 import { DoughnutChart } from '../Charts/DoughnutChart';
 import { useEventsStore } from '../EventsStore/useEventsStore';
+import { StackedChart } from '../Charts/StackedChart';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -79,7 +80,8 @@ export function App(): JSX.Element | null {
         <Portal>
           <main className="h-full overflow-y-auto">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
-            <DoughnutChart durations={durations} calendars={calendars} />
+            <DoughnutChart durations={durations} />
+            <StackedChart durations={durations} view={currentView} />
             <pre>
               {JSON.stringify({ currentView, auth, durations }, null, 4)}
               {JSON.stringify(

@@ -16,6 +16,8 @@ export function hexToRgb(hex: string): ColorTuple {
 
 /**
  * Copied from Charts.js Utils
+ * These are used only if calendar does not have a color (don't know how common
+ * that is)
  */
 const COLORS = [
   '#4dc9f6',
@@ -32,11 +34,11 @@ const COLORS = [
 export const randomColor = (): string =>
   COLORS[Math.floor(Math.random() * COLORS.length)];
 
-const backgroundBrightness = 100;
+const backgroundBrightness = 200;
 export const generateBackground = (color: ColorTuple): ColorTuple =>
   adjustColor(color, backgroundBrightness);
 
-const borderBrightness = 200;
+const borderBrightness = 100;
 export const generateBorder = (color: ColorTuple): ColorTuple =>
   adjustColor(color, borderBrightness);
 
