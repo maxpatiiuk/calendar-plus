@@ -8,6 +8,7 @@ import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { useEventsStore, useEvents } from '../EventsStore';
+import { DoughnutChart } from '../Charts/DoughnutChart';
 
 // Allowing for the class to be overridden from here
 const testWidgets: Array<WidgetObj> = [
@@ -77,6 +78,7 @@ export function App(): JSX.Element | null {
         <Portal>
           <main className="h-full overflow-y-auto">
             <Dashboard closeHandler={handleClose} widgets={testWidgets} />
+            <DoughnutChart durations={durations} calendars={calendars} />
             <pre>
               {JSON.stringify({ currentView, auth, durations }, null, 4)}
               {JSON.stringify(

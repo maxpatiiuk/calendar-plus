@@ -6,11 +6,24 @@ import { formatUrl } from '../../utils/queryString';
 import { sortFunction, split, toggleItem } from '../../utils/utils';
 import { listen } from '../../utils/events';
 import { AuthContext } from './AuthContext';
+import {
+  generateBackground,
+  generateBorder,
+  hexToRgb,
+  randomColor,
+  rgbToString,
+} from '../../utils/colors';
 
-type CalendarListEntry = Pick<
+type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
-  'id' | 'summary' | 'primary'
+  'id' | 'summary' | 'primary' | 'backgroundColor'
 >;
+
+type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
+  readonly shortId: number;
+  readonly backgroundColor: string;
+  readonly borderColor: string;
+};
 
 const calendarIdResolver: Set<string> = new Set();
 
@@ -30,17 +43,23 @@ export function CalendarsSpy({
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
           {
             minAccessRole: 'reader',
-            fields: 'items(id,summary,primary)',
+            fields: 'items(id,summary,primary,backgroundColor)',
             prettyPrint: false.toString(),
           }
         )
       );
       const results = await response.json();
-      const rawCalendars = results.items as RA<CalendarListEntry>;
+      const rawCalendars = results.items as RA<RawCalendarListEntry>;
       const calendars = rawCalendars.map((calendar) => {
         calendarIdResolver.add(calendar.id);
         const shortId = Array.from(calendarIdResolver).indexOf(calendar.id);
-        return { ...calendar, shortId };
+        const rgbColor = hexToRgb(calendar.backgroundColor ?? randomColor());
+        return {
+          ...calendar,
+          backgroundColor: rgbToString(generateBackground(rgbColor)),
+          borderColor: rgbToString(generateBorder(rgbColor)),
+          shortId,
+        };
       });
       const [secondary, primary] = split(
         calendars,
