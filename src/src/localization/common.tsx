@@ -13,6 +13,13 @@ export const commonText = createDictionary({
   dashboard: { 'en-us': 'Dashboard' },
   date: { 'en-us': 'Date' },
   duration: { 'en-us': 'Duration' },
+  goals: { 'en-us': 'Goals' },
+  noGoals: { 'en-us': 'No goals configured at the moment' },
+  quickActions: { 'en-us': 'Quick Actions' },
+  noQuickActions: { 'en-us': 'No quick actions available at the moment' },
+  suggestions: { 'en-us': 'Suggestions' },
+  noSuggestions: { 'en-us': 'No suggestions available at the moment' },
+  dataExport: { 'en-us': 'Data Export' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

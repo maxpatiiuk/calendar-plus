@@ -4,11 +4,18 @@ import { GoalsWidget } from '../Widgets/GoalsWidget';
 import { State } from 'typesafe-reducer';
 import { RA } from '../../utils/types';
 import { EventsStore } from '../EventsStore';
+import { DoughnutChart } from '../Charts/DoughnutChart';
+import { Suggestions } from '../Widgets/Suggestions';
+import { QuickActions } from '../Widgets/QuickActions';
+import { DataExport } from '../Widgets/DataExport';
 
 const widgets = {
-  DoughnutChart: StackedChart,
+  DoughnutChart,
   StackedChart,
+  DataExport,
   GoalsWidget,
+  QuickActions,
+  Suggestions,
 } as const;
 
 const breakpointsTailwind = {
@@ -30,7 +37,10 @@ export type Widget = {
   readonly definition:
     | State<'DoughnutChart'>
     | State<'StackedChart'>
-    | State<'GoalsWidget'>;
+    | State<'DataExport'>
+    | State<'GoalsWidget'>
+    | State<'QuickActions'>
+    | State<'Suggestions'>;
 };
 
 const singleRow = {
@@ -45,21 +55,45 @@ const singleRow = {
 const defaultLayout: RA<Widget> = [
   {
     colSpan: {
-      xs: 12,
-      sm: 12,
+      xs: 1,
+      sm: 1,
       md: 3,
       lg: 2,
-      xl: 2,
-      '2xl': 2,
+      xl: 1,
+      '2xl': 1,
     },
     rowSpan: singleRow,
     definition: { type: 'GoalsWidget' },
   },
   {
     colSpan: {
-      xs: 12,
-      sm: 12,
-      md: 6,
+      xs: 1,
+      sm: 1,
+      md: 3,
+      lg: 2,
+      xl: 1,
+      '2xl': 1,
+    },
+    rowSpan: singleRow,
+    definition: { type: 'QuickActions' },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 3,
+      lg: 2,
+      xl: 1,
+      '2xl': 1,
+    },
+    rowSpan: singleRow,
+    definition: { type: 'Suggestions' },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 3,
       lg: 3,
       xl: 3,
       '2xl': 3,
@@ -69,22 +103,34 @@ const defaultLayout: RA<Widget> = [
   },
   {
     colSpan: {
-      xs: 12,
-      sm: 12,
-      md: 4,
-      lg: 3,
-      xl: 3,
-      '2xl': 3,
+      xs: 1,
+      sm: 1,
+      md: 2,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
     },
     rowSpan: {
       xs: 1,
       sm: 1,
-      md: 4,
-      lg: 3,
-      xl: 3,
-      '2xl': 3,
+      md: 2,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
     },
     definition: { type: 'DoughnutChart' },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 3,
+      lg: 2,
+      xl: 1,
+      '2xl': 1,
+    },
+    rowSpan: singleRow,
+    definition: { type: 'DataExport' },
   },
 ];
 
