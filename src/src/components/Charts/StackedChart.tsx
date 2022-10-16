@@ -4,9 +4,7 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { EventsStore } from '../EventsStore';
@@ -16,15 +14,7 @@ import { RA, WritableArray } from '../../utils/types';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { formatLabel } from '../Atoms/Internationalization';
 
-ChartJS.register(
-  // TODO: check if can remove any of these
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 export function StackedChart({
   durations,
@@ -43,12 +33,6 @@ export function StackedChart({
       datasetIdKey="id"
       options={{
         responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-        },
-        // Utils.months({count: 7});
         scales: {
           x: {
             title: {

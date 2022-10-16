@@ -3,15 +3,9 @@ import { Doughnut } from 'react-chartjs-2';
 import { EventsStore } from '../EventsStore';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { RA, writable, WritableArray } from '../../utils/types';
-import {
-  Chart,
-  DoughnutController,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart, DoughnutController, ArcElement, Tooltip } from 'chart.js';
 
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+Chart.register(DoughnutController, ArcElement, Tooltip);
 
 export function DoughnutChart({
   durations,
@@ -53,11 +47,6 @@ export function DoughnutChart({
       ref={(chart) => setChart(chart ?? undefined)}
       options={{
         responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-        },
       }}
     />
   );

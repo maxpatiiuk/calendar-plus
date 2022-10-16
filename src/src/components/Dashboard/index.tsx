@@ -1,5 +1,4 @@
 import React, { CSSProperties } from 'react';
-import { DoughnutChart } from '../Charts/DoughnutChart';
 import { StackedChart } from '../Charts/StackedChart';
 import { GoalsWidget } from '../Widgets/GoalsWidget';
 import { State } from 'typesafe-reducer';
@@ -7,7 +6,7 @@ import { RA } from '../../utils/types';
 import { EventsStore } from '../EventsStore';
 
 const widgets = {
-  DoughnutChart,
+  DoughnutChart: StackedChart,
   StackedChart,
   GoalsWidget,
 } as const;
