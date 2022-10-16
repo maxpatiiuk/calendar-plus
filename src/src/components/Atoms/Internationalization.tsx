@@ -6,6 +6,7 @@ import { capitalize } from '../../utils/utils';
 import { commonText } from '../../localization/common';
 import { LANGUAGE } from '../../localization/utils';
 import type { RA } from '../../utils/types';
+import { CurrentView } from '../Contexts/CurrentViewContext';
 
 /* This is an incomplete definition. For complete, see MDN Docs */
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -67,6 +68,8 @@ declare namespace Intl {
         readonly dateStyle?: 'full' | 'long' | 'medium' | 'short';
         readonly timeStyle?: 'full' | 'long' | 'medium' | 'short';
         readonly month?: 'long' | 'short';
+        readonly weekday?: 'long' | 'short';
+        readonly day?: 'numeric';
       }
     );
 
@@ -164,6 +167,16 @@ export function getRelativeDate(date: Readonly<Date>): string {
     return relativeDate.format(-Math.round(timePassed / MONTH), 'month');
   else return relativeDate.format(-Math.round(timePassed / YEAR), 'year');
 }
+
+const dateFormatters = {
+  day: new Intl.DateTimeFormat(LANGUAGE, { dateStyle: 'full' }),
+  week: new Intl.DateTimeFormat(LANGUAGE, { weekday: 'long', day: 'numeric' }),
+  month: new Intl.DateTimeFormat(LANGUAGE, { day: 'numeric' }),
+  year: new Intl.DateTimeFormat(LANGUAGE, { month: 'long' }),
+} as const;
+
+export const formatLabel = (date: Date, { view }: CurrentView): string =>
+  dateFormatters[view].format(date);
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 export const compareStrings = new Intl.Collator(

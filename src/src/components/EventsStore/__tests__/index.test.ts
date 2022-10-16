@@ -2,10 +2,12 @@ import { theories } from '../../../tests/utils';
 import {
   countDaysBetween,
   dateToDateTime,
+  splitDate,
   dateToString,
   exportsForTests,
   getDatesBetween,
   isMidnight,
+  splitDateToString,
 } from '../index';
 
 const {
@@ -21,21 +23,51 @@ const timeMax = new Date('2022-10-16T05:00:00.000Z');
 
 theories(calculateBounds, {
   'empty cache': {
-    in: [{ current: {} }, 0, timeMin, getDatesBetween(timeMin, timeMax)],
+    in: [{ current: {} }, 'a', timeMin, getDatesBetween(timeMin, timeMax)],
     out: [timeMin, timeMax],
   },
   'non-empty cache': {
     in: [
       {
         current: {
-          '2022-10-9': { 2: 1 },
-          '2022-10-10': { 2: 1, 4: 1 },
-          '2022-10-14': { 3: 4 },
-          '2022-10-15': { 2: 1 },
-          '2022-10-16': { 2: 4 },
+          a: {
+            2022: [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                1,
+                1,
+                null,
+                null,
+                null,
+                undefined,
+                3,
+                1,
+                null,
+              ],
+              null,
+              null,
+            ],
+          },
         },
       },
-      2,
+      'a',
       timeMin,
       getDatesBetween(timeMin, timeMax),
     ],
@@ -52,14 +84,14 @@ theories(getDatesBetween, [
       new Date('2022-10-11T11:00:00-05:00'),
       new Date('2022-10-11T11:30:00-05:00'),
     ],
-    out: ['2022-10-11'],
+    out: [{ year: 2022, month: 9, day: 11 }],
   },
   {
     in: [
       new Date('2022-10-11T11:00:00-05:00'),
       new Date('2022-10-11T21:30:00-05:00'),
     ],
-    out: ['2022-10-11'],
+    out: [{ year: 2022, month: 9, day: 11 }],
   },
   {
     in: [
@@ -67,17 +99,17 @@ theories(getDatesBetween, [
       new Date('2022-10-21T21:30:00-05:00'),
     ],
     out: [
-      '2022-10-11',
-      '2022-10-12',
-      '2022-10-13',
-      '2022-10-14',
-      '2022-10-15',
-      '2022-10-16',
-      '2022-10-17',
-      '2022-10-18',
-      '2022-10-19',
-      '2022-10-20',
-      '2022-10-21',
+      { year: 2022, month: 9, day: 11 },
+      { year: 2022, month: 9, day: 12 },
+      { year: 2022, month: 9, day: 13 },
+      { year: 2022, month: 9, day: 14 },
+      { year: 2022, month: 9, day: 15 },
+      { year: 2022, month: 9, day: 16 },
+      { year: 2022, month: 9, day: 17 },
+      { year: 2022, month: 9, day: 18 },
+      { year: 2022, month: 9, day: 19 },
+      { year: 2022, month: 9, day: 20 },
+      { year: 2022, month: 9, day: 21 },
     ],
   },
   {
@@ -86,23 +118,37 @@ theories(getDatesBetween, [
       new Date('2022-10-21T00:00:00-05:00'),
     ],
     out: [
-      '2022-10-11',
-      '2022-10-12',
-      '2022-10-13',
-      '2022-10-14',
-      '2022-10-15',
-      '2022-10-16',
-      '2022-10-17',
-      '2022-10-18',
-      '2022-10-19',
-      '2022-10-20',
+      { year: 2022, month: 9, day: 11 },
+      { year: 2022, month: 9, day: 12 },
+      { year: 2022, month: 9, day: 13 },
+      { year: 2022, month: 9, day: 14 },
+      { year: 2022, month: 9, day: 15 },
+      { year: 2022, month: 9, day: 16 },
+      { year: 2022, month: 9, day: 17 },
+      { year: 2022, month: 9, day: 18 },
+      { year: 2022, month: 9, day: 19 },
+      { year: 2022, month: 9, day: 20 },
     ],
+  },
+]);
+
+theories(splitDate, [
+  {
+    in: [new Date('2022-10-11T11:00:00-05:00')],
+    out: { year: 2022, month: 9, day: 11 },
   },
 ]);
 
 theories(dateToString, [
   {
     in: [new Date('2022-10-11T11:00:00-05:00')],
+    out: '2022-10-11',
+  },
+]);
+
+theories(splitDateToString, [
+  {
+    in: [{ year: 2022, month: 9, day: 11 }],
     out: '2022-10-11',
   },
 ]);
@@ -236,52 +282,79 @@ theories(extractData, [
   {
     in: [
       {
-        '2022-10-09': {
-          3: 1,
-          4: 2,
-          5: 4,
+        a: {
+          2022: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              1,
+              1,
+              4,
+              3,
+              1,
+              null,
+            ],
+            null,
+            null,
+          ],
         },
-        '2022-10-10': {
-          3: 1,
-          4: 2,
-        },
-        '2022-10-11': {
-          3: 1,
-          4: 2,
-        },
-        '2022-10-12': {
-          2: 1,
-          3: 1,
-          4: 2,
+        b: {
+          2022: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            [null, null, null, null, null, 4, 5, 2, 1, 1, 4, 0, 1, 8],
+            null,
+            null,
+          ],
         },
       },
       [
         {
           summary: 'Calendar 3',
-          id: '',
-          shortId: 3,
+          id: 'a',
+          backgroundColor: '#ff0000',
         },
         {
           summary: 'Calendar 4',
-          id: '',
-          shortId: 4,
+          id: 'b',
+          backgroundColor: '#ff0000',
         },
       ],
       new Date('2022-10-10T11:00:00-05:00'),
       new Date('2022-10-12T11:30:00-05:00'),
     ],
     out: {
-      '2022-10-10': {
-        3: 1,
-        4: 2,
+      a: {
+        '2022-10-10': 4,
+        '2022-10-11': 3,
+        '2022-10-12': 1,
       },
-      '2022-10-11': {
-        3: 1,
-        4: 2,
-      },
-      '2022-10-12': {
-        3: 1,
-        4: 2,
+      b: {
+        '2022-10-10': 4,
+        '2022-10-11': 0,
+        '2022-10-12': 1,
       },
     },
   },
@@ -294,7 +367,7 @@ theories(calculateEventDuration, [
       new Date('2022-10-11T11:00:00-05:00'),
       new Date('2022-10-11T11:30:00-05:00'),
     ],
-    out: [['2022-10-11', 30]],
+    out: [[{ year: 2022, month: 9, day: 11 }, 30]],
   },
   {
     name: 'calls calculateInBetweenDurations',
@@ -302,7 +375,7 @@ theories(calculateEventDuration, [
       new Date('2022-10-11T11:00:00-05:00'),
       new Date('2022-10-12T00:00:00-05:00'),
     ],
-    out: [['2022-10-11', 780]],
+    out: [[{ year: 2022, month: 9, day: 11 }, 780]],
   },
 ]);
 
@@ -312,7 +385,7 @@ theories(calculateInBetweenDurations, [
       new Date('2022-10-11T11:00:00-05:00'),
       new Date('2022-10-12T00:00:00-05:00'),
     ],
-    out: [['2022-10-11', 780]],
+    out: [[{ year: 2022, month: 9, day: 11 }, 780]],
   },
   {
     in: [
@@ -320,17 +393,17 @@ theories(calculateInBetweenDurations, [
       new Date('2022-10-21T01:30:00-05:00'),
     ],
     out: [
-      ['2022-10-11', 780],
-      ['2022-10-12', 1440],
-      ['2022-10-13', 1440],
-      ['2022-10-14', 1440],
-      ['2022-10-15', 1440],
-      ['2022-10-16', 1440],
-      ['2022-10-17', 1440],
-      ['2022-10-18', 1440],
-      ['2022-10-19', 1440],
-      ['2022-10-20', 1440],
-      ['2022-10-21', 90],
+      [{ year: 2022, month: 9, day: 11 }, 780],
+      [{ year: 2022, month: 9, day: 12 }, 1440],
+      [{ year: 2022, month: 9, day: 13 }, 1440],
+      [{ year: 2022, month: 9, day: 14 }, 1440],
+      [{ year: 2022, month: 9, day: 15 }, 1440],
+      [{ year: 2022, month: 9, day: 16 }, 1440],
+      [{ year: 2022, month: 9, day: 17 }, 1440],
+      [{ year: 2022, month: 9, day: 18 }, 1440],
+      [{ year: 2022, month: 9, day: 19 }, 1440],
+      [{ year: 2022, month: 9, day: 20 }, 1440],
+      [{ year: 2022, month: 9, day: 21 }, 90],
     ],
   },
 ]);

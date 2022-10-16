@@ -5,21 +5,9 @@ import { Portal } from '../Molecules/Portal';
 import { Dashboard } from '../Dashboard';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { AuthContext } from '../Contexts/AuthContext';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { useEventsStore, useEvents } from '../EventsStore';
-
-// Allowing for the class to be overridden from here
-const testWidgets: Array<WidgetObj> = [
-  { header: 'Header 1', body: 'Body 1' },
-  { header: 'Header 2', body: 'Body 2' },
-  { header: 'Header 3', body: 'Body 3' },
-  { header: 'Header 4', body: 'Body 4' },
-  { header: 'Header 5', body: 'Body 5' },
-  { header: 'Header 6', body: 'Body 6' },
-  { header: 'Header 7', body: 'Body 7' },
-  { header: 'Header 8', body: 'Body 8' },
-];
+import { useEvents } from '../EventsStore';
+import { useEventsStore } from '../EventsStore/useEventsStore';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -52,7 +40,6 @@ export function App(): JSX.Element | null {
     false
   );
 
-  const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
 
   return typeof currentView === 'object' ? (
@@ -76,16 +63,7 @@ export function App(): JSX.Element | null {
       {isOpen && (
         <Portal>
           <main className="h-full overflow-y-auto">
-            <Dashboard closeHandler={handleClose} widgets={testWidgets} />
-            <pre>
-              {JSON.stringify({ currentView, auth, durations }, null, 4)}
-              {JSON.stringify(
-                calendars?.map(({ summary }) => summary) ??
-                  commonText('loading'),
-                null,
-                4
-              )}
-            </pre>
+            <Dashboard durations={durations} />
           </main>
         </Portal>
       )}

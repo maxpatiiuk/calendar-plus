@@ -9,7 +9,7 @@ import {
   months,
 } from '../Internationalization';
 
-test('localized month names are retried', () => {
+test('months names are localized', () => {
   expect(months).toEqual([
     'January',
     'February',

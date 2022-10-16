@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.3",
+    "chart.js": "^3.9.1",
     "react": "^18.2.0",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "typedoc": "^0.23.15",
     "typesafe-reducer": "^1.0.3"

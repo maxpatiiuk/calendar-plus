@@ -6,13 +6,16 @@ import { formatUrl } from '../../utils/queryString';
 import { sortFunction, split, toggleItem } from '../../utils/utils';
 import { listen } from '../../utils/events';
 import { AuthContext } from './AuthContext';
+import { randomColor } from '../../utils/colors';
 
-type CalendarListEntry = Pick<
+type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
-  'id' | 'summary' | 'primary'
+  'id' | 'summary' | 'primary' | 'backgroundColor'
 >;
 
-const calendarIdResolver: Set<string> = new Set();
+type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
+  readonly backgroundColor: string;
+};
 
 export function CalendarsSpy({
   children,
@@ -20,9 +23,7 @@ export function CalendarsSpy({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { authenticated } = React.useContext(AuthContext);
-  const [calendars] = useAsyncState<
-    RA<CalendarListEntry & { readonly shortId: number }>
-  >(
+  const [calendars] = useAsyncState<RA<CalendarListEntry>>(
     React.useCallback(async () => {
       if (!authenticated) return undefined;
       const response = await ajax(
@@ -30,18 +31,17 @@ export function CalendarsSpy({
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
           {
             minAccessRole: 'reader',
-            fields: 'items(id,summary,primary)',
+            fields: 'items(id,summary,primary,backgroundColor)',
             prettyPrint: false.toString(),
           }
         )
       );
       const results = await response.json();
-      const rawCalendars = results.items as RA<CalendarListEntry>;
-      const calendars = rawCalendars.map((calendar) => {
-        calendarIdResolver.add(calendar.id);
-        const shortId = Array.from(calendarIdResolver).indexOf(calendar.id);
-        return { ...calendar, shortId };
-      });
+      const rawCalendars = results.items as RA<RawCalendarListEntry>;
+      const calendars = rawCalendars.map((calendar) => ({
+        ...calendar,
+        backgroundColor: calendar.backgroundColor ?? randomColor(),
+      }));
       const [secondary, primary] = split(
         calendars,
         ({ primary }) => primary === true
@@ -71,7 +71,7 @@ export function CalendarsSpy({
 }
 
 export const CalendarsContext = React.createContext<
-  RA<CalendarListEntry & { readonly shortId: number }> | undefined
+  RA<CalendarListEntry> | undefined
 >(undefined);
 CalendarsContext.displayName = 'CalendarsContext';
 

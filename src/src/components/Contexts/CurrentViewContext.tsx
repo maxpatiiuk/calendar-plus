@@ -9,11 +9,11 @@ const supportedViews = [
   'day',
   'week',
   'month',
-  'year' /*, 'customday'*/,
+  /*'year' , 'customday'*/
 ] as const;
-type SupportedView = typeof supportedViews[number];
+export type SupportedView = typeof supportedViews[number];
 
-type CurrentView = {
+export type CurrentView = {
   readonly view: SupportedView;
   readonly selectedDay: Date;
   readonly firstDay: Date;
