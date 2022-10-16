@@ -47,7 +47,8 @@ theories(parsePath, [
       lastDay: new Date(2020, 11, 31),
     },
   },
-  {
+  // TODO: reEnable this once year view is supported
+  /*{
     in: ['/calendar/u/0/r/year/2023/'],
     out: {
       view: 'year',
@@ -55,5 +56,5 @@ theories(parsePath, [
       firstDay: new Date(2023, 0, 1),
       lastDay: new Date(2024, 0, 1),
     },
-  },
+  },*/
 ]);

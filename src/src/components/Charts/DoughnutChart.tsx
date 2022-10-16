@@ -83,7 +83,7 @@ function useDataSets(
               )
             ) ?? [],
       backgroundColor:
-        calendars?.map(({ originalColor }) => originalColor) ?? [],
+        calendars?.map(({ backgroundColor }) => backgroundColor) ?? [],
     }),
     [durations, calendars]
   );

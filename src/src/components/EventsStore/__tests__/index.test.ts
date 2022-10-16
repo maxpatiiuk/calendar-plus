@@ -335,13 +335,11 @@ theories(extractData, [
           summary: 'Calendar 3',
           id: 'a',
           backgroundColor: '#ff0000',
-          borderColor: '#ff0000',
         },
         {
           summary: 'Calendar 4',
           id: 'b',
           backgroundColor: '#ff0000',
-          borderColor: '#ff0000',
         },
       ],
       new Date('2022-10-10T11:00:00-05:00'),

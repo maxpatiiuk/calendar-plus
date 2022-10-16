@@ -1,19 +1,3 @@
-import { RA } from './types';
-
-type ColorTuple = readonly [r: number, g: number, b: number];
-
-/**
- * Convert a hex string in the #ffffff format into rgb 3-tuple
- */
-export function hexToRgb(hex: string): ColorTuple {
-  const [r, g, b] = hex.slice(1).match(/.{1,2}/g)!;
-  return [
-    Number.parseInt(r, 16),
-    Number.parseInt(g, 16),
-    Number.parseInt(b, 16),
-  ];
-}
-
 /**
  * Copied from Charts.js Utils
  * These are used only if calendar does not have a color (don't know how common
@@ -33,26 +17,3 @@ const COLORS = [
 
 export const randomColor = (): string =>
   COLORS[Math.floor(Math.random() * COLORS.length)];
-
-const backgroundBrightness = 200;
-export const generateBackground = (color: ColorTuple): ColorTuple =>
-  adjustColor(color, backgroundBrightness);
-
-const borderBrightness = 100;
-export const generateBorder = (color: ColorTuple): ColorTuple =>
-  adjustColor(color, borderBrightness);
-
-/**
- * Darken or lighten color as needed
- */
-export function adjustColor(color: ColorTuple, target: number): ColorTuple {
-  const coefficient = target / average(color);
-  const [r, g, b] = color.map((part) => Math.round(part * coefficient));
-  return [r, g, b];
-}
-
-export const rgbToString = (color: ColorTuple): string =>
-  `rgb(${color.join(',')})`;
-
-export const average = (array: RA<number>): number =>
-  array.reduce((total, item) => total + item, 0) / Math.max(1, array.length);

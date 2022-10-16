@@ -10,7 +10,6 @@ const supportedViews = [
   'week',
   'month',
   /*'year' , 'customday'*/
-  ,
 ] as const;
 export type SupportedView = typeof supportedViews[number];
 

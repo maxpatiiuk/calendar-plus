@@ -6,13 +6,7 @@ import { formatUrl } from '../../utils/queryString';
 import { sortFunction, split, toggleItem } from '../../utils/utils';
 import { listen } from '../../utils/events';
 import { AuthContext } from './AuthContext';
-import {
-  generateBackground,
-  generateBorder,
-  hexToRgb,
-  randomColor,
-  rgbToString,
-} from '../../utils/colors';
+import { randomColor } from '../../utils/colors';
 
 type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
@@ -21,11 +15,7 @@ type RawCalendarListEntry = Pick<
 
 type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
   readonly backgroundColor: string;
-  readonly borderColor: string;
-  readonly originalColor: string;
 };
-
-const calendarIdResolver: Set<string> = new Set();
 
 export function CalendarsSpy({
   children,
@@ -48,17 +38,10 @@ export function CalendarsSpy({
       );
       const results = await response.json();
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
-      const calendars = rawCalendars.map((calendar) => {
-        calendarIdResolver.add(calendar.id);
-        const originalColor = calendar.backgroundColor ?? randomColor();
-        const rgbColor = hexToRgb(originalColor);
-        return {
-          ...calendar,
-          originalColor,
-          backgroundColor: rgbToString(generateBackground(rgbColor)),
-          borderColor: rgbToString(generateBorder(rgbColor)),
-        };
-      });
+      const calendars = rawCalendars.map((calendar) => ({
+        ...calendar,
+        backgroundColor: calendar.backgroundColor ?? randomColor(),
+      }));
       const [secondary, primary] = split(
         calendars,
         ({ primary }) => primary === true

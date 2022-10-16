@@ -78,10 +78,10 @@ function useDataSets(
     () =>
       durations === undefined || calendars === undefined
         ? []
-        : calendars.map(({ id, summary, originalColor }) => ({
+        : calendars.map(({ id, summary, backgroundColor }) => ({
             id,
             label: summary,
-            backgroundColor: originalColor,
+            backgroundColor,
             data: Object.values(durations[id]),
           })),
     [durations, calendars]
