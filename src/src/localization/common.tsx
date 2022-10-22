@@ -20,6 +20,10 @@ export const commonText = createDictionary({
   suggestions: { 'en-us': 'Suggestions' },
   noSuggestions: { 'en-us': 'No suggestions available at the moment' },
   dataExport: { 'en-us': 'Data Export' },
+  save: { 'en-us': 'Save' },
+  edit: { 'en-us': 'Edit' },
+  cancel: { 'en-us': 'Cancel' },
+  resetToDefault: { 'en-us': 'Reset to Default' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */
