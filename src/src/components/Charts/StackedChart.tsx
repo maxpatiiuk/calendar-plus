@@ -13,6 +13,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { RA, WritableArray } from '../../utils/types';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { formatLabel } from '../Atoms/Internationalization';
+import { useBooleanState } from '../../hooks/useBooleanState';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -20,11 +21,16 @@ export function StackedChart({
   durations,
 }: {
   readonly durations: EventsStore | undefined;
-}): JSX.Element {
+}): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
   const labels = useLabels(durations);
   const dataSets = useDataSets(durations, calendars);
-  return (
+  const [loaded, handleLoaded] = useBooleanState();
+  React.useEffect(
+    () => (dataSets.length > 0 ? handleLoaded() : undefined),
+    [dataSets]
+  );
+  return loaded ? (
     <Bar
       data={{
         labels,
@@ -51,7 +57,7 @@ export function StackedChart({
         },
       }}
     />
-  );
+  ) : null;
 }
 
 function useLabels(durations: EventsStore | undefined): WritableArray<string> {

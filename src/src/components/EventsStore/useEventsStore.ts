@@ -9,14 +9,14 @@ import { cacheEvents, RawEventsStore } from './index';
 export function useEventsStore():
   | React.MutableRefObject<RawEventsStore>
   | undefined {
-  const [cachedEvents] = useAsyncState(
+  const [isLoaded] = useAsyncState(
     React.useCallback(
       () =>
         chrome.storage.local.get('events').then((events) => {
           eventsStoreRef.current =
             (events.events as RawEventsStore | undefined) ?? {};
           setDevelopmentGlobal('_eventsStore', eventsStoreRef.current);
-          return eventsStoreRef.current;
+          return true;
         }),
       []
     ),
@@ -36,5 +36,5 @@ export function useEventsStore():
   );
 
   const eventsStoreRef = React.useRef<RawEventsStore>({});
-  return cachedEvents === undefined ? undefined : eventsStoreRef;
+  return isLoaded === true ? eventsStoreRef : undefined;
 }

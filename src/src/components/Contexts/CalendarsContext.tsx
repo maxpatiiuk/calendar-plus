@@ -13,7 +13,7 @@ type RawCalendarListEntry = Pick<
   'id' | 'summary' | 'primary' | 'backgroundColor'
 >;
 
-type CalendarListEntry = Omit<RawCalendarListEntry, 'backgroundColor'> & {
+type CalendarListEntry = RawCalendarListEntry & {
   readonly backgroundColor: string;
 };
 
@@ -81,16 +81,20 @@ function useVisibilityChangeSpy(
 ): void {
   const [sideBar] = useAsyncState(
     React.useCallback(async () => {
-      const sideBar = await awaitElement(
-        () => document.querySelector('[role="complementary"]') ?? undefined
-      );
+      if (calendars === undefined) return;
+
+      const sideBar = await awaitElement(() => {
+        const sideBar = document.querySelector('[role="complementary"]');
+        if (
+          (sideBar?.querySelector('input[type="checkbox"]') ?? undefined) ===
+          undefined
+        )
+          return undefined;
+        else return sideBar ?? undefined;
+      });
       if (sideBar === undefined) console.error('Unable to locate the sidebar');
-      else
-        await awaitElement(
-          () => sideBar.querySelector('input[type="checkbox"]') ?? undefined
-        );
       return sideBar;
-    }, []),
+    }, [calendars]),
     false
   );
   React.useEffect(() => {
@@ -143,7 +147,7 @@ function useVisibilityChangeSpy(
  */
 async function awaitElement<T>(
   callback: () => T | undefined,
-  pollInterval = 10,
+  pollInterval = 50,
   limit = 100
 ): Promise<T | undefined> {
   const result = callback();
