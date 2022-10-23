@@ -4,6 +4,7 @@ import { EventsStore } from '../EventsStore';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { RA, writable, WritableArray } from '../../utils/types';
 import { Chart, DoughnutController, ArcElement, Tooltip } from 'chart.js';
+import { useBooleanState } from '../../hooks/useBooleanState';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -11,7 +12,7 @@ export function DoughnutChart({
   durations,
 }: {
   readonly durations: EventsStore | undefined;
-}): JSX.Element {
+}): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
   const labels = useLabels(calendars);
 
@@ -25,7 +26,9 @@ export function DoughnutChart({
   const [chart, setChart] = React.useState<
     Chart<'doughnut', RA<number>, string> | undefined
   >(undefined);
+  const [loaded, handleLoaded] = useBooleanState();
   React.useEffect(() => {
+    if (data.length > 0) handleLoaded();
     if (chart === undefined || dataRef.current === data) return;
     Array.from(
       {
@@ -38,7 +41,7 @@ export function DoughnutChart({
     chart.update();
   }, [data, chart]);
 
-  return (
+  return loaded ? (
     <Doughnut
       data={{
         labels,
@@ -49,7 +52,7 @@ export function DoughnutChart({
         responsive: true,
       }}
     />
-  );
+  ) : null;
 }
 
 function useLabels(

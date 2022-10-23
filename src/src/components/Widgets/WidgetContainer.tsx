@@ -9,7 +9,7 @@ export function WidgetContainer({
 }): JSX.Element {
   return (
     <div className="flex flex-col gap-2">
-      <h2>{header}</h2>
+      <h3>{header}</h3>
       <div className="flex-1">{children}</div>
     </div>
   );

@@ -2,9 +2,13 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { WidgetContainer } from './WidgetContainer';
 
-export function QuickActions(): JSX.Element {
+export function QuickActions({
+  label,
+}: {
+  readonly label: string;
+}): JSX.Element {
   return (
-    <WidgetContainer header={commonText('quickActions')}>
+    <WidgetContainer header={label}>
       {commonText('noQuickActions')}
     </WidgetContainer>
   );

@@ -53,7 +53,11 @@ export function Portal({
     };
   }, [element]);
 
-  return ReactDOM.createPortal(children, element);
+  return (
+    <PortalContext.Provider value={element}>
+      {ReactDOM.createPortal(children, element)}
+    </PortalContext.Provider>
+  );
 }
 
 /**
@@ -61,3 +65,8 @@ export function Portal({
  */
 const findMainContainer = (): Element | undefined =>
   document.querySelector('[role="main"]') ?? undefined;
+
+export const PortalContext = React.createContext<Element | undefined>(
+  undefined
+);
+PortalContext.displayName = 'PortalContext';

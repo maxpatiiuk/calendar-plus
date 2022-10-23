@@ -8,6 +8,7 @@ import { AuthContext } from '../Contexts/AuthContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
+import { Button } from '../Atoms';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -45,8 +46,7 @@ export function App(): JSX.Element | null {
   return typeof currentView === 'object' ? (
     <>
       {debugOverlay}
-      <button
-        type="button"
+      <Button.White
         onClick={
           auth.authenticated
             ? handleToggle
@@ -59,7 +59,7 @@ export function App(): JSX.Element | null {
         aria-pressed={isOpen}
       >
         {commonText('calendarPlus')}
-      </button>
+      </Button.White>
       {isOpen && (
         <Portal>
           <main className="h-full overflow-y-auto">

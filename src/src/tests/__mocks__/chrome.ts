@@ -13,9 +13,7 @@ Object.defineProperty(globalThis, 'chrome', {
   value: {
     storage: {
       local: {
-        async get(key: string): Promise<unknown> {
-          return data[key];
-        },
+        get: async (): Promise<unknown> => data,
         async set(entries: IR<unknown>) {
           Object.entries(entries).forEach(([key, value]) => {
             data[key] = value;

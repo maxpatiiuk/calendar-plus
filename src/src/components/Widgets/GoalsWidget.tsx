@@ -2,10 +2,12 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { WidgetContainer } from './WidgetContainer';
 
-export function GoalsWidget(): JSX.Element {
+export function GoalsWidget({
+  label,
+}: {
+  readonly label: string;
+}): JSX.Element {
   return (
-    <WidgetContainer header={commonText('goals')}>
-      {commonText('noGoals')}
-    </WidgetContainer>
+    <WidgetContainer header={label}>{commonText('noGoals')}</WidgetContainer>
   );
 }
