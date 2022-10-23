@@ -4,7 +4,6 @@ import { RA } from '../../utils/types';
 import { EventsStore } from '../EventsStore';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
-import { useLayout } from './useLayout';
 import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
 import { AddWidgetButton, WidgetContent } from './Widget';
 import type { BreakPoint } from './useBreakpoint';
@@ -12,6 +11,7 @@ import { useBreakpoint } from './useBreakpoint';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, H2 } from '../Atoms';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
+import { useStorage } from '../../hooks/useStorage';
 
 export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
 
@@ -31,7 +31,7 @@ const widgetClassName = `
   relative
   col-[span_var(--col-span)_/_span_var(--col-span)] 
   row-[span_var(--row-span)_/_span_var(--row-span)]
-  flex flex-col gap-2 rounded bg-gray-200 dark:bg-neutral-900
+  flex flex-col gap-2 rounded bg-white
 `;
 
 export function Dashboard({
@@ -41,13 +41,14 @@ export function Dashboard({
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
 
-  const [layout, setLayout] = useLayout();
+  const [layout = [], setLayout] = useStorage('layout', defaultLayout);
   const originalLayout = React.useRef<RA<WidgetDefinition>>([]);
   React.useEffect(() => {
     if (isEditing) originalLayout.current = layout;
   }, [isEditing]);
 
   const breakpoint = useBreakpoint();
+  const className = `${widgetClassName} ${isEditing ? '' : 'overflow-y-auto'}`;
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -88,7 +89,7 @@ export function Dashboard({
           {layout.map((widget, index) => (
             <section
               key={index}
-              className={widgetClassName}
+              className={className}
               style={
                 {
                   '--col-span': widget.colSpan[breakpoint],
@@ -119,7 +120,7 @@ export function Dashboard({
           ))}
           {isEditing && (
             <section
-              className={widgetClassName}
+              className={className}
               style={
                 {
                   '--col-span': 1,

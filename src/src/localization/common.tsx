@@ -32,7 +32,12 @@ export const commonText = createDictionary({
   doughnutChart: { 'en-us': 'Doughnut Chart' },
   stackedChart: { 'en-us': 'Stacked Chart' },
   type: { 'en-us': 'Type' },
-  add: { 'en-us': 'Add' },
+  addWidget: { 'en-us': 'Add Widget' },
+  addGoal: { 'en-us': 'Add Goal' },
+  hours: { 'en-us': 'hours' },
+  minutes: { 'en-us': 'minutes' },
+  calendar: { 'en-us': 'Calendar' },
+  aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

@@ -1,7 +1,7 @@
 import { EventsStore } from '../EventsStore';
 import React from 'react';
 import type { WidgetDefinition } from './index';
-import { GoalsWidget } from '../Widgets/GoalsWidget';
+import { GoalsWidget } from '../Goals/Widget';
 import { Suggestions } from '../Widgets/Suggestions';
 import { QuickActions } from '../Widgets/QuickActions';
 import { DataExport } from '../Widgets/DataExport';
@@ -39,7 +39,7 @@ export function WidgetContent({
 }): JSX.Element {
   const WidgetComponent = widgets[type];
   return (
-    <div className="p-4">
+    <div className="h-full p-4">
       <WidgetComponent
         durations={durations}
         label={widgetLabels[type]}
@@ -57,9 +57,9 @@ export function AddWidgetButton({
   return (
     <Button.Blue
       onClick={handleClick}
-      className="justify-center"
-      title={commonText('add')}
-      aria-label={commonText('add')}
+      className="h-full justify-center"
+      title={commonText('addWidget')}
+      aria-label={commonText('addWidget')}
     >
       {icon.plus}
     </Button.Blue>

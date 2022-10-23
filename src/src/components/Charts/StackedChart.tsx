@@ -88,7 +88,7 @@ function useDataSets(
             id,
             label: summary,
             backgroundColor,
-            data: Object.values(durations[id]),
+            data: Object.values(durations[id] ?? {}),
           })),
     [durations, calendars]
   );

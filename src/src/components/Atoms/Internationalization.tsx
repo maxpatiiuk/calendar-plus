@@ -129,6 +129,7 @@ export const HOUR = 60 * MINUTE;
 export const DAY = 24 * HOUR;
 export const MILLISECONDS_IN_DAY = DAY / MILLISECONDS;
 export const MINUTES_IN_DAY = DAY / MINUTE;
+export const MINUTES_IN_HOUR = HOUR / MINUTE;
 export const WEEK = 7 * DAY;
 export const MONTH = 4 * WEEK;
 export const YEAR = 12 * MONTH;
@@ -187,3 +188,15 @@ export const compareStrings = new Intl.Collator(
     ignorePunctuation: true,
   }
 ).compare;
+
+/**
+ * Format duration in minutes into an hours+minutes string
+ */
+export function formatDuration(duration: number): string {
+  const hours = Math.floor(duration / MINUTES_IN_HOUR);
+  const minutes = duration % MINUTES_IN_HOUR;
+  const formattedMinutes = `${minutes} ${commonText('minutes')}`;
+  return hours === 0
+    ? formattedMinutes
+    : `${hours} ${commonText('hours')} ${formattedMinutes}`;
+}
