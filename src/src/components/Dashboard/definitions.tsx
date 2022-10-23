@@ -2,7 +2,7 @@ import { RA } from '../../utils/types';
 import type { WidgetDefinition } from './index';
 import { WidgetGridColumnSizes } from './index';
 
-const singleRow = {
+export const singleRow = {
   xs: 1,
   sm: 1,
   md: 1,

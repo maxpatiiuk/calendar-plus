@@ -5,8 +5,8 @@ import { EventsStore } from '../EventsStore';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import { useLayout } from './useLayout';
-import { defaultLayout, widgetGridColumnSizes } from './definitions';
-import { WidgetContent } from './Widget';
+import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
+import { AddWidgetButton, WidgetContent } from './Widget';
 import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { removeItem, replaceItem } from '../../utils/utils';
@@ -26,6 +26,13 @@ export type WidgetDefinition = {
     | State<'QuickActions'>
     | State<'Suggestions'>;
 };
+
+const widgetClassName = `
+  relative
+  col-[span_var(--col-span)_/_span_var(--col-span)] 
+  row-[span_var(--row-span)_/_span_var(--row-span)]
+  flex flex-col gap-2 rounded bg-gray-200 dark:bg-neutral-900
+`;
 
 export function Dashboard({
   durations,
@@ -50,7 +57,10 @@ export function Dashboard({
         {isEditing && (
           <>
             <Button.White
-              onClick={(): void => setLayout(originalLayout.current)}
+              onClick={(): void => {
+                setLayout(originalLayout.current);
+                handleToggle();
+              }}
             >
               {commonText('cancel')}
             </Button.White>
@@ -78,12 +88,7 @@ export function Dashboard({
           {layout.map((widget, index) => (
             <section
               key={index}
-              className={`
-                relative
-                col-[span_var(--col-span)_/_span_var(--col-span)] 
-                row-[span_var(--row-span)_/_span_var(--row-span)]
-                flex flex-col gap-2 rounded bg-gray-200 dark:bg-neutral-900
-              `}
+              className={widgetClassName}
               style={
                 {
                   '--col-span': widget.colSpan[breakpoint],
@@ -112,6 +117,32 @@ export function Dashboard({
               )}
             </section>
           ))}
+          {isEditing && (
+            <section
+              className={widgetClassName}
+              style={
+                {
+                  '--col-span': 1,
+                  '--row-span': 1,
+                } as React.CSSProperties
+              }
+            >
+              <AddWidgetButton
+                onClick={(): void =>
+                  setLayout([
+                    ...layout,
+                    {
+                      colSpan: singleRow,
+                      rowSpan: singleRow,
+                      definition: {
+                        type: 'DoughnutChart',
+                      },
+                    },
+                  ])
+                }
+              />
+            </section>
+          )}
         </div>
       </div>
     </div>

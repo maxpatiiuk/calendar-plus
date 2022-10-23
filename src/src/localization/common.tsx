@@ -29,6 +29,10 @@ export const commonText = createDictionary({
   decreaseHeight: { 'en-us': 'Decrease Height' },
   increaseHeight: { 'en-us': 'Increase Height' },
   remove: { 'en-us': 'Remove' },
+  doughnutChart: { 'en-us': 'Doughnut Chart' },
+  stackedChart: { 'en-us': 'Stacked Chart' },
+  type: { 'en-us': 'Type' },
+  add: { 'en-us': 'Add' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */
