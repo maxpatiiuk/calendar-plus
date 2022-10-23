@@ -1,15 +1,19 @@
 import { EventsStore } from '../EventsStore';
 import React from 'react';
-import type { Widget } from './index';
+import type { WidgetDefinition } from './index';
 import { GoalsWidget } from '../Widgets/GoalsWidget';
 import { Suggestions } from '../Widgets/Suggestions';
 import { QuickActions } from '../Widgets/QuickActions';
 import { DataExport } from '../Widgets/DataExport';
 import { StackedChart } from '../Charts/StackedChart';
 import { DoughnutChart } from '../Charts/DoughnutChart';
+import { commonText } from '../../localization/common';
+import { icon } from '../Atoms/Icon';
+import { BreakPoint } from './useBreakpoint';
+import { widgetGridColumnSizes } from './definitions';
 
 const widgetClassName = `
-  bg-gray-200 dark:bg-neutral-900 flex flex-col gap-2 rounded p-4
+  bg-gray-200 dark:bg-neutral-900 flex flex-col gap-2 rounded relative
   col-[span_var(--col-span-xs)_/_span_var(--col-span-xs)]
   sm:col-[span_var(--col-span-sm)_/_span_var(--col-span-sm)]
   md:col-[span_var(--col-span-md)_/_span_var(--col-span-md)]
@@ -33,17 +37,32 @@ const widgets = {
   Suggestions,
 } as const;
 
+const buttonCommon = `
+  rounded-full border-none flex p-0.5 active:brightness-80 disabled:bg-gray-400
+  text-white disabled:text-black disabled:border disabled:border-neutral-700
+`;
+const resizeButton = `
+  ${buttonCommon} absolute pointer-events-auto bg-blue-600 hover:bg-blue-700
+`;
+
 export function Widget({
-  widget: {
+  durations,
+  breakpoint,
+  widget,
+  onEdit: handleEdit,
+}: {
+  readonly durations: EventsStore | undefined;
+  readonly breakpoint: BreakPoint;
+  readonly widget: WidgetDefinition;
+  readonly onEdit:
+    | ((newWidget: WidgetDefinition | undefined) => void)
+    | undefined;
+}): JSX.Element {
+  const {
     colSpan,
     rowSpan,
     definition: { type, ...definition },
-  },
-  durations,
-}: {
-  readonly widget: Widget;
-  readonly durations: EventsStore | undefined;
-}): JSX.Element {
+  } = widget;
   const colSpanVariables = React.useMemo(
     () => ({
       ...Object.fromEntries(
@@ -65,7 +84,120 @@ export function Widget({
   const WidgetComponent = widgets[type];
   return (
     <section style={colSpanVariables} className={widgetClassName}>
-      <WidgetComponent durations={durations} {...definition} />
+      {typeof handleEdit === 'function' && (
+        <WidgetEditor
+          breakpoint={breakpoint}
+          widget={widget}
+          onEdit={handleEdit}
+        />
+      )}
+      <div className="p-4">
+        <WidgetComponent durations={durations} {...definition} />
+      </div>
     </section>
+  );
+}
+
+function WidgetEditor({
+  breakpoint,
+  widget,
+  onEdit: handleEdit,
+}: {
+  readonly breakpoint: BreakPoint;
+  readonly widget: WidgetDefinition;
+  readonly onEdit: (newWidget: WidgetDefinition | undefined) => void;
+}): JSX.Element {
+  const colSpan = widget.colSpan[breakpoint];
+  const rowSpan = widget.rowSpan[breakpoint];
+  const maxCols = widgetGridColumnSizes[breakpoint];
+  return (
+    <>
+      <div className="pointer-events-none absolute flex h-full w-full items-center justify-between">
+        <button
+          type="button"
+          onClick={() =>
+            handleEdit({
+              ...widget,
+              colSpan: {
+                ...widget.colSpan,
+                [breakpoint]: colSpan - 1,
+              },
+            })
+          }
+          disabled={colSpan === 1}
+          title={commonText('decreaseWidth')}
+          aria-label={commonText('decreaseWidth')}
+          className={`${resizeButton} -left-1`}
+        >
+          {icon.minus}
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            handleEdit({
+              ...widget,
+              colSpan: {
+                ...widget.colSpan,
+                [breakpoint]: Math.min(colSpan + 1, maxCols),
+              },
+            })
+          }
+          disabled={colSpan === maxCols}
+          title={commonText('increaseWidth')}
+          aria-label={commonText('increaseWidth')}
+          className={`${resizeButton} -right-1`}
+        >
+          {icon.plus}
+        </button>
+      </div>
+      <div className="pointer-events-none absolute flex h-full w-full flex-col items-center justify-between">
+        <button
+          type="button"
+          onClick={() =>
+            handleEdit({
+              ...widget,
+              rowSpan: {
+                ...widget.rowSpan,
+                [breakpoint]: rowSpan - 1,
+              },
+            })
+          }
+          disabled={rowSpan === 1}
+          title={commonText('decreaseHeight')}
+          aria-label={commonText('decreaseHeight')}
+          className={`${resizeButton} -top-1`}
+        >
+          {icon.minus}
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            handleEdit({
+              ...widget,
+              rowSpan: {
+                ...widget.rowSpan,
+                [breakpoint]: rowSpan + 1,
+              },
+            })
+          }
+          title={commonText('increaseHeight')}
+          aria-label={commonText('increaseHeight')}
+          className={`${resizeButton} -bottom-1`}
+        >
+          {icon.plus}
+        </button>
+      </div>
+      <div className="absolute -top-1 -right-1">
+        <button
+          type="button"
+          onClick={() => handleEdit(undefined)}
+          title={commonText('remove')}
+          aria-label={commonText('remove')}
+          className={`${buttonCommon} bg-red-600 hover:bg-red-700`}
+        >
+          {icon.trash}
+        </button>
+      </div>
+    </>
   );
 }

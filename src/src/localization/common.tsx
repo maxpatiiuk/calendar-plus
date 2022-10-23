@@ -24,6 +24,11 @@ export const commonText = createDictionary({
   edit: { 'en-us': 'Edit' },
   cancel: { 'en-us': 'Cancel' },
   resetToDefault: { 'en-us': 'Reset to Default' },
+  decreaseWidth: { 'en-us': 'Decrease Width' },
+  increaseWidth: { 'en-us': 'Increase Width' },
+  decreaseHeight: { 'en-us': 'Decrease Height' },
+  increaseHeight: { 'en-us': 'Increase Height' },
+  remove: { 'en-us': 'Remove' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

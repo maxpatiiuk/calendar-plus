@@ -1,5 +1,6 @@
 import { RA } from '../../utils/types';
-import { Widget, WidgetGridColumnSizes } from './index';
+import type { WidgetDefinition } from './index';
+import { WidgetGridColumnSizes } from './index';
 
 const singleRow = {
   xs: 1,
@@ -10,7 +11,7 @@ const singleRow = {
   '2xl': 1,
 } as const;
 
-export const defaultLayout: RA<Widget> = [
+export const defaultLayout: RA<WidgetDefinition> = [
   {
     colSpan: {
       xs: 1,
