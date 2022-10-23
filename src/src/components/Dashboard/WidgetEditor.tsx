@@ -22,6 +22,7 @@ export function WidgetEditor({
               type: newType as WidgetDefinition['definition']['type'],
             })
           }
+          required
         >
           {Object.entries(widgetLabels).map(([type, label]) => (
             <option key={type} value={type}>

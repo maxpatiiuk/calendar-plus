@@ -56,13 +56,13 @@ export function App(): JSX.Element | null {
                   .then(handleToggle)
                   .catch(console.error)
         }
-        aria-pressed={isOpen}
+        aria-pressed={isOpen ? true : undefined}
       >
         {commonText('calendarPlus')}
       </Button.White>
       {isOpen && (
         <Portal>
-          <main className="h-full overflow-y-auto">
+          <main className="h-full overflow-y-auto bg-gray-200">
             <Dashboard durations={durations} />
           </main>
         </Portal>

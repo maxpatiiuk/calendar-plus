@@ -13,7 +13,7 @@ type RawCalendarListEntry = Pick<
   'id' | 'summary' | 'primary' | 'backgroundColor'
 >;
 
-type CalendarListEntry = RawCalendarListEntry & {
+export type CalendarListEntry = RawCalendarListEntry & {
   readonly backgroundColor: string;
 };
 
