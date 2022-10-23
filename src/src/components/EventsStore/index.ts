@@ -47,7 +47,7 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const calendars = React.useContext(CalendarsContext);
-  const [loaded] = useAsyncState(
+  const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
         eventsStore === undefined ||
@@ -106,22 +106,11 @@ export function useEvents(
         })
       );
       cacheEvents.trigger('changed');
-      return true;
+      return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [eventsStore, calendars, startDate, endDate]),
     false
   );
-
-  return React.useMemo(
-    () =>
-      loaded === true &&
-      typeof eventsStore === 'object' &&
-      typeof calendars === 'object' &&
-      typeof startDate === 'object' &&
-      typeof endDate === 'object'
-        ? extractData(eventsStore.current, calendars, startDate, endDate)
-        : undefined,
-    [loaded, calendars, startDate, endDate]
-  );
+  return durations;
 }
 
 /**

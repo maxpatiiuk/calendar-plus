@@ -80,7 +80,7 @@ function useDataSets(
         durations === undefined
           ? []
           : calendars?.map(({ id }) =>
-              Object.values(durations[id]).reduce(
+              Object.values(durations[id] ?? {}).reduce(
                 (total, durations) => total + durations,
                 0
               )

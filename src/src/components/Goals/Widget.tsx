@@ -104,7 +104,7 @@ function GoalComponent({
   const currentDuration = React.useMemo(
     () =>
       Object.values(currentDurations ?? {}).reduce(
-        (total, value) => total + value,
+        (total, value) => total + (value ?? 0),
         0
       ),
     [currentDurations]
