@@ -12,9 +12,8 @@ export function useEventsStore():
   const [isLoaded] = useAsyncState(
     React.useCallback(
       () =>
-        chrome.storage.local.get('events').then((events) => {
-          eventsStoreRef.current =
-            (events.events as RawEventsStore | undefined) ?? {};
+        chrome.storage.local.get('events').then(({ events }) => {
+          eventsStoreRef.current = (events as RawEventsStore | undefined) ?? {};
           setDevelopmentGlobal('_eventsStore', eventsStoreRef.current);
           return true;
         }),
