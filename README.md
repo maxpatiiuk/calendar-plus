@@ -11,7 +11,7 @@ Pre-requisites:
 Node.js 18
 Npm 8
 ```
-
+(Run all commands from the /src directory)
 Install dependencies:
 
 ```sh
