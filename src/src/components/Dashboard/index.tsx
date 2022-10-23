@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { State } from 'typesafe-reducer';
 import { RA } from '../../utils/types';
 import { EventsStore } from '../EventsStore';
@@ -6,11 +6,12 @@ import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import { useLayout } from './useLayout';
 import { defaultLayout, widgetGridColumnSizes } from './definitions';
-import { Widget } from './Widget';
+import { WidgetContent } from './Widget';
 import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { removeItem, replaceItem } from '../../utils/utils';
-import { Button } from '../Atoms';
+import { Button, H2 } from '../Atoms';
+import { WidgetEditorOverlay } from './WidgetEditorOverlay';
 
 export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
 
@@ -25,13 +26,6 @@ export type WidgetDefinition = {
     | State<'QuickActions'>
     | State<'Suggestions'>;
 };
-
-const gridSizeVariables = Object.fromEntries(
-  Object.entries(widgetGridColumnSizes).map(([breakpoint, size]) => [
-    `--grid-cols-${breakpoint}`,
-    size,
-  ])
-);
 
 export function Dashboard({
   durations,
@@ -51,7 +45,7 @@ export function Dashboard({
   return (
     <div className="flex flex-col gap-2 p-2">
       <div className="flex gap-2">
-        <h2>{commonText('calendarPlus')}</h2>
+        <H2>{commonText('calendarPlus')}</H2>
         <span className="-ml-2 flex-1" />
         {isEditing && (
           <>
@@ -72,33 +66,51 @@ export function Dashboard({
       <div className="overflow-y-auto overflow-x-hidden">
         <div
           className={`
-          grid grid-cols-[repeat(var(--grid-cols-xs),1fr)]
-          ${isEditing ? 'gap-4 p-2' : 'gap-2'}
-          sm:grid-cols-[repeat(var(--grid-cols-sm),1fr)]
-          md:grid-cols-[repeat(var(--grid-cols-md),1fr)]
-          lg:grid-cols-[repeat(var(--grid-cols-lg),1fr)]
-          xl:grid-cols-[repeat(var(--grid-cols-xl),1fr)]
-          2xl:grid-cols-[repeat(var(--grid-cols-2xl),1fr)]
-        `}
-          style={gridSizeVariables as CSSProperties}
+            grid grid-cols-[repeat(var(--grid-cols),1fr)]
+            ${isEditing ? 'gap-4 p-2' : 'gap-2'}
+          `}
+          style={
+            {
+              '--grid-cols': widgetGridColumnSizes[breakpoint],
+            } as React.CSSProperties
+          }
         >
           {layout.map((widget, index) => (
-            <Widget
+            <section
               key={index}
-              widget={widget}
-              onEdit={
-                isEditing
-                  ? (newWidget): void =>
-                      setLayout(
-                        newWidget === undefined
-                          ? removeItem(layout, index)
-                          : replaceItem(layout, index, newWidget)
-                      )
-                  : undefined
+              className={`
+                relative
+                col-[span_var(--col-span)_/_span_var(--col-span)] 
+                row-[span_var(--row-span)_/_span_var(--row-span)]
+                flex flex-col gap-2 rounded bg-gray-200 dark:bg-neutral-900
+              `}
+              style={
+                {
+                  '--col-span': widget.colSpan[breakpoint],
+                  '--row-span': widget.rowSpan[breakpoint],
+                } as React.CSSProperties
               }
-              breakpoint={breakpoint}
-              durations={durations}
-            />
+            >
+              {isEditing ? (
+                <WidgetEditorOverlay
+                  key={index}
+                  widget={widget}
+                  breakpoint={breakpoint}
+                  onEdit={(newWidget): void =>
+                    setLayout(
+                      newWidget === undefined
+                        ? removeItem(layout, index)
+                        : replaceItem(layout, index, newWidget)
+                    )
+                  }
+                />
+              ) : (
+                <WidgetContent
+                  durations={durations}
+                  definition={widget.definition}
+                />
+              )}
+            </section>
           ))}
         </div>
       </div>
