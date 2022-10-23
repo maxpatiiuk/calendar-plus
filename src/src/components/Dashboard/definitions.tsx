@@ -14,82 +14,94 @@ export const singleRow = {
 export const defaultLayout: RA<WidgetDefinition> = [
   {
     colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 3,
-      lg: 2,
-      xl: 1,
       '2xl': 1,
-    },
-    rowSpan: singleRow,
-    definition: { type: 'GoalsWidget' },
-  },
-  {
-    colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 3,
       lg: 2,
-      xl: 1,
-      '2xl': 1,
-    },
-    rowSpan: singleRow,
-    definition: { type: 'QuickActions' },
-  },
-  {
-    colSpan: {
-      xs: 1,
-      sm: 1,
       md: 3,
-      lg: 2,
-      xl: 1,
-      '2xl': 1,
-    },
-    rowSpan: singleRow,
-    definition: { type: 'Suggestions' },
-  },
-  {
-    colSpan: {
-      xs: 1,
       sm: 1,
-      md: 3,
-      lg: 3,
-      xl: 3,
-      '2xl': 3,
-    },
-    rowSpan: singleRow,
-    definition: { type: 'StackedChart' },
-  },
-  {
-    colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 3,
-      lg: 3,
       xl: 2,
+      xs: 1,
+    },
+    definition: {
+      type: 'GoalsWidget',
+    },
+    rowSpan: singleRow,
+  },
+  {
+    colSpan: {
+      '2xl': 1,
+      lg: 1,
+      md: 3,
+      sm: 1,
+      xl: 1,
+      xs: 1,
+    },
+    definition: {
+      type: 'QuickActions',
+    },
+    rowSpan: singleRow,
+  },
+  {
+    colSpan: {
+      '2xl': 3,
+      lg: 3,
+      md: 3,
+      sm: 1,
+      xl: 3,
+      xs: 1,
+    },
+    definition: {
+      type: 'StackedChart',
+    },
+    rowSpan: singleRow,
+  },
+  {
+    colSpan: {
       '2xl': 2,
+      lg: 2,
+      md: 3,
+      sm: 1,
+      xl: 2,
+      xs: 1,
+    },
+    definition: {
+      type: 'DoughnutChart',
     },
     rowSpan: {
-      xs: 1,
-      sm: 1,
-      md: 3,
-      lg: 3,
-      xl: 2,
       '2xl': 2,
+      lg: 3,
+      md: 3,
+      sm: 1,
+      xl: 2,
+      xs: 1,
     },
-    definition: { type: 'DoughnutChart' },
   },
   {
     colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 3,
-      lg: 3,
-      xl: 1,
       '2xl': 1,
+      lg: 3,
+      md: 3,
+      sm: 1,
+      xl: 2,
+      xs: 1,
+    },
+    definition: {
+      type: 'DataExport',
     },
     rowSpan: singleRow,
-    definition: { type: 'DataExport' },
+  },
+  {
+    colSpan: {
+      '2xl': 1,
+      lg: 3,
+      md: 3,
+      sm: 1,
+      xl: 2,
+      xs: 1,
+    },
+    definition: {
+      type: 'Suggestions',
+    },
+    rowSpan: singleRow,
   },
 ];
 
