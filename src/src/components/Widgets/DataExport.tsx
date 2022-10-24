@@ -61,6 +61,7 @@ export function DataExport({ label, durations, }: { readonly label: string, read
               disabled={durations === undefined}
               className="!p-1"
             >
+              {'Export currently selected calendar duration to CSV'}
     </Button.White>
     </WidgetContainer>;
 }
