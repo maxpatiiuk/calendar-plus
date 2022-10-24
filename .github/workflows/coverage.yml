@@ -13,10 +13,13 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+        
+      - name: Get number of CPU cores
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
       - name: Run tests
-        run: |
-          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}
+        run: npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}
         
       - name: Jest coverage comment
         uses: MishaKav/jest-coverage-comment@main
