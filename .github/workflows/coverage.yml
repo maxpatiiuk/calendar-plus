@@ -1,4 +1,4 @@
-name: 'coverage'
+name: Jest coverage report
 on:
     [pull_request, push]: 
         branches:
