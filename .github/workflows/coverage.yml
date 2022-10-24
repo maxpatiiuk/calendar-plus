@@ -1,6 +1,6 @@
 name: 'coverage'
 on:
-    pull_request: 
+    [pull_request, push]: 
         branches:
             - main
 jobs:
@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - uses: ArtiomTr/jest-coverage-report-action@v2
+            - uses: ArtiomTr/jest-coverage-report-action@v2.1.2
               id: coverage
               with: 
                   output: report-markdown
@@ -16,3 +16,4 @@ jobs:
               with: 
                   message: ${{ steps.coverage.outputs.report }}
                   test-script: npm test
+                  coverage-file: report.json
