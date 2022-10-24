@@ -1,6 +1,7 @@
 name: Jest coverage report
 on:
-    [pull_request, push]: 
+    push:
+    pull_request: 
         branches:
             - main
 jobs:
