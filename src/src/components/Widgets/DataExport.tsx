@@ -12,13 +12,12 @@ export function DataExport({ label, durations, }: { readonly label: string, read
   function exportToCSV() {
       if (durations === undefined || calendars === undefined) return;
       var csv = calendars.flatMap(({id, summary}) => {
-        Object.entries(durations[id] ?? {})
+        return Object.entries(durations[id] ?? {})
         .map(([date,duration])=>[summary,date,duration].join(','))
       })
       .join("\n")
-      console.log(csv)
 
-      downloadFile('Calendar-Stats.csv', csv ?? '')
+      downloadFile(`Calendar-Stats.csv`, csv ?? '')
       
   }
 
