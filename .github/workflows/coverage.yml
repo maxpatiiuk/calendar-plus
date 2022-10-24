@@ -16,7 +16,7 @@ jobs:
       
       - name: Run tests
         run: |
-          npx jest --coverage --reporters=default --reporters=jest-junit'
+          npx jest --coverage
         
       - name: Jest coverage comment
         uses: MishaKav/jest-coverage-comment@main
