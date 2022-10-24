@@ -41,4 +41,7 @@ jobs:
 
       - name: Run JS test suite
         run: |
-          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}
+          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }} --coverage --coverageReporters json-summary
+          
+      - name: Jest coverage comment
+        uses: MishaKav/jest-coverage-comment@main
