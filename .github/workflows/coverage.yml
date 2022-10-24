@@ -16,7 +16,7 @@ jobs:
       
       - name: Run tests
         run: |
-          npx jest --coverage
+          npm run unitTests -- --maxWorkers ${{ steps.cpu-cores.outputs.count }}
         
       - name: Jest coverage comment
         uses: MishaKav/jest-coverage-comment@main
