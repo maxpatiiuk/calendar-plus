@@ -2,8 +2,12 @@ name: Jest coverage comment
 on:
   push:
 jobs:
-  build:
+  coverage:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+        
     steps:
       - uses: actions/checkout@v3
 
