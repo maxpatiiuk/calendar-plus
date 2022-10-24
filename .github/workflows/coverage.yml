@@ -1,8 +1,8 @@
 name: 'coverage'
 on:
-  pull_request: 
-      branches:
-          - main
+    pull_request: 
+        branches:
+            - main
 jobs:
     coverage:
         runs-on: ubuntu-latest
@@ -13,6 +13,6 @@ jobs:
               with: 
                   output: report-markdown
             - uses: marocchino/sticky-pull-request-comment@v2
-            with: 
-                message: ${{ steps.coverage.outputs.report }}
-                test-script: npm test
+              with: 
+                  message: ${{ steps.coverage.outputs.report }}
+                  test-script: npm test
