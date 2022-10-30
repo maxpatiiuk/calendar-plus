@@ -9,6 +9,8 @@ import { useAsyncState } from '../../hooks/useAsyncState';
 import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
 import { Button } from '../Atoms';
+import { State } from 'typesafe-reducer';
+import { PreferencesPage } from '../Preferences';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -42,6 +44,9 @@ export function App(): JSX.Element | null {
   );
 
   const auth = React.useContext(AuthContext);
+  const [state, setState] = React.useState<
+    State<'MainState'> | State<'PreferencesState'>
+  >({ type: 'MainState' });
 
   return typeof currentView === 'object' ? (
     <>
@@ -63,7 +68,18 @@ export function App(): JSX.Element | null {
       {isOpen && (
         <Portal>
           <main className="h-full overflow-y-auto bg-gray-200">
-            <Dashboard durations={durations} />
+            {state.type === 'MainState' ? (
+              <Dashboard
+                durations={durations}
+                onOpenPreferences={(): void =>
+                  setState({ type: 'PreferencesState' })
+                }
+              />
+            ) : (
+              <PreferencesPage
+                onClose={(): void => setState({ type: 'MainState' })}
+              />
+            )}
           </main>
         </Portal>
       )}

@@ -40,6 +40,7 @@ export const commonText = createDictionary({
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
+  preferences: { 'en-us': 'Preferences' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

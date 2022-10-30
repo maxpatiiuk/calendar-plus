@@ -36,8 +36,10 @@ const widgetClassName = `
 
 export function Dashboard({
   durations,
+  onOpenPreferences: handleOpenPreferences,
 }: {
   readonly durations: EventsStore | undefined;
+  readonly onOpenPreferences: () => void;
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
 
@@ -55,7 +57,7 @@ export function Dashboard({
       <div className="flex gap-2">
         <H2>{commonText('calendarPlus')}</H2>
         <span className="-ml-2 flex-1" />
-        {isEditing && (
+        {isEditing ? (
           <>
             <Button.White
               onClick={(): void => {
@@ -69,6 +71,10 @@ export function Dashboard({
               {commonText('resetToDefault')}
             </Button.White>
           </>
+        ) : (
+          <Button.White onClick={handleOpenPreferences}>
+            {commonText('preferences')}
+          </Button.White>
         )}
         <Button.White onClick={handleToggle}>
           {isEditing ? commonText('save') : commonText('edit')}
