@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { usePref } from '../Preferences/usePref';
 
@@ -15,7 +15,7 @@ const ghostEventStyle = `{
 }`;
 
 export function GhostEvents(): null {
-  const [ghostEvents = [], setGhostEvents] = useStorage('ghostEvents', []);
+  const [ghostEvents = [], setGhostEvents] = useSafeStorage('ghostEvents', []);
   const styleRef = React.useRef<HTMLStyleElement | undefined>(undefined);
   const [ghostEventShortcut] = usePref('features', 'ghostEventShortcut');
 

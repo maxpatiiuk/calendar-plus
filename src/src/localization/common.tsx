@@ -50,6 +50,7 @@ export const commonText = createDictionary({
   regex: { 'en-us': 'Regex' },
   value: { 'en-us': 'Value' },
   virtualCalendar: { 'en-us': 'Virtual Calendar' },
+  addPrediction: { 'en-us': 'Add Prediction' },
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
 });
 /* eslint-enable react/jsx-no-literals */

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useSafeStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { RA, RR } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
@@ -29,13 +29,14 @@ const ruleLabel: RR<MatchRule, string> = {
   regex: commonText('regex'),
 };
 
+// BUG: bust the events cache when virtual events are edited
 export function VirtualCalendars({
   label,
 }: {
   readonly label: string;
 }): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [virtualCalendars, setVirtualCalendars] = useStorage(
+  const [virtualCalendars, setVirtualCalendars] = useSafeStorage(
     'virtualCalendars',
     []
   );
@@ -224,7 +225,7 @@ function EditableCalendarList({
               ])
             }
           >
-            {commonText('addGoal')}
+            {commonText('addPrediction')}
           </Button.White>
         </td>
       </tr>
