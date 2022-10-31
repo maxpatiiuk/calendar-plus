@@ -8,9 +8,10 @@ export const preferencesText = createDictionary({
   behavior: { 'en-us': 'Behavior' },
   includeAllDayEvents: { 'en-us': 'Include All-Day Events' },
   features: { 'en-us': 'Features' },
-  ghostEvent: { 'en-us': 'Display event as a ghost' },
+  ghostEvent: { 'en-us': 'A keyboard shortcut to display event as a ghost' },
   ghostEventDescription: {
-    'en-us': 'Display event as semi-transparent and non-interactive',
+    'en-us':
+      'Ghost events are displayed as semi-transparent and non-interactive',
   },
   shiftClick: { 'en-us': 'Shift+Click' },
   cmdClick: { 'en-us': 'Cmd+Click' },

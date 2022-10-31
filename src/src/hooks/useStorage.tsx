@@ -11,6 +11,7 @@ type StorageDefinitions = {
   readonly layout: RA<WidgetDefinition>;
   readonly goals: RA<Goal>;
   readonly preferences: UserPreferences;
+  readonly ghostEvents: RA<string>;
 };
 
 export function useStorage<NAME extends keyof StorageDefinitions>(

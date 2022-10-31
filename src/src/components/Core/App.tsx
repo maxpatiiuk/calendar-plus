@@ -12,6 +12,7 @@ import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
 import { Portal } from '../Molecules/Portal';
 import { PreferencesPage } from '../Preferences';
+import { GhostEvents } from '../PowerTools/GhostEvents';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -66,7 +67,7 @@ export function App(): JSX.Element | null {
       >
         {commonText('calendarPlus')}
       </Button.White>
-      {isOpen && (
+      {isOpen ? (
         <Portal>
           <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
             {state.type === 'MainState' ? (
@@ -83,6 +84,8 @@ export function App(): JSX.Element | null {
             )}
           </main>
         </Portal>
+      ) : (
+        <GhostEvents />
       )}
     </>
   ) : (

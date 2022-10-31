@@ -34,7 +34,9 @@ export const pickListPref = <T extends string>(
           const option =
             typeof rawOption === 'string' ? { value: rawOption } : rawOption;
           return (
-            <option key={option.value}>{option.title ?? option.value}</option>
+            <option key={option.value} value={option.value}>
+              {option.title ?? option.value}
+            </option>
           );
         })}
       </Select>
