@@ -3,6 +3,7 @@ import {
   capitalize,
   findLastIndex,
   removeItem,
+  removeKey,
   replaceItem,
   sortFunction,
   split,
@@ -79,6 +80,11 @@ theories(removeItem, {
   'remove at the end': { in: [[1, 2, 3, 4, 0], 4], out: [1, 2, 3, 4] },
   'remove from the end': { in: [[1, 2, 3, 0, 4], -1], out: [1, 2, 3, 4] },
   'remove after the end': { in: [[1, 2, 3, 4], 99], out: [1, 2, 3, 4] },
+});
+
+theories(removeKey, {
+  'removing a key that is present': [[{ a: 'b', c: 'd' }, 'c'], { a: 'b' }],
+  'removing a key that is not present': [[{ a: 'b' }, 'c' as 'a'], { a: 'b' }],
 });
 
 theories(findLastIndex, [

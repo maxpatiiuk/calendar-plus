@@ -11,11 +11,6 @@ import failOnConsole from 'jest-fail-on-console';
 // Fail a test if it calls console.error or console.log
 failOnConsole();
 
-/*
- * TEST: add a custom serializer for the SpecifyModel and
- *    LiteralField/Relationship objects
- */
-
 configure({
   throwSuggestions: true,
 });
