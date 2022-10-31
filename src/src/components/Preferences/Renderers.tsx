@@ -2,13 +2,15 @@ import React from 'react';
 
 import type { RA } from '../../utils/types';
 import { Input, Select } from '../Atoms';
-import type { PreferenceRenderer } from './Definitions';
+import type { PreferenceRenderer } from './definitions';
 
 export const BooleanPref: PreferenceRenderer<boolean> = ({
   value,
   onChange: handleChange,
 }): JSX.Element => (
-  <Input.Checkbox checked={value} onValueChange={handleChange} />
+  <span>
+    <Input.Checkbox checked={value} onValueChange={handleChange} />
+  </span>
 );
 
 export const pickListPref = <T extends string>(

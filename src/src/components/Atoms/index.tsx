@@ -91,7 +91,7 @@ export const Input = {
   >(
     'Input.Checkbox',
     'input',
-    `rounded-xs`,
+    `rounded-xs m-0 w-4 h-4`,
     ({ onValueChange, isReadOnly, ...props }) => ({
       ...props,
       type: 'checkbox',
@@ -129,4 +129,10 @@ export const Select = wrap<
       props.onChange?.(event);
     },
   })
+);
+
+export const Widget = wrap(
+  'Widget',
+  'section',
+  'flex flex-col gap-2 rounded bg-white'
 );

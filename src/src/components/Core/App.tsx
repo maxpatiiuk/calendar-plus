@@ -1,15 +1,16 @@
 import React from 'react';
-import { commonText } from '../../localization/common';
-import { useBooleanState } from '../../hooks/useBooleanState';
-import { Portal } from '../Molecules/Portal';
-import { Dashboard } from '../Dashboard';
-import { CurrentViewContext } from '../Contexts/CurrentViewContext';
-import { AuthContext } from '../Contexts/AuthContext';
+import type { State } from 'typesafe-reducer';
+
 import { useAsyncState } from '../../hooks/useAsyncState';
+import { useBooleanState } from '../../hooks/useBooleanState';
+import { commonText } from '../../localization/common';
+import { Button } from '../Atoms';
+import { AuthContext } from '../Contexts/AuthContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
+import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
-import { Button } from '../Atoms';
-import { State } from 'typesafe-reducer';
+import { Portal } from '../Molecules/Portal';
 import { PreferencesPage } from '../Preferences';
 
 const debugOverlayPromise =
@@ -52,6 +53,7 @@ export function App(): JSX.Element | null {
     <>
       {debugOverlay}
       <Button.White
+        aria-pressed={isOpen ? true : undefined}
         onClick={
           auth.authenticated
             ? handleToggle
@@ -61,13 +63,12 @@ export function App(): JSX.Element | null {
                   .then(handleToggle)
                   .catch(console.error)
         }
-        aria-pressed={isOpen ? true : undefined}
       >
         {commonText('calendarPlus')}
       </Button.White>
       {isOpen && (
         <Portal>
-          <main className="h-full overflow-y-auto bg-gray-200">
+          <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
             {state.type === 'MainState' ? (
               <Dashboard
                 durations={durations}

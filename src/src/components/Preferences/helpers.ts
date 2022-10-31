@@ -1,8 +1,8 @@
 /**
  * Utilities for dealing with user preferences
  */
-import type { Preferences } from './Definitions';
-import { preferenceDefinitions } from './Definitions';
+import type { Preferences } from './definitions';
+import { preferenceDefinitions } from './definitions';
 
 export const getPrefDefinition = <
   CATEGORY extends keyof Preferences,

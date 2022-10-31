@@ -32,18 +32,17 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
     false
   );
 
-  return [
-    value,
-    React.useCallback(
-      (value) => {
-        chrome.storage.sync
-          .set({
-            [name]: value,
-          })
-          .catch(console.error);
-        setValue(value);
-      },
-      [name]
-    ),
-  ];
+  const updateValue = React.useCallback(
+    (value: StorageDefinitions[NAME] | undefined) => {
+      chrome.storage.sync
+        .set({
+          [name]: value,
+        })
+        .catch(console.error);
+      setValue(value);
+    },
+    [name]
+  );
+
+  return React.useMemo(() => [value, updateValue], [value, updateValue]);
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import type { GetSet, IR } from '../../utils/types';
 import { removeKey } from '../../utils/utils';
 import { PreferencesContext } from './Context';
-import type { preferenceDefinitions, Preferences } from './Definitions';
+import type { preferenceDefinitions, Preferences } from './definitions';
 import { getPrefDefinition } from './helpers';
 
 /**
