@@ -79,6 +79,31 @@ export const Input = {
       />
     );
   },
+  Checkbox: wrap<
+    'input',
+    {
+      readonly onValueChange?: (isChecked: boolean) => void;
+      readonly readOnly?: never;
+      readonly isReadOnly?: boolean;
+      readonly type?: never;
+      readonly children?: undefined;
+    }
+  >(
+    'Input.Checkbox',
+    'input',
+    `rounded-xs`,
+    ({ onValueChange, isReadOnly, ...props }) => ({
+      ...props,
+      type: 'checkbox',
+      onChange(event): void {
+        // Disable onChange when readOnly
+        if (props.disabled === true || isReadOnly === true) return;
+        onValueChange?.((event.target as HTMLInputElement).checked);
+        props.onChange?.(event);
+      },
+      readOnly: isReadOnly,
+    })
+  ),
 };
 
 export const Select = wrap<

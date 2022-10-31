@@ -1,20 +1,17 @@
 import React from 'react';
-import { commonText } from '../../localization/common';
-import { WidgetContainer } from '../Widgets/WidgetContainer';
+
 import { useStorage } from '../../hooks/useStorage';
-import {
-  CurrentViewContext,
-  SupportedView,
-} from '../Contexts/CurrentViewContext';
-import {
-  CalendarListEntry,
-  CalendarsContext,
-} from '../Contexts/CalendarsContext';
-import { RA } from '../../utils/types';
-import { EventsStore } from '../EventsStore';
-import { GoalsEditor } from './GoalsEditor';
-import { Gage } from '../Molecules/Gage';
+import { commonText } from '../../localization/common';
+import type { RA } from '../../utils/types';
 import { formatDuration } from '../Atoms/Internationalization';
+import type { CalendarListEntry } from '../Contexts/CalendarsContext';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import type { SupportedView } from '../Contexts/CurrentViewContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
+import type { EventsStore } from '../EventsStore';
+import { Gage } from '../Molecules/Gage';
+import { WidgetContainer } from '../Widgets/WidgetContainer';
+import { GoalsEditor } from './GoalsEditor';
 
 export type Goal = {
   readonly calendarId: string;
@@ -34,20 +31,20 @@ export function GoalsWidget({
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
   return (
-    <WidgetContainer header={label} editing={[isEditing, setIsEditing]}>
+    <WidgetContainer editing={[isEditing, setIsEditing]} header={label}>
       {goals === undefined || calendars === undefined ? (
         commonText('loading')
       ) : isEditing ? (
         <GoalsEditor
-          goals={[goals, setGoals]}
           calendars={calendars}
           currentView={currentView}
+          goals={[goals, setGoals]}
         />
       ) : (
         <Goals
-          goals={goals.filter(({ view }) => view === currentView)}
-          durations={durations}
           calendars={calendars}
+          durations={durations}
+          goals={goals.filter(({ view }) => view === currentView)}
         />
       )}
     </WidgetContainer>
@@ -78,10 +75,10 @@ function Goals({
         ? commonText('noGoals')
         : goals.map((goal, index) => (
             <GoalComponent
-              key={index}
-              goal={goal}
-              durations={durations}
               calendars={calendars}
+              durations={durations}
+              goal={goal}
+              key={index}
             />
           ))}
     </div>
@@ -111,16 +108,16 @@ function GoalComponent({
   );
   return typeof calendar === 'object' ? (
     <Gage
-      value={currentDuration}
-      max={goalDuration}
+      color={calendar.backgroundColor}
+      fontSize={fontSize}
       label={`${calendar.summary} - ${commonText(
         'aOutOfB',
         formatDuration(currentDuration),
         formatDuration(goalDuration)
       )}`}
-      color={calendar.backgroundColor}
+      max={goalDuration}
       size={size}
-      fontSize={fontSize}
+      value={currentDuration}
     />
   ) : null;
 }
