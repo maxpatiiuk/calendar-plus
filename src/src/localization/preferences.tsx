@@ -13,6 +13,7 @@ export const preferencesText = createDictionary({
     'en-us':
       'Ghost events are displayed as semi-transparent and non-interactive',
   },
+  disable: { 'en-us': 'Disable' },
   shiftClick: { 'en-us': 'Shift+Click' },
   cmdClick: { 'en-us': 'Cmd+Click' },
   ctrlClick: { 'en-us': 'Ctrl+Click' },

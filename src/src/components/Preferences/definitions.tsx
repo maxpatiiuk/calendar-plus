@@ -53,10 +53,11 @@ export const preferenceDefinitions = {
   features: {
     title: preferencesText('features'),
     items: {
-      ghostEventShortcut: defineItem<'cmd' | 'ctrl' | 'shift'>({
+      ghostEventShortcut: defineItem<'cmd' | 'ctrl' | 'none' | 'shift'>({
         title: preferencesText('ghostEvent'),
         description: preferencesText('ghostEventDescription'),
-        renderer: pickListPref<'cmd' | 'ctrl' | 'shift'>([
+        renderer: pickListPref<'cmd' | 'ctrl' | 'none' | 'shift'>([
+          { value: 'none', title: preferencesText('disable') },
           { value: 'shift', title: preferencesText('shiftClick') },
           { value: 'cmd', title: preferencesText('cmdClick') },
           { value: 'ctrl', title: preferencesText('ctrlClick') },
