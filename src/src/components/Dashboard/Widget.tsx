@@ -11,6 +11,7 @@ import { commonText } from '../../localization/common';
 import { RR } from '../../utils/types';
 import { icon } from '../Atoms/Icon';
 import { Button } from '../Atoms';
+import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 
 const widgets = {
   DoughnutChart,
@@ -19,6 +20,7 @@ const widgets = {
   GoalsWidget,
   QuickActions,
   Suggestions,
+  VirtualCalendars,
 } as const;
 
 export const widgetLabels: RR<keyof typeof widgets, string> = {
@@ -28,6 +30,7 @@ export const widgetLabels: RR<keyof typeof widgets, string> = {
   GoalsWidget: commonText('goals'),
   QuickActions: commonText('quickActions'),
   Suggestions: commonText('suggestions'),
+  VirtualCalendars: commonText('virtualCalendars'),
 };
 
 export function WidgetContent({

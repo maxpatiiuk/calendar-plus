@@ -3,6 +3,7 @@ import React from 'react';
 import type { WidgetDefinition } from '../components/Dashboard';
 import type { Goal } from '../components/Goals/Widget';
 import type { UserPreferences } from '../components/Preferences/helpers';
+import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
 import type { GetSet, RA } from '../utils/types';
 import { setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
@@ -12,6 +13,7 @@ type StorageDefinitions = {
   readonly goals: RA<Goal>;
   readonly preferences: UserPreferences;
   readonly ghostEvents: RA<string>;
+  readonly virtualCalendars: RA<VirtualCalendar>;
 };
 
 export function useStorage<NAME extends keyof StorageDefinitions>(
@@ -41,6 +43,7 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
         })
         .catch(console.error);
       setValue(value);
+      setDevelopmentGlobal(`_${name}`, value);
     },
     [name]
   );

@@ -1,6 +1,5 @@
-import { RA } from '../../utils/types';
-import type { WidgetDefinition } from './index';
-import { WidgetGridColumnSizes } from './index';
+import type { RA } from '../../utils/types';
+import type { WidgetGridColumnSizes, WidgetDefinition } from './index';
 
 export const singleRow = {
   xs: 1,
@@ -102,6 +101,27 @@ export const defaultLayout: RA<WidgetDefinition> = [
       type: 'Suggestions',
     },
     rowSpan: singleRow,
+  },
+  {
+    colSpan: {
+      '2xl': 2,
+      lg: 4,
+      md: 3,
+      sm: 1,
+      xl: 2,
+      xs: 1,
+    },
+    definition: {
+      type: 'VirtualCalendars',
+    },
+    rowSpan: {
+      '2xl': 4,
+      lg: 4,
+      md: 2,
+      sm: 2,
+      xl: 2,
+      xs: 1,
+    },
   },
 ];
 

@@ -40,6 +40,17 @@ export const commonText = createDictionary({
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
   preferences: { 'en-us': 'Preferences' },
+  virtualCalendars: { 'en-us': 'Autocomplete Predictions' },
+  sourceCalendar: { 'en-us': 'Source Calendar' },
+  matchRule: { 'en-us': 'Match Rule' },
+  startsWith: { 'en-us': 'Starts With' },
+  endsWith: { 'en-us': 'Ends With' },
+  equals: { 'en-us': 'Equals' },
+  contains: { 'en-us': 'Contains' },
+  regex: { 'en-us': 'Regex' },
+  value: { 'en-us': 'Value' },
+  virtualCalendar: { 'en-us': 'Virtual Calendar' },
+  noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

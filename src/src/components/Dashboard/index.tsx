@@ -26,7 +26,8 @@ export type WidgetDefinition = {
     | State<'GoalsWidget'>
     | State<'QuickActions'>
     | State<'StackedChart'>
-    | State<'Suggestions'>;
+    | State<'Suggestions'>
+    | State<'VirtualCalendars'>;
 };
 
 const widgetClassName = `
@@ -79,6 +80,7 @@ export function Dashboard({
           {isEditing ? commonText('save') : commonText('edit')}
         </Button.White>
       </PageHeader>
+      {/* BUG: dashboard container is cut off at the bottom */}
       <div className="overflow-y-auto overflow-x-hidden">
         <div
           className={`
