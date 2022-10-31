@@ -18,7 +18,7 @@ export type VirtualCalendar = {
   readonly calendarId: string;
   readonly rule: MatchRule;
   readonly value: string;
-  readonly virtualCalendar: string;
+  readonly virtualCalendar?: string;
 };
 
 const ruleLabel: RR<MatchRule, string> = {
@@ -201,7 +201,9 @@ function EditableCalendarList({
                   placeholder={calendar.summary}
                   value={virtualCalendar}
                   onValueChange={(virtualCalendar): void =>
-                    handleEdited({ virtualCalendar })
+                    handleEdited({
+                      virtualCalendar: virtualCalendar || undefined,
+                    })
                   }
                 />
               </div>
