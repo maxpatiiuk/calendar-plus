@@ -4,7 +4,6 @@ import { createDictionary } from './utils';
 
 /* eslint-disable react/jsx-no-literals */
 /* eslint-disable @typescript-eslint/naming-convention */
-// REFACTOR: get rid of "exampleDialogText" in favor of just "example" ?
 export const commonText = createDictionary({
   calendarPlus: { 'en-us': 'Calendar Plus' },
   fullDate: { 'en-us': 'Full Date' },
@@ -40,6 +39,19 @@ export const commonText = createDictionary({
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
+  preferences: { 'en-us': 'Preferences' },
+  virtualCalendars: { 'en-us': 'Autocomplete Predictions' },
+  sourceCalendar: { 'en-us': 'Source Calendar' },
+  matchRule: { 'en-us': 'Match Rule' },
+  startsWith: { 'en-us': 'Starts With' },
+  endsWith: { 'en-us': 'Ends With' },
+  equals: { 'en-us': 'Equals' },
+  contains: { 'en-us': 'Contains' },
+  regex: { 'en-us': 'Regex' },
+  value: { 'en-us': 'Value' },
+  virtualCalendar: { 'en-us': 'Virtual Calendar' },
+  addPrediction: { 'en-us': 'Add Prediction' },
+  noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

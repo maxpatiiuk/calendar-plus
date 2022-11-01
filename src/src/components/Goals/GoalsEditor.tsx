@@ -1,13 +1,15 @@
-import { GetSet, RA } from '../../utils/types';
-import { SupportedView } from '../Contexts/CurrentViewContext';
-import { CalendarListEntry } from '../Contexts/CalendarsContext';
-import { Button, Select } from '../Atoms';
-import { commonText } from '../../localization/common';
-import { removeItem, replaceItem } from '../../utils/utils';
-import { icon } from '../Atoms/Icon';
-import { DurationPicker } from '../Molecules/DurationPicker';
 import React from 'react';
-import { Goal } from './Widget';
+
+import { commonText } from '../../localization/common';
+import type { GetSet, RA } from '../../utils/types';
+import { removeItem, replaceItem } from '../../utils/utils';
+import { Button } from '../Atoms';
+import { icon } from '../Atoms/Icon';
+import type { CalendarListEntry } from '../Contexts/CalendarsContext';
+import type { SupportedView } from '../Contexts/CurrentViewContext';
+import { CalendarList } from '../Molecules/CalendarList';
+import { DurationPicker } from '../Molecules/DurationPicker';
+import type { Goal } from './Widget';
 
 export function GoalsEditor({
   goals: [goals, setGoals],
@@ -17,23 +19,24 @@ export function GoalsEditor({
   readonly goals: GetSet<RA<Goal>>;
   readonly currentView: SupportedView;
   readonly calendars: RA<CalendarListEntry>;
-}) {
+}): JSX.Element {
   return (
     <>
       {goals.map((goal, index) =>
         goal.view === currentView ? (
           <div className="flex gap-2" key={index}>
             <Button.Red
-              title={commonText('remove')}
               aria-label={commonText('remove')}
-              onClick={(): void => setGoals(removeItem(goals, index))}
               className="!p-1"
+              title={commonText('remove')}
+              onClick={(): void => setGoals(removeItem(goals, index))}
             >
               {icon.trash}
             </Button.Red>
-            <Select
+            <CalendarList
+              calendars={calendars}
               value={goal.calendarId}
-              onValueChange={(calendarId): void =>
+              onChange={(calendarId): void =>
                 setGoals(
                   replaceItem(goals, index, {
                     ...goal,
@@ -41,16 +44,7 @@ export function GoalsEditor({
                   })
                 )
               }
-              title={commonText('calendar')}
-              aria-label={commonText('calendar')}
-              required
-            >
-              {calendars.map(({ id, summary }) => (
-                <option key={id} value={id}>
-                  {summary}
-                </option>
-              ))}
-            </Select>
+            />
             <DurationPicker
               value={goal.duration}
               onChange={(duration): void =>

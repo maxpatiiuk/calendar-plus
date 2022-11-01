@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { crash, error } from '../Errors/assert';
+import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
+import { crash, error } from '../Errors/assert';
 import { ErrorBoundary } from '../Errors/ErrorBoundary';
-import { useBooleanState } from '../../hooks/useBooleanState';
-import { TrackCurrentView } from './CurrentViewContext';
+import { PreferencesProvider } from '../Preferences/Context';
 import { AuthenticationProvider } from './AuthContext';
 import { CalendarsSpy } from './CalendarsContext';
+import { TrackCurrentView } from './CurrentViewContext';
 
 /**
  * Provide contexts used by other components
@@ -51,11 +52,13 @@ export function Contexts({
         {/* FEATURE: replace this with a toast, dialog, or status line*/}
         {isLoading && commonText('loading')}
         <React.Suspense fallback={<>{commonText('loading')}</>}>
-          <TrackCurrentView>
-            <AuthenticationProvider>
-              <CalendarsSpy>{children}</CalendarsSpy>
-            </AuthenticationProvider>
-          </TrackCurrentView>
+          <PreferencesProvider>
+            <TrackCurrentView>
+              <AuthenticationProvider>
+                <CalendarsSpy>{children}</CalendarsSpy>
+              </AuthenticationProvider>
+            </TrackCurrentView>
+          </PreferencesProvider>
         </React.Suspense>
       </LoadingContext.Provider>
     </ErrorBoundary>

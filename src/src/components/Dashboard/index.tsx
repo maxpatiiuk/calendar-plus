@@ -1,17 +1,19 @@
 import React from 'react';
-import { State } from 'typesafe-reducer';
-import { RA } from '../../utils/types';
-import { EventsStore } from '../EventsStore';
+import type { State } from 'typesafe-reducer';
+
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
+import type { RA } from '../../utils/types';
+import { removeItem, replaceItem } from '../../utils/utils';
+import { Button, Widget } from '../Atoms';
+import type { EventsStore } from '../EventsStore';
+import { PageHeader } from '../Molecules/PageHeader';
 import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
-import { AddWidgetButton, WidgetContent } from './Widget';
 import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
-import { removeItem, replaceItem } from '../../utils/utils';
-import { Button, H2 } from '../Atoms';
+import { AddWidgetButton, WidgetContent } from './Widget';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
-import { useStorage } from '../../hooks/useStorage';
 
 export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
 
@@ -19,25 +21,27 @@ export type WidgetDefinition = {
   readonly colSpan: WidgetGridColumnSizes;
   readonly rowSpan: WidgetGridColumnSizes;
   readonly definition:
-    | State<'DoughnutChart'>
-    | State<'StackedChart'>
     | State<'DataExport'>
+    | State<'DoughnutChart'>
     | State<'GoalsWidget'>
     | State<'QuickActions'>
-    | State<'Suggestions'>;
+    | State<'StackedChart'>
+    | State<'Suggestions'>
+    | State<'VirtualCalendars'>;
 };
 
 const widgetClassName = `
   relative
   col-[span_var(--col-span)_/_span_var(--col-span)] 
   row-[span_var(--row-span)_/_span_var(--row-span)]
-  flex flex-col gap-2 rounded bg-white
 `;
 
 export function Dashboard({
   durations,
+  onOpenPreferences: handleOpenPreferences,
 }: {
   readonly durations: EventsStore | undefined;
+  readonly onOpenPreferences: () => void;
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
 
@@ -51,11 +55,9 @@ export function Dashboard({
   const className = `${widgetClassName} ${isEditing ? '' : 'overflow-y-auto'}`;
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <div className="flex gap-2">
-        <H2>{commonText('calendarPlus')}</H2>
-        <span className="-ml-2 flex-1" />
-        {isEditing && (
+    <>
+      <PageHeader label={commonText('calendarPlus')}>
+        {isEditing ? (
           <>
             <Button.White
               onClick={(): void => {
@@ -69,11 +71,16 @@ export function Dashboard({
               {commonText('resetToDefault')}
             </Button.White>
           </>
+        ) : (
+          <Button.White onClick={handleOpenPreferences}>
+            {commonText('preferences')}
+          </Button.White>
         )}
         <Button.White onClick={handleToggle}>
           {isEditing ? commonText('save') : commonText('edit')}
         </Button.White>
-      </div>
+      </PageHeader>
+      {/* BUG: dashboard container is cut off at the bottom */}
       <div className="overflow-y-auto overflow-x-hidden">
         <div
           className={`
@@ -87,9 +94,9 @@ export function Dashboard({
           }
         >
           {layout.map((widget, index) => (
-            <section
-              key={index}
+            <Widget
               className={className}
+              key={index}
               style={
                 {
                   '--col-span': widget.colSpan[breakpoint],
@@ -99,9 +106,9 @@ export function Dashboard({
             >
               {isEditing ? (
                 <WidgetEditorOverlay
+                  breakpoint={breakpoint}
                   key={index}
                   widget={widget}
-                  breakpoint={breakpoint}
                   onEdit={(newWidget): void =>
                     setLayout(
                       newWidget === undefined
@@ -112,11 +119,11 @@ export function Dashboard({
                 />
               ) : (
                 <WidgetContent
-                  durations={durations}
                   definition={widget.definition}
+                  durations={durations}
                 />
               )}
-            </section>
+            </Widget>
           ))}
           {isEditing && (
             <section
@@ -146,6 +153,6 @@ export function Dashboard({
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

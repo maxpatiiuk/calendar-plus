@@ -79,6 +79,54 @@ export const Input = {
       />
     );
   },
+  Checkbox: wrap<
+    'input',
+    {
+      readonly onValueChange?: (isChecked: boolean) => void;
+      readonly readOnly?: never;
+      readonly isReadOnly?: boolean;
+      readonly type?: never;
+      readonly children?: undefined;
+    }
+  >(
+    'Input.Checkbox',
+    'input',
+    `rounded-xs m-0 w-4 h-4`,
+    ({ onValueChange, isReadOnly, ...props }) => ({
+      ...props,
+      type: 'checkbox',
+      onChange(event): void {
+        // Disable onChange when readOnly
+        if (props.disabled === true || isReadOnly === true) return;
+        onValueChange?.((event.target as HTMLInputElement).checked);
+        props.onChange?.(event);
+      },
+      readOnly: isReadOnly,
+    })
+  ),
+  Text: wrap<
+    'input',
+    {
+      readonly onValueChange?: (value: string) => void;
+      readonly type?: 'If you need to specify type, use Input.Generic';
+      readonly readOnly?: never;
+      readonly isReadOnly?: boolean;
+      readonly children?: undefined;
+    }
+  >(
+    'Input.Text',
+    'input',
+    `w-full ${googleButton}`,
+    ({ onValueChange, isReadOnly, ...props }) => ({
+      ...props,
+      type: 'text',
+      onChange(event): void {
+        onValueChange?.((event.target as HTMLInputElement).value);
+        props.onChange?.(event);
+      },
+      readOnly: isReadOnly,
+    })
+  ),
 };
 
 export const Select = wrap<
@@ -104,4 +152,10 @@ export const Select = wrap<
       props.onChange?.(event);
     },
   })
+);
+
+export const Widget = wrap(
+  'Widget',
+  'section',
+  'flex flex-col gap-2 rounded bg-white'
 );

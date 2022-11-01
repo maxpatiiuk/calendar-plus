@@ -1,14 +1,18 @@
 import React from 'react';
-import { commonText } from '../../localization/common';
-import { useBooleanState } from '../../hooks/useBooleanState';
-import { Portal } from '../Molecules/Portal';
-import { Dashboard } from '../Dashboard';
-import { CurrentViewContext } from '../Contexts/CurrentViewContext';
-import { AuthContext } from '../Contexts/AuthContext';
+import type { State } from 'typesafe-reducer';
+
 import { useAsyncState } from '../../hooks/useAsyncState';
+import { useBooleanState } from '../../hooks/useBooleanState';
+import { commonText } from '../../localization/common';
+import { Button } from '../Atoms';
+import { AuthContext } from '../Contexts/AuthContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
+import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
-import { Button } from '../Atoms';
+import { Portal } from '../Molecules/Portal';
+import { PreferencesPage } from '../Preferences';
+import { GhostEvents } from '../PowerTools/GhostEvents';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -42,11 +46,15 @@ export function App(): JSX.Element | null {
   );
 
   const auth = React.useContext(AuthContext);
+  const [state, setState] = React.useState<
+    State<'MainState'> | State<'PreferencesState'>
+  >({ type: 'MainState' });
 
   return typeof currentView === 'object' ? (
     <>
       {debugOverlay}
       <Button.White
+        aria-pressed={isOpen ? true : undefined}
         onClick={
           auth.authenticated
             ? handleToggle
@@ -56,16 +64,28 @@ export function App(): JSX.Element | null {
                   .then(handleToggle)
                   .catch(console.error)
         }
-        aria-pressed={isOpen ? true : undefined}
       >
         {commonText('calendarPlus')}
       </Button.White>
-      {isOpen && (
+      {isOpen ? (
         <Portal>
-          <main className="h-full overflow-y-auto bg-gray-200">
-            <Dashboard durations={durations} />
+          <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
+            {state.type === 'MainState' ? (
+              <Dashboard
+                durations={durations}
+                onOpenPreferences={(): void =>
+                  setState({ type: 'PreferencesState' })
+                }
+              />
+            ) : (
+              <PreferencesPage
+                onClose={(): void => setState({ type: 'MainState' })}
+              />
+            )}
           </main>
         </Portal>
+      ) : (
+        <GhostEvents />
       )}
     </>
   ) : (

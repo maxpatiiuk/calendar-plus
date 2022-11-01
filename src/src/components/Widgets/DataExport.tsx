@@ -49,7 +49,7 @@ export function DataExport({
           onClick={() => createExport('tsv')}
           disabled={durations === undefined || calendars === undefined}
         >
-          {commonText('exportToCsv')}
+          {commonText('exportToTsv')}
         </Button.White>
       </div>
     </WidgetContainer>

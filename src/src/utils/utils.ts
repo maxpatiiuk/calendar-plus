@@ -3,7 +3,8 @@
  *
  * @module
  */
-import { RA } from './types';
+import { IR, RA } from './types';
+import { f } from './functools';
 
 export const capitalize = <T extends string>(string: T): Capitalize<T> =>
   (string.charAt(0).toUpperCase() + string.slice(1)) as Capitalize<T>;
@@ -75,6 +76,21 @@ export const removeItem = <T>(array: RA<T>, index: number): RA<T> =>
   index < 0
     ? [...array.slice(0, index - 1), ...array.slice(index)]
     : [...array.slice(0, index), ...array.slice(index + 1)];
+
+/**
+ * Create a new object with given keys removed
+ */
+export const removeKey = <
+  DICTIONARY extends IR<unknown>,
+  OMIT extends keyof DICTIONARY
+>(
+  object: DICTIONARY,
+  ...toOmit: RA<OMIT>
+): Omit<DICTIONARY, OMIT> =>
+  // @ts-expect-error
+  Object.fromEntries(
+    Object.entries(object).filter(([key]) => !f.includes(toOmit, key))
+  );
 
 export function findLastIndex<T>(
   array: RA<T>,
