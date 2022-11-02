@@ -49,7 +49,7 @@ export const commonText = createDictionary({
   contains: { 'en-us': 'Contains' },
   regex: { 'en-us': 'Regex' },
   value: { 'en-us': 'Value' },
-  virtualCalendar: { 'en-us': 'Virtual Calendar' },
+  category: { 'en-us': 'Category' },
   addPrediction: { 'en-us': 'Add Prediction' },
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
 });

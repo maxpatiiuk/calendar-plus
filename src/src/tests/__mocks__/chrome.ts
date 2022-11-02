@@ -7,16 +7,25 @@
  */
 import type { IR, R } from '../../utils/types';
 
-const data: R<unknown> = {};
+const localData: R<unknown> = {};
+const syncData: R<unknown> = {};
 
 Object.defineProperty(globalThis, 'chrome', {
   value: {
     storage: {
       local: {
-        get: async (): Promise<unknown> => data,
+        get: async (): Promise<unknown> => localData,
         async set(entries: IR<unknown>) {
           Object.entries(entries).forEach(([key, value]) => {
-            data[key] = value;
+            localData[key] = value;
+          });
+        },
+      },
+      sync: {
+        get: async (): Promise<unknown> => syncData,
+        async set(entries: IR<unknown>) {
+          Object.entries(entries).forEach(([key, value]) => {
+            syncData[key] = value;
           });
         },
       },

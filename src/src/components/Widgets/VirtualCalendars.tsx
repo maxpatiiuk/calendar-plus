@@ -12,7 +12,14 @@ import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
 import { WidgetContainer } from './WidgetContainer';
 
-type MatchRule = 'contains' | 'endsWith' | 'equals' | 'regex' | 'startsWith';
+export const matchRules = [
+  'equals',
+  'endsWith',
+  'startsWith',
+  'contains',
+  'regex',
+] as const;
+export type MatchRule = typeof matchRules[number];
 
 export type VirtualCalendar = {
   readonly calendarId: string;
@@ -23,8 +30,8 @@ export type VirtualCalendar = {
 
 const ruleLabel: RR<MatchRule, string> = {
   equals: commonText('equals'),
-  startsWith: commonText('startsWith'),
   endsWith: commonText('endsWith'),
+  startsWith: commonText('startsWith'),
   contains: commonText('contains'),
   regex: commonText('regex'),
 };
@@ -71,7 +78,7 @@ export function VirtualCalendars({
                 <th scope="col">{commonText('sourceCalendar')}</th>
                 <th scope="col">{commonText('matchRule')}</th>
                 <th scope="col">{commonText('value')}</th>
-                <th scope="col">{commonText('virtualCalendar')}</th>
+                <th scope="col">{commonText('category')}</th>
               </tr>
             </thead>
             <tbody>
@@ -187,7 +194,7 @@ function EditableCalendarList({
               {/* FEATURE: provide regex validation */}
               <div className="flex">
                 <Input.Text
-                  placeholder={rule === 'regex' ? '/abc/i' : undefined}
+                  placeholder={rule === 'regex' ? 'a*b+c?' : undefined}
                   required
                   value={value}
                   onValueChange={(value): void => handleEdited({ value })}
