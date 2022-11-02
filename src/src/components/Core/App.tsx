@@ -13,6 +13,7 @@ import { useEventsStore } from '../EventsStore/useEventsStore';
 import { Portal } from '../Molecules/Portal';
 import { PreferencesPage } from '../Preferences';
 import { GhostEvents } from '../PowerTools/GhostEvents';
+import { AutoComplete } from '../PowerTools/AutoComplete';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -50,45 +51,49 @@ export function App(): JSX.Element | null {
     State<'MainState'> | State<'PreferencesState'>
   >({ type: 'MainState' });
 
-  return typeof currentView === 'object' ? (
+  return (
     <>
-      {debugOverlay}
-      <Button.White
-        aria-pressed={isOpen ? true : undefined}
-        onClick={
-          auth.authenticated
-            ? handleToggle
-            : (): void =>
-                void auth
-                  .handleAuthenticate()
-                  .then(handleToggle)
-                  .catch(console.error)
-        }
-      >
-        {commonText('calendarPlus')}
-      </Button.White>
-      {isOpen ? (
-        <Portal>
-          <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
-            {state.type === 'MainState' ? (
-              <Dashboard
-                durations={durations}
-                onOpenPreferences={(): void =>
-                  setState({ type: 'PreferencesState' })
-                }
-              />
-            ) : (
-              <PreferencesPage
-                onClose={(): void => setState({ type: 'MainState' })}
-              />
-            )}
-          </main>
-        </Portal>
-      ) : (
-        <GhostEvents />
+      {typeof currentView === 'object' && (
+        <>
+          {debugOverlay}
+          <Button.White
+            aria-pressed={isOpen ? true : undefined}
+            onClick={
+              auth.authenticated
+                ? handleToggle
+                : (): void =>
+                    void auth
+                      .handleAuthenticate()
+                      .then(handleToggle)
+                      .catch(console.error)
+            }
+          >
+            {commonText('calendarPlus')}
+          </Button.White>
+          {isOpen ? (
+            <Portal>
+              <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
+                {state.type === 'MainState' ? (
+                  <Dashboard
+                    durations={durations}
+                    onOpenPreferences={(): void =>
+                      setState({ type: 'PreferencesState' })
+                    }
+                  />
+                ) : (
+                  <PreferencesPage
+                    onClose={(): void => setState({ type: 'MainState' })}
+                  />
+                )}
+              </main>
+            </Portal>
+          ) : (
+            <GhostEvents />
+          )}
+        </>
       )}
+      {debugOverlay}
+      <AutoComplete />
     </>
-  ) : (
-    debugOverlay ?? null
   );
 }

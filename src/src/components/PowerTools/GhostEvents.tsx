@@ -19,12 +19,15 @@ export function GhostEvents(): null {
   const styleRef = React.useRef<HTMLStyleElement | undefined>(undefined);
   const [ghostEventShortcut] = usePref('features', 'ghostEventShortcut');
 
+  React.useEffect(() => {
+    styleRef.current = document.createElement('style');
+    document.head.append(styleRef.current);
+    return (): void => styleRef.current?.remove();
+  }, []);
+
   // Set styles
   React.useEffect(() => {
-    if (styleRef.current === undefined) {
-      styleRef.current = document.createElement('style');
-      document.head.append(styleRef.current);
-    }
+    if (styleRef.current === undefined) return;
 
     // This allows for a way to temporary disable event ghosting
     const isDisabled = ghostEventShortcut === 'none';
