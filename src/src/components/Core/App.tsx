@@ -70,7 +70,7 @@ export function App(): JSX.Element | null {
           >
             {commonText('calendarPlus')}
           </Button.White>
-          {isOpen ? (
+          {isOpen && (
             <Portal>
               <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
                 {state.type === 'MainState' ? (
@@ -87,13 +87,12 @@ export function App(): JSX.Element | null {
                 )}
               </main>
             </Portal>
-          ) : (
-            <GhostEvents />
           )}
         </>
       )}
       {debugOverlay}
       <AutoComplete />
+      <GhostEvents />
     </>
   );
 }
