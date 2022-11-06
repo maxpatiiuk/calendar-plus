@@ -64,7 +64,7 @@ export function AutoComplete(): JSX.Element {
           if (parent === undefined) return;
           const select = findCalendarSelector(parent);
           if (select === undefined) return;
-          waitAndClick(parent, () => {
+          waitAndClick(parent, select, () => {
             const option = findOption(calendars!, calendarId, select);
             option.click();
             // The option click is not registering if focusing the input too soon
@@ -150,11 +150,17 @@ function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
 /**
  * Open the list of calendars and wait for it to be rendered
  */
-function waitAndClick(parent: HTMLElement, callback: () => void): void {
+function waitAndClick(
+  parent: HTMLElement,
+  select: HTMLElement,
+  callback: () => void
+): void {
   const calendarsButton = parent.querySelector<HTMLElement>(
     '[data-key="calendar"]'
   );
-  calendarsButton?.click();
+  const clickable =
+    calendarsButton ?? select.querySelector('[role="presentation"]');
+  clickable?.click();
   const timeOut = calendarsButton === null ? 200 : 440;
 
   // Unfortunately, the listbox has JS animation (can't be disabled with CSS)
