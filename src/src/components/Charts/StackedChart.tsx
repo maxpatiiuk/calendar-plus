@@ -87,7 +87,7 @@ function useDataSets(
         ? []
         : calendars.map(({ id, summary, backgroundColor }) => {
             const data = Object.values(durations[id] ?? {});
-            const summed = Object.values(data[0]);
+            const summed = Object.values(data[0] ?? {});
             data.slice(1).forEach((durations) =>
               Object.values(durations).forEach((value, index) => {
                 summed[index] = value;
