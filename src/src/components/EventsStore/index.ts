@@ -5,7 +5,7 @@ import { ajax } from '../../utils/ajax';
 import { eventListener } from '../../utils/events';
 import { formatUrl } from '../../utils/queryString';
 import type { IR, R, RA, WritableArray } from '../../utils/types';
-import { findLastIndex, group } from '../../utils/utils';
+import { findLastIndex, group, sortFunction } from '../../utils/utils';
 import {
   DAY,
   MILLISECONDS_IN_DAY,
@@ -87,6 +87,7 @@ export function useEvents(
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
+          // FIXME: debug bounds checking code
           const bounds = calculateBounds(
             eventsStore,
             id,
@@ -332,19 +333,29 @@ function extractData(
       const totals: R<number> = Object.fromEntries(
         daysBetween.map(({ string }) => [string, 0])
       );
-      const entries = Object.entries(eventsStore[id]).map(
-        ([virtualCalendar, dates]) => [
-          virtualCalendar,
-          Object.fromEntries(
-            daysBetween.map((date) => {
-              const string = splitDateToString(date);
-              const total = dates[date.year]?.[date.month]?.[date.day] ?? 0;
-              totals[string] += total;
-              return [string, total];
-            })
-          ),
-        ]
-      );
+      const entries = Object.entries(eventsStore[id])
+        .map(([virtualCalendar, dates]) => {
+          let categoryTotal = 0;
+          return [
+            virtualCalendar,
+            Object.fromEntries(
+              daysBetween.map((date) => {
+                const string = splitDateToString(date);
+                const total = dates[date.year]?.[date.month]?.[date.day] ?? 0;
+                totals[string] += total;
+                categoryTotal += total;
+                return [string, total];
+              })
+            ),
+            categoryTotal,
+          ] as const;
+        })
+        .sort(
+          sortFunction(
+            ([_label, _durations, categoryTotal]) => categoryTotal,
+            true
+          )
+        );
       return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
     })
   );

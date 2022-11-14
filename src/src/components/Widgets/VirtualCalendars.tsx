@@ -71,14 +71,16 @@ export function VirtualCalendars({
     // Clear cache for calendars whose rules changed
     if (eventsStore === undefined) return;
     const indexedOldCalendars = Object.fromEntries(
-      virtualCalendarsRef.current?.map(({ calendarId, ...rest }) => [
-        calendarId,
-        rest,
-      ]) ?? []
+      group(
+        virtualCalendarsRef.current?.map(({ calendarId, ...rest }) => [
+          calendarId,
+          rest,
+        ]) ?? []
+      )
     );
     const oldKeys = Object.keys(indexedOldCalendars);
     const indexedNewCalendars = Object.fromEntries(
-      localCalendars.map(({ calendarId, ...rest }) => [calendarId, rest])
+      group(localCalendars.map(({ calendarId, ...rest }) => [calendarId, rest]))
     );
     const newKeys = Object.keys(indexedNewCalendars);
     const changedKeys = f
@@ -105,7 +107,7 @@ export function VirtualCalendars({
           <EditableCalendarList
             calendars={calendars}
             virtualCalendars={localCalendars ?? virtualCalendars}
-            onChange={setVirtualCalendars}
+            onChange={setLocalCalendars}
           />
         ) : (
           <Calendars
@@ -292,8 +294,9 @@ function EditableCalendarList({
                 handleChange([
                   ...virtualCalendars,
                   {
-                    calendarId: calendars[0].id,
-                    rule: 'equals',
+                    calendarId:
+                      virtualCalendars.at(-1)?.calendarId ?? calendars[0].id,
+                    rule: virtualCalendars.at(-1)?.rule ?? 'equals',
                     value: '',
                     virtualCalendar: '',
                   },

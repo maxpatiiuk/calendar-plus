@@ -41,6 +41,7 @@ export const commonText = createDictionary({
   exportToTsv: { 'en-us': 'Export to TSV' },
   preferences: { 'en-us': 'Preferences' },
   virtualCalendars: { 'en-us': 'Autocomplete predictions' },
+  other: { 'en-us': 'Other' },
   sourceCalendar: { 'en-us': 'Source Calendar' },
   matchRule: { 'en-us': 'Match Rule' },
   startsWith: { 'en-us': 'Starts With' },

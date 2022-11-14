@@ -7,6 +7,9 @@ import type { RA, WritableArray } from '../../utils/types';
 import { writable } from '../../utils/types';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
+import { summedDurations } from '../EventsStore';
+import { commonText } from '../../localization/common';
+import { formatDuration } from '../Atoms/Internationalization';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -16,18 +19,20 @@ export function DoughnutChart({
   readonly durations: EventsStore | undefined;
 }): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
-  const labels = useLabels(calendars);
 
+  const layers = useDataSets(durations, calendars);
+  const [outerLayer, innerLayer] = layers;
+  const loaded = true;
+  const [chart, setChart] = React.useState<
+    Chart<'doughnut', RA<number>, string> | undefined
+  >(undefined);
   /**
    * In order for ChartJS to smoothly animate from one state to another rather
    * than re-render from scratch, need to mutate the data object rather than
    * give it a new one
    */
-  const { data, ...dataSet } = useDataSets(durations, calendars);
+  /*const [_, { data, ...dataSet }] = useDataSets(durations, calendars);
   const dataRef = React.useRef(data);
-  const [chart, setChart] = React.useState<
-    Chart<'doughnut', RA<number>, string> | undefined
-  >(undefined);
   const [loaded, handleLoaded] = useBooleanState();
   React.useEffect(() => {
     if (data.length > 0) handleLoaded();
@@ -41,54 +46,83 @@ export function DoughnutChart({
       }
     );
     chart.update();
-  }, [data, chart]);
+  }, [data, chart, handleLoaded]);*/
 
   return loaded ? (
     <Doughnut
       data={{
-        labels,
-        datasets: [{ ...dataSet, data: dataRef.current }],
+        labels: [
+          ...outerLayer.labels,
+          ...innerLayer.labels,
+        ] as WritableArray<string>,
+        datasets: [outerLayer, innerLayer],
+        // datasets: [{ ...dataSet, data: dataRef.current }],
       }}
       options={{
         responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: ({ datasetIndex, dataIndex, parsed }) =>
+                `${layers[datasetIndex].labels[dataIndex]}: ${formatDuration(
+                  parsed
+                )}`,
+            },
+          },
+        },
       }}
       ref={(chart) => setChart(chart ?? undefined)}
     />
   ) : null;
 }
 
-function useLabels(
-  calendars: React.ContextType<typeof CalendarsContext> | undefined
-): WritableArray<string> {
-  return React.useMemo(
-    () =>
-      calendars === undefined ? [] : calendars.map(({ summary }) => summary),
-    [calendars]
-  );
-}
+type Layer = {
+  readonly data: RA<number>;
+  readonly backgroundColor: RA<string>;
+  readonly labels: RA<string>;
+};
 
 function useDataSets(
   durations: EventsStore | undefined,
   calendars: React.ContextType<typeof CalendarsContext>
-): {
-  readonly label: string;
-  readonly data: RA<number>;
-  readonly backgroundColor: RA<string>;
-} {
-  return React.useMemo(
-    () => ({
-      label: '',
-      data:
-        durations === undefined
-          ? []
-          : calendars?.map(({ id }) =>
-              Object.values(durations[id] ?? {})
-                .flatMap((durations) => Object.values(durations))
-                .reduce((total, durations) => total + durations, 0)
-            ) ?? [],
-      backgroundColor:
-        calendars?.map(({ backgroundColor }) => backgroundColor) ?? [],
-    }),
-    [durations, calendars]
-  );
+): readonly [Layer, Layer] {
+  return React.useMemo(() => {
+    const partBackgroundColors: WritableArray<string> = [];
+    const labels: WritableArray<string> = [];
+    const categoryData =
+      durations === undefined
+        ? []
+        : calendars?.flatMap(({ id, backgroundColor }) =>
+            Object.entries(durations[id] ?? {}).map(([label, durations]) => {
+              partBackgroundColors.push(backgroundColor);
+              labels.push(label || commonText('other'));
+              return Object.values(durations).reduce(
+                (total, durations) => total + durations,
+                0
+              );
+            })
+          ) ?? [];
+    const calendarData =
+      durations === undefined
+        ? []
+        : calendars?.map(({ id }) =>
+            Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
+              (total, durations) => total + durations,
+              0
+            )
+          ) ?? [];
+    return [
+      {
+        data: categoryData,
+        backgroundColor: partBackgroundColors,
+        labels,
+      },
+      {
+        data: calendarData,
+        backgroundColor:
+          calendars?.map(({ backgroundColor }) => backgroundColor) ?? [],
+        labels: calendars?.map(({ summary }) => summary) ?? [],
+      },
+    ];
+  }, [durations, calendars]);
 }
