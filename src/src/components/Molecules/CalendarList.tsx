@@ -46,13 +46,15 @@ export function VirtualCalendarsList({
 }): JSX.Element {
   const categories = React.useMemo(
     () =>
-      f.unique(
-        virtualCalendars
-          .filter(
-            (virtualCalendar) => virtualCalendar.calendarId === calendarId
-          )
-          .map(({ virtualCalendar }) => virtualCalendar)
-      ),
+      f
+        .unique(
+          virtualCalendars
+            .filter(
+              (virtualCalendar) => virtualCalendar.calendarId === calendarId
+            )
+            .map(({ virtualCalendar }) => virtualCalendar)
+        )
+        .filter((category) => category !== undefined),
     [virtualCalendars, calendarId]
   );
   return (

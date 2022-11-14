@@ -65,9 +65,13 @@ function useLabels(durations: EventsStore | undefined): WritableArray<string> {
   const currentView = React.useContext(CurrentViewContext)!;
   return React.useMemo(
     () =>
-      Object.keys(Object.values(durations ?? {})[0] ?? {}).map((duration) =>
-        formatLabel(new Date(duration), currentView)
-      ),
+      Object.keys(
+        Object.values(
+          Object.values(durations ?? {}).find(
+            (categories) => Object.keys(categories).length > 0
+          ) ?? {}
+        )[0] ?? {}
+      ).map((duration) => formatLabel(new Date(duration), currentView)),
     [durations, currentView]
   );
 }

@@ -103,7 +103,7 @@ export function useEvents(
                 timeMax: timeMax.toJSON(),
                 prettyPrint: false.toString(),
                 fields:
-                  'summary,items(start(dateTime,date),end(dateTime,date))',
+                  'items(summary,start(dateTime,date),end(dateTime,date))',
                 // FEATURE: set this to True to reduce response size
                 singleEvents: true.toString(),
               }
@@ -119,16 +119,14 @@ export function useEvents(
 
           const events = results.items as RA<CalendarEvent>;
           const durations = group(
-            events.flatMap<
-              readonly [string, ReturnType<typeof calculateEventDuration>]
-            >(({ summary, start, end }) => {
+            events.map(({ summary, start, end }) => {
               if (
                 ignoreAllDayEvents &&
                 (start.dateTime === undefined || end.dateTime === undefined)
               )
-                return [];
+                return ['', []];
               const dates = resolveEventDates(timeMin, timeMax, start, end);
-              if (dates === undefined) return [];
+              if (dates === undefined) return ['', []];
               const [startDate, endDate] = dates;
               const data = calculateEventDuration(startDate, endDate);
               return [guessCalendar(summary) ?? '', data] as const;
@@ -178,19 +176,25 @@ function calculateBounds(
   startDate: Date,
   daysBetween: RA<SplitDate>
 ): readonly [timeMin: Date, timeMax: Date] | undefined {
-  const firstDayToFetch = daysBetween.findIndex(({ month, year, day }) =>
-    Object.values(eventsStore.current[id] ?? []).some(
-      (virtualCalendar) =>
-        typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
-    )
-  );
+  const durations = Object.values(eventsStore.current[id] ?? []);
+  const firstDayToFetch =
+    durations.length === 0
+      ? 0
+      : daysBetween.findIndex(({ month, year, day }) =>
+          durations.some(
+            (virtualCalendar) =>
+              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+          )
+        );
   const lastDayToFetch =
-    findLastIndex(daysBetween, ({ month, year, day }) =>
-      Object.values(eventsStore.current[id] ?? []).some(
-        (virtualCalendar) =>
-          typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
-      )
-    ) + 1;
+    durations.length === 0
+      ? daysBetween.length
+      : findLastIndex(daysBetween, ({ month, year, day }) =>
+          durations.some(
+            (virtualCalendar) =>
+              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+          )
+        ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
   timeMin.setDate(timeMin.getDate() + firstDayToFetch);
