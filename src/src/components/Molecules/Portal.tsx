@@ -32,9 +32,6 @@ export function Portal({
     if (mainContainer === undefined)
       throw new Error('Unable to find main container');
 
-    // Hide Google Calendar container when the overlay is shown
-    mainContainer.classList.add('hidden');
-
     // Create a container that would house the React portal
     if (portalRoot === undefined) {
       portalRoot = document.createElement('div');
@@ -49,7 +46,6 @@ export function Portal({
     return (): void => {
       element.remove();
       portalStack.delete(portalId);
-      if (portalStack.size === 0) mainContainer.classList.remove('hidden');
     };
   }, [element]);
 

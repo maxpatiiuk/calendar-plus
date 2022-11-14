@@ -74,7 +74,13 @@ export function App(): JSX.Element | null {
           </Button.White>
           {isOpen ? (
             <Portal>
-              <main className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
+              <main
+                className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2"
+                style={{
+                  zIndex: '1000',
+                  position: 'relative',
+                }}
+              >
                 {state.type === 'MainState' ? (
                   <Dashboard
                     durations={durations}
