@@ -7,7 +7,7 @@ import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Widget } from '../Atoms';
-import type { EventsStore } from '../EventsStore';
+import type { EventsStore, RawEventsStore } from '../EventsStore';
 import { PageHeader } from '../Molecules/PageHeader';
 import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
 import type { BreakPoint } from './useBreakpoint';
@@ -38,9 +38,11 @@ const widgetClassName = `
 
 export function Dashboard({
   durations,
+  eventsStore,
   onOpenPreferences: handleOpenPreferences,
 }: {
   readonly durations: EventsStore | undefined;
+  readonly eventsStore: React.MutableRefObject<RawEventsStore> | undefined;
   readonly onOpenPreferences: () => void;
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
@@ -121,6 +123,7 @@ export function Dashboard({
                 <WidgetContent
                   definition={widget.definition}
                   durations={durations}
+                  eventsStore={eventsStore}
                 />
               )}
             </Widget>

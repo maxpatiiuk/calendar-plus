@@ -1,19 +1,20 @@
-import React from 'react';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  LinearScale,
   Tooltip,
 } from 'chart.js';
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { EventsStore } from '../EventsStore';
-import { commonText } from '../../localization/common';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
-import { RA, WritableArray } from '../../utils/types';
-import { CurrentViewContext } from '../Contexts/CurrentViewContext';
-import { formatLabel } from '../Atoms/Internationalization';
+
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { commonText } from '../../localization/common';
+import type { RA, WritableArray } from '../../utils/types';
+import { formatLabel } from '../Atoms/Internationalization';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
+import type { EventsStore } from '../EventsStore';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -84,12 +85,21 @@ function useDataSets(
     () =>
       durations === undefined || calendars === undefined
         ? []
-        : calendars.map(({ id, summary, backgroundColor }) => ({
-            id,
-            label: summary,
-            backgroundColor,
-            data: Object.values(durations[id] ?? {}),
-          })),
+        : calendars.map(({ id, summary, backgroundColor }) => {
+            const data = Object.values(durations[id] ?? {});
+            const summed = Object.values(data[0]);
+            data.slice(1).forEach((durations) =>
+              Object.values(durations).forEach((value, index) => {
+                summed[index] = value;
+              })
+            );
+            return {
+              id,
+              label: summary,
+              backgroundColor,
+              data: summed,
+            };
+          }),
     [durations, calendars]
   );
 }

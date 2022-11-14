@@ -40,7 +40,7 @@ export const commonText = createDictionary({
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
   preferences: { 'en-us': 'Preferences' },
-  virtualCalendars: { 'en-us': 'Autocomplete Predictions' },
+  virtualCalendars: { 'en-us': 'Sub Calendar' },
   sourceCalendar: { 'en-us': 'Source Calendar' },
   matchRule: { 'en-us': 'Match Rule' },
   startsWith: { 'en-us': 'Starts With' },
@@ -50,6 +50,7 @@ export const commonText = createDictionary({
   regex: { 'en-us': 'Regex' },
   value: { 'en-us': 'Value' },
   category: { 'en-us': 'Category' },
+  allCategories: { 'en-us': 'All Categories' },
   addPrediction: { 'en-us': 'Add Prediction' },
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
 });

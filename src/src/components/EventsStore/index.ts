@@ -1,28 +1,35 @@
+import React from 'react';
+
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
-import React from 'react';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { eventListener } from '../../utils/events';
 import { formatUrl } from '../../utils/queryString';
-import { IR, RA, WritableArray } from '../../utils/types';
-import { findLastIndex } from '../../utils/utils';
+import type { IR, RA, WritableArray } from '../../utils/types';
+import { findLastIndex, group } from '../../utils/utils';
 import {
   DAY,
   MILLISECONDS_IN_DAY,
   MINUTE,
   MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
-import { eventListener } from '../../utils/events';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
 
 /**
  * This is stored in cache
  * The data structure is optimized for storage efficiency
  */
+// eslint-disable-next-line functional/prefer-readonly-type
 export type RawEventsStore = {
+  // eslint-disable-next-line functional/prefer-readonly-type
   [CALENDAR_ID in string]: {
-    [YEAR in number]?: WritableArray<
-      WritableArray<number | null | undefined> | null | undefined
-    >;
+    // eslint-disable-next-line functional/prefer-readonly-type
+    [VIRTUAL_CALENDAR in string]: {
+      [YEAR in number]?: WritableArray<
+        WritableArray<number | null | undefined> | null | undefined
+      >;
+    };
   };
 };
 /*
@@ -30,11 +37,16 @@ export type RawEventsStore = {
  * The data structure is optimized for ease of use
  */
 export type EventsStore = {
-  [CALENDAR_ID in string]: IR<number>;
+  readonly [CALENDAR_ID in string]: {
+    readonly [VIRTUAL_CALENDAR in string]: IR<number>;
+  };
 };
-type CalendarEvent = Pick<gapi.client.calendar.Event, 'start' | 'end'>;
+type CalendarEvent = Pick<
+  gapi.client.calendar.Event,
+  'end' | 'start' | 'summary'
+>;
 
-export const cacheEvents = eventListener<{ changed: undefined }>();
+export const cacheEvents = eventListener<{ readonly changed: undefined }>();
 
 // TEST: test daylight savings time switch and back
 /**
@@ -48,8 +60,12 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const calendars = React.useContext(CalendarsContext);
+
   const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
   const previousPrefRef = React.useRef(ignoreAllDayEvents);
+
+  const virtualCalendars = useVirtualCalendars();
+
   const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
@@ -86,40 +102,64 @@ export function useEvents(
                 timeMin: timeMin.toJSON(),
                 timeMax: timeMax.toJSON(),
                 prettyPrint: false.toString(),
-                fields: 'items(start(dateTime,date),end(dateTime,date))',
+                fields:
+                  'summary,items(start(dateTime,date),end(dateTime,date))',
                 // FEATURE: set this to True to reduce response size
                 singleEvents: true.toString(),
               }
             )
           );
           const results = await response.json();
+
+          const guessCalendar = (input: string): string | undefined =>
+            virtualCalendars.find(
+              ({ calendarId, rule, value }) =>
+                calendarId === id && ruleMatchers[rule](input, value)
+            )?.virtualCalendar;
+
           const events = results.items as RA<CalendarEvent>;
-          const durations = events.flatMap(({ start, end }) => {
-            if (
-              ignoreAllDayEvents &&
-              (start.dateTime === undefined || end.dateTime === undefined)
-            )
-              return [];
-            const dates = resolveEventDates(timeMin, timeMax, start, end);
-            if (dates === undefined) return [];
-            const [startDate, endDate] = dates;
-            return calculateEventDuration(startDate, endDate);
-          });
+          const durations = group(
+            events.flatMap<
+              readonly [string, ReturnType<typeof calculateEventDuration>]
+            >(({ summary, start, end }) => {
+              if (
+                ignoreAllDayEvents &&
+                (start.dateTime === undefined || end.dateTime === undefined)
+              )
+                return [];
+              const dates = resolveEventDates(timeMin, timeMax, start, end);
+              if (dates === undefined) return [];
+              const [startDate, endDate] = dates;
+              const data = calculateEventDuration(startDate, endDate);
+              return [guessCalendar(summary) ?? '', data] as const;
+            })
+          );
 
           eventsStore.current[id] ??= {};
-          daysBetween.forEach(({ year, month, day }) => {
-            eventsStore.current[id][year] ??= [];
-            eventsStore.current[id][year]![month] ??= [];
-            eventsStore.current[id][year]![month]![day] ??= 0;
-          });
-          durations.forEach(([{ year, month, day }, duration]) => {
-            eventsStore.current[id][year]![month]![day]! += duration;
+          durations.map(([virtualCalendar, durations]) => {
+            eventsStore.current[id][virtualCalendar] ??= {};
+            const years = eventsStore.current[id][virtualCalendar];
+            durations.flat().forEach(([{ year, month, day }, duration]) => {
+              years[year] ??= [];
+              const months = years[year]!;
+              months[month] ??= [];
+              const days = months[month]!;
+              days[day] ??= 0;
+              days[day]! += duration;
+            });
           });
         })
       );
       cacheEvents.trigger('changed');
       return extractData(eventsStore.current, calendars, startDate, endDate);
-    }, [eventsStore, calendars, startDate, endDate, ignoreAllDayEvents]),
+    }, [
+      eventsStore,
+      calendars,
+      startDate,
+      endDate,
+      ignoreAllDayEvents,
+      virtualCalendars,
+    ]),
     false
   );
   return durations;
@@ -137,16 +177,19 @@ function calculateBounds(
   id: string,
   startDate: Date,
   daysBetween: RA<SplitDate>
-): [timeMin: Date, timeMax: Date] | undefined {
-  const firstDayToFetch = daysBetween.findIndex(
-    ({ month, year, day }) =>
-      typeof eventsStore.current[id]?.[year]?.[month]?.[day] !== 'number'
+): readonly [timeMin: Date, timeMax: Date] | undefined {
+  const firstDayToFetch = daysBetween.findIndex(({ month, year, day }) =>
+    Object.values(eventsStore.current[id] ?? []).some(
+      (virtualCalendar) =>
+        typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+    )
   );
   const lastDayToFetch =
-    findLastIndex(
-      daysBetween,
-      ({ month, year, day }) =>
-        typeof eventsStore.current[id]?.[year]?.[month]?.[day] !== 'number'
+    findLastIndex(daysBetween, ({ month, year, day }) =>
+      Object.values(eventsStore.current[id] ?? []).some(
+        (virtualCalendar) =>
+          typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+      )
     ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
@@ -217,7 +260,7 @@ function resolveEventDates(
   timeMax: Date,
   start: CalendarEvent['start'],
   end: CalendarEvent['end']
-): [start: Date, end: Date] | undefined {
+): readonly [start: Date, end: Date] | undefined {
   // Date is defined instead of DateTime for multi-day events
   const unboundedStartDate =
     typeof start.dateTime === 'string'
@@ -250,7 +293,7 @@ function resolveEventDates(
  */
 export function dateToDateTime(
   dateString: string,
-  type: 'startDate' | 'endDate'
+  type: 'endDate' | 'startDate'
 ): Date {
   const date = new Date(dateString);
   if (type === 'endDate') date.setDate(date.getDate() + 1);
@@ -274,9 +317,14 @@ function extractData(
     calendars.map(({ id }) => [
       id,
       Object.fromEntries(
-        daysBetween.map((date) => [
-          splitDateToString(date),
-          eventsStore[id]![date.year]![date.month]![date.day]!,
+        Object.entries(eventsStore[id]).map(([virtualCalendar, dates]) => [
+          virtualCalendar,
+          Object.fromEntries(
+            daysBetween.map((date) => [
+              splitDateToString(date),
+              dates[date.year]![date.month]![date.day]!,
+            ])
+          ),
         ])
       ),
     ])

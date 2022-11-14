@@ -15,6 +15,7 @@ import { GoalsEditor } from './GoalsEditor';
 
 export type Goal = {
   readonly calendarId: string;
+  readonly virtualCalendar?: string;
   readonly duration: number;
   readonly view: SupportedView;
 };
@@ -88,7 +89,7 @@ function Goals({
 }
 
 function GoalComponent({
-  goal: { calendarId, duration: goalDuration },
+  goal: { calendarId, virtualCalendar, duration: goalDuration },
   durations,
   calendars,
 }: {
@@ -98,19 +99,24 @@ function GoalComponent({
 }): JSX.Element | null {
   const calendar = calendars.find(({ id }) => id === calendarId);
   const currentDurations = durations[calendarId];
-  const currentDuration = React.useMemo(
-    () =>
-      Object.values(currentDurations ?? {}).reduce(
-        (total, value) => total + (value ?? 0),
-        0
-      ),
-    [currentDurations]
-  );
+  const currentDuration = React.useMemo(() => {
+    const durations =
+      virtualCalendar === undefined
+        ? Object.values(currentDurations ?? {}).flatMap((durations) =>
+            Object.values(durations)
+          )
+        : Object.values(currentDurations?.[virtualCalendar] ?? {});
+    return durations.reduce((total, value) => total + (value ?? 0), 0);
+  }, [currentDurations, virtualCalendar]);
   return typeof calendar === 'object' ? (
     <Gage
       color={calendar.backgroundColor}
       fontSize={fontSize}
-      label={`${calendar.summary} - ${commonText(
+      label={`${
+        virtualCalendar === undefined
+          ? calendar.summary
+          : `${virtualCalendar} (${calendar.summary})`
+      } - ${commonText(
         'aOutOfB',
         formatDuration(currentDuration),
         formatDuration(goalDuration)

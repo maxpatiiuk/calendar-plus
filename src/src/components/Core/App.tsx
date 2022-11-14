@@ -76,6 +76,7 @@ export function App(): JSX.Element | null {
                 {state.type === 'MainState' ? (
                   <Dashboard
                     durations={durations}
+                    eventsStore={eventsStore}
                     onOpenPreferences={(): void =>
                       setState({ type: 'PreferencesState' })
                     }

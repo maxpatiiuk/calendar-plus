@@ -2,6 +2,7 @@ import {
   camelToHuman,
   capitalize,
   findLastIndex,
+  group,
   removeItem,
   removeKey,
   replaceItem,
@@ -98,5 +99,24 @@ theories(findLastIndex, [
       (_value: number, index: number) => index === 4,
     ],
     out: 4,
+  },
+]);
+
+theories(group, [
+  {
+    in: [
+      [
+        ['a', 1],
+        ['a', 2],
+        ['b', 3],
+        ['c', 4],
+        ['a', 5],
+      ],
+    ],
+    out: [
+      ['a', [1, 2, 5]],
+      ['b', [3]],
+      ['c', [4]],
+    ],
   },
 ]);

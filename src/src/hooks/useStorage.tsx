@@ -7,6 +7,7 @@ import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
 import type { GetSet, RA } from '../utils/types';
 import { setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
+import { f } from '../utils/functools';
 
 type StorageDefinitions = {
   readonly layout: RA<WidgetDefinition>;
@@ -133,12 +134,8 @@ function useOverSize(name: string): GetSet<boolean> {
     overSize.includes(name),
     React.useCallback(
       (isOverSize: boolean) => {
-        const newArray = Array.from(
-          new Set(
-            isOverSize
-              ? [...overSize, name]
-              : overSize.filter((n) => n !== name)
-          )
+        const newArray = f.unique(
+          isOverSize ? [...overSize, name] : overSize.filter((n) => n !== name)
         );
         if (newArray.length !== overSize.length) setOverSize(newArray);
       },

@@ -7,9 +7,10 @@ import { Button } from '../Atoms';
 import { icon } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
-import { CalendarList } from '../Molecules/CalendarList';
+import { CalendarList, VirtualCalendarsList } from '../Molecules/CalendarList';
 import { DurationPicker } from '../Molecules/DurationPicker';
 import type { Goal } from './Widget';
+import { useVirtualCalendars } from '../PowerTools/AutoComplete';
 
 export function GoalsEditor({
   goals: [goals, setGoals],
@@ -20,6 +21,7 @@ export function GoalsEditor({
   readonly currentView: SupportedView;
   readonly calendars: RA<CalendarListEntry>;
 }): JSX.Element {
+  const virtualCalendars = useVirtualCalendars();
   return (
     <>
       {goals.map((goal, index) =>
@@ -41,6 +43,19 @@ export function GoalsEditor({
                   replaceItem(goals, index, {
                     ...goal,
                     calendarId,
+                  })
+                )
+              }
+            />
+            <VirtualCalendarsList
+              calendar={goal.calendarId}
+              virtualCalendars={virtualCalendars}
+              value={goal.virtualCalendar}
+              onChange={(virtualCalendar): void =>
+                setGoals(
+                  replaceItem(goals, index, {
+                    ...goal,
+                    virtualCalendar,
                   })
                 )
               }

@@ -7,6 +7,7 @@ import React from 'react';
 import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { usePref } from '../Preferences/usePref';
+import { f } from '../../utils/functools';
 
 const trimmedIdLength = 16;
 const ghostEventStyle = `{
@@ -65,7 +66,7 @@ export function GhostEvents(): null {
               const eventId = eventElement.getAttribute('data-eventid') ?? '';
               if (eventId.length === 0) return;
               const trimmed = eventId.slice(0, trimmedIdLength);
-              setGhostEvents(Array.from(new Set([...ghostEvents, trimmed])));
+              setGhostEvents(f.unique([...ghostEvents, trimmed]));
             }
           ),
     [ghostEventShortcut, ghostEvents, setGhostEvents]

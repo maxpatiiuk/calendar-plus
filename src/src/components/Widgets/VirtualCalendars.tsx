@@ -2,12 +2,15 @@ import React from 'react';
 
 import { useSafeStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
+import { f } from '../../utils/functools';
 import type { RA, RR } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input, Select } from '../Atoms';
 import { icon } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
+import type { RawEventsStore } from '../EventsStore';
+import { cacheEvents } from '../EventsStore';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
 import { WidgetContainer } from './WidgetContainer';
@@ -39,30 +42,56 @@ const ruleLabel: RR<MatchRule, string> = {
 // BUG: bust the events cache when virtual events are edited
 export function VirtualCalendars({
   label,
+  eventsStore,
 }: {
   readonly label: string;
+  readonly eventsStore: React.MutableRefObject<RawEventsStore> | undefined;
 }): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
   const [virtualCalendars, setVirtualCalendars] = useSafeStorage(
     'virtualCalendars',
     []
   );
+  const virtualCalendarsRef = React.useRef(virtualCalendars);
 
   // Don't update the shared state until the user is done editing.
   const [localCalendars, setLocalCalendars] = React.useState<
     RA<VirtualCalendar> | undefined
   >(undefined);
-  React.useEffect(
-    () => setLocalCalendars(virtualCalendars),
-    [virtualCalendars]
-  );
-  React.useEffect(
-    () =>
-      isEditing || localCalendars === undefined
-        ? undefined
-        : setVirtualCalendars(localCalendars),
-    [isEditing, localCalendars, setVirtualCalendars]
-  );
+  React.useEffect(() => {
+    setLocalCalendars(virtualCalendars);
+    virtualCalendarsRef.current = virtualCalendars;
+  }, [virtualCalendars]);
+  React.useEffect(() => {
+    if (isEditing || localCalendars === undefined) return;
+    setVirtualCalendars(localCalendars);
+
+    // Clear cache for calendars whose rules changed
+    if (eventsStore === undefined) return;
+    const indexedOldCalendars = Object.fromEntries(
+      virtualCalendarsRef.current?.map(({ calendarId, ...rest }) => [
+        calendarId,
+        rest,
+      ]) ?? []
+    );
+    const oldKeys = Object.keys(indexedOldCalendars);
+    const indexedNewCalendars = Object.fromEntries(
+      localCalendars.map(({ calendarId, ...rest }) => [calendarId, rest])
+    );
+    const newKeys = Object.keys(indexedNewCalendars);
+    const changedKeys = f
+      .unique([...oldKeys, ...newKeys])
+      .filter(
+        (calendarId) =>
+          JSON.stringify(indexedOldCalendars[calendarId] ?? []) !==
+          JSON.stringify(indexedNewCalendars[calendarId] ?? [])
+      );
+    if (changedKeys.length === 0) return;
+    changedKeys.forEach((changedKey) => {
+      eventsStore.current[changedKey] = {};
+    });
+    cacheEvents.trigger('changed');
+  }, [isEditing, localCalendars, setVirtualCalendars]);
 
   const calendars = React.useContext(CalendarsContext)!;
   return (
@@ -206,7 +235,7 @@ function EditableCalendarList({
               <div className="flex">
                 <Input.Text
                   placeholder={calendar.summary}
-                  value={virtualCalendar}
+                  value={virtualCalendar ?? ''}
                   onValueChange={(virtualCalendar): void =>
                     handleEdited({
                       virtualCalendar: virtualCalendar || undefined,

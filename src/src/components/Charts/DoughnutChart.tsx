@@ -1,10 +1,12 @@
+import { ArcElement, Chart, DoughnutController, Tooltip } from 'chart.js';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { EventsStore } from '../EventsStore';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
-import { RA, writable, WritableArray } from '../../utils/types';
-import { Chart, DoughnutController, ArcElement, Tooltip } from 'chart.js';
+
 import { useBooleanState } from '../../hooks/useBooleanState';
+import type { RA, WritableArray } from '../../utils/types';
+import { writable } from '../../utils/types';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import type { EventsStore } from '../EventsStore';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -47,10 +49,10 @@ export function DoughnutChart({
         labels,
         datasets: [{ ...dataSet, data: dataRef.current }],
       }}
-      ref={(chart) => setChart(chart ?? undefined)}
       options={{
         responsive: true,
       }}
+      ref={(chart) => setChart(chart ?? undefined)}
     />
   ) : null;
 }
@@ -80,10 +82,9 @@ function useDataSets(
         durations === undefined
           ? []
           : calendars?.map(({ id }) =>
-              Object.values(durations[id] ?? {}).reduce(
-                (total, durations) => total + durations,
-                0
-              )
+              Object.values(durations[id] ?? {})
+                .flatMap((durations) => Object.values(durations))
+                .reduce((total, durations) => total + durations, 0)
             ) ?? [],
       backgroundColor:
         calendars?.map(({ backgroundColor }) => backgroundColor) ?? [],
