@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { useAsyncState } from '../../hooks/useAsyncState';
-import { setDevelopmentGlobal } from '../../utils/types';
+import { useStorage } from '../../hooks/useStorage';
 import type { RawEventsStore } from './index';
 import { cacheEvents } from './index';
+
+const eventsStoreVersion = '3';
 
 /**
  * Fetch computed event durations from cache and update cache on any changes
@@ -11,31 +12,20 @@ import { cacheEvents } from './index';
 export function useEventsStore():
   | React.MutableRefObject<RawEventsStore>
   | undefined {
-  const [isLoaded] = useAsyncState(
-    React.useCallback(
-      async () =>
-        chrome.storage.local.get('events').then(({ events }) => {
-          eventsStoreRef.current = (events as RawEventsStore | undefined) ?? {};
-          setDevelopmentGlobal('_eventsStore', eventsStoreRef.current);
-          return true;
-        }),
-      []
-    ),
-    false
+  const [eventsStore, setEventsStore] = useStorage(
+    'events',
+    {},
+    'local',
+    eventsStoreVersion
   );
+  const eventsStoreRef = React.useRef<RawEventsStore>({});
+  eventsStoreRef.current = eventsStore ?? {};
 
   React.useEffect(
     () =>
-      cacheEvents.on('changed', async () =>
-        chrome.storage.local
-          .set({
-            events: eventsStoreRef.current,
-          })
-          .catch(console.error)
-      ),
-    []
+      cacheEvents.on('changed', () => setEventsStore(eventsStoreRef.current)),
+    [setEventsStore]
   );
 
-  const eventsStoreRef = React.useRef<RawEventsStore>({});
-  return isLoaded === true ? eventsStoreRef : undefined;
+  return eventsStore === undefined ? undefined : eventsStoreRef;
 }

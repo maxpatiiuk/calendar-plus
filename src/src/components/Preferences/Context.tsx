@@ -2,14 +2,14 @@ import React from 'react';
 
 import type { GetSet } from '../../utils/types';
 import type { UserPreferences } from './helpers';
-import { useStorage } from '../../hooks/useStorage';
+import { useSimpleStorage } from '../../hooks/useStorage';
 
 export function PreferencesProvider({
   children,
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const preferences = useStorage('preferences', {});
+  const preferences = useSimpleStorage('preferences', {});
   const nonNullPreferences =
     preferences[0] === undefined
       ? ([{}, () => {}] as const)

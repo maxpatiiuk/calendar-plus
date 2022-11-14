@@ -9,8 +9,8 @@ import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
 import { CalendarList, VirtualCalendarsList } from '../Molecules/CalendarList';
 import { DurationPicker } from '../Molecules/DurationPicker';
-import type { Goal } from './Widget';
 import { useVirtualCalendars } from '../PowerTools/AutoComplete';
+import type { Goal } from './Widget';
 
 export function GoalsEditor({
   goals: [goals, setGoals],
@@ -48,9 +48,9 @@ export function GoalsEditor({
               }
             />
             <VirtualCalendarsList
-              calendar={goal.calendarId}
-              virtualCalendars={virtualCalendars}
+              calendarId={goal.calendarId}
               value={goal.virtualCalendar}
+              virtualCalendars={virtualCalendars}
               onChange={(virtualCalendar): void =>
                 setGoals(
                   replaceItem(goals, index, {

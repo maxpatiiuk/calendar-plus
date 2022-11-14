@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useSimpleStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { formatDuration } from '../Atoms/Internationalization';
@@ -27,7 +27,7 @@ export function GoalsWidget({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const [goals, setGoals] = useStorage('goals', []);
+  const [goals, setGoals] = useSimpleStorage('goals', []);
   const calendars = React.useContext(CalendarsContext);
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
