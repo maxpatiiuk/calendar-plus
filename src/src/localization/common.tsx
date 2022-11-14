@@ -40,7 +40,7 @@ export const commonText = createDictionary({
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
   preferences: { 'en-us': 'Preferences' },
-  virtualCalendars: { 'en-us': 'Sub Calendar' },
+  virtualCalendars: { 'en-us': 'Autocomplete predictions' },
   sourceCalendar: { 'en-us': 'Source Calendar' },
   matchRule: { 'en-us': 'Match Rule' },
   startsWith: { 'en-us': 'Starts With' },

@@ -78,6 +78,7 @@ export function useEvents(
       if (ignoreAllDayEvents !== previousPrefRef.current) {
         previousPrefRef.current = ignoreAllDayEvents;
         eventsStore.current = {};
+        cacheEvents.trigger('changed');
       }
       await Promise.all(
         calendars.map(async ({ id }) => {
@@ -140,9 +141,11 @@ export function useEvents(
             durations.flat().forEach(([{ year, month, day }, duration]) => {
               years[year] ??= [];
               const months = years[year]!;
-              months[month] ??= [];
+              const monthsToAdd = month - months.length + 1;
+              for (let i = 0; i < monthsToAdd; i++) months.push([]);
               const days = months[month]!;
-              days[day] ??= 0;
+              const daysToAdd = day - days.length + 1;
+              for (let i = 0; i < daysToAdd; i++) days.push(0);
               days[day]! += duration;
             });
           });
@@ -326,7 +329,7 @@ function extractData(
           Object.fromEntries(
             daysBetween.map((date) => [
               splitDateToString(date),
-              dates[date.year]![date.month]![date.day]!,
+              dates[date.year]?.[date.month]?.[date.day] ?? 0,
             ])
           ),
         ])
