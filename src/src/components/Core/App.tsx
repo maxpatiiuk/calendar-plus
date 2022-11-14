@@ -24,13 +24,13 @@ export function App(): JSX.Element | null {
   const [isOpen, _, __, handleToggle] = useBooleanState();
 
   React.useEffect(() => {
-    const handleEscKey = (event: KeyboardEvent): void =>
-      event.key === 'Escape' ? handleToggle() : undefined;
+    const handleBackTickKey = (event: KeyboardEvent): void =>
+      event.key === '`' ? handleToggle() : undefined;
 
-    document.addEventListener('keydown', handleEscKey, false);
+    document.addEventListener('keydown', handleBackTickKey, false);
 
     return () => {
-      document.removeEventListener('keydown', handleEscKey, false);
+      document.removeEventListener('keydown', handleBackTickKey, false);
     };
   }, []);
 
