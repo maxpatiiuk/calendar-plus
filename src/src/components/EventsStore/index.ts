@@ -4,7 +4,7 @@ import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
 import { eventListener } from '../../utils/events';
 import { formatUrl } from '../../utils/queryString';
-import type { IR, RA, WritableArray } from '../../utils/types';
+import type { IR, R, RA, WritableArray } from '../../utils/types';
 import { findLastIndex, group } from '../../utils/utils';
 import {
   DAY,
@@ -15,6 +15,8 @@ import {
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
+
+export const summedDurations: unique symbol = Symbol('calendarTotal');
 
 /**
  * This is stored in cache
@@ -39,6 +41,8 @@ export type RawEventsStore = {
 export type EventsStore = {
   readonly [CALENDAR_ID in string]: {
     readonly [VIRTUAL_CALENDAR in string]: IR<number>;
+  } & {
+    readonly [summedDurations]: IR<number>;
   };
 };
 type CalendarEvent = Pick<
@@ -319,22 +323,30 @@ function extractData(
   startDate: Date,
   endDate: Date
 ): EventsStore {
-  const daysBetween = getDatesBetween(startDate, endDate);
+  const daysBetween = getDatesBetween(startDate, endDate).map((components) => ({
+    ...components,
+    string: splitDateToString(components),
+  }));
   return Object.fromEntries(
-    calendars.map(({ id }) => [
-      id,
-      Object.fromEntries(
-        Object.entries(eventsStore[id]).map(([virtualCalendar, dates]) => [
+    calendars.map(({ id }) => {
+      const totals: R<number> = Object.fromEntries(
+        daysBetween.map(({ string }) => [string, 0])
+      );
+      const entries = Object.entries(eventsStore[id]).map(
+        ([virtualCalendar, dates]) => [
           virtualCalendar,
           Object.fromEntries(
-            daysBetween.map((date) => [
-              splitDateToString(date),
-              dates[date.year]?.[date.month]?.[date.day] ?? 0,
-            ])
+            daysBetween.map((date) => {
+              const string = splitDateToString(date);
+              const total = dates[date.year]?.[date.month]?.[date.day] ?? 0;
+              totals[string] += total;
+              return [string, total];
+            })
           ),
-        ])
-      ),
-    ])
+        ]
+      );
+      return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
+    })
   );
 }
 

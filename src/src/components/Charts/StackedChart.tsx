@@ -15,6 +15,7 @@ import { formatLabel } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
+import { summedDurations } from '../EventsStore';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -66,11 +67,7 @@ function useLabels(durations: EventsStore | undefined): WritableArray<string> {
   return React.useMemo(
     () =>
       Object.keys(
-        Object.values(
-          Object.values(durations ?? {}).find(
-            (categories) => Object.keys(categories).length > 0
-          ) ?? {}
-        )[0] ?? {}
+        Object.values(durations ?? {})[0]?.[summedDurations] ?? []
       ).map((duration) => formatLabel(new Date(duration), currentView)),
     [durations, currentView]
   );
@@ -89,21 +86,12 @@ function useDataSets(
     () =>
       durations === undefined || calendars === undefined
         ? []
-        : calendars.map(({ id, summary, backgroundColor }) => {
-            const data = Object.values(durations[id] ?? {});
-            const summed = Object.values(data[0] ?? {});
-            data.slice(1).forEach((durations) =>
-              Object.values(durations).forEach((value, index) => {
-                summed[index] = value;
-              })
-            );
-            return {
-              id,
-              label: summary,
-              backgroundColor,
-              data: summed,
-            };
-          }),
+        : calendars.map(({ id, summary, backgroundColor }) => ({
+            id,
+            label: summary,
+            backgroundColor,
+            data: Object.values(durations[id]?.[summedDurations] ?? {}),
+          })),
     [durations, calendars]
   );
 }
