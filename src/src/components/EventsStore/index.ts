@@ -12,6 +12,7 @@ import {
   MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
 import { eventListener } from '../../utils/events';
+import { usePref } from '../Preferences/usePref';
 
 /**
  * This is stored in cache
@@ -47,6 +48,8 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const calendars = React.useContext(CalendarsContext);
+  const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
+  const previousPrefRef = React.useRef(ignoreAllDayEvents);
   const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
@@ -56,6 +59,10 @@ export function useEvents(
         endDate === undefined
       )
         return undefined;
+      if (ignoreAllDayEvents !== previousPrefRef.current) {
+        previousPrefRef.current = ignoreAllDayEvents;
+        eventsStore.current = {};
+      }
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
@@ -88,6 +95,11 @@ export function useEvents(
           const results = await response.json();
           const events = results.items as RA<CalendarEvent>;
           const durations = events.flatMap(({ start, end }) => {
+            if (
+              ignoreAllDayEvents &&
+              (start.dateTime === undefined || end.dateTime === undefined)
+            )
+              return [];
             const dates = resolveEventDates(timeMin, timeMax, start, end);
             if (dates === undefined) return [];
             const [startDate, endDate] = dates;
@@ -107,7 +119,7 @@ export function useEvents(
       );
       cacheEvents.trigger('changed');
       return extractData(eventsStore.current, calendars, startDate, endDate);
-    }, [eventsStore, calendars, startDate, endDate]),
+    }, [eventsStore, calendars, startDate, endDate, ignoreAllDayEvents]),
     false
   );
   return durations;
