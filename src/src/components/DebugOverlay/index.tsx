@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { sendRequest } from '../Background/messages';
 
 /**
@@ -8,12 +9,25 @@ import { sendRequest } from '../Background/messages';
  */
 export function DebugOverlay(): JSX.Element {
   return (
-    <button
-      type="button"
-      className="absolute top-0 left-0"
-      onClick={() => sendRequest('ReloadExtension', undefined)}
-    >
-      Reload Extension
-    </button>
+    <div className="absolute top-0 left-0">
+      <button
+        type="button"
+        onClick={async (): Promise<void> =>
+          sendRequest('ReloadExtension', undefined)
+        }
+      >
+        Reload Extension
+      </button>
+      <button
+        type="button"
+        onClick={async (): Promise<void> => {
+          await chrome.storage.local.clear();
+          await chrome.storage.sync.clear();
+          window.location.reload();
+        }}
+      >
+        Clear Storage
+      </button>
+    </div>
   );
 }
