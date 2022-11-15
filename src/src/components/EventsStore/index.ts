@@ -139,21 +139,36 @@ export function useEvents(
             })
           );
 
+          /*
+           * Need to initialize the cache entries, even if empty so that the
+           * code can later detect that this region was already fetched.
+           * Thus, need to be careful and only initialize the days for which
+           * data was actually fetched
+           */
+          const initializeCalendar = (
+            years: RawEventsStore[string][string]
+          ): void =>
+            daysBetween.forEach(({ year, month, day }) => {
+              years[year] ??= [];
+              const months = years[year]!;
+              months[month] ??= [];
+              const days = months[month]!;
+              days[day] ??= 0;
+            });
+
           eventsStore.current[id] ??= {};
           durations.map(([virtualCalendar, durations]) => {
             eventsStore.current[id][virtualCalendar] ??= {};
             const years = eventsStore.current[id][virtualCalendar];
+            initializeCalendar(years);
             durations.flat().forEach(([{ year, month, day }, duration]) => {
-              years[year] ??= [];
-              const months = years[year]!;
-              const monthsToAdd = month - months.length + 1;
-              for (let i = 0; i < monthsToAdd; i++) months.push([]);
-              const days = months[month]!;
-              const daysToAdd = day - days.length + 1;
-              for (let i = 0; i < daysToAdd; i++) days.push(null);
-              days[day]! += duration;
+              years[year]![month]![day]! += duration;
             });
           });
+          if (durations.length === 0) {
+            eventsStore.current[id] = { '': [] };
+            initializeCalendar(eventsStore.current[id]['']);
+          }
         })
       );
       cacheEvents.trigger('changed');

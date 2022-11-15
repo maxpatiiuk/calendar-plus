@@ -41,7 +41,6 @@ const ruleLabel: RR<MatchRule, string> = {
   regex: commonText('regex'),
 };
 
-// BUG: bust the events cache when virtual events are edited
 export function VirtualCalendars({
   label,
   eventsStore,

@@ -31,6 +31,7 @@ export function DoughnutChart({
    * than re-render from scratch, need to mutate the data object rather than
    * give it a new one
    */
+  // FIXME: uncomment this
   /*const [_, { data, ...dataSet }] = useDataSets(durations, calendars);
   const dataRef = React.useRef(data);
   const [loaded, handleLoaded] = useBooleanState();
