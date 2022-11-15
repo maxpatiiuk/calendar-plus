@@ -4,17 +4,18 @@ import type { State } from 'typesafe-reducer';
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
+import { listen } from '../../utils/events';
 import { Button } from '../Atoms';
 import { AuthContext } from '../Contexts/AuthContext';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
 import { useEventsStore } from '../EventsStore/useEventsStore';
 import { Portal } from '../Molecules/Portal';
-import { PreferencesPage } from '../Preferences';
-import { GhostEvents } from '../PowerTools/GhostEvents';
 import { AutoComplete } from '../PowerTools/AutoComplete';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { GhostEvents } from '../PowerTools/GhostEvents';
+import { PreferencesPage } from '../Preferences';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -24,16 +25,13 @@ const debugOverlayPromise =
 export function App(): JSX.Element | null {
   const [isOpen, _, __, handleToggle] = useBooleanState();
 
-  React.useEffect(() => {
-    const handleBackTickKey = (event: KeyboardEvent): void =>
-      event.key === '`' ? handleToggle() : undefined;
-
-    document.addEventListener('keydown', handleBackTickKey, false);
-
-    return () => {
-      document.removeEventListener('keydown', handleBackTickKey, false);
-    };
-  }, []);
+  React.useEffect(
+    () =>
+      listen(document, 'keydown', (event) =>
+        event.key === '`' ? handleToggle() : undefined
+      ),
+    [handleToggle]
+  );
 
   const currentView = React.useContext(CurrentViewContext);
   const eventsStore = useEventsStore();
