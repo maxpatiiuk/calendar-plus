@@ -21,15 +21,17 @@ const debugOverlayPromise =
     : undefined;
 
 export function App(): JSX.Element | null {
-  const [isOpen, _, handleClose, handleToggle] = useBooleanState();
+  const [isOpen, _, __, handleToggle] = useBooleanState();
 
   React.useEffect(() => {
-    const handleEscKey = (event: KeyboardEvent): void =>
-      event.key === 'Escape' ? handleClose() : undefined;
+    const handleBackTickKey = (event: KeyboardEvent): void =>
+      event.key === '`' ? handleToggle() : undefined;
 
-    document.addEventListener('keydown', handleEscKey, false);
+    document.addEventListener('keydown', handleBackTickKey, false);
 
-    return () => document.removeEventListener('keydown', handleEscKey, false);
+    return () => {
+      document.removeEventListener('keydown', handleBackTickKey, false);
+    };
   }, []);
 
   const currentView = React.useContext(CurrentViewContext);
