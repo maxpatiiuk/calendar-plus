@@ -92,15 +92,19 @@ function useDataSets(
     const categoryData =
       durations === undefined
         ? []
-        : calendars?.flatMap(({ id, backgroundColor }) =>
-            Object.entries(durations[id] ?? {}).map(([label, durations]) => {
-              partBackgroundColors.push(backgroundColor);
-              labels.push(label || commonText('other'));
-              return Object.values(durations).reduce(
-                (total, durations) => total + durations,
-                0
-              );
-            })
+        : calendars?.flatMap(({ id, summary, backgroundColor }) =>
+            Object.entries(durations[id] ?? {}).map(
+              ([label, durations], { length }) => {
+                partBackgroundColors.push(backgroundColor);
+                labels.push(
+                  label || (length === 1 ? summary : commonText('other'))
+                );
+                return Object.values(durations).reduce(
+                  (total, durations) => total + durations,
+                  0
+                );
+              }
+            )
           ) ?? [];
     const calendarData =
       durations === undefined

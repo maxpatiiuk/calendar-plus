@@ -150,7 +150,7 @@ export function useEvents(
               for (let i = 0; i < monthsToAdd; i++) months.push([]);
               const days = months[month]!;
               const daysToAdd = day - days.length + 1;
-              for (let i = 0; i < daysToAdd; i++) days.push(0);
+              for (let i = 0; i < daysToAdd; i++) days.push(null);
               days[day]! += duration;
             });
           });
@@ -278,13 +278,13 @@ function resolveEventDates(
     typeof start.dateTime === 'string'
       ? new Date(start.dateTime)
       : typeof start.date === 'string'
-      ? dateToDateTime(start.date, 'startDate')
+      ? dateToDateTime(start.date)
       : undefined;
   const unboundedEndDate =
     typeof end.dateTime === 'string'
       ? new Date(end.dateTime)
       : typeof end.date === 'string'
-      ? dateToDateTime(end.date, 'endDate')
+      ? dateToDateTime(end.date)
       : undefined;
 
   if (unboundedStartDate === undefined || unboundedEndDate === undefined)
@@ -303,12 +303,8 @@ function resolveEventDates(
 /**
  * Convert date to dateTime (using midnight in current time zone)
  */
-export function dateToDateTime(
-  dateString: string,
-  type: 'endDate' | 'startDate'
-): Date {
+export function dateToDateTime(dateString: string): Date {
   const date = new Date(dateString);
-  if (type === 'endDate') date.setDate(date.getDate() + 1);
   // FEATURE: time zone support (use calendar time zone)
   date.setHours(24);
   return date;

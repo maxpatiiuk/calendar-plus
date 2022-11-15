@@ -64,24 +64,29 @@ function Goals({
   readonly durations: EventsStore | undefined;
   readonly calendars: RA<CalendarListEntry>;
 }): JSX.Element {
+  const hasGoals = goals.length > 0;
   return typeof durations === 'object' ? (
     <div
       className={`
-        grid flex-1 grid-cols-[repeat(auto-fill,var(--size))] items-center
-        justify-evenly gap-2
+        grid flex-1 gap-2
+        ${
+          hasGoals
+            ? 'grid-cols-[repeat(auto-fill,var(--size))] items-center justify-evenly'
+            : ''
+        }
       `}
       style={{ '--size': `${size}rem` } as React.CSSProperties}
     >
-      {goals.length === 0
-        ? commonText('noGoals')
-        : goals.map((goal, index) => (
+      {hasGoals
+        ? goals.map((goal, index) => (
             <GoalComponent
               calendars={calendars}
               durations={durations}
               goal={goal}
               key={index}
             />
-          ))}
+          ))
+        : commonText('noGoals')}
     </div>
   ) : (
     <>{commonText('loading')}</>

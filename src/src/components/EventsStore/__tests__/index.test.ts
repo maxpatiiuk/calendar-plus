@@ -269,12 +269,8 @@ theories(resolveEventDates, {
 
 theories(dateToDateTime, [
   {
-    in: ['2020-01-01', 'startDate'],
+    in: ['2020-01-01'],
     out: new Date('2020-01-01T00:00:00.000-06:00'),
-  },
-  {
-    in: ['2020-01-01', 'endDate'],
-    out: new Date('2020-01-02T00:00:00.000-06:00'),
   },
 ]);
 
