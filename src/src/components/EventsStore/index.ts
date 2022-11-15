@@ -87,7 +87,6 @@ export function useEvents(
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
-          // FIXME: debug bounds checking code
           const bounds = calculateBounds(
             eventsStore,
             id,

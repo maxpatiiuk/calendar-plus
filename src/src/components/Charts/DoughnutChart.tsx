@@ -3,13 +3,13 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
 import { writable } from '../../utils/types';
+import { formatDuration } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
-import { commonText } from '../../localization/common';
-import { formatDuration } from '../Atoms/Internationalization';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -20,44 +20,55 @@ export function DoughnutChart({
 }): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
 
-  const layers = useDataSets(durations, calendars);
-  const [outerLayer, innerLayer] = layers;
-  const loaded = true;
-  const [chart, setChart] = React.useState<
-    Chart<'doughnut', RA<number>, string> | undefined
-  >(undefined);
   /**
    * In order for ChartJS to smoothly animate from one state to another rather
    * than re-render from scratch, need to mutate the data object rather than
    * give it a new one
    */
-  // FIXME: uncomment this
-  /*const [_, { data, ...dataSet }] = useDataSets(durations, calendars);
-  const dataRef = React.useRef(data);
+  const layers = useDataSets(durations, calendars);
+  const [
+    { data: outerData, labels: outerLabels, ...outerDataSet },
+    { data: innerData, labels: innerLabels, ...innerDataSet },
+  ] = layers;
+  const [chart, setChart] = React.useState<
+    Chart<'doughnut', RA<number>, string> | undefined
+  >(undefined);
+  const innerDataRef = React.useRef(innerData);
+  const outerDataRef = React.useRef(outerData);
   const [loaded, handleLoaded] = useBooleanState();
   React.useEffect(() => {
-    if (data.length > 0) handleLoaded();
-    if (chart === undefined || dataRef.current === data) return;
+    if (outerData.length > 0) handleLoaded();
+    if (chart === undefined || outerDataRef.current === outerData) return;
     Array.from(
       {
-        length: Math.max(chart.data.datasets[0].data.length, data.length),
+        length: Math.max(chart.data.datasets[0].data.length, outerData.length),
       },
       (_, index) => {
-        writable(chart.data.datasets[0].data)[index] = data[index];
+        writable(chart.data.datasets[0].data)[index] = outerData[index];
+      }
+    );
+    Array.from(
+      {
+        length: Math.max(chart.data.datasets[1].data.length, innerData.length),
+      },
+      (_, index) => {
+        writable(chart.data.datasets[1].data)[index] = innerData[index];
       }
     );
     chart.update();
-  }, [data, chart, handleLoaded]);*/
+  }, [innerData, outerData, chart, handleLoaded]);
 
   return loaded ? (
     <Doughnut
       data={{
-        labels: [
-          ...outerLayer.labels,
-          ...innerLayer.labels,
-        ] as WritableArray<string>,
-        datasets: [outerLayer, innerLayer],
-        // datasets: [{ ...dataSet, data: dataRef.current }],
+        labels: [...outerLabels, ...innerLabels] as WritableArray<string>,
+        datasets: [
+          {
+            ...outerDataSet,
+            data: outerDataRef.current,
+          },
+          { ...innerDataSet, data: innerDataRef.current },
+        ],
       }}
       options={{
         responsive: true,
@@ -95,7 +106,7 @@ function useDataSets(
         ? []
         : calendars?.flatMap(({ id, summary, backgroundColor }) =>
             Object.entries(durations[id] ?? {}).map(
-              ([label, durations], { length }) => {
+              ([label, durations], _, { length }) => {
                 partBackgroundColors.push(backgroundColor);
                 labels.push(
                   label || (length === 1 ? summary : commonText('other'))
