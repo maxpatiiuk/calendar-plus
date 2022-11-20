@@ -20,6 +20,7 @@ export type StorageDefinitions = {
   readonly virtualCalendars: RA<VirtualCalendar>;
   readonly overSizeStorage: RA<string>;
   readonly storageVersions: Partial<RR<keyof StorageDefinitions, string>>;
+  readonly customViewDuration: number;
 };
 
 /**

@@ -47,14 +47,32 @@ theories(parsePath, [
       lastDay: new Date(2020, 11, 31),
     },
   },
+  {
+    in: ['/calendar/u/0/r/customday/2020/12/10/'],
+    out: {
+      view: 'customday',
+      selectedDay: new Date(2020, 11, 10),
+      firstDay: new Date(2020, 11, 14),
+      lastDay: new Date(2020, 11, 14),
+    },
+  },
+  {
+    in: ['/calendar/u/0/r/customweek/2020/12/10/'],
+    out: {
+      view: 'customweek',
+      selectedDay: new Date(2020, 11, 10),
+      firstDay: new Date(2020, 11, 6),
+      lastDay: new Date(2020, 11, 10),
+    },
+  },
   // TODO: reEnable this once year view is supported
   /*{
-    in: ['/calendar/u/0/r/year/2023/'],
-    out: {
-      view: 'year',
-      selectedDay: new Date(2023, month, day),
-      firstDay: new Date(2023, 0, 1),
-      lastDay: new Date(2024, 0, 1),
-    },
-  },*/
+  in: ['/calendar/u/0/r/year/2023/'],
+  out: {
+    view: 'year',
+    selectedDay: new Date(2023, month, day),
+    firstDay: new Date(2023, 0, 1),
+    lastDay: new Date(2024, 0, 1),
+  },
+},*/
 ]);

@@ -9,7 +9,9 @@ const supportedViews = [
   'day',
   'week',
   'month',
-  /*'year' , 'customday'*/
+  /* 'year' */
+  'customday',
+  'customweek',
 ] as const;
 export type SupportedView = typeof supportedViews[number];
 
@@ -119,6 +121,7 @@ function resolveBoundaries(
       ),
     };
   else if (viewName === 'week') {
+    // FEATURE: detect first of the week
     const dayOffset = selectedDay.getDate() - selectedDay.getDay();
     return {
       firstDay: new Date(
@@ -141,7 +144,42 @@ function resolveBoundaries(
         0
       ),
     };
-  else if (viewName === 'year')
+  else if (viewName === 'customday') {
+    // Find out how many days are displayed
+    const duration = new Set(
+      Array.from(
+        document.querySelectorAll('[data-start-date-key] [data-datekey]'),
+        (v) => v.getAttribute('data-datekey')
+      )
+    ).size;
+    return {
+      firstDay: selectedDay,
+      lastDay: new Date(
+        selectedDay.getFullYear(),
+        selectedDay.getMonth(),
+        selectedDay.getDate() + duration
+      ),
+    };
+  } else if (viewName === 'customweek') {
+    // Find out how many days are displayed
+    const duration = new Set(
+      Array.from(
+        document.querySelectorAll('[data-start-date-key] [data-datekey]'),
+        (v) => v.getAttribute('data-datekey')
+      )
+    ).size;
+    const firstDay = new Date(selectedDay);
+    // FEATURE: detect first of the week
+    firstDay.setDate(firstDay.getDate() - firstDay.getDay());
+    return {
+      firstDay,
+      lastDay: new Date(
+        firstDay.getFullYear(),
+        firstDay.getMonth(),
+        firstDay.getDate() + duration
+      ),
+    };
+  } else if (viewName === 'year')
     return {
       firstDay: new Date(selectedDay.getFullYear(), 0, 1),
       lastDay: new Date(selectedDay.getFullYear() + 1, 0, 1),
