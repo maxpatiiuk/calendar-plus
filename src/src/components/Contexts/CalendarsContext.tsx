@@ -145,7 +145,7 @@ function useVisibilityChangeSpy(
 /**
  * Poll regularly until a desired element has been added to the DOM
  */
-async function awaitElement<T>(
+export async function awaitElement<T>(
   callback: () => T | undefined,
   pollInterval = 50,
   limit = 100
