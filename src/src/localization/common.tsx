@@ -33,6 +33,7 @@ export const commonText = createDictionary({
   type: { 'en-us': 'Type' },
   addWidget: { 'en-us': 'Add Widget' },
   addGoal: { 'en-us': 'Add Goal' },
+  add: { 'en-us': 'Add' },
   hours: { 'en-us': 'hours' },
   minutes: { 'en-us': 'minutes' },
   calendar: { 'en-us': 'Calendar' },

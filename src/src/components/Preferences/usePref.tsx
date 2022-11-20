@@ -25,6 +25,8 @@ export function usePref<
 
   const updatePref = React.useCallback(
     (newPref: Preferences[CATEGORY]['items'][ITEM]['defaultValue']): void => {
+      const isUnchanged = value === newPref;
+      if (isUnchanged) return;
       const isDefault = definition.defaultValue === newPref;
       if (isDefault) {
         const items = removeKey(
