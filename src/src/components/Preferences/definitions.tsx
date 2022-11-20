@@ -48,6 +48,11 @@ export const preferenceDefinitions = {
         renderer: BooleanPref,
         defaultValue: true,
       }),
+      ignoreAllDayEvents: defineItem<boolean>({
+        title: preferencesText('ignoreAllDayEvents'),
+        renderer: BooleanPref,
+        defaultValue: true,
+      }),
     },
   },
   features: {

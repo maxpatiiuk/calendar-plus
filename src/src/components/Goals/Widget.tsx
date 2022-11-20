@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStorage } from '../../hooks/useStorage';
+import { useSimpleStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { formatDuration } from '../Atoms/Internationalization';
@@ -15,6 +15,7 @@ import { GoalsEditor } from './GoalsEditor';
 
 export type Goal = {
   readonly calendarId: string;
+  readonly virtualCalendar?: string;
   readonly duration: number;
   readonly view: SupportedView;
 };
@@ -26,7 +27,7 @@ export function GoalsWidget({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const [goals, setGoals] = useStorage('goals', []);
+  const [goals, setGoals] = useSimpleStorage('goals', []);
   const calendars = React.useContext(CalendarsContext);
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
@@ -63,24 +64,29 @@ function Goals({
   readonly durations: EventsStore | undefined;
   readonly calendars: RA<CalendarListEntry>;
 }): JSX.Element {
+  const hasGoals = goals.length > 0;
   return typeof durations === 'object' ? (
     <div
       className={`
-        grid flex-1 grid-cols-[repeat(auto-fill,var(--size))] items-center
-        justify-evenly gap-2
+        grid flex-1 gap-2
+        ${
+          hasGoals
+            ? 'grid-cols-[repeat(auto-fill,var(--size))] items-center justify-evenly'
+            : ''
+        }
       `}
       style={{ '--size': `${size}rem` } as React.CSSProperties}
     >
-      {goals.length === 0
-        ? commonText('noGoals')
-        : goals.map((goal, index) => (
+      {hasGoals
+        ? goals.map((goal, index) => (
             <GoalComponent
               calendars={calendars}
               durations={durations}
               goal={goal}
               key={index}
             />
-          ))}
+          ))
+        : commonText('noGoals')}
     </div>
   ) : (
     <>{commonText('loading')}</>
@@ -88,7 +94,7 @@ function Goals({
 }
 
 function GoalComponent({
-  goal: { calendarId, duration: goalDuration },
+  goal: { calendarId, virtualCalendar, duration: goalDuration },
   durations,
   calendars,
 }: {
@@ -98,19 +104,24 @@ function GoalComponent({
 }): JSX.Element | null {
   const calendar = calendars.find(({ id }) => id === calendarId);
   const currentDurations = durations[calendarId];
-  const currentDuration = React.useMemo(
-    () =>
-      Object.values(currentDurations ?? {}).reduce(
-        (total, value) => total + (value ?? 0),
-        0
-      ),
-    [currentDurations]
-  );
+  const currentDuration = React.useMemo(() => {
+    const durations =
+      virtualCalendar === undefined
+        ? Object.values(currentDurations ?? {}).flatMap((durations) =>
+            Object.values(durations)
+          )
+        : Object.values(currentDurations?.[virtualCalendar] ?? {});
+    return durations.reduce((total, value) => total + (value ?? 0), 0);
+  }, [currentDurations, virtualCalendar]);
   return typeof calendar === 'object' ? (
     <Gage
       color={calendar.backgroundColor}
       fontSize={fontSize}
-      label={`${calendar.summary} - ${commonText(
+      label={`${
+        virtualCalendar === undefined
+          ? calendar.summary
+          : `${virtualCalendar} (${calendar.summary})`
+      } - ${commonText(
         'aOutOfB',
         formatDuration(currentDuration),
         formatDuration(goalDuration)

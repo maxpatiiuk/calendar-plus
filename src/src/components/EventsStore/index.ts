@@ -1,27 +1,37 @@
+import React from 'react';
+
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
-import React from 'react';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { eventListener } from '../../utils/events';
 import { formatUrl } from '../../utils/queryString';
-import { IR, RA, WritableArray } from '../../utils/types';
-import { findLastIndex } from '../../utils/utils';
+import type { IR, R, RA, WritableArray } from '../../utils/types';
+import { findLastIndex, group, sortFunction } from '../../utils/utils';
 import {
   DAY,
   MILLISECONDS_IN_DAY,
   MINUTE,
   MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
-import { eventListener } from '../../utils/events';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
+import { usePref } from '../Preferences/usePref';
+
+export const summedDurations: unique symbol = Symbol('calendarTotal');
 
 /**
  * This is stored in cache
  * The data structure is optimized for storage efficiency
  */
+// eslint-disable-next-line functional/prefer-readonly-type
 export type RawEventsStore = {
+  // eslint-disable-next-line functional/prefer-readonly-type
   [CALENDAR_ID in string]: {
-    [YEAR in number]?: WritableArray<
-      WritableArray<number | null | undefined> | null | undefined
-    >;
+    // eslint-disable-next-line functional/prefer-readonly-type
+    [VIRTUAL_CALENDAR in string]: {
+      [YEAR in number]?: WritableArray<
+        WritableArray<number | null | undefined> | null | undefined
+      >;
+    };
   };
 };
 /*
@@ -29,11 +39,18 @@ export type RawEventsStore = {
  * The data structure is optimized for ease of use
  */
 export type EventsStore = {
-  [CALENDAR_ID in string]: IR<number>;
+  readonly [CALENDAR_ID in string]: {
+    readonly [VIRTUAL_CALENDAR in string]: IR<number>;
+  } & {
+    readonly [summedDurations]: IR<number>;
+  };
 };
-type CalendarEvent = Pick<gapi.client.calendar.Event, 'start' | 'end'>;
+type CalendarEvent = Pick<
+  gapi.client.calendar.Event,
+  'end' | 'start' | 'summary'
+>;
 
-export const cacheEvents = eventListener<{ changed: undefined }>();
+export const cacheEvents = eventListener<{ readonly changed: undefined }>();
 
 // TEST: test daylight savings time switch and back
 /**
@@ -47,6 +64,12 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const calendars = React.useContext(CalendarsContext);
+
+  const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
+  const previousPrefRef = React.useRef(ignoreAllDayEvents);
+
+  const virtualCalendars = useVirtualCalendars();
+
   const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
@@ -56,6 +79,11 @@ export function useEvents(
         endDate === undefined
       )
         return undefined;
+      if (ignoreAllDayEvents !== previousPrefRef.current) {
+        previousPrefRef.current = ignoreAllDayEvents;
+        eventsStore.current = {};
+        cacheEvents.trigger('changed');
+      }
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
@@ -79,35 +107,79 @@ export function useEvents(
                 timeMin: timeMin.toJSON(),
                 timeMax: timeMax.toJSON(),
                 prettyPrint: false.toString(),
-                fields: 'items(start(dateTime,date),end(dateTime,date))',
+                fields:
+                  'items(summary,start(dateTime,date),end(dateTime,date))',
                 // FEATURE: set this to True to reduce response size
                 singleEvents: true.toString(),
               }
             )
           );
           const results = await response.json();
+
+          const guessCalendar = (input: string): string | undefined =>
+            virtualCalendars.find(
+              ({ calendarId, rule, value }) =>
+                calendarId === id && ruleMatchers[rule](input, value)
+            )?.virtualCalendar;
+
           const events = results.items as RA<CalendarEvent>;
-          const durations = events.flatMap(({ start, end }) => {
-            const dates = resolveEventDates(timeMin, timeMax, start, end);
-            if (dates === undefined) return [];
-            const [startDate, endDate] = dates;
-            return calculateEventDuration(startDate, endDate);
-          });
+          const durations = group(
+            events.map(({ summary, start, end }) => {
+              if (
+                ignoreAllDayEvents &&
+                (start.dateTime === undefined || end.dateTime === undefined)
+              )
+                return ['', []];
+              const dates = resolveEventDates(timeMin, timeMax, start, end);
+              if (dates === undefined) return ['', []];
+              const [startDate, endDate] = dates;
+              const data = calculateEventDuration(startDate, endDate);
+              return [guessCalendar(summary) ?? '', data] as const;
+            })
+          );
+
+          /*
+           * Need to initialize the cache entries, even if empty so that the
+           * code can later detect that this region was already fetched.
+           * Thus, need to be careful and only initialize the days for which
+           * data was actually fetched
+           */
+          const initializeCalendar = (
+            years: RawEventsStore[string][string]
+          ): void =>
+            daysBetween.forEach(({ year, month, day }) => {
+              years[year] ??= [];
+              const months = years[year]!;
+              months[month] ??= [];
+              const days = months[month]!;
+              days[day] ??= 0;
+            });
 
           eventsStore.current[id] ??= {};
-          daysBetween.forEach(({ year, month, day }) => {
-            eventsStore.current[id][year] ??= [];
-            eventsStore.current[id][year]![month] ??= [];
-            eventsStore.current[id][year]![month]![day] ??= 0;
+          durations.map(([virtualCalendar, durations]) => {
+            eventsStore.current[id][virtualCalendar] ??= {};
+            const years = eventsStore.current[id][virtualCalendar];
+            initializeCalendar(years);
+            durations.flat().forEach(([{ year, month, day }, duration]) => {
+              years[year]![month]![day]! += duration;
+            });
           });
-          durations.forEach(([{ year, month, day }, duration]) => {
-            eventsStore.current[id][year]![month]![day]! += duration;
-          });
+          if (durations.length === 0) {
+            eventsStore.current[id] = { '': [] };
+            initializeCalendar(eventsStore.current[id]['']);
+          }
         })
       );
       cacheEvents.trigger('changed');
       return extractData(eventsStore.current, calendars, startDate, endDate);
-    }, [eventsStore, calendars, startDate, endDate]),
+    }, [
+      eventsStore,
+      calendars,
+      startDate,
+      endDate,
+      ignoreAllDayEvents,
+      virtualCalendars,
+    ]),
     false
   );
   return durations;
@@ -125,17 +197,26 @@ function calculateBounds(
   id: string,
   startDate: Date,
   daysBetween: RA<SplitDate>
-): [timeMin: Date, timeMax: Date] | undefined {
-  const firstDayToFetch = daysBetween.findIndex(
-    ({ month, year, day }) =>
-      typeof eventsStore.current[id]?.[year]?.[month]?.[day] !== 'number'
-  );
+): readonly [timeMin: Date, timeMax: Date] | undefined {
+  const durations = Object.values(eventsStore.current[id] ?? []);
+  const firstDayToFetch =
+    durations.length === 0
+      ? 0
+      : daysBetween.findIndex(({ month, year, day }) =>
+          durations.some(
+            (virtualCalendar) =>
+              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+          )
+        );
   const lastDayToFetch =
-    findLastIndex(
-      daysBetween,
-      ({ month, year, day }) =>
-        typeof eventsStore.current[id]?.[year]?.[month]?.[day] !== 'number'
-    ) + 1;
+    durations.length === 0
+      ? daysBetween.length
+      : findLastIndex(daysBetween, ({ month, year, day }) =>
+          durations.some(
+            (virtualCalendar) =>
+              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
+          )
+        ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
   timeMin.setDate(timeMin.getDate() + firstDayToFetch);
@@ -205,19 +286,19 @@ function resolveEventDates(
   timeMax: Date,
   start: CalendarEvent['start'],
   end: CalendarEvent['end']
-): [start: Date, end: Date] | undefined {
+): readonly [start: Date, end: Date] | undefined {
   // Date is defined instead of DateTime for multi-day events
   const unboundedStartDate =
     typeof start.dateTime === 'string'
       ? new Date(start.dateTime)
       : typeof start.date === 'string'
-      ? dateToDateTime(start.date, 'startDate')
+      ? dateToDateTime(start.date)
       : undefined;
   const unboundedEndDate =
     typeof end.dateTime === 'string'
       ? new Date(end.dateTime)
       : typeof end.date === 'string'
-      ? dateToDateTime(end.date, 'endDate')
+      ? dateToDateTime(end.date)
       : undefined;
 
   if (unboundedStartDate === undefined || unboundedEndDate === undefined)
@@ -236,12 +317,8 @@ function resolveEventDates(
 /**
  * Convert date to dateTime (using midnight in current time zone)
  */
-export function dateToDateTime(
-  dateString: string,
-  type: 'startDate' | 'endDate'
-): Date {
+export function dateToDateTime(dateString: string): Date {
   const date = new Date(dateString);
-  if (type === 'endDate') date.setDate(date.getDate() + 1);
   // FEATURE: time zone support (use calendar time zone)
   date.setHours(24);
   return date;
@@ -257,17 +334,40 @@ function extractData(
   startDate: Date,
   endDate: Date
 ): EventsStore {
-  const daysBetween = getDatesBetween(startDate, endDate);
+  const daysBetween = getDatesBetween(startDate, endDate).map((components) => ({
+    ...components,
+    string: splitDateToString(components),
+  }));
   return Object.fromEntries(
-    calendars.map(({ id }) => [
-      id,
-      Object.fromEntries(
-        daysBetween.map((date) => [
-          splitDateToString(date),
-          eventsStore[id]![date.year]![date.month]![date.day]!,
-        ])
-      ),
-    ])
+    calendars.map(({ id }) => {
+      const totals: R<number> = Object.fromEntries(
+        daysBetween.map(({ string }) => [string, 0])
+      );
+      const entries = Object.entries(eventsStore[id])
+        .map(([virtualCalendar, dates]) => {
+          let categoryTotal = 0;
+          return [
+            virtualCalendar,
+            Object.fromEntries(
+              daysBetween.map((date) => {
+                const string = splitDateToString(date);
+                const total = dates[date.year]?.[date.month]?.[date.day] ?? 0;
+                totals[string] += total;
+                categoryTotal += total;
+                return [string, total];
+              })
+            ),
+            categoryTotal,
+          ] as const;
+        })
+        .sort(
+          sortFunction(
+            ([_label, _durations, categoryTotal]) => categoryTotal,
+            true
+          )
+        );
+      return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
+    })
   );
 }
 

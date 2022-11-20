@@ -5,27 +5,15 @@ import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import type { RA, RR } from '../../utils/types';
 import { filterArray } from '../../utils/types';
-import type { MatchRule } from '../Widgets/VirtualCalendars';
+import type { CalendarListEntry } from '../Contexts/CalendarsContext';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
-import {
-  CalendarListEntry,
-  CalendarsContext,
-} from '../Contexts/CalendarsContext';
 
 export function AutoComplete(): JSX.Element {
-  const [rawVirtualCalendars] = useSafeStorage('virtualCalendars', []);
   const calendars = React.useContext(CalendarsContext);
 
-  // Sort the rules according to their priority
-  const virtualCalendars = React.useMemo(
-    () =>
-      Array.isArray(rawVirtualCalendars)
-        ? matchRules.flatMap((ruleName) =>
-            rawVirtualCalendars.filter(({ rule }) => rule === ruleName)
-          )
-        : [],
-    [rawVirtualCalendars]
-  );
+  const virtualCalendars = useVirtualCalendars();
 
   const virtualCalendarsRef = React.useRef(virtualCalendars);
   React.useEffect(() => {
@@ -64,7 +52,7 @@ export function AutoComplete(): JSX.Element {
           if (parent === undefined) return;
           const select = findCalendarSelector(parent);
           if (select === undefined) return;
-          waitAndClick(parent, () => {
+          waitAndClick(parent, select, () => {
             const option = findOption(calendars!, calendarId, select);
             option.click();
             // The option click is not registering if focusing the input too soon
@@ -100,9 +88,27 @@ export function AutoComplete(): JSX.Element {
   );
 }
 
+export function useVirtualCalendars(): RA<VirtualCalendar> {
+  const [rawVirtualCalendars] = useSafeStorage('virtualCalendars', []);
+
+  // Sort the rules according to their priority
+  return React.useMemo(
+    () =>
+      Array.isArray(rawVirtualCalendars)
+        ? matchRules.flatMap((ruleName) =>
+            rawVirtualCalendars.filter(({ rule }) => rule === ruleName)
+          )
+        : [],
+    [rawVirtualCalendars]
+  );
+}
+
 const blurListeners = new WeakMap<HTMLInputElement, () => void>();
 
-const ruleMatchers: RR<MatchRule, (value: string, input: string) => boolean> = {
+export const ruleMatchers: RR<
+  MatchRule,
+  (value: string, input: string) => boolean
+> = {
   equals: (value, input) => value === input,
   endsWith: (value, input) => value.endsWith(input),
   startsWith: (value, input) => value.startsWith(input),
@@ -150,11 +156,17 @@ function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
 /**
  * Open the list of calendars and wait for it to be rendered
  */
-function waitAndClick(parent: HTMLElement, callback: () => void): void {
+function waitAndClick(
+  parent: HTMLElement,
+  select: HTMLElement,
+  callback: () => void
+): void {
   const calendarsButton = parent.querySelector<HTMLElement>(
     '[data-key="calendar"]'
   );
-  calendarsButton?.click();
+  const clickable =
+    calendarsButton ?? select.querySelector('[role="presentation"]');
+  clickable?.click();
   const timeOut = calendarsButton === null ? 200 : 440;
 
   // Unfortunately, the listbox has JS animation (can't be disabled with CSS)

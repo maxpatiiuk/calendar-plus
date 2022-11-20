@@ -1,20 +1,25 @@
 import React from 'react';
 
+import { VersionsContext } from '../components/Contexts/VersionsContext';
 import type { WidgetDefinition } from '../components/Dashboard';
+import type { RawEventsStore } from '../components/EventsStore';
 import type { Goal } from '../components/Goals/Widget';
 import type { UserPreferences } from '../components/Preferences/helpers';
 import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
-import type { GetSet, RA } from '../utils/types';
+import { f } from '../utils/functools';
+import type { GetSet, RA, RR } from '../utils/types';
 import { setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
 
-type StorageDefinitions = {
+export type StorageDefinitions = {
   readonly layout: RA<WidgetDefinition>;
   readonly goals: RA<Goal>;
+  readonly events: RawEventsStore;
   readonly preferences: UserPreferences;
   readonly ghostEvents: RA<string>;
   readonly virtualCalendars: RA<VirtualCalendar>;
   readonly overSizeStorage: RA<string>;
+  readonly storageVersions: Partial<RR<keyof StorageDefinitions, string>>;
 };
 
 /**
@@ -25,7 +30,8 @@ type StorageDefinitions = {
 export function useSafeStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
   defaultValue: StorageDefinitions[NAME],
-  type: 'local' | 'sync' = 'sync'
+  type: 'local' | 'sync' = 'sync',
+  version?: string
 ): GetSet<StorageDefinitions[NAME] | undefined> {
   const [isOverSize, setIsOverSize] = useOverSize(name);
   const resolvedType = isOverSize ? 'local' : type;
@@ -42,7 +48,12 @@ export function useSafeStorage<NAME extends keyof StorageDefinitions>(
     previousType.current = type;
   }, [name, type]);
 
-  const [value, rawUpdateValue] = useStorage(name, defaultValue, resolvedType);
+  const [value, rawUpdateValue] = useStorage(
+    name,
+    defaultValue,
+    resolvedType,
+    version
+  );
   const updateValue = React.useCallback(
     (value: StorageDefinitions[NAME] | undefined) => {
       const isNewlyOverSize = type === 'sync' && isOverSizeLimit(name, value);
@@ -74,8 +85,39 @@ function isOverSizeLimit(name: string, value: unknown): boolean {
 
 /**
  * A wrapper for extensions Storage API (without checking for quota size)
+ * with checks for cache version. If cache is found to be outdated, it is removed
  */
 export function useStorage<NAME extends keyof StorageDefinitions>(
+  name: NAME,
+  defaultValue: StorageDefinitions[NAME],
+  type: 'local' | 'sync' = 'sync',
+  version?: string
+): readonly [
+  StorageDefinitions[NAME] | undefined,
+  (
+    newValue: StorageDefinitions[NAME] | undefined,
+    typeOverride?: 'local' | 'sync'
+  ) => void
+] {
+  const [value, setValue] = useSimpleStorage(name, defaultValue, type);
+
+  // Reset to default if cache is outdated
+  const [cacheVersions, setCacheVersions] = React.useContext(VersionsContext);
+  React.useLayoutEffect(() => {
+    if (cacheVersions === undefined || cacheVersions[name] === version) return;
+    console.log('Cache version mismatch detected', { name, cacheVersions });
+    if (cacheVersions[name] === undefined) setValue(defaultValue);
+    setCacheVersions({ ...cacheVersions, [name]: version });
+  }, [name, cacheVersions, version, setCacheVersions, defaultValue, setValue]);
+
+  return [value, setValue];
+}
+
+/**
+ * A wrapper for extensions Storage API (without checking for quota size
+ * or cache version)
+ */
+export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
   defaultValue: StorageDefinitions[NAME],
   type: 'local' | 'sync' = 'sync'
@@ -124,7 +166,7 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
  * Stores and indicator of whether the storage is over size or no
  */
 function useOverSize(name: string): GetSet<boolean> {
-  const [overSize = [], setOverSize] = useStorage(
+  const [overSize = [], setOverSize] = useSimpleStorage(
     'overSizeStorage',
     [],
     'local'
@@ -133,12 +175,8 @@ function useOverSize(name: string): GetSet<boolean> {
     overSize.includes(name),
     React.useCallback(
       (isOverSize: boolean) => {
-        const newArray = Array.from(
-          new Set(
-            isOverSize
-              ? [...overSize, name]
-              : overSize.filter((n) => n !== name)
-          )
+        const newArray = f.unique(
+          isOverSize ? [...overSize, name] : overSize.filter((n) => n !== name)
         );
         if (newArray.length !== overSize.length) setOverSize(newArray);
       },

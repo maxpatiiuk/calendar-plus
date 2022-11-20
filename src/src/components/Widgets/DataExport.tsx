@@ -1,10 +1,11 @@
 import React from 'react';
-import { WidgetContainer } from './WidgetContainer';
-import { Button } from '../Atoms';
-import { EventsStore } from '../EventsStore';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
-import { downloadFile } from '../../utils/utils';
+
 import { commonText } from '../../localization/common';
+import { downloadFile } from '../../utils/utils';
+import { Button } from '../Atoms';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
+import type { EventsStore } from '../EventsStore';
+import { WidgetContainer } from './WidgetContainer';
 
 export function DataExport({
   label,
@@ -40,14 +41,14 @@ export function DataExport({
     <WidgetContainer header={label}>
       <div className="flex flex-wrap gap-2">
         <Button.White
-          onClick={() => createExport('csv')}
           disabled={durations === undefined || calendars === undefined}
+          onClick={() => createExport('csv')}
         >
           {commonText('exportToCsv')}
         </Button.White>
         <Button.White
-          onClick={() => createExport('tsv')}
           disabled={durations === undefined || calendars === undefined}
+          onClick={() => createExport('tsv')}
         >
           {commonText('exportToTsv')}
         </Button.White>

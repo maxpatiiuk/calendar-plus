@@ -14,6 +14,7 @@ import { Portal } from '../Molecules/Portal';
 import { PreferencesPage } from '../Preferences';
 import { GhostEvents } from '../PowerTools/GhostEvents';
 import { AutoComplete } from '../PowerTools/AutoComplete';
+import { CalendarsContext } from '../Contexts/CalendarsContext';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -48,6 +49,7 @@ export function App(): JSX.Element | null {
     false
   );
 
+  const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
   const [state, setState] = React.useState<
     State<'MainState'> | State<'PreferencesState'>
@@ -55,7 +57,7 @@ export function App(): JSX.Element | null {
 
   return (
     <>
-      {typeof currentView === 'object' && (
+      {typeof currentView === 'object' && Array.isArray(calendars) ? (
         <>
           {debugOverlay}
           <Button.White
@@ -72,18 +74,13 @@ export function App(): JSX.Element | null {
           >
             {commonText('calendarPlus')}
           </Button.White>
-          {isOpen ? (
+          {isOpen && (
             <Portal>
-              <main
-                className="flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2"
-                style={{
-                  zIndex: '1000',
-                  position: 'relative',
-                }}
-              >
+              <main className="relative z-[100] flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
                 {state.type === 'MainState' ? (
                   <Dashboard
                     durations={durations}
+                    eventsStore={eventsStore}
                     onOpenPreferences={(): void =>
                       setState({ type: 'PreferencesState' })
                     }
@@ -95,13 +92,12 @@ export function App(): JSX.Element | null {
                 )}
               </main>
             </Portal>
-          ) : (
-            <GhostEvents />
           )}
         </>
-      )}
+      ) : undefined}
       {debugOverlay}
       <AutoComplete />
+      <GhostEvents />
     </>
   );
 }

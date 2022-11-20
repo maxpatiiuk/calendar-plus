@@ -9,6 +9,7 @@ import { PreferencesProvider } from '../Preferences/Context';
 import { AuthenticationProvider } from './AuthContext';
 import { CalendarsSpy } from './CalendarsContext';
 import { TrackCurrentView } from './CurrentViewContext';
+import { VersionsContextProvider } from './VersionsContext';
 
 /**
  * Provide contexts used by other components
@@ -55,7 +56,9 @@ export function Contexts({
           <PreferencesProvider>
             <TrackCurrentView>
               <AuthenticationProvider>
-                <CalendarsSpy>{children}</CalendarsSpy>
+                <VersionsContextProvider>
+                  <CalendarsSpy>{children}</CalendarsSpy>
+                </VersionsContextProvider>
               </AuthenticationProvider>
             </TrackCurrentView>
           </PreferencesProvider>

@@ -17,6 +17,7 @@ export const preferencesText = createDictionary({
   shiftClick: { 'en-us': 'Shift+Click' },
   cmdClick: { 'en-us': 'Cmd+Click' },
   ctrlClick: { 'en-us': 'Ctrl+Click' },
+  ignoreAllDayEvents: { 'en-us': 'Ignore All-Day Events' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

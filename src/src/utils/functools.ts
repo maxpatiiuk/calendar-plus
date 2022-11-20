@@ -13,4 +13,5 @@ export const f = {
    */
   includes: <T>(array: RA<T>, item: unknown): item is T =>
     array.includes(item as T),
+  unique: <ITEM>(array: RA<ITEM>): RA<ITEM> => Array.from(new Set(array)),
 } as const;

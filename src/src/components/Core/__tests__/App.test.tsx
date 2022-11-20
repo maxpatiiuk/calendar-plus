@@ -5,12 +5,15 @@ import { commonText } from '../../../localization/common';
 import { CurrentViewContext } from '../../Contexts/CurrentViewContext';
 import { testTime } from '../../../tests/helpers';
 import { act } from '@testing-library/react';
+import { VersionsContextProvider } from '../../Contexts/VersionsContext';
 
 test('does not render until current date is extracted', () =>
   act(() => {
     const { container } = mount(
       <CurrentViewContext.Provider value={undefined}>
-        <App />
+        <VersionsContextProvider>
+          <App />
+        </VersionsContextProvider>
       </CurrentViewContext.Provider>
     );
     expect(container.textContent).toEqual('');
@@ -27,7 +30,9 @@ test.skip('renders a button after current date is extracted', () =>
           lastDay: testTime,
         }}
       >
-        <App />
+        <VersionsContextProvider>
+          <App />
+        </VersionsContextProvider>
       </CurrentViewContext.Provider>
     );
     const linkElement = getByRole('button', {
