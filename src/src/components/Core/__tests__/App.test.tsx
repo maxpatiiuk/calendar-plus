@@ -6,13 +6,16 @@ import { CurrentViewContext } from '../../Contexts/CurrentViewContext';
 import { testTime } from '../../../tests/helpers';
 import { act } from '@testing-library/react';
 import { VersionsContextProvider } from '../../Contexts/VersionsContext';
+import { KeyboardListener } from '../../Contexts/KeyboardContext';
 
 test('does not render until current date is extracted', () =>
   act(() => {
     const { container } = mount(
       <CurrentViewContext.Provider value={undefined}>
         <VersionsContextProvider>
-          <App />
+          <KeyboardListener>
+            <App />
+          </KeyboardListener>
         </VersionsContextProvider>
       </CurrentViewContext.Provider>
     );
@@ -31,7 +34,9 @@ test.skip('renders a button after current date is extracted', () =>
         }}
       >
         <VersionsContextProvider>
-          <App />
+          <KeyboardListener>
+            <App />
+          </KeyboardListener>
         </VersionsContextProvider>
       </CurrentViewContext.Provider>
     );
