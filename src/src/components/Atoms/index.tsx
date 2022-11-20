@@ -11,31 +11,39 @@ const googleButton = `
   border border-solid p-2 rounded flex items-center gap-2 cursor-pointer
 `;
 
+const button = (name: string, className: string) =>
+  wrap<
+    'button',
+    {
+      readonly onClick:
+        | ((event: React.MouseEvent<HTMLButtonElement>) => void)
+        | undefined;
+    }
+  >(
+    name,
+    'button',
+    `${googleButton} ${className}`,
+    ({ onClick: handleClick, disabled = false, ...props }) => ({
+      type: 'button' as const,
+      onClick: handleClick,
+      disabled: disabled || handleClick === undefined,
+      ...props,
+    })
+  );
+
 export const Button = {
-  White: wrap(
+  White: button(
     'Button.White',
-    'button',
-    `${googleButton} bg-white border-[#dadce0] active:bg-[#dadce0]
-      [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
-    {
-      type: 'button',
-    }
+    `bg-white border-[#dadce0] active:bg-[#dadce0]
+      [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`
   ),
-  Blue: wrap(
+  Blue: button(
     'Button.Blue',
-    'button',
-    `${googleButton} border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`,
-    {
-      type: 'button',
-    }
+    `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`
   ),
-  Red: wrap(
+  Red: button(
     'Button.Blue',
-    'button',
-    `${googleButton} border-red-600 bg-red-600 hover:bg-red-700 active:bg-red-500 text-white`,
-    {
-      type: 'button',
-    }
+    `border-red-600 bg-red-600 hover:bg-red-700 active:bg-red-500 text-white`
   ),
 };
 

@@ -18,7 +18,7 @@ const ghostEventStyle = `{
 export function GhostEvents(): null {
   const [ghostEvents = [], setGhostEvents] = useSafeStorage('ghostEvents', []);
   const styleRef = React.useRef<HTMLStyleElement | undefined>(undefined);
-  const [ghostEventShortcut] = usePref('features', 'ghostEventShortcut');
+  const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
 
   React.useEffect(() => {
     styleRef.current = document.createElement('style');

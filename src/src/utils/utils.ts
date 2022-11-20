@@ -71,6 +71,20 @@ export const replaceItem = <T>(array: RA<T>, index: number, item: T): RA<T> =>
         ...(index === -1 ? [] : array.slice(index + 1)),
       ];
 
+/** Creates a new object with a given key replaced */
+export const replaceKey = <T extends IR<unknown>>(
+  object: T,
+  targetKey: keyof T,
+  newValue: T[keyof T]
+): T =>
+  object[targetKey] === newValue
+    ? object
+    : {
+        // Despite what it looks like, this would preserve the order of keys
+        ...object,
+        [targetKey]: newValue,
+      };
+
 /** Create a new array without a given item */
 export const removeItem = <T>(array: RA<T>, index: number): RA<T> =>
   index < 0
