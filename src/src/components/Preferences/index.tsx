@@ -8,7 +8,7 @@ import type {
   GenericPreferencesCategories,
   PreferenceItem,
 } from './definitions';
-import { preferenceDefinitions } from './definitions';
+import { noLabelRenderers, preferenceDefinitions } from './definitions';
 import { usePref } from './usePref';
 
 export function PreferencesPage({
@@ -17,6 +17,7 @@ export function PreferencesPage({
   readonly onClose: () => void;
 }): JSX.Element {
   const [_, setPreferences] = React.useContext(PreferencesContext);
+
   return (
     <>
       <PageHeader label={commonText('preferences')}>
@@ -32,25 +33,37 @@ export function PreferencesPage({
           <Widget key={categoryName} className="gap-4 p-4">
             <H3>{title}</H3>
             <div className="flex flex-col gap-2">
-              {Object.entries(items).map(([itemName, definition]) => (
-                <label className="flex gap-4" key={itemName}>
-                  <div className="flex-1 text-right">
-                    <div className="min-h-4">{definition.title}</div>
-                    {typeof definition.description === 'string' && (
-                      <span className="text-gray-500">
-                        {definition.description}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col gap-2">
-                    <Item
-                      categoryName={categoryName}
-                      definition={definition}
-                      itemName={itemName}
-                    />
-                  </div>
-                </label>
-              ))}
+              {Object.entries(items).map(([itemName, definition]) => {
+                const hasLabel = !noLabelRenderers.includes(
+                  definition.renderer
+                );
+                return React.createElement(
+                  hasLabel ? 'label' : 'div',
+                  {
+                    className: 'flex gap-4',
+                    key: itemName,
+                  },
+                  <>
+                    <div className="flex-1 text-right">
+                      <div className="min-h-4 leading-8">
+                        {definition.title}
+                      </div>
+                      {typeof definition.description === 'string' && (
+                        <span className="leading-8 text-gray-500">
+                          {definition.description}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col gap-2">
+                      <Item
+                        categoryName={categoryName}
+                        definition={definition}
+                        itemName={itemName}
+                      />
+                    </div>
+                  </>
+                );
+              })}
             </div>
           </Widget>
         ))}

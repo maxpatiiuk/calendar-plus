@@ -5,6 +5,8 @@
 import { preferencesText } from '../../localization/preferences';
 import type { IR } from '../../utils/types';
 import { ensure } from '../../utils/types';
+import type { KeyboardShortcuts } from '../Molecules/KeyboardShortcut';
+import { SetKeyboardShortcuts } from '../Molecules/KeyboardShortcut';
 import { BooleanPref, pickListPref } from './Renderers';
 
 /**
@@ -55,9 +57,27 @@ export const preferenceDefinitions = {
       }),
     },
   },
-  features: {
+  feature: {
     title: preferencesText('features'),
     items: {
+      openOverlayShortcut: defineItem<KeyboardShortcuts>({
+        title: preferencesText('openOverlayShortcut'),
+        renderer: SetKeyboardShortcuts,
+        defaultValue: {
+          linux: [{ modifiers: [], keys: ['`'] }],
+          macOS: [{ modifiers: [], keys: ['`'] }],
+          windows: [{ modifiers: [], keys: ['`'] }],
+        },
+      }),
+      closeOverlayShortcut: defineItem<KeyboardShortcuts>({
+        title: preferencesText('closeOverlayShortcut'),
+        renderer: SetKeyboardShortcuts,
+        defaultValue: {
+          linux: [{ modifiers: [], keys: ['`'] }],
+          macOS: [{ modifiers: [], keys: ['`'] }],
+          windows: [{ modifiers: [], keys: ['`'] }],
+        },
+      }),
       ghostEventShortcut: defineItem<'cmd' | 'ctrl' | 'none' | 'shift'>({
         title: preferencesText('ghostEvent'),
         description: preferencesText('ghostEventDescription'),
@@ -72,6 +92,8 @@ export const preferenceDefinitions = {
     },
   },
 } as const;
+
+export const noLabelRenderers = [SetKeyboardShortcuts];
 
 export type Preferences = GenericPreferencesCategories &
   typeof preferenceDefinitions;

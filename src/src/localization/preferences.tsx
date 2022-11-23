@@ -18,6 +18,14 @@ export const preferencesText = createDictionary({
   cmdClick: { 'en-us': 'Cmd+Click' },
   ctrlClick: { 'en-us': 'Ctrl+Click' },
   ignoreAllDayEvents: { 'en-us': 'Ignore All-Day Events' },
+  openOverlayShortcut: { 'en-us': 'Open Overlay Shortcut' },
+  closeOverlayShortcut: { 'en-us': 'Close Overlay Shortcut' },
+  ctrl: { 'en-us': 'Ctrl' },
+  cmd: { 'en-us': 'Cmd' },
+  shift: { 'en-us': 'Shift' },
+  alt: { 'en-us': 'Alt' },
+  meta: { 'en-us': 'Cmd' },
+  pressKeys: { 'en-us': 'Press some keys...' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */
