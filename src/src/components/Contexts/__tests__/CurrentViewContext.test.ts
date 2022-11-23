@@ -52,7 +52,7 @@ theories(parsePath, [
     out: {
       view: 'customday',
       selectedDay: new Date(2020, 11, 10),
-      firstDay: new Date(2020, 11, 14),
+      firstDay: new Date(2020, 11, 10),
       lastDay: new Date(2020, 11, 14),
     },
   },
