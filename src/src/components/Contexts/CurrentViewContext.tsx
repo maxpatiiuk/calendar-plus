@@ -1,16 +1,32 @@
 import React from 'react';
-import { listenEvent } from '../Background/messages';
 
-/*
- * "customday" is a user-customizable view (they can change the number of days
- * to display)
- */
+import { useSimpleStorage } from '../../hooks/useStorage';
+import { f } from '../../utils/functools';
+import type { GetSet } from '../../utils/types';
+import { listenEvent } from '../Background/messages';
+import { awaitElement } from './CalendarsContext';
+
 const supportedViews = [
   'day',
   'week',
   'month',
-  /*'year' , 'customday'*/
+  /* 'year' */
+  /**
+   * custom views are user-customizable view (they can change the number of days
+   * to display)
+   */
+  'customday',
+  'customweek',
 ] as const;
+
+/**
+ * Google Calendar is not always consistent it how it calls these views
+ */
+const viewMapper = {
+  custom_days: 'customday',
+  custom_weeks: 'customweek',
+} as const;
+
 export type SupportedView = typeof supportedViews[number];
 
 export type CurrentView = {
@@ -38,16 +54,28 @@ export function TrackCurrentView({
   );
 }
 
+export const defaultCustomViewSize = 4;
+
 /**
  * Listen for changes to current URL
  */
 function useCurrentTracker(
   setCurrentView: (newCurrentView: CurrentView | undefined) => void
 ) {
+  const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
+    useSimpleStorage('customViewSize', defaultCustomViewSize);
   React.useEffect(() => {
     let lastPath = '';
 
-    const parseUrl = () => setCurrentView(parsePath(window.location.pathname));
+    function parseUrl(): void {
+      const parsed = parsePath(window.location.pathname, customViewSize);
+      setCurrentView(parsed);
+      if (parsed?.view === 'customday' || parsed?.view === 'customweek')
+        detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
+          console.error
+        );
+    }
+
     // Parse initial URL
     parseUrl();
 
@@ -56,7 +84,7 @@ function useCurrentTracker(
       lastPath = window.location.pathname;
       parseUrl();
     });
-  }, [setCurrentView]);
+  }, [setCurrentView, customViewSize, setCustomViewSize]);
 }
 
 const commonPrefix = `/calendar/u/0/r/`;
@@ -64,27 +92,30 @@ const commonPrefix = `/calendar/u/0/r/`;
 /**
  * Extract current date from the Google Calendar URL
  */
-function parsePath(path: string): CurrentView | undefined {
-  if (path === '/calendar/u/0/r') {
+function parsePath(
+  path: string,
+  customViewSize: number
+): CurrentView | undefined {
+  if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
     const viewMode = document.querySelector('header div[data-active-view]');
-    const viewName = viewMode?.getAttribute(
-      'data-active-view'
-    ) as SupportedView;
-    if (viewName && supportedViews.includes(viewName)) {
+    const rawViewName = viewMode?.getAttribute('data-active-view') ?? '';
+    const viewName =
+      rawViewName in viewMapper
+        ? viewMapper[rawViewName as keyof typeof viewMapper]
+        : rawViewName;
+    if (f.includes(supportedViews, viewName)) {
       // Used to center on current date (always centered if basic path)
       const today = new Date();
       return {
         view: viewName,
         selectedDay: today,
-        ...resolveBoundaries('day', today),
+        ...resolveBoundaries(viewName, today, customViewSize),
       };
     }
   }
   if (!path.startsWith(commonPrefix)) return undefined;
-  const [rawView, ...date] = path.slice(commonPrefix.length).split('/');
-  // Make it more type safe
-  const viewName = rawView as SupportedView;
-  if (!supportedViews.includes(viewName)) return undefined;
+  const [viewName, ...date] = path.slice(commonPrefix.length).split('/');
+  if (!f.includes(supportedViews, viewName)) return undefined;
   const year = date[0] || new Date().getFullYear().toString();
   const month = date[1] || (new Date().getMonth() + 1).toString();
   const day = date[2] || new Date().getDate().toString();
@@ -97,14 +128,15 @@ function parsePath(path: string): CurrentView | undefined {
   return {
     view: viewName,
     selectedDay,
-    ...resolveBoundaries(viewName, selectedDay),
+    ...resolveBoundaries(viewName, selectedDay, customViewSize),
   };
 }
 
 function resolveBoundaries(
   viewName: SupportedView,
-  selectedDay: Date
-): { firstDay: Date; lastDay: Date } {
+  selectedDay: Date,
+  customViewSize: number
+): { readonly firstDay: Date; readonly lastDay: Date } {
   if (viewName === 'day')
     return {
       firstDay: new Date(
@@ -119,6 +151,7 @@ function resolveBoundaries(
       ),
     };
   else if (viewName === 'week') {
+    // FEATURE: detect first of the week
     const dayOffset = selectedDay.getDate() - selectedDay.getDay();
     return {
       firstDay: new Date(
@@ -141,12 +174,52 @@ function resolveBoundaries(
         0
       ),
     };
-  else if (viewName === 'year')
+  else if (viewName === 'customday') {
+    return {
+      firstDay: selectedDay,
+      lastDay: new Date(
+        selectedDay.getFullYear(),
+        selectedDay.getMonth(),
+        selectedDay.getDate() + customViewSize
+      ),
+    };
+  } else if (viewName === 'customweek') {
+    const firstDay = new Date(selectedDay);
+    // FEATURE: detect first of the week
+    firstDay.setDate(firstDay.getDate() - firstDay.getDay());
+    return {
+      firstDay,
+      lastDay: new Date(
+        firstDay.getFullYear(),
+        firstDay.getMonth(),
+        firstDay.getDate() + customViewSize
+      ),
+    };
+  } else if (viewName === 'year')
     return {
       firstDay: new Date(selectedDay.getFullYear(), 0, 1),
       lastDay: new Date(selectedDay.getFullYear() + 1, 0, 1),
     };
   else throw new Error('unknown view');
+}
+
+async function detectCustomViewSize([
+  customViewSize,
+  setCustomViewSize,
+]: GetSet<number>): Promise<void> {
+  const dateKeys = await awaitElement(() => {
+    const items =
+      Array.from(document.querySelectorAll('[role="main"]'))
+        .at(-1)
+        ?.querySelectorAll('[data-start-date-key] [data-datekey]') ?? [];
+    return items.length === 0 ? undefined : items;
+  });
+  if (dateKeys === undefined) return;
+  // Find out how many days are displayed
+  const duration = new Set(
+    Array.from(dateKeys, (dateKey) => dateKey.getAttribute('data-datekey'))
+  ).size;
+  if (duration !== customViewSize) setCustomViewSize(duration);
 }
 
 export const CurrentViewContext = React.createContext<CurrentView | undefined>(

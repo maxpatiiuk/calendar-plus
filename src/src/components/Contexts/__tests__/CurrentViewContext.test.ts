@@ -1,4 +1,4 @@
-import { exportsForTests } from '../CurrentViewContext';
+import { defaultCustomViewSize, exportsForTests } from '../CurrentViewContext';
 import { theories } from '../../../tests/utils';
 import { mockTime, testTime } from '../../../tests/helpers';
 
@@ -12,7 +12,7 @@ const day = testTime.getDate();
 
 theories(parsePath, [
   {
-    in: ['/calendar/u/0/r/day/'],
+    in: ['/calendar/u/0/r/day/', defaultCustomViewSize],
     out: {
       view: 'day',
       selectedDay: new Date(year, month, day),
@@ -21,7 +21,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/week/'],
+    in: ['/calendar/u/0/r/week/', defaultCustomViewSize],
     out: {
       view: 'week',
       selectedDay: new Date(year, month, day),
@@ -30,7 +30,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/week/2022/12/31/'],
+    in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize],
     out: {
       view: 'week',
       selectedDay: new Date(2022, 11, 31),
@@ -39,7 +39,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/month/2020/12/31/'],
+    in: ['/calendar/u/0/r/month/2020/12/31/', defaultCustomViewSize],
     out: {
       view: 'month',
       selectedDay: new Date(2020, 11, 31),
@@ -47,14 +47,32 @@ theories(parsePath, [
       lastDay: new Date(2020, 11, 31),
     },
   },
+  {
+    in: ['/calendar/u/0/r/customday/2020/12/10/', defaultCustomViewSize],
+    out: {
+      view: 'customday',
+      selectedDay: new Date(2020, 11, 10),
+      firstDay: new Date(2020, 11, 10),
+      lastDay: new Date(2020, 11, 14),
+    },
+  },
+  {
+    in: ['/calendar/u/0/r/customweek/2020/12/10/', 14],
+    out: {
+      view: 'customweek',
+      selectedDay: new Date(2020, 11, 10),
+      firstDay: new Date(2020, 11, 6),
+      lastDay: new Date(2020, 11, 20),
+    },
+  },
   // TODO: reEnable this once year view is supported
   /*{
-    in: ['/calendar/u/0/r/year/2023/'],
-    out: {
-      view: 'year',
-      selectedDay: new Date(2023, month, day),
-      firstDay: new Date(2023, 0, 1),
-      lastDay: new Date(2024, 0, 1),
-    },
-  },*/
+  in: ['/calendar/u/0/r/year/2023/'],
+  out: {
+    view: 'year',
+    selectedDay: new Date(2023, month, day),
+    firstDay: new Date(2023, 0, 1),
+    lastDay: new Date(2024, 0, 1),
+  },
+},*/
 ]);

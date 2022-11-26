@@ -174,6 +174,13 @@ const dateFormatters = {
   week: new Intl.DateTimeFormat(LANGUAGE, { weekday: 'long', day: 'numeric' }),
   month: new Intl.DateTimeFormat(LANGUAGE, { day: 'numeric' }),
   year: new Intl.DateTimeFormat(LANGUAGE, { month: 'long' }),
+  customday: new Intl.DateTimeFormat(LANGUAGE, {
+    weekday: 'long',
+    day: 'numeric',
+  }),
+  customweek: new Intl.DateTimeFormat(LANGUAGE, {
+    day: 'numeric',
+  }),
 } as const;
 
 export const formatLabel = (date: Date, { view }: CurrentView): string =>
