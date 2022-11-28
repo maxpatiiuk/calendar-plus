@@ -12,7 +12,7 @@ import { RR } from '../../utils/types';
 import { icon } from '../Atoms/Icon';
 import { Button } from '../Atoms';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
-import { Shortcuts } from '../Widgets/Shortcuts';
+import { Synonyms } from '../Widgets/Synonyms';
 
 const widgets = {
   DoughnutChart,
@@ -22,7 +22,7 @@ const widgets = {
   QuickActions,
   Suggestions,
   VirtualCalendars,
-  Shortcuts,
+  Shortcuts: Synonyms,
 } as const;
 
 export const widgetLabels: RR<keyof typeof widgets, string> = {

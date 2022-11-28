@@ -10,19 +10,19 @@ import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
 import { WidgetContainer } from './WidgetContainer';
 
-export type Shortcut = {
+export type Synonym = {
   readonly calendar: string;
-  readonly shortcut: string;
+  readonly synonym: string;
 };
 
-export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
-  const [shortcuts, setShortcuts] = useSafeStorage('shortcuts', []);
+export function Synonyms({ label }: { readonly label: string }): JSX.Element {
+  const [synonyms, setSynonyms] = useSafeStorage('synonyms', []);
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;
   const calendars = React.useContext(CalendarsContext);
   return (
     <WidgetContainer editing={editing} header={label}>
-      {Array.isArray(calendars) && Array.isArray(shortcuts) ? (
+      {Array.isArray(calendars) && Array.isArray(synonyms) ? (
         <table className="text-left">
           <thead>
             <tr>
@@ -32,7 +32,7 @@ export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
             </tr>
           </thead>
           <tbody>
-            {shortcuts.map(({ calendar: calendarId, shortcut }, index) => {
+            {synonyms.map(({ calendar: calendarId, synonym }, index) => {
               const calendar = calendars.find(({ id }) => id === calendarId);
               if (calendar === undefined) return undefined;
               return (
@@ -44,7 +44,7 @@ export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
                         className="!p-1"
                         title={commonText('remove')}
                         onClick={(): void =>
-                          setShortcuts(removeItem(shortcuts, index))
+                          setSynonyms(removeItem(synonyms, index))
                         }
                       >
                         {icon.trash}
@@ -59,10 +59,10 @@ export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
                         calendars={calendars}
                         value={calendar.id}
                         onChange={(calendar): void =>
-                          setShortcuts(
-                            replaceItem(shortcuts, index, {
+                          setSynonyms(
+                            replaceItem(synonyms, index, {
                               calendar,
-                              shortcut,
+                              synonym,
                             })
                           )
                         }
@@ -74,18 +74,18 @@ export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
                   <td>
                     {isEditing ? (
                       <Input.Text
-                        value={shortcut}
-                        onValueChange={(shortcut): void =>
-                          setShortcuts(
-                            replaceItem(shortcuts, index, {
+                        value={synonym}
+                        onValueChange={(synonym): void =>
+                          setSynonyms(
+                            replaceItem(synonyms, index, {
                               calendar: calendarId,
-                              shortcut,
+                              synonym,
                             })
                           )
                         }
                       />
                     ) : (
-                      shortcut
+                      synonym
                     )}
                   </td>
                 </tr>
@@ -97,9 +97,9 @@ export function Shortcuts({ label }: { readonly label: string }): JSX.Element {
                 <td colSpan={2}>
                   <Button.White
                     onClick={(): void =>
-                      setShortcuts([
-                        ...shortcuts,
-                        { calendar: calendars[0].id, shortcut: '' },
+                      setSynonyms([
+                        ...synonyms,
+                        { calendar: calendars[0].id, synonym: '' },
                       ])
                     }
                   >

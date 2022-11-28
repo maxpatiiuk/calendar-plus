@@ -19,11 +19,11 @@ export function AutoComplete(): JSX.Element {
     virtualCalendarsRef.current = virtualCalendars;
   }, [virtualCalendars]);
 
-  const [shortcuts = []] = useSafeStorage('shortcuts', []);
-  const shortcutsRef = React.useRef(shortcuts);
+  const [synonyms = []] = useSafeStorage('synonyms', []);
+  const synonymsRef = React.useRef(synonyms);
   React.useEffect(() => {
-    shortcutsRef.current = shortcuts;
-  }, [shortcuts]);
+    synonymsRef.current = synonyms;
+  }, [synonyms]);
 
   const dataListId = useId('autocomplete-list')('');
 
@@ -53,13 +53,13 @@ export function AutoComplete(): JSX.Element {
           const eventName = element.value.trim();
           let calendarId = guessCalendar(eventName);
           if (calendarId === undefined) {
-            const guessShortcut = shortcutsRef.current.find(({ shortcut }) =>
-              eventName.startsWith(`${shortcut}:`)
+            const guessSynonym = synonymsRef.current.find(({ synonym }) =>
+              eventName.startsWith(`${synonym}:`)
             );
-            if (guessShortcut === undefined) return;
-            calendarId = guessShortcut.calendar;
+            if (guessSynonym === undefined) return;
+            calendarId = guessSynonym.calendar;
             element.value = eventName
-              .slice(guessShortcut.shortcut.length + 1)
+              .slice(guessSynonym.synonym.length + 1)
               .trim();
           }
 
