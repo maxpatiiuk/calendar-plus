@@ -5,6 +5,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { RA, writable, WritableArray } from '../../utils/types';
 import { Chart, DoughnutController, ArcElement, Tooltip } from 'chart.js';
 import { useBooleanState } from '../../hooks/useBooleanState';
+import useReducedMotion from '../../hooks/useReducedMotion';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -15,7 +16,7 @@ export function DoughnutChart({
 }): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
   const labels = useLabels(calendars);
-
+  const reducedMotion : boolean = useReducedMotion(false);
   /**
    * In order for ChartJS to smoothly animate from one state to another rather
    * than re-render from scratch, need to mutate the data object rather than
@@ -50,6 +51,9 @@ export function DoughnutChart({
       ref={(chart) => setChart(chart ?? undefined)}
       options={{
         responsive: true,
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
+        }
       }}
     />
   ) : null;

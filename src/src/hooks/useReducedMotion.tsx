@@ -24,6 +24,7 @@ const useReducedMotion = (defaultVal = true) => {
       // Remove the event listener when the component unmounts.
       return () => mediaQuery.removeEventListener("change", queryCnangeHandler);
     }
+    return;
   }, []);
 
   return reducedMotion;

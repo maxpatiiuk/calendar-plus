@@ -14,6 +14,7 @@ import { RA, WritableArray } from '../../utils/types';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { formatLabel } from '../Atoms/Internationalization';
 import { useBooleanState } from '../../hooks/useBooleanState';
+import useReducedMotion from '../../hooks/useReducedMotion';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -26,6 +27,8 @@ export function StackedChart({
   const labels = useLabels(durations);
   const dataSets = useDataSets(durations, calendars);
   const [loaded, handleLoaded] = useBooleanState();
+  const reducedMotion : boolean = useReducedMotion(false);
+
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
     [dataSets]
@@ -54,6 +57,9 @@ export function StackedChart({
             },
             stacked: true,
           },
+        },
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
         },
       }}
     />
