@@ -15,6 +15,7 @@ import { PreferencesPage } from '../Preferences';
 import { GhostEvents } from '../PowerTools/GhostEvents';
 import { AutoComplete } from '../PowerTools/AutoComplete';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
+import { Gage } from '../Molecules/Gage';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -44,10 +45,18 @@ export function App(): JSX.Element | null {
     currentView?.lastDay
   );
 
+
+  const divStyle = {
+    display: 'flex',
+    alignItems: 'center'
+  };
+
   const [debugOverlay] = useAsyncState(
     React.useCallback(() => debugOverlayPromise, []),
     false
   );
+
+
 
   const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
@@ -60,20 +69,50 @@ export function App(): JSX.Element | null {
       {typeof currentView === 'object' && Array.isArray(calendars) ? (
         <>
           {debugOverlay}
-          <Button.White
-            aria-pressed={isOpen ? true : undefined}
-            onClick={
-              auth.authenticated
+          <div style={divStyle} 
+          onClick={
+            auth.authenticated
                 ? handleToggle
                 : (): void =>
                     void auth
                       .handleAuthenticate()
                       .then(handleToggle)
                       .catch(console.error)
-            }
-          >
-            {commonText('calendarPlus')}
-          </Button.White>
+          }>
+            <Gage
+            value={10}
+            max={100}
+            label={commonText('goals')}
+            color='blue'
+            fontSize={2}
+            size={3}
+            />
+            <Gage
+            value={10}
+            max={100}
+            label={commonText('goals')}
+            color='orange'
+            fontSize={2}
+            size={3}
+            />
+            <Gage
+            value={10}
+            max={100}
+            label={commonText('goals')}
+            color='green'
+            fontSize={2}
+            size={3}
+            />
+            <Gage
+            value={10}
+            max={100}
+            label={commonText('goals')}
+            color='red'
+            fontSize={2}
+            size={3}
+            />
+          </div>
+
           {isOpen && (
             <Portal>
               <main className="relative z-[100] flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2">
