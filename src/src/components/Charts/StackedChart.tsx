@@ -16,6 +16,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
+import useReducedMotion from '../../hooks/useRedecedMotion';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -28,6 +29,7 @@ export function StackedChart({
   const labels = useLabels(durations);
   const dataSets = useDataSets(durations, calendars);
   const [loaded, handleLoaded] = useBooleanState();
+  const reducedMotion : boolean = useReducedMotion(false);
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
     [dataSets]
@@ -41,6 +43,9 @@ export function StackedChart({
       datasetIdKey="id"
       options={{
         responsive: true,
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
+        },          
         scales: {
           x: {
             title: {
