@@ -10,6 +10,7 @@ import { f } from '../utils/functools';
 import type { GetSet, RA, RR } from '../utils/types';
 import { setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
+import { Synonym } from '../components/Widgets/Synonyms';
 
 export type StorageDefinitions = {
   readonly layout: RA<WidgetDefinition>;
@@ -21,6 +22,7 @@ export type StorageDefinitions = {
   readonly overSizeStorage: RA<string>;
   readonly storageVersions: Partial<RR<keyof StorageDefinitions, string>>;
   readonly customViewSize: number;
+  readonly synonyms: RA<Synonym>;
 };
 
 /**

@@ -14,11 +14,16 @@ export function AutoComplete(): JSX.Element {
   const calendars = React.useContext(CalendarsContext);
 
   const virtualCalendars = useVirtualCalendars();
-
   const virtualCalendarsRef = React.useRef(virtualCalendars);
   React.useEffect(() => {
     virtualCalendarsRef.current = virtualCalendars;
   }, [virtualCalendars]);
+
+  const [synonyms = []] = useSafeStorage('synonyms', []);
+  const synonymsRef = React.useRef(synonyms);
+  React.useEffect(() => {
+    synonymsRef.current = synonyms;
+  }, [synonyms]);
 
   const dataListId = useId('autocomplete-list')('');
 
@@ -45,15 +50,25 @@ export function AutoComplete(): JSX.Element {
           element.removeEventListener('blur', blurListeners.get(element)!);
           blurListeners.delete(element);
 
-          const calendarId = guessCalendar(element.value.trim());
-          if (typeof calendarId === 'undefined') return;
+          const eventName = element.value.trim();
+          let calendarId = guessCalendar(eventName);
+          if (calendarId === undefined) {
+            const guessSynonym = synonymsRef.current.find(({ synonym }) =>
+              eventName.startsWith(`${synonym}:`)
+            );
+            if (guessSynonym === undefined) return;
+            calendarId = guessSynonym.calendar;
+            element.value = eventName
+              .slice(guessSynonym.synonym.length + 1)
+              .trim();
+          }
 
           const parent = findParent(element);
           if (parent === undefined) return;
           const select = findCalendarSelector(parent);
           if (select === undefined) return;
           waitAndClick(parent, select, () => {
-            const option = findOption(calendars!, calendarId, select);
+            const option = findOption(calendars!, calendarId!, select);
             option.click();
             // The option click is not registering if focusing the input too soon
             setTimeout(() => element.focus(), 200);

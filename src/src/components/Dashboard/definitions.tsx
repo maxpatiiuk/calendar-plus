@@ -76,69 +76,6 @@ export const defaultLayout: RA<WidgetDefinition> = [
   },
   {
     colSpan: {
-      '2xl': 2,
-      lg: 2,
-      md: 3,
-      sm: 1,
-      xl: 2,
-      xs: 1,
-    },
-    rowSpan: {
-      '2xl': 1,
-      lg: 1,
-      md: 1,
-      sm: 1,
-      xl: 1,
-      xs: 1,
-    },
-    definition: {
-      type: 'DataExport',
-    },
-  },
-  {
-    colSpan: {
-      '2xl': 1,
-      lg: 1,
-      md: 3,
-      sm: 1,
-      xl: 1,
-      xs: 1,
-    },
-    rowSpan: {
-      '2xl': 1,
-      lg: 1,
-      md: 1,
-      sm: 1,
-      xl: 1,
-      xs: 1,
-    },
-    definition: {
-      type: 'Suggestions',
-    },
-  },
-  {
-    colSpan: {
-      '2xl': 1,
-      lg: 1,
-      md: 3,
-      sm: 1,
-      xl: 1,
-      xs: 1,
-    },
-    rowSpan: {
-      '2xl': 1,
-      lg: 1,
-      md: 1,
-      sm: 2,
-      xl: 1,
-      xs: 1,
-    },
-    definition: {
-      type: 'QuickActions',
-    },
-  },
-  {
-    colSpan: {
       xs: 1,
       sm: 1,
       md: 3,
@@ -150,12 +87,96 @@ export const defaultLayout: RA<WidgetDefinition> = [
       xs: 1,
       sm: 1,
       md: 1,
+      lg: 7,
+      xl: 11,
+      '2xl': 9,
+    },
+    definition: {
+      type: 'VirtualCalendars',
+    },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
       lg: 1,
       xl: 1,
       '2xl': 1,
     },
     definition: {
-      type: 'VirtualCalendars',
+      type: 'DataExport',
+    },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 2,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 1,
+      xl: 1,
+      '2xl': 1,
+    },
+    definition: {
+      type: 'Shortcuts',
+    },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 2,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 1,
+      xl: 1,
+      '2xl': 1,
+    },
+    definition: {
+      type: 'QuickActions',
+    },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 1,
+      xl: 1,
+      '2xl': 1,
+    },
+    definition: {
+      type: 'Suggestions',
     },
   },
 ];

@@ -27,7 +27,8 @@ export type WidgetDefinition = {
     | State<'QuickActions'>
     | State<'StackedChart'>
     | State<'Suggestions'>
-    | State<'VirtualCalendars'>;
+    | State<'VirtualCalendars'>
+    | State<'Shortcuts'>;
 };
 
 const widgetClassName = `

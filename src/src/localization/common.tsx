@@ -55,6 +55,8 @@ export const commonText = createDictionary({
   allCategories: { 'en-us': 'All Categories' },
   addPrediction: { 'en-us': 'Add Prediction' },
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
+  shortName: { 'en-us': 'Short Name' },
+  shortNames: { 'en-us': 'Short Names' },
 });
 /* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */
