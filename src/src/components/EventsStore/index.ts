@@ -114,6 +114,7 @@ export function useEvents(
               }
             )
           );
+          if (response.status !== 200) return;
           const results = await response.json();
 
           const guessCalendar = (input: string): string | undefined =>
@@ -144,30 +145,27 @@ export function useEvents(
            * Thus, need to be careful and only initialize the days for which
            * data was actually fetched
            */
-          const initializeCalendar = (
-            years: RawEventsStore[string][string]
-          ): void =>
-            daysBetween.forEach(({ year, month, day }) => {
-              years[year] ??= [];
-              const months = years[year]!;
-              months[month] ??= [];
-              const days = months[month]!;
-              days[day] ??= 0;
-            });
-
           eventsStore.current[id] ??= {};
+          eventsStore.current[id][''] ??= {};
+          const fetched = eventsStore.current[id][''];
+          daysBetween.forEach(({ year, month, day }) => {
+            fetched[year] ??= [];
+            const months = fetched[year]!;
+            months[month] ??= [];
+            const days = months[month]!;
+            days[day] ??= 0;
+          });
+
           durations.map(([virtualCalendar, durations]) => {
             eventsStore.current[id][virtualCalendar] ??= {};
             const years = eventsStore.current[id][virtualCalendar];
-            initializeCalendar(years);
             durations.flat().forEach(([{ year, month, day }, duration]) => {
-              years[year]![month]![day]! += duration;
+              years[year] ??= [];
+              const months = years[year]!;
+              months[month] ??= [];
+              months[month]![day] = duration;
             });
           });
-          if (durations.length === 0) {
-            eventsStore.current[id] = { '': [] };
-            initializeCalendar(eventsStore.current[id]['']);
-          }
         })
       );
       cacheEvents.trigger('changed');
@@ -198,24 +196,21 @@ function calculateBounds(
   startDate: Date,
   daysBetween: RA<SplitDate>
 ): readonly [timeMin: Date, timeMax: Date] | undefined {
-  const durations = Object.values(eventsStore.current[id] ?? []);
+  const durations = eventsStore.current[id]?.[''];
   const firstDayToFetch =
-    durations.length === 0
+    durations === undefined
       ? 0
-      : daysBetween.findIndex(({ month, year, day }) =>
-          durations.some(
-            (virtualCalendar) =>
-              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
-          )
+      : daysBetween.findIndex(
+          ({ month, year, day }) =>
+            day !== 0 && typeof durations[year]?.[month]?.[day] !== 'number'
         );
   const lastDayToFetch =
-    durations.length === 0
+    durations === undefined
       ? daysBetween.length
-      : findLastIndex(daysBetween, ({ month, year, day }) =>
-          durations.some(
-            (virtualCalendar) =>
-              typeof virtualCalendar[year]?.[month]?.[day] !== 'number'
-          )
+      : findLastIndex(
+          daysBetween,
+          ({ month, year, day }) =>
+            day !== 0 && typeof durations[year]?.[month]?.[day] !== 'number'
         ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
