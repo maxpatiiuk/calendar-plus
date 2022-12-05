@@ -5,7 +5,7 @@ const useReducedMotion = (defaultVal = true) => {
   const [reducedMotion, setReducedMotion] = useState(defaultVal);
 
   // Callback for media query cahnge events.
-  function queryCnangeHandler(event : any) {
+  function queryChangeHandler(event : any) {
     // Set the state to the value of the media query.
     setReducedMotion(event.target.matches);
   }
@@ -13,16 +13,16 @@ const useReducedMotion = (defaultVal = true) => {
   useEffect(() => {
     // Grab the reduced motion media query,
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    console.log("Reduced Motion", mediaQuery)
+    
     if(mediaQuery) {
       // Set the state to the value of the media query.
       setReducedMotion(mediaQuery.matches);
     
       // Listen for changes in the media query.
-      mediaQuery.addEventListener("change", queryCnangeHandler);
+      mediaQuery.addEventListener("change", queryChangeHandler);
     
       // Remove the event listener when the component unmounts.
-      return () => mediaQuery.removeEventListener("change", queryCnangeHandler);
+      return () => mediaQuery.removeEventListener("change", queryChangeHandler);
     }
     return;
   }, []);

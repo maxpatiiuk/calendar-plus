@@ -10,7 +10,7 @@ import { formatDuration } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
-import useReducedMotion from '../../hooks/useRedecedMotion';
+import useReducedMotion from '../../hooks/useReducedMotion';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 

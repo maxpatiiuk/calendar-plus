@@ -16,7 +16,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
-import useReducedMotion from '../../hooks/useRedecedMotion';
+import useReducedMotion from '../../hooks/useReducedMotion';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
