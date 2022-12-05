@@ -50,7 +50,10 @@ type CalendarEvent = Pick<
   'end' | 'start' | 'summary'
 >;
 
-export const cacheEvents = eventListener<{ readonly changed: undefined }>();
+export const cacheEvents = eventListener<{
+  readonly loaded: undefined;
+  readonly changed: undefined;
+}>();
 
 // TEST: test daylight savings time switch and back
 /**
@@ -69,6 +72,11 @@ export function useEvents(
   const previousPrefRef = React.useRef(ignoreAllDayEvents);
 
   const virtualCalendars = useVirtualCalendars();
+  const [version, setVersion] = React.useState(0);
+  React.useEffect(
+    () => cacheEvents.on('changed', () => setVersion((version) => version + 1)),
+    []
+  );
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
@@ -81,8 +89,9 @@ export function useEvents(
         return undefined;
       if (ignoreAllDayEvents !== previousPrefRef.current) {
         previousPrefRef.current = ignoreAllDayEvents;
-        eventsStore.current = {};
-        cacheEvents.trigger('changed');
+        Object.keys(eventsStore.current).forEach((id) => {
+          eventsStore.current[id] = {};
+        });
       }
       await Promise.all(
         calendars.map(async ({ id }) => {
@@ -168,7 +177,7 @@ export function useEvents(
           });
         })
       );
-      cacheEvents.trigger('changed');
+      cacheEvents.trigger('loaded');
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
       eventsStore,
@@ -177,6 +186,7 @@ export function useEvents(
       endDate,
       ignoreAllDayEvents,
       virtualCalendars,
+      version,
     ]),
     false
   );

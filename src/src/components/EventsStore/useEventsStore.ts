@@ -23,7 +23,7 @@ export function useEventsStore():
 
   React.useEffect(
     () =>
-      cacheEvents.on('changed', () => setEventsStore(eventsStoreRef.current)),
+      cacheEvents.on('loaded', () => setEventsStore(eventsStoreRef.current)),
     [setEventsStore]
   );
 
