@@ -10,6 +10,7 @@ import { formatDuration } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
+import useReducedMotion from '../../hooks/useReducedMotion';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -36,6 +37,7 @@ export function DoughnutChart({
   const innerDataRef = React.useRef(innerData);
   const outerDataRef = React.useRef(outerData);
   const [loaded, handleLoaded] = useBooleanState();
+  const reducedMotion : boolean = useReducedMotion(false);
   React.useEffect(() => {
     if (outerData.length > 0) handleLoaded();
     if (chart === undefined || outerDataRef.current === outerData) return;
@@ -72,6 +74,9 @@ export function DoughnutChart({
       }}
       options={{
         responsive: true,
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
+        },
         plugins: {
           tooltip: {
             callbacks: {
