@@ -4,7 +4,7 @@ import { useStorage } from '../../hooks/useStorage';
 import type { RawEventsStore } from './index';
 import { cacheEvents } from './index';
 
-const eventsStoreVersion = '3';
+const eventsStoreVersion = '4';
 
 /**
  * Fetch computed event durations from cache and update cache on any changes
@@ -23,7 +23,7 @@ export function useEventsStore():
 
   React.useEffect(
     () =>
-      cacheEvents.on('changed', () => setEventsStore(eventsStoreRef.current)),
+      cacheEvents.on('loaded', () => setEventsStore(eventsStoreRef.current)),
     [setEventsStore]
   );
 

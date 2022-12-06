@@ -14,6 +14,8 @@ import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { AddWidgetButton, WidgetContent } from './Widget';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
+import { cacheEvents, getDatesBetween } from '../EventsStore';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 
 export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
 
@@ -57,6 +59,8 @@ export function Dashboard({
   const breakpoint = useBreakpoint();
   const className = `${widgetClassName} ${isEditing ? '' : 'overflow-y-auto'}`;
 
+  const currentView = React.useContext(CurrentViewContext);
+
   return (
     <>
       <PageHeader label={commonText('calendarPlus')}>
@@ -75,9 +79,38 @@ export function Dashboard({
             </Button.White>
           </>
         ) : (
-          <Button.White onClick={handleOpenPreferences}>
-            {commonText('preferences')}
-          </Button.White>
+          <>
+            <Button.White
+              onClick={
+                eventsStore === undefined || currentView === undefined
+                  ? undefined
+                  : (): void => {
+                      const daysBetween = getDatesBetween(
+                        currentView.firstDay,
+                        currentView.lastDay
+                      );
+                      Object.values(eventsStore.current).forEach(
+                        (virtualCalendars) =>
+                          Object.values(virtualCalendars).forEach((durations) =>
+                            daysBetween.forEach(({ year, month, day }) => {
+                              if (
+                                typeof durations[year]?.[month]?.[day] ===
+                                'number'
+                              )
+                                durations[year]![month]![day] = null;
+                            })
+                          )
+                      );
+                      cacheEvents.trigger('changed');
+                    }
+              }
+            >
+              {commonText('refresh')}
+            </Button.White>
+            <Button.White onClick={handleOpenPreferences}>
+              {commonText('preferences')}
+            </Button.White>
+          </>
         )}
         <Button.White onClick={handleToggle}>
           {isEditing ? commonText('save') : commonText('edit')}
