@@ -15,11 +15,17 @@ import { Contexts } from '../Contexts/Contexts';
  * Can't look for the search button by [aria-label] attribute, as that attribute
  * is localizable (has different value depending on user's language).
  */
-const container =
-  Array.from(
-    document.querySelectorAll('header div[aria-label][role="button"]')
-  ).find((item) => item.querySelector('i')?.textContent === 'search')
-    ?.parentElement?.parentElement ?? undefined;
+const icon = Array.from(document.querySelectorAll('header i')).find(
+  (icon) => icon?.textContent === 'search'
+);
+// Find an element that contains more that one icon
+const findContainer = (element: Element | undefined): Element | undefined =>
+  element === undefined
+    ? undefined
+    : element.querySelectorAll('i').length > 1
+    ? element
+    : findContainer(element.parentElement ?? undefined);
+const container = findContainer(icon);
 if (typeof container === 'object') {
   const reactContainer = document.createElement('div');
   container.prepend(reactContainer);
@@ -32,6 +38,4 @@ if (typeof container === 'object') {
       </Contexts>
     </React.StrictMode>
   );
-}
-else console.error('Failed to attach Calendar Plus plugin');
-
+} else console.error('Failed to attach Calendar Plus plugin');
