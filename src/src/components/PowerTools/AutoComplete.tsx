@@ -67,6 +67,17 @@ export function AutoComplete(): JSX.Element {
           if (parent === undefined) return;
           const select = findCalendarSelector(parent);
           if (select === undefined) return;
+
+          // Don't change calendar if correct one is already selected
+          const currentCalendar = select.querySelector(
+            '[aria-selected="true"]'
+          )?.textContent;
+          if (
+            currentCalendar ===
+            calendars?.find(({ id }) => id === calendarId)?.summary
+          )
+            return;
+
           waitAndClick(parent, select, () => {
             const option = findOption(calendars!, calendarId!, select);
             option.click();
@@ -196,8 +207,7 @@ function findOption(
   const options = Array.from(
     select.querySelectorAll<HTMLElement>('[role="option"]')
   );
-  const calendarIndex = calendars.findIndex(({ id }) => id === calendarId);
-  const calendar = calendars[calendarIndex];
+  const calendar = calendars.find(({ id }) => id === calendarId)!;
   const option = options.find(
     (option) => option.textContent === calendar.summary
   );
