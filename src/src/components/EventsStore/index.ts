@@ -104,27 +104,8 @@ export function useEvents(
           );
           if (bounds === undefined) return;
           const [timeMin, timeMax] = bounds;
-          const response = await ajax(
-            formatUrl(
-              `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
-                id
-              )}/events`,
-              {
-                maxAttendees: (1).toString(),
-                // FEATURE: handle pagination (pageToken)
-                maxResults: (2500).toString(),
-                timeMin: timeMin.toJSON(),
-                timeMax: timeMax.toJSON(),
-                prettyPrint: false.toString(),
-                fields:
-                  'items(summary,start(dateTime,date),end(dateTime,date))',
-                // FEATURE: set this to True to reduce response size
-                singleEvents: true.toString(),
-              }
-            )
-          );
-          if (response.status !== 200) return;
-          const results = await response.json();
+          const events = await fetchEvents(id, timeMin, timeMax);
+          if (events === undefined) return;
 
           const guessCalendar = (input: string): string | undefined =>
             virtualCalendars.find(
@@ -132,7 +113,6 @@ export function useEvents(
                 calendarId === id && ruleMatchers[rule](input, value)
             )?.virtualCalendar;
 
-          const events = results.items as RA<CalendarEvent>;
           const durations = group(
             events.map(({ summary, start, end }) => {
               if (
@@ -191,6 +171,46 @@ export function useEvents(
     false
   );
   return durations;
+}
+
+/** This is the maximum allowed by the API */
+const maxResults = 2500;
+
+async function fetchEvents(
+  id: string,
+  timeMin: Date,
+  timeMax: Date,
+  pageToken?: string
+): Promise<RA<CalendarEvent> | undefined> {
+  const response = await ajax(
+    formatUrl(
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
+        id
+      )}/events`,
+      {
+        maxAttendees: (1).toString(),
+        maxResults: maxResults.toString(),
+        timeMin: timeMin.toJSON(),
+        timeMax: timeMax.toJSON(),
+        prettyPrint: false.toString(),
+        fields:
+          'nextPageToken,items(summary,start(dateTime,date),end(dateTime,date))',
+        // FEATURE: set this to True to reduce response size
+        singleEvents: true.toString(),
+        ...(typeof pageToken === 'string' ? { pageToken } : {}),
+      }
+    )
+  );
+  if (response.status !== 200) return undefined;
+  const results = await response.json();
+  const events = results.items as RA<CalendarEvent>;
+  const nextPageToken = results.nextPageToken as string | undefined;
+
+  if (typeof nextPageToken === 'string') {
+    const newEvents = await fetchEvents(id, timeMin, timeMax, nextPageToken);
+    return newEvents === undefined ? undefined : [...events, ...newEvents];
+  }
+  return events;
 }
 
 /**
