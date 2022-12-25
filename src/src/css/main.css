@@ -30,6 +30,18 @@
     @apply top-0;
   }
 
+  body.hide-edit-all [role="dialog"] [role="radiogroup"] label:nth-child(3) {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition-delay: 0s !important;
+  }
+
+  body.hide-edit-all [role="dialog"] [role="radiogroup"]:hover label:nth-child(3) {
+    visibility: visible !important;
+    pointer-events: initial !important;
+    transition-delay: 3s !important;
+  }
+
 }
 
 /**

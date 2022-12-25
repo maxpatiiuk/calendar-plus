@@ -45,11 +45,6 @@ export const preferenceDefinitions = {
   behavior: {
     title: preferencesText('behavior'),
     items: {
-      includeAllDayEvents: defineItem<boolean>({
-        title: preferencesText('includeAllDayEvents'),
-        renderer: BooleanPref,
-        defaultValue: true,
-      }),
       ignoreAllDayEvents: defineItem<boolean>({
         title: preferencesText('ignoreAllDayEvents'),
         renderer: BooleanPref,
@@ -88,6 +83,23 @@ export const preferenceDefinitions = {
           { value: 'ctrl', title: preferencesText('ctrlClick') },
         ]),
         defaultValue: 'shift' as const,
+      }),
+    },
+  },
+  recurringEvents: {
+    title: preferencesText('recurringEvents'),
+    items: {
+      hideEditAll: defineItem<boolean>({
+        title: preferencesText('hideEditAll'),
+        description: preferencesText('hideEditAllDescription'),
+        renderer: BooleanPref,
+        defaultValue: false,
+      }),
+      lessInvasiveDialog: defineItem<boolean>({
+        title: preferencesText('lessInvasiveDialog'),
+        description: preferencesText('lessInvasiveDialogDescription'),
+        renderer: BooleanPref,
+        defaultValue: false,
       }),
     },
   },

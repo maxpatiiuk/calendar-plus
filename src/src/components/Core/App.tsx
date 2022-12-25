@@ -17,6 +17,8 @@ import { AutoComplete } from '../PowerTools/AutoComplete';
 import { GhostEvents } from '../PowerTools/GhostEvents';
 import { PreferencesPage } from '../Preferences';
 import { usePref } from '../Preferences/usePref';
+import { HideEditAll } from '../PowerTools/HideEditAll';
+import { BetterEditRecurring } from '../PowerTools/BetterEditRecurring';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -107,6 +109,8 @@ export function App(): JSX.Element | null {
       {debugOverlay}
       <AutoComplete />
       <GhostEvents />
+      <HideEditAll />
+      <BetterEditRecurring />
     </>
   );
 }
