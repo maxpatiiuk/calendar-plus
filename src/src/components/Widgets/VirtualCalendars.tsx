@@ -16,6 +16,7 @@ import { cacheEvents } from '../EventsStore';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
 import { WidgetContainer } from './WidgetContainer';
+import { RegexInput } from '../Molecules/RegexInput';
 
 export const matchRules = [
   'equals',
@@ -258,14 +259,19 @@ function EditableCalendarList({
                 </Select>
               </td>
               <td>
-                {/* FEATURE: provide regex validation */}
                 <div className="flex">
-                  <Input.Text
-                    placeholder={rule === 'regex' ? 'a*b+c?' : undefined}
-                    required
-                    value={value}
-                    onValueChange={(value): void => handleEdited({ value })}
-                  />
+                  {rule === 'regex' ? (
+                    <RegexInput
+                      value={value}
+                      onChange={(value): void => handleEdited({ value })}
+                    />
+                  ) : (
+                    <Input.Text
+                      required
+                      value={value}
+                      onValueChange={(value): void => handleEdited({ value })}
+                    />
+                  )}
                 </div>
               </td>
               <td>
