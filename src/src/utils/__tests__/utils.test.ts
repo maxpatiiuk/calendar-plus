@@ -3,6 +3,7 @@ import {
   capitalize,
   findLastIndex,
   group,
+  mappedFind,
   removeItem,
   removeKey,
   replaceItem,
@@ -139,3 +140,18 @@ theories(group, [
     ],
   },
 ]);
+
+describe('mappedFind', () => {
+  test('Found value', () => {
+    expect(
+      mappedFind([undefined, 1, 2, 3, 4, 5], (value) =>
+        typeof value === 'number' ? value * 2 : undefined
+      )
+    ).toBe(2);
+  });
+  test('Not found a value', () => {
+    expect(
+      mappedFind([undefined, undefined, undefined], (value) => value)
+    ).toBe(undefined);
+  });
+});

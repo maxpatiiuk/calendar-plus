@@ -18,7 +18,7 @@
 
     [title]:focus::after {
       @apply w-fit absolute p-1 text-black bg-white border border-black
-        content-[attr(title)] top-[90%];
+      content-[attr(title)] top-[90%];
     }
   }
 
@@ -30,16 +30,35 @@
     @apply top-0;
   }
 
-  body.hide-edit-all [role="dialog"] [role="radiogroup"] label:nth-child(3) {
-    visibility: hidden !important;
-    pointer-events: none !important;
-    transition-delay: 0s !important;
+  /*
+   * Hide "Edit All", unless it is selected
+   */
+  body.hide-edit-all [role="dialog"] [role="radiogroup"] label:nth-child(3):not(:has(input:checked)) {
+    @apply invisible pointer-events-none delay-[0s];
   }
 
   body.hide-edit-all [role="dialog"] [role="radiogroup"]:hover label:nth-child(3) {
-    visibility: visible !important;
-    pointer-events: initial !important;
-    transition-delay: 3s !important;
+    @apply !visible !pointer-events-auto !delay-[3s];
+  }
+
+  .less-invasive-batch-edit {
+    @apply !pointer-events-none !bg-transparent;
+  }
+
+  .less-invasive-batch-edit [role="dialog"] + :nth-child(3) {
+    @apply !grow-0;
+  }
+
+  .less-invasive-batch-edit [role="dialog"] {
+    @apply !pointer-events-auto !flex-row !max-w-[80vw];
+  }
+
+  .less-invasive-batch-edit [role="dialog"] > * {
+    @apply !min-w-[unset] !max-w-[unset];
+  }
+
+  .less-invasive-batch-edit [role="dialog"] :is([role="radiogroup"], div:has([role="heading"])) {
+    @apply flex gap-4;
   }
 
 }
