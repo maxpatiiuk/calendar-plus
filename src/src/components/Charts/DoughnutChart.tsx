@@ -37,7 +37,7 @@ export function DoughnutChart({
   const innerDataRef = React.useRef(innerData);
   const outerDataRef = React.useRef(outerData);
   const [loaded, handleLoaded] = useBooleanState();
-  const reducedMotion : boolean = useReducedMotion(false);
+  const reducedMotion: boolean = useReducedMotion(false);
   React.useEffect(() => {
     if (outerData.length > 0) handleLoaded();
     if (chart === undefined || outerDataRef.current === outerData) return;
@@ -74,8 +74,8 @@ export function DoughnutChart({
       }}
       options={{
         responsive: true,
-        animation: {
-          duration: reducedMotion ? 0 : 1000,
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
         },
         plugins: {
           tooltip: {

@@ -92,7 +92,11 @@ export function useEvents(
             events.map(({ summary, start, end }) => {
               if (
                 ignoreAllDayEvents &&
-                (start.dateTime === undefined || end.dateTime === undefined)
+                // Event does not have start/end time
+                (start.dateTime === undefined ||
+                  end.dateTime === undefined ||
+                  // Event lasts more than one day
+                  start.dateTime.split('T')[0] !== end.dateTime.split('T')[0])
               )
                 return ['', []];
               const dates = resolveEventDates(timeMin, timeMax, start, end);
@@ -120,7 +124,8 @@ export function useEvents(
             eventsStore.current[id][virtualCalendar] ??= {};
             const calendarDurations = eventsStore.current[id][virtualCalendar];
             durations.flat().forEach(([date, duration]) => {
-              calendarDurations[date] = duration;
+              calendarDurations[date] ??= 0;
+              calendarDurations[date] += duration;
             });
           });
         })

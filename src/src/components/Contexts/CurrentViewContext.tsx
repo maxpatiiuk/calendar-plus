@@ -10,7 +10,7 @@ const supportedViews = [
   'day',
   'week',
   'month',
-  /* 'year' */
+  'year',
   /**
    * custom views are user-customizable view (they can change the number of days
    * to display)
