@@ -11,12 +11,16 @@ import { Bar } from 'react-chartjs-2';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
-import { formatLabel } from '../Atoms/Internationalization';
+import { formatLabel, months } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
-import { CurrentViewContext } from '../Contexts/CurrentViewContext';
+import {
+  CurrentViewContext,
+  SupportedView,
+} from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
 import useReducedMotion from '../../hooks/useReducedMotion';
+import { group } from '../../utils/utils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -25,9 +29,10 @@ export function StackedChart({
 }: {
   readonly durations: EventsStore | undefined;
 }): JSX.Element | null {
+  const { view } = React.useContext(CurrentViewContext)!;
   const calendars = React.useContext(CalendarsContext);
-  const labels = useLabels(durations);
-  const dataSets = useDataSets(durations, calendars);
+  const labels = useLabels(durations, view);
+  const dataSets = useDataSets(durations, calendars, view);
   const [loaded, handleLoaded] = useBooleanState();
   const reducedMotion: boolean = useReducedMotion(false);
   React.useEffect(
@@ -67,20 +72,26 @@ export function StackedChart({
   ) : null;
 }
 
-function useLabels(durations: EventsStore | undefined): WritableArray<string> {
+function useLabels(
+  durations: EventsStore | undefined,
+  view: SupportedView
+): WritableArray<string> {
   const currentView = React.useContext(CurrentViewContext)!;
   return React.useMemo(
     () =>
-      Object.keys(
-        Object.values(durations ?? {})[0]?.[summedDurations] ?? []
-      ).map((duration) => formatLabel(new Date(duration), currentView)),
-    [durations, currentView]
+      view === 'year'
+        ? (months as WritableArray<string>)
+        : Object.keys(
+            Object.values(durations ?? {})[0]?.[summedDurations] ?? []
+          ).map((duration) => formatLabel(new Date(duration), currentView)),
+    [view, durations, currentView]
   );
 }
 
 function useDataSets(
   durations: EventsStore | undefined,
-  calendars: React.ContextType<typeof CalendarsContext>
+  calendars: React.ContextType<typeof CalendarsContext>,
+  view: SupportedView
 ): WritableArray<{
   readonly id: string;
   readonly label: string;
@@ -95,7 +106,17 @@ function useDataSets(
             id,
             label: summary,
             backgroundColor,
-            data: Object.values(durations[id]?.[summedDurations] ?? {}),
+            data:
+              view === 'year'
+                ? group(
+                    Object.entries(durations[id]?.[summedDurations] ?? {}).map(
+                      ([date, duration]) =>
+                        [new Date(date).getMonth(), duration] as const
+                    )
+                  ).map(([_key, values]) =>
+                    values.reduce((total, value) => total + value, 0)
+                  )
+                : Object.values(durations[id]?.[summedDurations] ?? {}),
           })),
     [durations, calendars]
   );
