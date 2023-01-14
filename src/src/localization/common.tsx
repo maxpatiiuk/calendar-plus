@@ -40,7 +40,6 @@ export const commonText = createDictionary({
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
-  refresh: { 'en-us': 'Refresh' },
   preferences: { 'en-us': 'Preferences' },
   virtualCalendars: { 'en-us': 'Autocomplete predictions' },
   other: { 'en-us': 'Other' },

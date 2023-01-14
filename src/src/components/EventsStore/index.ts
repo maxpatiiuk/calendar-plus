@@ -23,7 +23,7 @@ export const summedDurations: unique symbol = Symbol('calendarTotal');
  * The data structure is optimized for storage efficiency
  */
 // eslint-disable-next-line functional/prefer-readonly-type
-export type RawEventsStore = {
+type RawEventsStore = {
   // eslint-disable-next-line functional/prefer-readonly-type
   [CALENDAR_ID in string]: {
     // eslint-disable-next-line functional/prefer-readonly-type
@@ -51,7 +51,6 @@ type CalendarEvent = Pick<
 >;
 
 export const cacheEvents = eventListener<{
-  readonly loaded: undefined;
   readonly changed: undefined;
 }>();
 
@@ -62,10 +61,10 @@ export const cacheEvents = eventListener<{
  * calendar, and cache the computations for future use.
  */
 export function useEvents(
-  eventsStore: React.MutableRefObject<RawEventsStore> | undefined,
   startDate: Date | undefined,
   endDate: Date | undefined
 ): EventsStore | undefined {
+  const eventsStore = React.useRef<RawEventsStore>({});
   const calendars = React.useContext(CalendarsContext);
 
   const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
@@ -157,7 +156,6 @@ export function useEvents(
           });
         })
       );
-      cacheEvents.trigger('loaded');
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
       eventsStore,
@@ -195,7 +193,6 @@ async function fetchEvents(
         prettyPrint: false.toString(),
         fields:
           'nextPageToken,items(summary,start(dateTime,date),end(dateTime,date))',
-        // FEATURE: set this to True to reduce response size
         singleEvents: true.toString(),
         ...(typeof pageToken === 'string' ? { pageToken } : {}),
       }

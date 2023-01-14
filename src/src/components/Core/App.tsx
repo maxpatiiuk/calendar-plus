@@ -11,14 +11,13 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { KeyboardContext } from '../Contexts/KeyboardContext';
 import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
-import { useEventsStore } from '../EventsStore/useEventsStore';
 import { Portal } from '../Molecules/Portal';
 import { AutoComplete } from '../PowerTools/AutoComplete';
+import { BetterEditRecurring } from '../PowerTools/BetterEditRecurring';
 import { GhostEvents } from '../PowerTools/GhostEvents';
+import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
 import { usePref } from '../Preferences/usePref';
-import { HideEditAll } from '../PowerTools/HideEditAll';
-import { BetterEditRecurring } from '../PowerTools/BetterEditRecurring';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -47,9 +46,7 @@ export function App(): JSX.Element | null {
   );
 
   const currentView = React.useContext(CurrentViewContext);
-  const eventsStore = useEventsStore();
   const durations = useEvents(
-    eventsStore,
     // Don't fetch until the overlay is opened
     isOpen ? currentView?.firstDay : undefined,
     currentView?.lastDay
@@ -91,7 +88,6 @@ export function App(): JSX.Element | null {
                 {state.type === 'MainState' ? (
                   <Dashboard
                     durations={durations}
-                    eventsStore={eventsStore}
                     onOpenPreferences={(): void =>
                       setState({ type: 'PreferencesState' })
                     }

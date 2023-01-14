@@ -2,7 +2,6 @@ import React from 'react';
 
 import { VersionsContext } from '../components/Contexts/VersionsContext';
 import type { WidgetDefinition } from '../components/Dashboard';
-import type { RawEventsStore } from '../components/EventsStore';
 import type { Goal } from '../components/Goals/Widget';
 import type { UserPreferences } from '../components/Preferences/helpers';
 import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
@@ -15,7 +14,6 @@ import { Synonym } from '../components/Widgets/Synonyms';
 export type StorageDefinitions = {
   readonly layout: RA<WidgetDefinition>;
   readonly goals: RA<Goal>;
-  readonly events: RawEventsStore;
   readonly preferences: UserPreferences;
   readonly ghostEvents: RA<string>;
   readonly virtualCalendars: RA<VirtualCalendar>;

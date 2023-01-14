@@ -7,15 +7,13 @@ import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Widget } from '../Atoms';
-import type { EventsStore, RawEventsStore } from '../EventsStore';
+import type { EventsStore } from '../EventsStore';
 import { PageHeader } from '../Molecules/PageHeader';
 import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
 import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { AddWidgetButton, WidgetContent } from './Widget';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
-import { cacheEvents, getDatesBetween } from '../EventsStore';
-import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 
 export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
 
@@ -41,11 +39,9 @@ const widgetClassName = `
 
 export function Dashboard({
   durations,
-  eventsStore,
   onOpenPreferences: handleOpenPreferences,
 }: {
   readonly durations: EventsStore | undefined;
-  readonly eventsStore: React.MutableRefObject<RawEventsStore> | undefined;
   readonly onOpenPreferences: () => void;
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
@@ -58,8 +54,6 @@ export function Dashboard({
 
   const breakpoint = useBreakpoint();
   const className = `${widgetClassName} ${isEditing ? '' : 'overflow-y-auto'}`;
-
-  const currentView = React.useContext(CurrentViewContext);
 
   return (
     <>
@@ -79,38 +73,9 @@ export function Dashboard({
             </Button.White>
           </>
         ) : (
-          <>
-            <Button.White
-              onClick={
-                eventsStore === undefined || currentView === undefined
-                  ? undefined
-                  : (): void => {
-                      const daysBetween = getDatesBetween(
-                        currentView.firstDay,
-                        currentView.lastDay
-                      );
-                      Object.values(eventsStore.current).forEach(
-                        (virtualCalendars) =>
-                          Object.values(virtualCalendars).forEach((durations) =>
-                            daysBetween.forEach(({ year, month, day }) => {
-                              if (
-                                typeof durations[year]?.[month]?.[day] ===
-                                'number'
-                              )
-                                durations[year]![month]![day] = null;
-                            })
-                          )
-                      );
-                      cacheEvents.trigger('changed');
-                    }
-              }
-            >
-              {commonText('refresh')}
-            </Button.White>
-            <Button.White onClick={handleOpenPreferences}>
-              {commonText('preferences')}
-            </Button.White>
-          </>
+          <Button.White onClick={handleOpenPreferences}>
+            {commonText('preferences')}
+          </Button.White>
         )}
         <Button.White onClick={handleToggle}>
           {isEditing ? commonText('save') : commonText('edit')}
@@ -157,7 +122,6 @@ export function Dashboard({
                 <WidgetContent
                   definition={widget.definition}
                   durations={durations}
-                  eventsStore={eventsStore}
                 />
               )}
             </Widget>

@@ -29,7 +29,7 @@ export function StackedChart({
   const labels = useLabels(durations);
   const dataSets = useDataSets(durations, calendars);
   const [loaded, handleLoaded] = useBooleanState();
-  const reducedMotion : boolean = useReducedMotion(false);
+  const reducedMotion: boolean = useReducedMotion(false);
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
     [dataSets]
@@ -43,9 +43,9 @@ export function StackedChart({
       datasetIdKey="id"
       options={{
         responsive: true,
-        animation: {
-          duration: reducedMotion ? 0 : 1000,
-        },          
+        animation: {
+          duration: reducedMotion ? 0 : 1000,
+        },
         scales: {
           x: {
             title: {

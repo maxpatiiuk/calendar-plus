@@ -18,16 +18,6 @@ export function DebugOverlay(): JSX.Element {
       >
         Reload Extension
       </button>
-      <button
-        type="button"
-        onClick={async (): Promise<void> => {
-          await chrome.storage.local.clear();
-          await chrome.storage.sync.clear();
-          window.location.reload();
-        }}
-      >
-        Clear Storage
-      </button>
     </div>
   );
 }

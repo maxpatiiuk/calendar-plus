@@ -11,12 +11,10 @@ import { Button, Input, Select } from '../Atoms';
 import { icon } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
-import type { RawEventsStore } from '../EventsStore';
-import { cacheEvents } from '../EventsStore';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
-import { WidgetContainer } from './WidgetContainer';
 import { RegexInput } from '../Molecules/RegexInput';
+import { WidgetContainer } from './WidgetContainer';
 
 export const matchRules = [
   'equals',
@@ -44,10 +42,8 @@ const ruleLabel: RR<MatchRule, string> = {
 
 export function VirtualCalendars({
   label,
-  eventsStore,
 }: {
   readonly label: string;
-  readonly eventsStore: React.MutableRefObject<RawEventsStore> | undefined;
 }): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
   const [virtualCalendars, setVirtualCalendars] = useSafeStorage(
@@ -64,38 +60,13 @@ export function VirtualCalendars({
     setLocalCalendars(virtualCalendars);
     virtualCalendarsRef.current = virtualCalendars;
   }, [virtualCalendars]);
-  React.useEffect(() => {
-    if (isEditing || localCalendars === undefined) return;
-    setVirtualCalendars(localCalendars);
-
-    // Clear cache for calendars whose rules changed
-    if (eventsStore === undefined) return;
-    const indexedOldCalendars = Object.fromEntries(
-      group(
-        virtualCalendarsRef.current?.map(({ calendarId, ...rest }) => [
-          calendarId,
-          rest,
-        ]) ?? []
-      )
-    );
-    const oldKeys = Object.keys(indexedOldCalendars);
-    const indexedNewCalendars = Object.fromEntries(
-      group(localCalendars.map(({ calendarId, ...rest }) => [calendarId, rest]))
-    );
-    const newKeys = Object.keys(indexedNewCalendars);
-    const changedKeys = f
-      .unique([...oldKeys, ...newKeys])
-      .filter(
-        (calendarId) =>
-          JSON.stringify(indexedOldCalendars[calendarId] ?? []) !==
-          JSON.stringify(indexedNewCalendars[calendarId] ?? [])
-      );
-    if (changedKeys.length === 0) return;
-    changedKeys.forEach((changedKey) => {
-      eventsStore.current[changedKey] = {};
-    });
-    cacheEvents.trigger('changed');
-  }, [isEditing, localCalendars, setVirtualCalendars]);
+  React.useEffect(
+    () =>
+      isEditing || localCalendars === undefined
+        ? undefined
+        : setVirtualCalendars(localCalendars),
+    [isEditing, localCalendars, setVirtualCalendars]
+  );
 
   const calendars = React.useContext(CalendarsContext)!;
   return (

@@ -1,4 +1,4 @@
-import { EventsStore, RawEventsStore } from '../EventsStore';
+import { EventsStore } from '../EventsStore';
 import React from 'react';
 import type { WidgetDefinition } from './index';
 import { GoalsWidget } from '../Goals/Widget';
@@ -38,11 +38,9 @@ export const widgetLabels: RR<keyof typeof widgets, string> = {
 
 export function WidgetContent({
   definition: { type, ...definition },
-  eventsStore,
   durations,
 }: {
   readonly definition: WidgetDefinition['definition'];
-  readonly eventsStore: React.MutableRefObject<RawEventsStore> | undefined;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
   const WidgetComponent = widgets[type];
@@ -50,7 +48,6 @@ export function WidgetContent({
     <div className="h-full p-4">
       <WidgetComponent
         durations={durations}
-        eventsStore={eventsStore}
         label={widgetLabels[type]}
         {...definition}
       />
