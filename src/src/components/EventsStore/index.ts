@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
-import { eventListener } from '../../utils/events';
 import { formatUrl } from '../../utils/queryString';
 import type { IR, R, RA, WritableArray } from '../../utils/types';
 import { findLastIndex, group, sortFunction } from '../../utils/utils';
@@ -18,26 +17,13 @@ import { usePref } from '../Preferences/usePref';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
-/**
- * This is stored in cache
- * The data structure is optimized for storage efficiency
- */
 // eslint-disable-next-line functional/prefer-readonly-type
 type RawEventsStore = {
   // eslint-disable-next-line functional/prefer-readonly-type
   [CALENDAR_ID in string]: {
-    // eslint-disable-next-line functional/prefer-readonly-type
-    [VIRTUAL_CALENDAR in string]: {
-      [YEAR in number]?: WritableArray<
-        WritableArray<number | null | undefined> | null | undefined
-      >;
-    };
+    [VIRTUAL_CALENDAR in string]: R<number>;
   };
 };
-/*
- * This is used by charts when plotting
- * The data structure is optimized for ease of use
- */
 export type EventsStore = {
   readonly [CALENDAR_ID in string]: {
     readonly [VIRTUAL_CALENDAR in string]: IR<number>;
@@ -50,10 +36,6 @@ type CalendarEvent = Pick<
   'end' | 'start' | 'summary'
 >;
 
-export const cacheEvents = eventListener<{
-  readonly changed: undefined;
-}>();
-
 // TEST: test daylight savings time switch and back
 /**
  * Fetch the events between the provided dates for all visible calendars,
@@ -65,17 +47,17 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
+  // Clean temporary cache when overlay is closed
+  const clearCache = startDate === undefined || endDate === undefined;
+  if (clearCache) eventsStore.current = {};
   const calendars = React.useContext(CalendarsContext);
 
   const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
-  const previousPrefRef = React.useRef(ignoreAllDayEvents);
+  React.useEffect(() => {
+    if (ignoreAllDayEvents) eventsStore.current = {};
+  }, [ignoreAllDayEvents]);
 
   const virtualCalendars = useVirtualCalendars();
-  const [version, setVersion] = React.useState(0);
-  React.useEffect(
-    () => cacheEvents.on('changed', () => setVersion((version) => version + 1)),
-    []
-  );
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
@@ -86,12 +68,6 @@ export function useEvents(
         endDate === undefined
       )
         return undefined;
-      if (ignoreAllDayEvents !== previousPrefRef.current) {
-        previousPrefRef.current = ignoreAllDayEvents;
-        Object.keys(eventsStore.current).forEach((id) => {
-          eventsStore.current[id] = {};
-        });
-      }
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
@@ -136,22 +112,15 @@ export function useEvents(
           eventsStore.current[id] ??= {};
           eventsStore.current[id][''] ??= {};
           const fetched = eventsStore.current[id][''];
-          daysBetween.forEach(({ year, month, day }) => {
-            fetched[year] ??= [];
-            const months = fetched[year]!;
-            months[month] ??= [];
-            const days = months[month]!;
-            days[day] ??= 0;
+          daysBetween.forEach((date) => {
+            fetched[date] ??= 0;
           });
 
           durations.map(([virtualCalendar, durations]) => {
             eventsStore.current[id][virtualCalendar] ??= {};
-            const years = eventsStore.current[id][virtualCalendar];
-            durations.flat().forEach(([{ year, month, day }, duration]) => {
-              years[year] ??= [];
-              const months = years[year]!;
-              months[month] ??= [];
-              months[month]![day] = duration;
+            const calendarDurations = eventsStore.current[id][virtualCalendar];
+            durations.flat().forEach(([date, duration]) => {
+              calendarDurations[date] = duration;
             });
           });
         })
@@ -164,7 +133,6 @@ export function useEvents(
       endDate,
       ignoreAllDayEvents,
       virtualCalendars,
-      version,
     ]),
     false
   );
@@ -221,23 +189,19 @@ function calculateBounds(
   eventsStore: React.MutableRefObject<RawEventsStore>,
   id: string,
   startDate: Date,
-  daysBetween: RA<SplitDate>
+  daysBetween: RA<string>
 ): readonly [timeMin: Date, timeMax: Date] | undefined {
   const durations = eventsStore.current[id]?.[''];
   const firstDayToFetch =
     durations === undefined
       ? 0
-      : daysBetween.findIndex(
-          ({ month, year, day }) =>
-            day !== 0 && typeof durations[year]?.[month]?.[day] !== 'number'
-        );
+      : daysBetween.findIndex((date) => typeof durations[date] !== 'number');
   const lastDayToFetch =
     durations === undefined
       ? daysBetween.length
       : findLastIndex(
           daysBetween,
-          ({ month, year, day }) =>
-            day !== 0 && typeof durations[year]?.[month]?.[day] !== 'number'
+          (date) => typeof durations[date] !== 'number'
         ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
@@ -247,33 +211,13 @@ function calculateBounds(
   return [timeMin, timeMax];
 }
 
-export type SplitDate = {
-  readonly year: number;
-  // Note, month numbering is 0 based
-  readonly month: number;
-  readonly day: number;
-};
-
-export const splitDate = (date: Date): SplitDate => ({
-  year: date.getFullYear(),
-  // Note, month numbering is 0 based
-  month: date.getMonth(),
-  day: date.getDate(),
-});
-
 export const dateToString = (date: Date): string =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-
-export const splitDateToString = ({ year, month, day }: SplitDate): string =>
-  `${year}-${month + 1}-${day}`;
 
 /**
  * Return all dates in between two dates (inclusive) as strings
  */
-export const getDatesBetween = (
-  startDate: Date,
-  endDate: Date
-): RA<SplitDate> =>
+export const getDatesBetween = (startDate: Date, endDate: Date): RA<string> =>
   Array.from(
     {
       length: countDaysBetween(startDate, endDate),
@@ -281,7 +225,7 @@ export const getDatesBetween = (
     (_, index) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + index);
-      return splitDate(date);
+      return dateToString(date);
     }
   );
 
@@ -356,14 +300,11 @@ function extractData(
   startDate: Date,
   endDate: Date
 ): EventsStore {
-  const daysBetween = getDatesBetween(startDate, endDate).map((components) => ({
-    ...components,
-    string: splitDateToString(components),
-  }));
+  const daysBetween = getDatesBetween(startDate, endDate);
   return Object.fromEntries(
     calendars.map(({ id }) => {
       const totals: R<number> = Object.fromEntries(
-        daysBetween.map(({ string }) => [string, 0])
+        daysBetween.map((date) => [date, 0])
       );
       const entries = Object.entries(eventsStore[id])
         .map(([virtualCalendar, dates]) => {
@@ -372,11 +313,10 @@ function extractData(
             virtualCalendar,
             Object.fromEntries(
               daysBetween.map((date) => {
-                const string = splitDateToString(date);
-                const total = dates[date.year]?.[date.month]?.[date.day] ?? 0;
-                totals[string] += total;
+                const total = dates[date] ?? 0;
+                totals[date] += total;
                 categoryTotal += total;
-                return [string, total];
+                return [date, total];
               })
             ),
             categoryTotal,
@@ -400,13 +340,13 @@ function extractData(
 function calculateEventDuration(
   startDate: Date,
   endDate: Date
-): RA<readonly [SplitDate, number]> {
+): RA<readonly [string, number]> {
   const daySpan = countDaysBetween(startDate, endDate);
   if (Number.isNaN(daySpan)) [];
 
   if (daySpan === 1) {
     const duration = (endDate.getTime() - startDate.getTime()) / MINUTE;
-    return [[splitDate(startDate), duration]] as const;
+    return [[dateToString(startDate), duration]] as const;
   } else return calculateInBetweenDurations(startDate, endDate);
 }
 
@@ -417,8 +357,8 @@ function calculateEventDuration(
 function calculateInBetweenDurations(
   startDate: Date,
   endDate: Date
-): RA<readonly [SplitDate, number]> {
-  const results: WritableArray<readonly [SplitDate, number]> = [];
+): RA<readonly [string, number]> {
+  const results: WritableArray<readonly [string, number]> = [];
 
   // First Day
   const firstDayStart = new Date(startDate);
@@ -427,16 +367,14 @@ function calculateInBetweenDurations(
   firstDayStart.setSeconds(0);
   const firstDayDuration =
     (DAY - (startDate.getTime() - firstDayStart.getTime())) / MINUTE;
-  results.push([splitDate(startDate), firstDayDuration]);
+  results.push([dateToString(startDate), firstDayDuration]);
 
   // Full days
   const datesBetween = getDatesBetween(startDate, endDate).slice(
     1,
     isMidnight(endDate) ? undefined : -1
   );
-  datesBetween.forEach((dateString) =>
-    results.push([dateString, MINUTES_IN_DAY])
-  );
+  datesBetween.forEach((date) => results.push([date, MINUTES_IN_DAY]));
 
   // Last Day
   const lastDayStart = new Date(endDate);
@@ -445,7 +383,7 @@ function calculateInBetweenDurations(
   lastDayStart.setSeconds(0);
   const lastDayDuration = (endDate.getTime() - lastDayStart.getTime()) / MINUTE;
   if (lastDayDuration !== 0)
-    results.push([splitDate(endDate), lastDayDuration]);
+    results.push([dateToString(endDate), lastDayDuration]);
   return results;
 }
 
