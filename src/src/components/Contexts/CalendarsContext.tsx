@@ -3,7 +3,7 @@ import { ajax } from '../../utils/ajax';
 import React from 'react';
 import { filterArray, GetOrSet, RA } from '../../utils/types';
 import { formatUrl } from '../../utils/queryString';
-import { sortFunction, split, toggleItem } from '../../utils/utils';
+import { sortFunction, split } from '../../utils/utils';
 import { listen } from '../../utils/events';
 import { AuthContext } from './AuthContext';
 import { randomColor } from '../../utils/colors';
@@ -133,10 +133,13 @@ function useVisibilityChangeSpy(
     return listen(sideBar, 'click', ({ target }) => {
       const element = target as HTMLInputElement;
       if (element.tagName !== 'INPUT' || element.type !== 'checkbox') return;
-      const calendarId = parseCheckbox(element)?.[0];
-      if (calendarId === undefined) return;
+      const data = parseCheckbox(element)?.[0];
+      if (data === undefined) return;
+      const [calendarId, checked] = data;
       handleChange((visibleCalendars) =>
-        toggleItem(visibleCalendars, calendarId)
+        checked
+          ? visibleCalendars.filter((id) => id !== calendarId)
+          : [...visibleCalendars, calendarId]
       );
     });
   }, [calendars, sideBar]);
