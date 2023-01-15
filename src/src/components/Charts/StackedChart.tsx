@@ -9,18 +9,16 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
 import { useBooleanState } from '../../hooks/useBooleanState';
+import { useTransitionDuration } from '../../hooks/useTransitionDuration';
 import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
+import { group } from '../../utils/utils';
 import { formatLabel, months } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
-import {
-  CurrentViewContext,
-  SupportedView,
-} from '../Contexts/CurrentViewContext';
+import type { SupportedView } from '../Contexts/CurrentViewContext';
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
-import useReducedMotion from '../../hooks/useReducedMotion';
-import { group } from '../../utils/utils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -34,7 +32,7 @@ export function StackedChart({
   const labels = useLabels(durations, view);
   const dataSets = useDataSets(durations, calendars, view);
   const [loaded, handleLoaded] = useBooleanState();
-  const reducedMotion: boolean = useReducedMotion(false);
+  const transitionDuration = useTransitionDuration();
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
     [dataSets]
@@ -49,7 +47,7 @@ export function StackedChart({
       options={{
         responsive: true,
         animation: {
-          duration: reducedMotion ? 0 : 1000,
+          duration: transitionDuration,
         },
         scales: {
           x: {
