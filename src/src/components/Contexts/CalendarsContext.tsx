@@ -53,14 +53,14 @@ export function CalendarsSpy({
     false
   );
 
-  const [visibleCalendars, setVisibleCalendars] = React.useState<RA<string>>(
-    []
-  );
+  const [visibleCalendars, setVisibleCalendars] = React.useState<
+    RA<string> | undefined
+  >(undefined);
 
   useVisibilityChangeSpy(calendars, setVisibleCalendars);
 
   const filteredCalendars = React.useMemo(
-    () => calendars?.filter(({ id }) => visibleCalendars.includes(id)),
+    () => calendars?.filter(({ id }) => visibleCalendars?.includes(id)),
     [calendars, visibleCalendars]
   );
   return (
@@ -77,7 +77,7 @@ CalendarsContext.displayName = 'CalendarsContext';
 
 function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
-  handleChange: GetOrSet<RA<string>>[1]
+  handleChange: GetOrSet<RA<string> | undefined>[1]
 ): void {
   const [sideBar] = useAsyncState(
     React.useCallback(async () => {
@@ -138,8 +138,8 @@ function useVisibilityChangeSpy(
       const [calendarId, checked] = data;
       handleChange((visibleCalendars) =>
         checked
-          ? visibleCalendars.filter((id) => id !== calendarId)
-          : [...visibleCalendars, calendarId]
+          ? visibleCalendars?.filter((id) => id !== calendarId)
+          : [...(visibleCalendars ?? []), calendarId]
       );
     });
   }, [calendars, sideBar]);
