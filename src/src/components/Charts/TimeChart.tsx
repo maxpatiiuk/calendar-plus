@@ -1,13 +1,17 @@
 import React from 'react';
 
+import { useSimpleStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { IR, RA } from '../../utils/types';
+import { Button } from '../Atoms';
 import { formatNumber, HOUR, MINUTE } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { DayHours, EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { WidgetContainer } from '../Widgets/WidgetContainer';
+
+export type TimeChartMode = 'average' | 'total';
 
 export function TimeChart({
   label,
@@ -16,11 +20,15 @@ export function TimeChart({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const editing = React.useState<boolean>(false);
+  const [mode, setMode] = useSimpleStorage('timeChartMode', 'total');
+
   const calendars = React.useContext(CalendarsContext)!;
   const times = React.useMemo(
-    () => (durations === undefined ? undefined : getTimes(durations)),
-    [durations]
+    () =>
+      durations === undefined || mode === undefined
+        ? undefined
+        : getTimes(durations, mode),
+    [durations, mode]
   );
   const rowMax = React.useMemo(
     () =>
@@ -47,10 +55,33 @@ export function TimeChart({
           ),
     [times, calendars]
   );
-  // FEATURE: average/total switch
   return (
-    <WidgetContainer editing={editing} header={label}>
-      {times === undefined || totals === undefined || rowMax === undefined ? (
+    <WidgetContainer
+      buttons={
+        <div className="flex gap-2">
+          <span className="sr-only">{commonText('viewMode')}</span>
+          <Button.White
+            aria-pressed={mode === 'total' ? true : undefined}
+            title={commonText('viewMode')}
+            onClick={(): void => setMode('total')}
+          >
+            {commonText('totalHours')}
+          </Button.White>
+          <Button.White
+            aria-pressed={mode === 'average' ? true : undefined}
+            title={commonText('viewMode')}
+            onClick={(): void => setMode('average')}
+          >
+            {commonText('averageMinutes')}
+          </Button.White>
+        </div>
+      }
+      header={label}
+    >
+      {times === undefined ||
+      totals === undefined ||
+      rowMax === undefined ||
+      mode === undefined ? (
         commonText('loading')
       ) : (
         <table
@@ -85,8 +116,8 @@ export function TimeChart({
                 </th>
                 {Array.from({ length: 24 }, (_, index) => (
                   <td
-                    key={index}
                     className="bg-[color:var(--color)]"
+                    key={index}
                     style={
                       {
                         '--color': `${backgroundColor}${getOpacity(
@@ -130,21 +161,30 @@ const number = (number: number) => formatNumber(Math.round(number));
 /**
  * Sum durations for the current period
  */
-const getTimes = (durations: EventsStore): IR<DayHours> =>
+const getTimes = (durations: EventsStore, mode: TimeChartMode): IR<DayHours> =>
   Object.fromEntries(
     Object.entries(durations).map(([id, durations]) => [
       id,
-      summedTimes(Object.values(durations[summedDurations])),
+      summedTimes(
+        Object.values(durations[summedDurations]),
+        mode === 'total' ? toTotalHours : toAverageMinutes
+      ),
     ])
   );
 
-const summedTimes = (durations: RA<DayHours>): DayHours => ({
-  total: durations.reduce((sum, { total }) => sum + total, 0) / (HOUR / MINUTE),
-  hourly: Array.from(
-    { length: 24 },
-    (_, index) =>
-      durations.reduce((total, { hourly }) => total + hourly[index], 0) /
-      (HOUR / MINUTE)
+const toTotalHours = (durations: RA<number>): number =>
+  durations.reduce((sum, duration) => sum + duration, 0) / (HOUR / MINUTE);
+
+const toAverageMinutes = (durations: RA<number>): number =>
+  durations.reduce((sum, duration) => sum + duration, 0) / durations.length;
+
+const summedTimes = (
+  durations: RA<DayHours>,
+  aggregate: (numbers: RA<number>) => number
+): DayHours => ({
+  total: aggregate(durations.map(({ total }) => total)),
+  hourly: Array.from({ length: 24 }, (_, index) =>
+    aggregate(durations.map(({ hourly }) => hourly[index]))
   ),
 });
 

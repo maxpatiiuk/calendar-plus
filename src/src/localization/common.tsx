@@ -63,5 +63,14 @@ export const commonText = createDictionary({
   },
   timeChart: { 'en-us': 'Time Chart' },
   total: { 'en-us': 'Total' },
+  viewMode: {
+    'en-us': 'View Mode',
+  },
+  totalHours: {
+    'en-us': 'Total Hours',
+  },
+  averageMinutes: {
+    'en-us': 'Average Minutes',
+  },
 });
 /* eslint-enable @typescript-eslint/naming-convention */
