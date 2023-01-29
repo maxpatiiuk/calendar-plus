@@ -6,10 +6,9 @@ import { formatUrl } from '../../utils/queryString';
 import type { IR, R, RA, WritableArray } from '../../utils/types';
 import { findLastIndex, group, sortFunction } from '../../utils/utils';
 import {
-  DAY,
+  HOUR,
   MILLISECONDS_IN_DAY,
   MINUTE,
-  MINUTES_IN_DAY,
 } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
@@ -17,18 +16,28 @@ import { usePref } from '../Preferences/usePref';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
-// eslint-disable-next-line functional/prefer-readonly-type
+export type DayHours = {
+  readonly total: number;
+  readonly hourly: RA<number>;
+};
+
+/* eslint-disable functional/prefer-readonly-type */
+export type WritableDayHours = {
+  total: number;
+  hourly: number[];
+};
+
 type RawEventsStore = {
-  // eslint-disable-next-line functional/prefer-readonly-type
   [CALENDAR_ID in string]: {
-    [VIRTUAL_CALENDAR in string]: R<number>;
+    [VIRTUAL_CALENDAR in string]: R<WritableDayHours>;
   };
 };
+/* eslint-enable functional/prefer-readonly-type */
 export type EventsStore = {
   readonly [CALENDAR_ID in string]: {
-    readonly [VIRTUAL_CALENDAR in string]: IR<number>;
+    readonly [summedDurations]: IR<DayHours>;
   } & {
-    readonly [summedDurations]: IR<number>;
+    readonly [VIRTUAL_CALENDAR in string]: IR<DayHours>;
   };
 };
 type CalendarEvent = Pick<
@@ -98,9 +107,9 @@ export function useEvents(
                   // Event lasts more than one day
                   start.dateTime.split('T')[0] !== end.dateTime.split('T')[0])
               )
-                return ['', []];
+                return ['', {}];
               const dates = resolveEventDates(timeMin, timeMax, start, end);
-              if (dates === undefined) return ['', []];
+              if (dates === undefined) return ['', {}];
               const [startDate, endDate] = dates;
               const data = calculateEventDuration(startDate, endDate);
               return [guessCalendar(summary) ?? '', data] as const;
@@ -117,16 +126,21 @@ export function useEvents(
           eventsStore.current[id][''] ??= {};
           const fetched = eventsStore.current[id][''];
           daysBetween.forEach((date) => {
-            fetched[date] ??= 0;
+            fetched[date] ??= blankHours();
           });
 
-          durations.map(([virtualCalendar, durations]) => {
+          durations.forEach(([virtualCalendar, durations]) => {
             eventsStore.current[id][virtualCalendar] ??= {};
             const calendarDurations = eventsStore.current[id][virtualCalendar];
-            durations.flat().forEach(([date, duration]) => {
-              calendarDurations[date] ??= 0;
-              calendarDurations[date] += duration;
-            });
+            durations.forEach((durations) =>
+              Object.entries(durations).forEach(([date, durations]) => {
+                calendarDurations[date] ??= blankHours();
+                durations.forEach((duration, hour) => {
+                  calendarDurations[date].total += duration;
+                  calendarDurations[date].hourly[hour] = duration;
+                });
+              })
+            );
           });
         })
       );
@@ -146,6 +160,12 @@ export function useEvents(
 
 /** This is the maximum allowed by the API */
 const maxResults = 2500;
+
+const blankHours = (): WritableDayHours => ({
+  total: 0,
+  // eslint-disable-next-line functional/prefer-readonly-type
+  hourly: Array.from({ length: 24 }).fill(0) as number[],
+});
 
 async function fetchEvents(
   id: string,
@@ -200,13 +220,13 @@ function calculateBounds(
   const firstDayToFetch =
     durations === undefined
       ? 0
-      : daysBetween.findIndex((date) => typeof durations[date] !== 'number');
+      : daysBetween.findIndex((date) => typeof durations[date] !== 'object');
   const lastDayToFetch =
     durations === undefined
       ? daysBetween.length
       : findLastIndex(
           daysBetween,
-          (date) => typeof durations[date] !== 'number'
+          (date) => typeof durations[date] !== 'object'
         ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
@@ -308,8 +328,8 @@ function extractData(
   const daysBetween = getDatesBetween(startDate, endDate);
   return Object.fromEntries(
     calendars.map(({ id }) => {
-      const totals: R<number> = Object.fromEntries(
-        daysBetween.map((date) => [date, 0])
+      const totals: R<WritableDayHours> = Object.fromEntries(
+        daysBetween.map((date) => [date, blankHours()])
       );
       const entries = Object.entries(eventsStore[id])
         .map(([virtualCalendar, dates]) => {
@@ -318,9 +338,12 @@ function extractData(
             virtualCalendar,
             Object.fromEntries(
               daysBetween.map((date) => {
-                const total = dates[date] ?? 0;
-                totals[date] += total;
-                categoryTotal += total;
+                const total = dates[date] ?? blankHours();
+                totals[date].total += total.total;
+                total.hourly.forEach((minutes, hour) => {
+                  totals[date].hourly[hour] += minutes;
+                });
+                categoryTotal += total.total;
                 return [date, total];
               })
             ),
@@ -339,56 +362,51 @@ function extractData(
 }
 
 /**
- * Calculate number of minutes between two days, split into 24-hour chunks
- * Handles the case when both dates are on the same day
+ * Calculate number of minutes between two days, split into 1-hour chunks
+ * Handles the case when both dates are on the same day or several days apart
  */
 function calculateEventDuration(
   startDate: Date,
   endDate: Date
-): RA<readonly [string, number]> {
-  const daySpan = countDaysBetween(startDate, endDate);
-  if (Number.isNaN(daySpan)) [];
+): IR<RA<number>> {
+  const results: R<WritableArray<number>> = {};
+  const startDateString = dateToString(startDate);
+  const endDateString = dateToString(endDate);
+  const startHour = startDate.getHours();
+  const endHour = endDate.getHours();
+  const nearestHour = new Date(startDate);
 
-  if (daySpan === 1) {
-    const duration = (endDate.getTime() - startDate.getTime()) / MINUTE;
-    return [[dateToString(startDate), duration]] as const;
-  } else return calculateInBetweenDurations(startDate, endDate);
-}
+  if (startDateString === endDateString && startHour === endHour) {
+    results[startDateString] = [];
+    results[startDateString][startHour] =
+      endDate.getMinutes() - startDate.getMinutes();
+    return results;
+  }
 
-/**
- * Calculate number of minutes between two dates, split into 24-hour chunks
- * Expects endDate to not be on the same day as startDate
- */
-function calculateInBetweenDurations(
-  startDate: Date,
-  endDate: Date
-): RA<readonly [string, number]> {
-  const results: WritableArray<readonly [string, number]> = [];
+  if (startDate.getMinutes() !== 0) {
+    results[startDateString] = [];
+    results[startDateString][startHour] =
+      HOUR / MINUTE - startDate.getMinutes();
+    nearestHour.setMinutes(0);
+    nearestHour.setHours(nearestHour.getHours() + 1);
+  }
 
-  // First Day
-  const firstDayStart = new Date(startDate);
-  firstDayStart.setHours(0);
-  firstDayStart.setMinutes(0);
-  firstDayStart.setSeconds(0);
-  const firstDayDuration =
-    (DAY - (startDate.getTime() - firstDayStart.getTime())) / MINUTE;
-  results.push([dateToString(startDate), firstDayDuration]);
+  const lastHour = new Date(endDate);
+  lastHour.setMinutes(0);
 
-  // Full days
-  const datesBetween = getDatesBetween(startDate, endDate).slice(
-    1,
-    isMidnight(endDate) ? undefined : -1
-  );
-  datesBetween.forEach((date) => results.push([date, MINUTES_IN_DAY]));
+  const localDate = new Date(nearestHour);
+  while (localDate < lastHour) {
+    const dateString = dateToString(localDate);
+    results[dateString] ??= [];
+    results[dateString][localDate.getHours()] = HOUR / MINUTE;
+    localDate.setHours(localDate.getHours() + 1);
+  }
 
-  // Last Day
-  const lastDayStart = new Date(endDate);
-  lastDayStart.setHours(0);
-  lastDayStart.setMinutes(0);
-  lastDayStart.setSeconds(0);
-  const lastDayDuration = (endDate.getTime() - lastDayStart.getTime()) / MINUTE;
-  if (lastDayDuration !== 0)
-    results.push([dateToString(endDate), lastDayDuration]);
+  if (endDate.getMinutes() > 0) {
+    results[endDateString] ??= [];
+    results[endDateString][endHour] = endDate.getMinutes();
+  }
+
   return results;
 }
 
@@ -397,5 +415,4 @@ export const exportsForTests = {
   resolveEventDates,
   extractData,
   calculateEventDuration,
-  calculateInBetweenDurations,
 };

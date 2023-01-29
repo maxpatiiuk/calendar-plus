@@ -128,7 +128,6 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 export const DAY = 24 * HOUR;
 export const MILLISECONDS_IN_DAY = DAY / MILLISECONDS;
-export const MINUTES_IN_DAY = DAY / MINUTE;
 export const MINUTES_IN_HOUR = HOUR / MINUTE;
 export const WEEK = 7 * DAY;
 export const MONTH = 4 * WEEK;

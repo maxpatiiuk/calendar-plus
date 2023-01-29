@@ -109,12 +109,14 @@ function useDataSets(
                 ? group(
                     Object.entries(durations[id]?.[summedDurations] ?? {}).map(
                       ([date, duration]) =>
-                        [new Date(date).getMonth(), duration] as const
+                        [new Date(date).getMonth(), duration.total] as const
                     )
                   ).map(([_key, values]) =>
                     values.reduce((total, value) => total + value, 0)
                   )
-                : Object.values(durations[id]?.[summedDurations] ?? {}),
+                : Object.values(durations[id]?.[summedDurations] ?? {}).map(
+                    ({ total }) => total
+                  ),
           })),
     [durations, calendars]
   );
