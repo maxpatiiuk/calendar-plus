@@ -2,7 +2,6 @@ import { createDictionary } from './utils';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 
-/* eslint-disable react/jsx-no-literals */
 /* eslint-disable @typescript-eslint/naming-convention */
 export const commonText = createDictionary({
   calendarPlus: { 'en-us': 'Calendar Plus' },
@@ -57,6 +56,9 @@ export const commonText = createDictionary({
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
   shortName: { 'en-us': 'Short Name' },
   shortNames: { 'en-us': 'Short Names' },
+  unknownWidget: { 'en-us': 'Unknown' },
+  unknownWidgetDescription: {
+    'en-us': 'This widget has been removed or is temporarily unavailable',
+  },
 });
-/* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

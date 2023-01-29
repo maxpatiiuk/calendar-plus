@@ -13,6 +13,7 @@ import { icon } from '../Atoms/Icon';
 import { Button } from '../Atoms';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 import { Synonyms } from '../Widgets/Synonyms';
+import { Unknown } from '../Widgets/Unknown';
 
 const widgets = {
   DoughnutChart,
@@ -22,7 +23,8 @@ const widgets = {
   QuickActions,
   Suggestions,
   VirtualCalendars,
-  Shortcuts: Synonyms,
+  Synonyms,
+  Unknown,
 } as const;
 
 export const widgetLabels: RR<keyof typeof widgets, string> = {
@@ -33,7 +35,8 @@ export const widgetLabels: RR<keyof typeof widgets, string> = {
   QuickActions: commonText('quickActions'),
   Suggestions: commonText('suggestions'),
   VirtualCalendars: commonText('virtualCalendars'),
-  Shortcuts: commonText('shortNames'),
+  Synonyms: commonText('shortNames'),
+  Unknown: commonText('unknownWidget'),
 };
 
 export function WidgetContent({
@@ -43,7 +46,7 @@ export function WidgetContent({
   readonly definition: WidgetDefinition['definition'];
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const WidgetComponent = widgets[type];
+  const WidgetComponent = widgets[type] ?? windget.Unknown;
   return (
     <div className="h-full p-4">
       <WidgetComponent

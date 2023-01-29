@@ -134,7 +134,7 @@ export const defaultLayout: RA<WidgetDefinition> = [
       '2xl': 1,
     },
     definition: {
-      type: 'Shortcuts',
+      type: 'Synonyms',
     },
   },
   {
