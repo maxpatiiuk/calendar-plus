@@ -12,6 +12,7 @@ import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { WidgetContainer } from '../Widgets/WidgetContainer';
 
 export type TimeChartMode = 'average' | 'total';
+const stickyColumn = 'sticky left-0 bg-white';
 
 export function TimeChart({
   label,
@@ -93,7 +94,7 @@ export function TimeChart({
         >
           <thead>
             <tr>
-              <th scope="col">
+              <th scope="col" className={stickyColumn}>
                 <span className="sr-only">{commonText('calendars')}</span>
               </th>
               {Array.from({ length: 24 }, (_, index) => (
@@ -110,7 +111,7 @@ export function TimeChart({
           <tbody>
             {calendars.map(({ id, summary, backgroundColor }) => (
               <tr key={id}>
-                <th className="text-left" scope="row">
+                <th className={`text-left ${stickyColumn}`} scope="row">
                   <CalendarIndicator color={backgroundColor} />
                   {summary}
                 </th>
@@ -134,7 +135,7 @@ export function TimeChart({
               </tr>
             ))}
             <tr>
-              <th className="text-left" scope="row">
+              <th className={`text-left ${stickyColumn}`} scope="row">
                 <CalendarIndicator color="transparent" />
                 {commonText('total')}
               </th>
