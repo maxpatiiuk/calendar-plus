@@ -4,7 +4,8 @@ import { useSimpleStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { IR, RA } from '../../utils/types';
 import { Button } from '../Atoms';
-import { formatNumber, HOUR, MINUTE } from '../Atoms/Internationalization';
+import { DAY, formatNumber, HOUR, MINUTE } from '../Atoms/Internationalization';
+import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { DayHours, EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
@@ -28,34 +29,10 @@ export function TimeChart({
     () =>
       durations === undefined || mode === undefined
         ? undefined
-        : getTimes(durations, mode),
+        : getTimes(durations, summedDurations, mode),
     [durations, mode]
   );
-  const rowMax = React.useMemo(
-    () =>
-      times === undefined
-        ? undefined
-        : Object.fromEntries(
-            Object.entries(times).map(([id, durations]) => [
-              id,
-              Math.max(...durations.hourly, 1),
-            ])
-          ),
-    [times]
-  );
 
-  const totals = React.useMemo(
-    () =>
-      times === undefined
-        ? undefined
-        : Array.from({ length: 24 }, (_, index) =>
-            calendars.reduce(
-              (total, { id }) => total + times[id].hourly[index],
-              0
-            )
-          ),
-    [times, calendars]
-  );
   return (
     <WidgetContainer
       buttons={
@@ -79,10 +56,7 @@ export function TimeChart({
       }
       header={label}
     >
-      {times === undefined ||
-      totals === undefined ||
-      rowMax === undefined ||
-      mode === undefined ? (
+      {times === undefined || mode === undefined ? (
         commonText('loading')
       ) : (
         <table
@@ -94,10 +68,10 @@ export function TimeChart({
         >
           <thead>
             <tr>
-              <th scope="col" className={stickyColumn}>
+              <th className={stickyColumn} scope="col">
                 <span className="sr-only">{commonText('calendars')}</span>
               </th>
-              {Array.from({ length: 24 }, (_, index) => (
+              {Array.from({ length: DAY / HOUR }, (_, index) => (
                 <th className="justify-center" key={index} scope="col">
                   {/* FIXME: display AM/PM when appropriate */}
                   {index}
@@ -109,47 +83,14 @@ export function TimeChart({
             </tr>
           </thead>
           <tbody>
-            {calendars.map(({ id, summary, backgroundColor }) => (
-              <tr key={id}>
-                <th className={`text-left ${stickyColumn}`} scope="row">
-                  <CalendarIndicator color={backgroundColor} />
-                  {summary}
-                </th>
-                {Array.from({ length: 24 }, (_, index) => (
-                  <td
-                    className="bg-[color:var(--color)]"
-                    key={index}
-                    style={
-                      {
-                        '--color': `${backgroundColor}${getOpacity(
-                          times[id].hourly[index],
-                          rowMax[id]
-                        )}`,
-                      } as React.CSSProperties
-                    }
-                  >
-                    {number(times[id].hourly[index])}
-                  </td>
-                ))}
-                <td>{number(times[id].total)}</td>
-              </tr>
+            {calendars.map((calendar) => (
+              <Row
+                calendar={calendar}
+                key={calendar.id}
+                times={times[calendar.id]}
+              />
             ))}
-            <tr>
-              <th className={`text-left ${stickyColumn}`} scope="row">
-                <CalendarIndicator color="transparent" />
-                {commonText('total')}
-              </th>
-              {totals.map((total, index) => (
-                <td key={index}>{number(total)}</td>
-              ))}
-              <td>
-                {number(
-                  totals
-                    .map((total) => total)
-                    .reduce((sum, total) => sum + total, 0)
-                )}
-              </td>
-            </tr>
+            <TotalsRow times={times} />
           </tbody>
         </table>
       )}
@@ -157,17 +98,19 @@ export function TimeChart({
   );
 }
 
-const number = (number: number) => formatNumber(Math.round(number));
-
 /**
  * Sum durations for the current period
  */
-const getTimes = (durations: EventsStore, mode: TimeChartMode): IR<DayHours> =>
+const getTimes = (
+  durations: EventsStore,
+  key: string | typeof summedDurations,
+  mode: TimeChartMode
+): IR<DayHours> =>
   Object.fromEntries(
     Object.entries(durations).map(([id, durations]) => [
       id,
       summedTimes(
-        Object.values(durations[summedDurations]),
+        Object.values(durations[key]),
         mode === 'total' ? toTotalHours : toAverageMinutes
       ),
     ])
@@ -184,15 +127,76 @@ const summedTimes = (
   aggregate: (numbers: RA<number>) => number
 ): DayHours => ({
   total: aggregate(durations.map(({ total }) => total)),
-  hourly: Array.from({ length: 24 }, (_, index) =>
+  hourly: Array.from({ length: DAY / HOUR }, (_, index) =>
     aggregate(durations.map(({ hourly }) => hourly[index]))
   ),
 });
+
+function Row({
+  calendar: { id, summary, backgroundColor },
+  times: { hourly, total },
+}: {
+  readonly calendar: CalendarListEntry;
+  readonly times: DayHours;
+}): JSX.Element {
+  const max = Math.max(...hourly, 1);
+  return (
+    <tr key={id}>
+      <th className={`text-left ${stickyColumn}`} scope="row">
+        <CalendarIndicator color={backgroundColor} />
+        {summary}
+      </th>
+      {Array.from({ length: DAY / HOUR }, (_, index) => (
+        <td
+          className="bg-[color:var(--color)]"
+          key={index}
+          style={
+            {
+              '--color': `${backgroundColor}${getOpacity(hourly[index], max)}`,
+            } as React.CSSProperties
+          }
+        >
+          {number(hourly[index])}
+        </td>
+      ))}
+      <td>{number(total)}</td>
+    </tr>
+  );
+}
+
+const number = (number: number): string => formatNumber(Math.round(number));
 
 const getOpacity = (value: number, max: number): string =>
   Math.floor((value / max) * (2 ** 8 - 1))
     .toString(16)
     .padStart(2, '0');
+
+function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
+  const calendars = React.useContext(CalendarsContext)!;
+  const totals = React.useMemo(
+    () =>
+      Array.from({ length: DAY / HOUR }, (_, index) =>
+        calendars.reduce((total, { id }) => total + times[id].hourly[index], 0)
+      ),
+    [times, calendars]
+  );
+  return (
+    <tr>
+      <th className={`text-left ${stickyColumn}`} scope="row">
+        <CalendarIndicator color="transparent" />
+        {commonText('total')}
+      </th>
+      {totals.map((total, index) => (
+        <td key={index}>{number(total)}</td>
+      ))}
+      <td>
+        {number(
+          totals.map((total) => total).reduce((sum, total) => sum + total, 0)
+        )}
+      </td>
+    </tr>
+  );
+}
 
 export const exportsForTests = {
   getTimes,
