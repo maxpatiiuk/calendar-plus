@@ -4,7 +4,7 @@ import { commonText } from '../../localization/common';
 import type { GetSet, RA } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button } from '../Atoms';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
 import { CalendarList, VirtualCalendarsList } from '../Molecules/CalendarList';
@@ -33,7 +33,7 @@ export function GoalsEditor({
               title={commonText('remove')}
               onClick={(): void => setGoals(removeItem(goals, index))}
             >
-              {icon.trash}
+              {icons.trash}
             </Button.Red>
             <CalendarList
               calendars={calendars}

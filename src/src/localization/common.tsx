@@ -72,5 +72,11 @@ export const commonText = createDictionary({
   averageMinutes: {
     'en-us': 'Average Minutes',
   },
+  expand: {
+    'en-us': 'Expand',
+  },
+  collapse: {
+    'en-us': 'Collapse',
+  },
 });
 /* eslint-enable @typescript-eslint/naming-convention */

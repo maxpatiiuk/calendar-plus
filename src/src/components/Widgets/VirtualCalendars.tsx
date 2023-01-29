@@ -8,7 +8,7 @@ import type { RA, RR } from '../../utils/types';
 import { filterArray } from '../../utils/types';
 import { group, removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input, Select } from '../Atoms';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
@@ -219,7 +219,7 @@ function EditableCalendarList({
                     handleChange(removeItem(virtualCalendars, index))
                   }
                 >
-                  {icon.trash}
+                  {icons.trash}
                 </Button.Red>
               </td>
               <td>

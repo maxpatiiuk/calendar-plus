@@ -1,3 +1,4 @@
+import _default from 'chart.js/dist/plugins/plugin.tooltip';
 import React from 'react';
 
 import { useSimpleStorage } from '../../hooks/useStorage';
@@ -31,7 +32,7 @@ export function TimeChart({
     () =>
       durations === undefined || mode === undefined
         ? undefined
-        : getTimes(durations, summedDurations, mode),
+        : getTimes(durations, mode),
     [durations, mode]
   );
 
@@ -58,7 +59,7 @@ export function TimeChart({
       }
       header={label}
     >
-      {times === undefined || mode === undefined ? (
+      {durations === undefined || times === undefined || mode === undefined ? (
         commonText('loading')
       ) : (
         <table
@@ -86,8 +87,9 @@ export function TimeChart({
           </thead>
           <tbody>
             {calendars.map((calendar) => (
-              <Row
+              <CalendarRow
                 calendar={calendar}
+                durations={durations[calendar.id]}
                 key={calendar.id}
                 times={times[calendar.id]}
               />
@@ -103,19 +105,18 @@ export function TimeChart({
 /**
  * Sum durations for the current period
  */
-const getTimes = (
-  durations: EventsStore,
-  key: string | typeof summedDurations,
-  mode: TimeChartMode
-): IR<DayHours> =>
+const getTimes = (durations: EventsStore, mode: TimeChartMode): IR<DayHours> =>
   Object.fromEntries(
     Object.entries(durations).map(([id, durations]) => [
       id,
-      summedTimes(
-        Object.values(durations[key]),
-        mode === 'total' ? toTotalHours : toAverageMinutes
-      ),
+      getRowData(durations[summedDurations], mode),
     ])
+  );
+
+const getRowData = (data: IR<DayHours>, mode: TimeChartMode): DayHours =>
+  summedTimes(
+    Object.values(data),
+    mode === 'total' ? toTotalHours : toAverageMinutes
   );
 
 const toTotalHours = (durations: RA<number>): number =>
@@ -134,23 +135,80 @@ const summedTimes = (
   ),
 });
 
-function Row({
-  calendar: { id, summary, backgroundColor },
-  times: { hourly, total },
+function CalendarRow({
+  calendar,
+  times,
+  durations,
 }: {
   readonly calendar: CalendarListEntry;
   readonly times: DayHours;
+  readonly durations: EventsStore[string];
+}): JSX.Element {
+  const [isCollapsed, setIsCollapsed] = React.useState(true);
+  return (
+    <>
+      <Row
+        backgroundColor={calendar.backgroundColor}
+        collapseButton={
+          <>
+            <Button.Icon
+              icon={isCollapsed ? 'chevronRight' : 'chevronDown'}
+              title={
+                isCollapsed ? commonText('expand') : commonText('collapse')
+              }
+              onClick={(): void => setIsCollapsed(!isCollapsed)}
+            />
+            <CalendarIndicator color={calendar.backgroundColor} />
+          </>
+        }
+        label={calendar.summary}
+        times={times}
+      />
+      {!isCollapsed && (
+        <VirtualCalendarRows calendar={calendar} durations={durations} />
+      )}
+    </>
+  );
+}
+
+function Row({
+  label,
+  backgroundColor,
+  times: { hourly, total },
+  collapseButton,
+}: {
+  readonly label: string;
+  readonly backgroundColor: string;
+  readonly times: DayHours;
+  readonly collapseButton?: JSX.Element;
 }): JSX.Element {
   const max = Math.max(...hourly, 1);
   return (
-    <tr key={id}>
-      <th className={`text-left ${stickyColumn}`} scope="row">
-        <CalendarIndicator color={backgroundColor} />
-        {summary}
+    <tr>
+      <th
+        className={`text-left ${
+          collapseButton === undefined ? darkened : ''
+        } ${stickyColumn}`}
+        scope="row"
+      >
+        {collapseButton ?? (
+          // Render invisible button to reserve the space
+          <>
+            <Button.Icon
+              aria-hidden
+              className="invisible"
+              icon="chevronRight"
+              title="hidden"
+              onClick={console.error}
+            />
+            <CalendarIndicator color={backgroundColor} />
+          </>
+        )}
+        {label}
       </th>
       {Array.from({ length: DAY / HOUR }, (_, index) => (
         <td
-          className="bg-[color:var(--color)]"
+          className={` bg-[color:var(--color)]`}
           key={index}
           style={
             {
@@ -161,7 +219,9 @@ function Row({
           {number(hourly[index])}
         </td>
       ))}
-      <td className={darkened}>{number(total)}</td>
+      <td className={collapseButton === undefined ? extraDarkened : darkened}>
+        {number(total)}
+      </td>
     </tr>
   );
 }
@@ -199,6 +259,48 @@ function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
         )}
       </td>
     </tr>
+  );
+}
+
+function VirtualCalendarRows({
+  calendar,
+  durations,
+}: {
+  readonly calendar: CalendarListEntry;
+  readonly durations: EventsStore[string];
+}): JSX.Element {
+  return (
+    <>
+      {Object.entries(durations).map(([virtualCalendar, row]) => (
+        <VirtualCalendarRow
+          backgroundColor={calendar.backgroundColor}
+          key={virtualCalendar}
+          label={virtualCalendar || calendar.summary}
+          row={row}
+        />
+      ))}
+    </>
+  );
+}
+
+function VirtualCalendarRow({
+  label,
+  backgroundColor,
+  row,
+}: {
+  readonly label: string;
+  readonly backgroundColor: string;
+  readonly row: IR<DayHours>;
+}): JSX.Element {
+  const [mode = 'total'] = useSimpleStorage('timeChartMode', 'total');
+  const times = React.useMemo(() => getRowData(row, mode), [row, mode]);
+  return (
+    <Row
+      backgroundColor={backgroundColor}
+      collapseButton={undefined}
+      label={label}
+      times={times}
+    />
   );
 }
 

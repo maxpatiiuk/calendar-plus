@@ -3,7 +3,7 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import type { RR } from '../../utils/types';
 import { Button } from '../Atoms';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import { DoughnutChart } from '../Charts/DoughnutChart';
 import { StackedChart } from '../Charts/StackedChart';
 import type { EventsStore } from '../EventsStore';
@@ -74,7 +74,7 @@ export function AddWidgetButton({
       title={commonText('addWidget')}
       onClick={handleClick}
     >
-      {icon.plus}
+      {icons.plus}
     </Button.Blue>
   );
 }
