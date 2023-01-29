@@ -36,6 +36,7 @@ export const commonText = createDictionary({
   hours: { 'en-us': 'hours' },
   minutes: { 'en-us': 'minutes' },
   calendar: { 'en-us': 'Calendar' },
+  calendars: { 'en-us': 'Calendars' },
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
@@ -60,5 +61,7 @@ export const commonText = createDictionary({
   unknownWidgetDescription: {
     'en-us': 'This widget has been removed or is temporarily unavailable',
   },
+  timeChart: { 'en-us': 'Time Chart' },
+  total: { 'en-us': 'Total' },
 });
 /* eslint-enable @typescript-eslint/naming-convention */

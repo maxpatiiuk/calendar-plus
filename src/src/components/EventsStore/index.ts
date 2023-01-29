@@ -161,7 +161,7 @@ export function useEvents(
 /** This is the maximum allowed by the API */
 const maxResults = 2500;
 
-const blankHours = (): WritableDayHours => ({
+export const blankHours = (): WritableDayHours => ({
   total: 0,
   // eslint-disable-next-line functional/prefer-readonly-type
   hourly: Array.from({ length: 24 }).fill(0) as number[],

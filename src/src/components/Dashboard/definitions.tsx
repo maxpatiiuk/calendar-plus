@@ -55,6 +55,27 @@ export const defaultLayout: RA<WidgetDefinition> = [
   },
   {
     colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 3,
+      lg: 6,
+      xl: 6,
+      '2xl': 6,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 1,
+      xl: 1,
+      '2xl': 1,
+    },
+    definition: {
+      type: 'TimeChart',
+    },
+  },
+  {
+    colSpan: {
       '2xl': 2,
       lg: 2,
       md: 3,

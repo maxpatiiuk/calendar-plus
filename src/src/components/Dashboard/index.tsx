@@ -28,7 +28,8 @@ export type WidgetDefinition = {
     | State<'StackedChart'>
     | State<'Suggestions'>
     | State<'VirtualCalendars'>
-    | State<'Synonyms'>;
+    | State<'Synonyms'>
+    | State<'TimeChart'>;
 };
 
 const widgetClassName = `

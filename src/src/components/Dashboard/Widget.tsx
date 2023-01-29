@@ -1,19 +1,21 @@
-import { EventsStore } from '../EventsStore';
 import React from 'react';
-import type { WidgetDefinition } from './index';
-import { GoalsWidget } from '../Goals/Widget';
-import { Suggestions } from '../Widgets/Suggestions';
-import { QuickActions } from '../Widgets/QuickActions';
-import { DataExport } from '../Widgets/DataExport';
-import { StackedChart } from '../Charts/StackedChart';
-import { DoughnutChart } from '../Charts/DoughnutChart';
+
 import { commonText } from '../../localization/common';
-import { RR } from '../../utils/types';
-import { icon } from '../Atoms/Icon';
+import type { RR } from '../../utils/types';
 import { Button } from '../Atoms';
-import { VirtualCalendars } from '../Widgets/VirtualCalendars';
+import { icon } from '../Atoms/Icon';
+import { DoughnutChart } from '../Charts/DoughnutChart';
+import { StackedChart } from '../Charts/StackedChart';
+import type { EventsStore } from '../EventsStore';
+import { GoalsWidget } from '../Goals/Widget';
+import { DataExport } from '../Widgets/DataExport';
+import { QuickActions } from '../Widgets/QuickActions';
+import { Suggestions } from '../Widgets/Suggestions';
 import { Synonyms } from '../Widgets/Synonyms';
+import { TimeChart } from '../Charts/TimeChart';
 import { Unknown } from '../Widgets/Unknown';
+import { VirtualCalendars } from '../Widgets/VirtualCalendars';
+import type { WidgetDefinition } from './index';
 
 const widgets = {
   DoughnutChart,
@@ -25,6 +27,7 @@ const widgets = {
   VirtualCalendars,
   Synonyms,
   Unknown,
+  TimeChart,
 } as const;
 
 export const widgetLabels: RR<keyof typeof widgets, string> = {
@@ -37,6 +40,7 @@ export const widgetLabels: RR<keyof typeof widgets, string> = {
   VirtualCalendars: commonText('virtualCalendars'),
   Synonyms: commonText('shortNames'),
   Unknown: commonText('unknownWidget'),
+  TimeChart: commonText('timeChart'),
 };
 
 export function WidgetContent({
@@ -46,7 +50,7 @@ export function WidgetContent({
   readonly definition: WidgetDefinition['definition'];
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const WidgetComponent = widgets[type] ?? windget.Unknown;
+  const WidgetComponent = widgets[type] ?? widgets.Unknown;
   return (
     <div className="h-full p-4">
       <WidgetComponent
@@ -65,10 +69,10 @@ export function AddWidgetButton({
 }): JSX.Element {
   return (
     <Button.Blue
-      onClick={handleClick}
+      aria-label={commonText('addWidget')}
       className="h-full justify-center"
       title={commonText('addWidget')}
-      aria-label={commonText('addWidget')}
+      onClick={handleClick}
     >
       {icon.plus}
     </Button.Blue>
