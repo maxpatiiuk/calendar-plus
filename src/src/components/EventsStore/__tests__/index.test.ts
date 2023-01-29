@@ -10,6 +10,7 @@ import {
   isMidnight,
   summedDurations,
 } from '../index';
+import { dayHours } from './hourUtils';
 
 const {
   calculateBounds,
@@ -20,11 +21,6 @@ const {
 
 const timeMin = new Date('2022-10-09T05:00:00.000Z');
 const timeMax = new Date('2022-10-16T05:00:00.000Z');
-
-const dayHours = (...hourly: RA<number>): WritableDayHours => ({
-  total: hourly.reduce((total, minutes) => total + minutes, 0),
-  hourly: Array.from({ length: 24 }, (_, index) => hourly[index] ?? 0),
-});
 
 theories(calculateBounds, {
   'empty cache': {

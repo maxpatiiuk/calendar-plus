@@ -152,3 +152,8 @@ const getOpacity = (value: number, max: number): string =>
   Math.floor((value / max) * (2 ** 8 - 1))
     .toString(16)
     .padStart(2, '0');
+
+export const exportsForTests = {
+  getTimes,
+  getOpacity,
+};
