@@ -14,6 +14,8 @@ import { WidgetContainer } from '../Widgets/WidgetContainer';
 
 export type TimeChartMode = 'average' | 'total';
 const stickyColumn = 'sticky left-0 bg-white';
+const darkened = 'bg-gray-300';
+const extraDarkened = 'bg-gray-400';
 
 export function TimeChart({
   label,
@@ -77,7 +79,7 @@ export function TimeChart({
                   {index}
                 </th>
               ))}
-              <th className="justify-center" scope="col">
+              <th className={`justify-center ${darkened}`} scope="col">
                 {commonText('total')}
               </th>
             </tr>
@@ -159,7 +161,7 @@ function Row({
           {number(hourly[index])}
         </td>
       ))}
-      <td>{number(total)}</td>
+      <td className={darkened}>{number(total)}</td>
     </tr>
   );
 }
@@ -182,14 +184,16 @@ function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
   );
   return (
     <tr>
-      <th className={`text-left ${stickyColumn}`} scope="row">
+      <th className={`text-left ${darkened} ${stickyColumn}`} scope="row">
         <CalendarIndicator color="transparent" />
         {commonText('total')}
       </th>
       {totals.map((total, index) => (
-        <td key={index}>{number(total)}</td>
+        <td className={darkened} key={index}>
+          {number(total)}
+        </td>
       ))}
-      <td>
+      <td className={extraDarkened}>
         {number(
           totals.map((total) => total).reduce((sum, total) => sum + total, 0)
         )}
