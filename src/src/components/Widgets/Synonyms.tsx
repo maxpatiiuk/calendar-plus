@@ -4,7 +4,7 @@ import { useSafeStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input } from '../Atoms';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
 import { CalendarList } from '../Molecules/CalendarList';
@@ -47,7 +47,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
                           setSynonyms(removeItem(synonyms, index))
                         }
                       >
-                        {icon.trash}
+                        {icons.trash}
                       </Button.Red>
                     ) : (
                       <CalendarIndicator color={calendar.backgroundColor} />

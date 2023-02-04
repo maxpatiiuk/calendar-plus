@@ -2,7 +2,6 @@ import { createDictionary } from './utils';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 
-/* eslint-disable react/jsx-no-literals */
 /* eslint-disable @typescript-eslint/naming-convention */
 export const commonText = createDictionary({
   calendarPlus: { 'en-us': 'Calendar Plus' },
@@ -37,6 +36,7 @@ export const commonText = createDictionary({
   hours: { 'en-us': 'hours' },
   minutes: { 'en-us': 'minutes' },
   calendar: { 'en-us': 'Calendar' },
+  calendars: { 'en-us': 'Calendars' },
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
   exportToCsv: { 'en-us': 'Export to CSV' },
   exportToTsv: { 'en-us': 'Export to TSV' },
@@ -57,6 +57,26 @@ export const commonText = createDictionary({
   noVirtualCalendars: { 'en-us': 'No virtual calendars configured' },
   shortName: { 'en-us': 'Short Name' },
   shortNames: { 'en-us': 'Short Names' },
+  unknownWidget: { 'en-us': 'Unknown' },
+  unknownWidgetDescription: {
+    'en-us': 'This widget has been removed or is temporarily unavailable',
+  },
+  timeChart: { 'en-us': 'Time Chart' },
+  total: { 'en-us': 'Total' },
+  viewMode: {
+    'en-us': 'View Mode',
+  },
+  totalHours: {
+    'en-us': 'Total Hours',
+  },
+  averageMinutes: {
+    'en-us': 'Average Minutes',
+  },
+  expand: {
+    'en-us': 'Expand',
+  },
+  collapse: {
+    'en-us': 'Collapse',
+  },
 });
-/* eslint-enable react/jsx-no-literals */
 /* eslint-enable @typescript-eslint/naming-convention */

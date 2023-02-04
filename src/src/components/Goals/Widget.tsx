@@ -111,7 +111,7 @@ function GoalComponent({
             Object.values(durations)
           )
         : Object.values(currentDurations?.[virtualCalendar] ?? {});
-    return durations.reduce((total, value) => total + (value ?? 0), 0);
+    return durations.reduce((total, value) => total + value.total, 0);
   }, [currentDurations, virtualCalendar]);
   return typeof calendar === 'object' ? (
     <Gage

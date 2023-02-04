@@ -118,7 +118,7 @@ function useDataSets(
                   label || (length === 1 ? summary : commonText('other'))
                 );
                 return Object.values(durations).reduce(
-                  (total, durations) => total + durations,
+                  (total, durations) => total + durations.total,
                   0
                 );
               }
@@ -129,7 +129,7 @@ function useDataSets(
         ? []
         : calendars?.map(({ id }) =>
             Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
-              (total, durations) => total + durations,
+              (total, durations) => total + durations.total,
               0
             )
           ) ?? [];

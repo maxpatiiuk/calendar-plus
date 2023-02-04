@@ -8,7 +8,7 @@ import type { RA, RR } from '../../utils/types';
 import { filterArray } from '../../utils/types';
 import { group, removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input, Select } from '../Atoms';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CalendarIndicator } from '../Molecules/CalendarIndicator';
@@ -122,20 +122,35 @@ function Calendars({
   );
 }
 
+const thClassName = 'bg-white top-0 sticky';
+
 function Table({
   children,
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
   return (
-    <table className="text-left">
+    <table
+      className={`
+        grid-table max-h-[50vh] grid-cols-[min-content_auto_auto_auto_auto]
+        overflow-auto text-left [&_:is(th,td)]:p-1
+      `}
+    >
       <thead>
         <tr>
-          <td />
-          <th scope="col">{commonText('sourceCalendar')}</th>
-          <th scope="col">{commonText('matchRule')}</th>
-          <th scope="col">{commonText('value')}</th>
-          <th scope="col">{commonText('category')}</th>
+          <td className={thClassName} />
+          <th className={thClassName} scope="col">
+            {commonText('sourceCalendar')}
+          </th>
+          <th className={thClassName} scope="col">
+            {commonText('matchRule')}
+          </th>
+          <th className={thClassName} scope="col">
+            {commonText('value')}
+          </th>
+          <th className={thClassName} scope="col">
+            {commonText('category')}
+          </th>
         </tr>
       </thead>
       <tbody>{children}</tbody>
@@ -204,7 +219,7 @@ function EditableCalendarList({
                     handleChange(removeItem(virtualCalendars, index))
                   }
                 >
-                  {icon.trash}
+                  {icons.trash}
                 </Button.Red>
               </td>
               <td>
@@ -230,7 +245,7 @@ function EditableCalendarList({
                 </Select>
               </td>
               <td>
-                <div className="flex">
+                <div className="flex w-full">
                   {rule === 'regex' ? (
                     <RegexInput
                       value={value}
@@ -246,7 +261,7 @@ function EditableCalendarList({
                 </div>
               </td>
               <td>
-                <div className="flex">
+                <div className="flex w-full">
                   <Input.Text
                     list={id(calendar.id)}
                     placeholder={calendar.summary}

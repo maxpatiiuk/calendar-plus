@@ -1,4 +1,5 @@
 import { theories } from '../../../tests/utils';
+import type { RA, RR } from '../../../utils/types';
 import {
   countDaysBetween,
   dateToDateTime,
@@ -8,13 +9,13 @@ import {
   isMidnight,
   summedDurations,
 } from '../index';
+import { dayHours } from './hourUtils';
 
 const {
   calculateBounds,
   resolveEventDates,
   extractData,
   calculateEventDuration,
-  calculateInBetweenDurations,
 } = exportsForTests;
 
 const timeMin = new Date('2022-10-09T05:00:00.000Z');
@@ -31,10 +32,10 @@ theories(calculateBounds, {
         current: {
           a: {
             '': {
-              '2022-10-9': 1,
-              '2022-10-10': 1,
-              '2022-10-11': 2,
-              '2022-10-16': 1,
+              '2022-10-9': dayHours(1),
+              '2022-10-10': dayHours(1),
+              '2022-10-11': dayHours(1),
+              '2022-10-16': dayHours(1),
             },
           },
         },
@@ -238,35 +239,40 @@ theories(extractData, [
       {
         a: {
           '': {
-            '2022-10-8': 1,
-            '2022-10-9': 1,
-            '2022-10-10': 4,
-            '2022-10-11': 3,
-            '2022-10-12': 1,
+            '2022-10-8': dayHours(1),
+            '2022-10-9': dayHours(1),
+            // Previous are ignored
+            '2022-10-10': dayHours(1, 2, 3, 4),
+            '2022-10-11': dayHours(2, 3, 4, 5),
+            '2022-10-12': dayHours(3, 4, 5),
           },
         },
         b: {
           '': {
-            '2022-10-4': 4,
-            '2022-10-5': 5,
-            '2022-10-6': 2,
-            '2022-10-7': 1,
-            '2022-10-9': 1,
-            '2022-10-10': 4,
-            '2022-10-11': 0,
-            '2022-10-12': 1,
-            '2022-10-13': 8,
+            '2022-10-4': dayHours(4),
+            '2022-10-5': dayHours(5),
+            '2022-10-6': dayHours(2),
+            '2022-10-7': dayHours(1),
+            '2022-10-9': dayHours(2),
+            // Previous are ignored
+            '2022-10-10': dayHours(1, 2, 3, 4),
+            '2022-10-11': dayHours(),
+            '2022-10-12': dayHours(2, 3, 4),
+            // Following are ignored
+            '2022-10-13': dayHours(0),
           },
           'Some Category': {
-            '2022-10-5': 1,
-            '2022-10-6': 2,
-            '2022-10-7': 3,
-            '2022-10-8': 4,
-            '2022-10-9': 5,
-            '2022-10-10': 6,
-            '2022-10-11': 7,
-            '2022-10-12': 8,
-            '2022-10-13': 9,
+            '2022-10-5': dayHours(1),
+            '2022-10-6': dayHours(2),
+            '2022-10-7': dayHours(3),
+            '2022-10-8': dayHours(4),
+            '2022-10-9': dayHours(5),
+            // Previous are ignored
+            '2022-10-10': dayHours(6, 7, 2, 2),
+            '2022-10-11': dayHours(1, 5, 6, 2, 1, 2, 3),
+            '2022-10-12': dayHours(0, 1, 3, 5, 0, 1),
+            // Following are ignored
+            '2022-10-13': dayHours(9),
           },
         },
       },
@@ -288,81 +294,105 @@ theories(extractData, [
     out: {
       a: {
         '': {
-          '2022-10-10': 4,
-          '2022-10-11': 3,
-          '2022-10-12': 1,
+          '2022-10-10': dayHours(1, 2, 3, 4),
+          '2022-10-11': dayHours(2, 3, 4, 5),
+          '2022-10-12': dayHours(3, 4, 5),
         },
         [summedDurations]: {
-          '2022-10-10': 4,
-          '2022-10-11': 3,
-          '2022-10-12': 1,
+          '2022-10-10': dayHours(1, 2, 3, 4),
+          '2022-10-11': dayHours(2, 3, 4, 5),
+          '2022-10-12': dayHours(3, 4, 5),
         },
       },
       b: {
         '': {
-          '2022-10-10': 4,
-          '2022-10-11': 0,
-          '2022-10-12': 1,
+          '2022-10-10': dayHours(1, 2, 3, 4),
+          '2022-10-11': dayHours(),
+          '2022-10-12': dayHours(2, 3, 4),
         },
         'Some Category': {
-          '2022-10-10': 6,
-          '2022-10-11': 7,
-          '2022-10-12': 8,
+          '2022-10-10': dayHours(6, 7, 2, 2),
+          '2022-10-11': dayHours(1, 5, 6, 2, 1, 2, 3),
+          '2022-10-12': dayHours(0, 1, 3, 5, 0, 1),
         },
         [summedDurations]: {
-          '2022-10-10': 4 + 6,
-          '2022-10-11': 0 + 7,
-          '2022-10-12': 1 + 8,
+          '2022-10-10': dayHours(1 + 6, 2 + 7, 3 + 2, 4 + 2),
+          '2022-10-11': dayHours(1, 5, 6, 2, 1, 2, 3),
+          '2022-10-12': dayHours(2 + 0, 3 + 1, 4 + 3, 5, 0, 1),
         },
       },
     },
   },
 ]);
 
+const getHours = (hours: RR<number, number>): RA<number> =>
+  Array.from({ length: 24 }, (_, index) => hours[index]);
+
+const fullDay = Array.from({ length: 24 }).fill(60);
+
 theories(calculateEventDuration, [
+  {
+    name: 'handles sub-hour event',
+    in: [
+      new Date('2022-10-11T11:15:00-05:00'),
+      new Date('2022-10-11T11:45:00-05:00'),
+    ],
+    out: { '2022-10-11': getHours({ 11: 30 }) },
+  },
   {
     name: 'handles case when both dates are on the same day',
     in: [
       new Date('2022-10-11T11:00:00-05:00'),
-      new Date('2022-10-11T11:30:00-05:00'),
+      new Date('2022-10-11T12:30:00-05:00'),
     ],
-    out: [['2022-10-11', 30]],
+    out: { '2022-10-11': getHours({ 11: 60, 12: 30 }) },
   },
   {
-    name: 'calls calculateInBetweenDurations',
+    name: 'handles event than goes to midnight',
     in: [
-      new Date('2022-10-11T11:00:00-05:00'),
+      new Date('2022-10-11T21:15:00-05:00'),
       new Date('2022-10-12T00:00:00-05:00'),
     ],
-    out: [['2022-10-11', 780]],
+    out: {
+      '2022-10-11': getHours({
+        21: 45,
+        22: 60,
+        23: 60,
+      }),
+    },
   },
-]);
-
-theories(calculateInBetweenDurations, [
   {
+    name: 'handles event that starts at midnight',
     in: [
-      new Date('2022-10-11T11:00:00-05:00'),
-      new Date('2022-10-12T00:00:00-05:00'),
+      new Date('2022-10-11T00:00:00-05:00'),
+      new Date('2022-10-11T02:15:00-05:00'),
     ],
-    out: [['2022-10-11', 780]],
+    out: {
+      '2022-10-11': getHours({
+        0: 60,
+        1: 60,
+        2: 15,
+      }),
+    },
   },
   {
+    name: 'Handles multi day event',
     in: [
-      new Date('2022-10-11T11:00:00-05:00'),
+      new Date('2022-10-11T23:15:00-05:00'),
       new Date('2022-10-21T01:30:00-05:00'),
     ],
-    out: [
-      ['2022-10-11', 780],
-      ['2022-10-12', 1440],
-      ['2022-10-13', 1440],
-      ['2022-10-14', 1440],
-      ['2022-10-15', 1440],
-      ['2022-10-16', 1440],
-      ['2022-10-17', 1440],
-      ['2022-10-18', 1440],
-      ['2022-10-19', 1440],
-      ['2022-10-20', 1440],
-      ['2022-10-21', 90],
-    ],
+    out: {
+      '2022-10-11': getHours({ 23: 45 }),
+      '2022-10-12': fullDay,
+      '2022-10-13': fullDay,
+      '2022-10-14': fullDay,
+      '2022-10-15': fullDay,
+      '2022-10-16': fullDay,
+      '2022-10-17': fullDay,
+      '2022-10-18': fullDay,
+      '2022-10-19': fullDay,
+      '2022-10-20': fullDay,
+      '2022-10-21': getHours({ 0: 60, 1: 30 }),
+    },
   },
 ]);

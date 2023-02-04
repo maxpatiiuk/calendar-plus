@@ -2,7 +2,7 @@ import { BreakPoint } from './useBreakpoint';
 import { WidgetDefinition } from './index';
 import { widgetGridColumnSizes } from './definitions';
 import { commonText } from '../../localization/common';
-import { icon } from '../Atoms/Icon';
+import { icons } from '../Atoms/Icon';
 import React from 'react';
 import { WidgetEditor } from './WidgetEditor';
 
@@ -45,7 +45,7 @@ export function WidgetEditorOverlay({
           aria-label={commonText('decreaseWidth')}
           className={`${resizeButton} -left-1`}
         >
-          {icon.minus}
+          {icons.minus}
         </button>
         <button
           type="button"
@@ -63,7 +63,7 @@ export function WidgetEditorOverlay({
           aria-label={commonText('increaseWidth')}
           className={`${resizeButton} -right-1`}
         >
-          {icon.plus}
+          {icons.plus}
         </button>
       </div>
       <div className="pointer-events-none absolute flex h-full w-full flex-col items-center justify-between">
@@ -83,7 +83,7 @@ export function WidgetEditorOverlay({
           aria-label={commonText('decreaseHeight')}
           className={`${resizeButton} -top-1`}
         >
-          {icon.minus}
+          {icons.minus}
         </button>
         <button
           type="button"
@@ -100,7 +100,7 @@ export function WidgetEditorOverlay({
           aria-label={commonText('increaseHeight')}
           className={`${resizeButton} -bottom-1`}
         >
-          {icon.plus}
+          {icons.plus}
         </button>
       </div>
       <div className="absolute -top-1 -right-1">
@@ -111,7 +111,7 @@ export function WidgetEditorOverlay({
           aria-label={commonText('remove')}
           className={`${buttonCommon} bg-red-600 hover:bg-red-700`}
         >
-          {icon.trash}
+          {icons.trash}
         </button>
       </div>
       <WidgetEditor

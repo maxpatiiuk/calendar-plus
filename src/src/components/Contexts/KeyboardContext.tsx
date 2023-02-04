@@ -45,6 +45,7 @@ export function KeyboardListener({
   React.useEffect(
     () =>
       listen(document, 'keydown', (event) => {
+        if (event.key === undefined) return;
         const key =
           event.key.length === 1 ? event.key.toUpperCase() : event.key;
         if (modifierKeyNames.has(event.key)) return;
@@ -59,6 +60,7 @@ export function KeyboardListener({
   React.useEffect(
     () =>
       listen(document, 'keyup', (event) => {
+        if (event.key === undefined) return;
         const pressedKey =
           event.key.length === 1 ? event.key.toUpperCase() : event.key;
         pressedKeys.current = pressedKeys.current

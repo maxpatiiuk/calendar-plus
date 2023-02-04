@@ -1,5 +1,9 @@
 import React from 'react';
-import { TagProps, wrap } from './wrapper';
+
+import type { IconProps } from './Icon';
+import { icons } from './Icon';
+import type { TagProps } from './wrapper';
+import { wrap } from './wrapper';
 
 export const H2 = wrap('H2', 'h2', 'm-0 flex items-center gap-2');
 export const H3 = wrap('H2', 'h2', 'm-0 flex items-center gap-2');
@@ -45,6 +49,19 @@ export const Button = {
     'Button.Blue',
     `border-red-600 bg-red-600 hover:bg-red-700 active:bg-red-500 text-white`
   ),
+  Icon: wrap<
+    'button',
+    IconProps & {
+      readonly onClick:
+        | ((event: React.MouseEvent<HTMLButtonElement>) => void)
+        | undefined;
+    }
+  >('Button.Icon', 'button', `icon link rounded`, ({ icon, ...props }) => ({
+    ...props,
+    'aria-label': props['aria-label'] ?? props.title,
+    type: 'button',
+    children: icons[icon],
+  })),
 };
 
 export const Label = {
@@ -58,7 +75,7 @@ export const Input = {
     value,
     onValueChange: handleValueChange,
     ...props
-  }: Omit<TagProps<'input'>, 'type' | 'readOnly' | 'children'> & {
+  }: Omit<TagProps<'input'>, 'children' | 'readOnly' | 'type'> & {
     readonly isReadOnly?: boolean;
     readonly onValueChange?: (value: number) => void;
   }): JSX.Element {
@@ -67,10 +84,10 @@ export const Input = {
     return (
       <input
         {...props}
-        value={hasValue ? value : ''}
         className={`w-full ${googleButton} ${className ?? ''}`}
-        type="number"
         readOnly={isReadOnly}
+        type="number"
+        value={hasValue ? value : ''}
         onChange={(event): void => {
           const rawHumber = Number.parseInt(
             (event.target as HTMLInputElement).value
