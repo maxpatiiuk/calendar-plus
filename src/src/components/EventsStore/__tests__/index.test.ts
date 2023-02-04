@@ -1,6 +1,5 @@
 import { theories } from '../../../tests/utils';
 import type { RA, RR } from '../../../utils/types';
-import type { WritableDayHours } from '../index';
 import {
   countDaysBetween,
   dateToDateTime,

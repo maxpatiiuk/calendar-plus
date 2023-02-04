@@ -1,5 +1,5 @@
-import { RA } from '../../../utils/types';
-import { WritableDayHours } from '../index';
+import type { RA } from '../../../utils/types';
+import type { WritableDayHours } from '../index';
 
 export const dayHours = (...hourly: RA<number>): WritableDayHours => ({
   total: hourly.reduce((total, minutes) => total + minutes, 0),

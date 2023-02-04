@@ -76,7 +76,7 @@ export function TimeChart({
               </th>
               {Array.from({ length: DAY / HOUR }, (_, index) => (
                 <th className="justify-center" key={index} scope="col">
-                  {/* FIXME: display AM/PM when appropriate */}
+                  {/* FEATURE: display AM/PM when appropriate */}
                   {index}
                 </th>
               ))}
