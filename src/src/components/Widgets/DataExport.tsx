@@ -37,6 +37,22 @@ export function DataExport({
     downloadFile(`calendar-plus.${type}`, data).catch(console.error);
   }
 
+  function createExportToJson() {
+    if (durations === undefined || calendars === undefined) return;
+    const data = [
+      [commonText('calendar'), commonText('date'), commonText('duration')],
+      ...calendars.flatMap(({ id, summary }) =>
+        Object.entries(durations[id] ?? {}).map(([date, duration]) => [
+          summary,
+          date,
+          duration,
+        ])
+      ),
+    ]
+    const jsonString = JSON.stringify(data);
+    downloadFile(`calendar-plus.json`, jsonString).catch(console.error);
+  }
+
   return (
     <WidgetContainer header={label}>
       <div className="flex flex-wrap gap-2">
@@ -51,6 +67,12 @@ export function DataExport({
           onClick={() => createExport('tsv')}
         >
           {commonText('exportToTsv')}
+        </Button.White>
+        <Button.White
+          disabled={durations === undefined || calendars === undefined}
+          onClick={() => createExportToJson()}
+        >
+          {'Export To Json'}
         </Button.White>
       </div>
     </WidgetContainer>
