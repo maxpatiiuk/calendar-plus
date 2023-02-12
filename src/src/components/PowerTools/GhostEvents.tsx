@@ -6,12 +6,12 @@ import React from 'react';
 
 import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
-import { usePref } from '../Preferences/usePref';
 import { f } from '../../utils/functools';
+import { usePref } from '../Preferences/usePref';
 
 const trimmedIdLength = 16;
 const ghostEventStyle = `{
-  opacity: 0.3;
+  opacity: var(--event-ghosting-opacity);
   pointer-events: none;
 }`;
 
@@ -19,6 +19,14 @@ export function GhostEvents(): null {
   const [ghostEvents = [], setGhostEvents] = useSafeStorage('ghostEvents', []);
   const styleRef = React.useRef<HTMLStyleElement | undefined>(undefined);
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
+  const [ghostEventOpacity] = usePref('feature', 'ghostEventOpacity');
+
+  React.useEffect(() => {
+    document.body.style.setProperty(
+      '--event-ghosting-opacity',
+      (ghostEventOpacity / 100).toString()
+    );
+  }, [ghostEventOpacity]);
 
   React.useEffect(() => {
     styleRef.current = document.createElement('style');

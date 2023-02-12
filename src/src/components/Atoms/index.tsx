@@ -152,6 +152,27 @@ export const Input = {
       readOnly: isReadOnly,
     })
   ),
+  Generic: wrap<
+    'input',
+    {
+      readonly onValueChange?: (value: string) => void;
+      readonly readOnly?: never;
+      readonly isReadOnly?: boolean;
+      readonly children?: undefined;
+    }
+  >(
+    'Input.Generic',
+    'input',
+    `w-full ${googleButton}`,
+    ({ onValueChange, isReadOnly, ...props }) => ({
+      ...props,
+      onChange(event): void {
+        onValueChange?.((event.target as HTMLInputElement).value);
+        props.onChange?.(event);
+      },
+      readOnly: isReadOnly,
+    })
+  ),
 };
 
 export const Select = wrap<
