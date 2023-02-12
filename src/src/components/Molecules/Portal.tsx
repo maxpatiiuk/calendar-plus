@@ -63,7 +63,7 @@ export function Portal({
 /**
  * Find container that shows Google Calendar's main content
  */
-const findMainContainer = (): Element | undefined =>
+export const findMainContainer = (): Element | undefined =>
   document.querySelector('[role="main"]') ?? undefined;
 
 export const PortalContext = React.createContext<Element | undefined>(
