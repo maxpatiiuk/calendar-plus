@@ -49,7 +49,7 @@ export function DataExport({
         ])
       ),
     ]
-    const jsonString = JSON.stringify(data);
+    const jsonString = JSON.stringify(data, null, 4);
     downloadFile(`calendar-plus.json`, jsonString).catch(console.error);
   }
 
