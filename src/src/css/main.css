@@ -102,6 +102,11 @@
       disabled:hover:dark:!text-neutral-600;
   }
 
+  .ghosting-enabled .ghosted {
+    opacity: var(--event-ghosting-opacity);
+    pointer-events: none;
+  }
+
 
 
 }

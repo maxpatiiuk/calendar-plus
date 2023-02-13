@@ -7,7 +7,7 @@ import type { IR } from '../../utils/types';
 import { ensure } from '../../utils/types';
 import type { KeyboardShortcuts } from '../Molecules/KeyboardShortcut';
 import { SetKeyboardShortcuts } from '../Molecules/KeyboardShortcut';
-import { BooleanPref, pickListPref } from './Renderers';
+import { BooleanPref, pickListPref, rangePref } from './Renderers';
 
 /**
  * Represents a single preference option
@@ -83,6 +83,11 @@ export const preferenceDefinitions = {
           { value: 'ctrl', title: preferencesText('ctrlClick') },
         ]),
         defaultValue: 'shift' as const,
+      }),
+      ghostEventOpacity: defineItem<number>({
+        title: preferencesText('ghostedEventOpacity'),
+        renderer: rangePref({ min: 0, max: 100, step: 1 }),
+        defaultValue: 30,
       }),
     },
   },

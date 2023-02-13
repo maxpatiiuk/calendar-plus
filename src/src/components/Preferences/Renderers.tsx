@@ -42,3 +42,29 @@ export const pickListPref = <T extends string>(
       </Select>
     );
   };
+
+export const rangePref = ({
+  min,
+  max,
+  step,
+}: {
+  readonly min: number;
+  readonly max: number;
+  readonly step: number;
+}) =>
+  function RangePref({
+    value,
+    onChange: handleChange,
+  }: Parameters<PreferenceRenderer<number>>[0]): JSX.Element {
+    return (
+      <Input.Generic
+        className="p-0"
+        max={max}
+        min={min}
+        step={step}
+        type="range"
+        value={value}
+        onValueChange={(value) => handleChange(Number.parseInt(value))}
+      />
+    );
+  };

@@ -178,3 +178,11 @@ export function mappedFind<ITEM, RETURN_TYPE>(
   });
   return value;
 }
+
+export function debounce(callback: () => void, timeout: number): () => void {
+  let timer: ReturnType<typeof setTimeout>;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(callback, timeout);
+  };
+}

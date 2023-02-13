@@ -2,8 +2,6 @@ import { createDictionary } from './utils';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 
-/* eslint-disable react/jsx-no-literals */
-/* eslint-disable @typescript-eslint/naming-convention */
 export const preferencesText = createDictionary({
   behavior: { 'en-us': 'Behavior' },
   features: { 'en-us': 'Features' },
@@ -12,6 +10,7 @@ export const preferencesText = createDictionary({
     'en-us':
       'Ghost events are displayed as semi-transparent and non-interactive',
   },
+  ghostedEventOpacity: { 'en-us': 'Ghosted Event Opacity' },
   disable: { 'en-us': 'Disable' },
   shiftClick: { 'en-us': 'Shift+Click' },
   cmdClick: { 'en-us': 'Cmd+Click' },
@@ -47,5 +46,3 @@ export const preferencesText = createDictionary({
     `,
   },
 });
-/* eslint-enable react/jsx-no-literals */
-/* eslint-enable @typescript-eslint/naming-convention */

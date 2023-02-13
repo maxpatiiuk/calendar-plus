@@ -64,7 +64,6 @@ export function DoughnutChart({
   return loaded ? (
     <Doughnut
       data={{
-        labels: [...outerLabels, ...innerLabels] as WritableArray<string>,
         datasets: [
           {
             ...outerDataSet,

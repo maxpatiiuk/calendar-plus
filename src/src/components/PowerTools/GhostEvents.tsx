@@ -6,40 +6,66 @@ import React from 'react';
 
 import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
-import { usePref } from '../Preferences/usePref';
 import { f } from '../../utils/functools';
-
-const trimmedIdLength = 16;
-const ghostEventStyle = `{
-  opacity: 0.3;
-  pointer-events: none;
-}`;
+import { debounce } from '../../utils/utils';
+import { findMainContainer } from '../Molecules/Portal';
+import { usePref } from '../Preferences/usePref';
 
 export function GhostEvents(): null {
-  const [ghostEvents = [], setGhostEvents] = useSafeStorage('ghostEvents', []);
-  const styleRef = React.useRef<HTMLStyleElement | undefined>(undefined);
+  const [ghostEvents = [], setGhostEvents] = useSafeStorage(
+    'ghostEvents',
+    [],
+    'sync',
+    '2'
+  );
+
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
+  const [ghostEventOpacity] = usePref('feature', 'ghostEventOpacity');
+
+  // This allows for a way to temporary disable event ghosting
+  const isDisabled = ghostEventShortcut === 'none';
 
   React.useEffect(() => {
-    styleRef.current = document.createElement('style');
-    document.head.append(styleRef.current);
-    return (): void => styleRef.current?.remove();
-  }, []);
+    document.body.classList.toggle('ghosting-enabled', !isDisabled);
+    document.body.style.setProperty(
+      '--event-ghosting-opacity',
+      (ghostEventOpacity / 100).toString()
+    );
+  }, [ghostEventOpacity, isDisabled]);
 
-  // Set styles
+  const mainContainer = React.useMemo(
+    () => findMainContainer()?.parentElement ?? undefined,
+    []
+  );
+
+  const doGhosting = React.useCallback(
+    (): void =>
+      mainContainer === undefined
+        ? undefined
+        : void Array.from(
+            mainContainer.querySelectorAll('[role="gridcell"] [role="button"]'),
+            (element) =>
+              ghostEventsRef.current.has(getEventName(element))
+                ? element.classList.add('ghosted')
+                : undefined
+          ),
+    [mainContainer]
+  );
+
+  const ghostEventsRef = React.useRef(new Set());
   React.useEffect(() => {
-    if (styleRef.current === undefined) return;
+    ghostEventsRef.current = new Set(ghostEvents);
+    doGhosting();
+  }, [ghostEvents, doGhosting]);
 
-    // This allows for a way to temporary disable event ghosting
-    const isDisabled = ghostEventShortcut === 'none';
-
-    styleRef.current.textContent =
-      isDisabled || ghostEvents.length === 0
-        ? ''
-        : `${ghostEvents
-            .map((id) => `[data-eventid*="${id}"]`)
-            .join(',')}${ghostEventStyle}`;
-  }, [ghostEvents, ghostEventShortcut]);
+  // Listen for DOM changes
+  React.useEffect(() => {
+    if (mainContainer === undefined) return undefined;
+    const config = { childList: true, subtree: true };
+    const observer = new MutationObserver(debounce(doGhosting, 60));
+    observer.observe(mainContainer, config);
+    return (): void => observer.disconnect();
+  }, [mainContainer, doGhosting]);
 
   // Listen for key press
   React.useEffect(
@@ -63,10 +89,9 @@ export function GhostEvents(): null {
                 '[data-eventid]'
               );
               if (eventElement === null) return;
-              const eventId = eventElement.getAttribute('data-eventid') ?? '';
-              if (eventId.length === 0) return;
-              const trimmed = eventId.slice(0, trimmedIdLength);
-              setGhostEvents(f.unique([...ghostEvents, trimmed]));
+              const eventName = getEventName(eventElement) ?? '';
+              if (eventName.length === 0) return;
+              setGhostEvents(f.unique([...ghostEvents, eventName]));
             }
           ),
     [ghostEventShortcut, ghostEvents, setGhostEvents]
@@ -74,3 +99,6 @@ export function GhostEvents(): null {
 
   return null;
 }
+
+const getEventName = (eventElement: Element): string | undefined =>
+  eventElement.querySelectorAll('span')[1]?.textContent?.trim();
