@@ -11,6 +11,7 @@ import { formatDuration } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
+import { WidgetContainer } from '../Widgets/WidgetContainer';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -61,36 +62,83 @@ export function DoughnutChart({
   }, [innerData, outerData, chart, handleLoaded]);
 
   const transitionDuration = useTransitionDuration();
-  return loaded ? (
-    <Doughnut
-      data={{
-        datasets: [
-          {
-            ...outerDataSet,
-            data: outerDataRef.current,
-          },
-          { ...innerDataSet, data: innerDataRef.current },
-        ],
-      }}
-      options={{
-        responsive: true,
-        animation: {
-          duration: transitionDuration,
+
+  function getJsonExport() {
+    const { data } = getCategoryData(durations, calendars);
+    return getCalendarData(durations, calendars).map((minutes, index) => ({
+      calendar: calendars?.[index]?.summary ?? index,
+      minutes,
+      virtualCalendars: data[index].map(({ minutes, label }) => ({
+        virtualCalendar: label,
+        minutes,
+      })),
+    }));
+  }
+
+  const getTsvExport = () =>
+    getJsonExport()
+      .flatMap(({ calendar, minutes, virtualCalendars }, index) => [
+        {
+          calendar,
+          virtualCalendar: commonText('total'),
+          minutes,
         },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: ({ datasetIndex, dataIndex, parsed }) =>
-                `${layers[datasetIndex].labels[dataIndex]}: ${formatDuration(
-                  parsed
-                )}`,
+        ...virtualCalendars.map(({ virtualCalendar, minutes }) => ({
+          calendar,
+          virtualCalendar:
+            virtualCalendar ||
+            (virtualCalendars.length === 1
+              ? calendars?.[index].summary ?? index.toString()
+              : commonText('other')),
+          minutes,
+        })),
+      ])
+      .map(({ calendar, virtualCalendar, minutes }) => ({
+        [commonText('calendar')]: calendar,
+        [commonText('virtualCalendar')]: virtualCalendar,
+        [commonText('minutes')]: minutes,
+      }));
+
+  return (
+    <WidgetContainer
+      header={commonText('doughnutChart')}
+      getJsonExport={getJsonExport}
+      getTsvExport={getTsvExport}
+    >
+      {loaded ? (
+        <Doughnut
+          data={{
+            datasets: [
+              {
+                ...outerDataSet,
+                data: outerDataRef.current,
+              },
+              { ...innerDataSet, data: innerDataRef.current },
+            ],
+          }}
+          options={{
+            responsive: true,
+            animation: {
+              duration: transitionDuration,
             },
-          },
-        },
-      }}
-      ref={(chart) => setChart(chart ?? undefined)}
-    />
-  ) : null;
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: ({ datasetIndex, dataIndex, parsed }) =>
+                    `${
+                      layers[datasetIndex].labels[dataIndex]
+                    }: ${formatDuration(parsed)}`,
+                },
+              },
+            },
+          }}
+          ref={(chart) => setChart(chart ?? undefined)}
+        />
+      ) : (
+        commonText('loading')
+      )}
+    </WidgetContainer>
+  );
 }
 
 type Layer = {
@@ -104,40 +152,23 @@ function useDataSets(
   calendars: React.ContextType<typeof CalendarsContext>
 ): readonly [Layer, Layer] {
   return React.useMemo(() => {
-    const partBackgroundColors: WritableArray<string> = [];
-    const labels: WritableArray<string> = [];
-    const categoryData =
-      durations === undefined
-        ? []
-        : calendars?.flatMap(({ id, summary, backgroundColor }) =>
-            Object.entries(durations[id] ?? {}).map(
-              ([label, durations], _, { length }) => {
-                partBackgroundColors.push(backgroundColor);
-                labels.push(
-                  label || (length === 1 ? summary : commonText('other'))
-                );
-                return Object.values(durations).reduce(
-                  (total, durations) => total + durations.total,
-                  0
-                );
-              }
-            )
-          ) ?? [];
-    const calendarData =
-      durations === undefined
-        ? []
-        : calendars?.map(({ id }) =>
-            Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
-              (total, durations) => total + durations.total,
-              0
-            )
-          ) ?? [];
+    const { data, ...rest } = getCategoryData(durations, calendars);
+    const categoryData = {
+      data: data.flat().map(({ minutes }) => minutes),
+      labels: data.flatMap((data, index) =>
+        data.map(
+          ({ label }) =>
+            label ||
+            (data.length === 1
+              ? calendars?.[index].summary ?? index.toString()
+              : commonText('other'))
+        )
+      ),
+      ...rest,
+    };
+    const calendarData = getCalendarData(durations, calendars);
     return [
-      {
-        data: categoryData,
-        backgroundColor: partBackgroundColors,
-        labels,
-      },
+      categoryData,
       {
         data: calendarData,
         backgroundColor:
@@ -147,3 +178,45 @@ function useDataSets(
     ];
   }, [durations, calendars]);
 }
+
+function getCategoryData(
+  durations: EventsStore | undefined,
+  calendars: React.ContextType<typeof CalendarsContext>
+): {
+  readonly data: RA<RA<{ readonly label: string; readonly minutes: number }>>;
+  readonly backgroundColor: RA<string>;
+} {
+  const partBackgroundColors: WritableArray<string> = [];
+  const categoryData =
+    durations === undefined
+      ? []
+      : calendars?.map(({ id, backgroundColor }) =>
+          Object.entries(durations[id] ?? {}).map(([label, durations]) => {
+            partBackgroundColors.push(backgroundColor);
+            return {
+              label,
+              minutes: Object.values(durations).reduce(
+                (total, durations) => total + durations.total,
+                0
+              ),
+            };
+          })
+        ) ?? [];
+  return {
+    data: categoryData,
+    backgroundColor: partBackgroundColors,
+  };
+}
+
+const getCalendarData = (
+  durations: EventsStore | undefined,
+  calendars: React.ContextType<typeof CalendarsContext>
+) =>
+  durations === undefined
+    ? []
+    : calendars?.map(({ id }) =>
+        Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
+          (total, durations) => total + durations.total,
+          0
+        )
+      ) ?? [];

@@ -45,4 +45,10 @@ export const preferencesText = createDictionary({
       miss click on a potentially dangerous option
     `,
   },
+  exportFormat: {
+    'en-us': 'Export File Format',
+  },
+  csv: { 'en-us': 'CSV' },
+  tsv: { 'en-us': 'TSV' },
+  json: { 'en-us': 'JSON' },
 });

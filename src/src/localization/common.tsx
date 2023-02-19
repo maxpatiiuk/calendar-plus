@@ -11,9 +11,18 @@ export const commonText = createDictionary({
   dashboard: { 'en-us': 'Dashboard' },
   date: { 'en-us': 'Date' },
   duration: { 'en-us': 'Duration' },
+  perDuration: { 'en-us': 'Per Duration' },
   goals: { 'en-us': 'Goals' },
+  goal: {
+    'en-us': 'Goal',
+  },
+  completed: {
+    'en-us': 'Completed',
+  },
   noGoals: { 'en-us': 'No goals configured at the moment' },
   dataExport: { 'en-us': 'Data Export' },
+  // A verb
+  export: { 'en-us': 'Export' },
   save: { 'en-us': 'Save' },
   edit: { 'en-us': 'Edit' },
   cancel: { 'en-us': 'Cancel' },
@@ -34,10 +43,11 @@ export const commonText = createDictionary({
   calendar: { 'en-us': 'Calendar' },
   calendars: { 'en-us': 'Calendars' },
   aOutOfB: { 'en-us': (a: string, b: string) => `${a} out of ${b}` },
-  exportToCsv: { 'en-us': 'Export to CSV' },
-  exportToTsv: { 'en-us': 'Export to TSV' },
   preferences: { 'en-us': 'Preferences' },
   virtualCalendars: { 'en-us': 'Autocomplete predictions' },
+  virtualCalendar: {
+    'en-us': 'Virtual Calendar',
+  },
   other: { 'en-us': 'Other' },
   sourceCalendar: { 'en-us': 'Source Calendar' },
   matchRule: { 'en-us': 'Match Rule' },

@@ -13,12 +13,13 @@ import { useTransitionDuration } from '../../hooks/useTransitionDuration';
 import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
 import { group } from '../../utils/utils';
-import { formatLabel, months } from '../Atoms/Internationalization';
+import { formatDateLabel, months } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
+import { WidgetContainer } from '../Widgets/WidgetContainer';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -29,64 +30,90 @@ export function StackedChart({
 }): JSX.Element | null {
   const { view } = React.useContext(CurrentViewContext)!;
   const calendars = React.useContext(CalendarsContext);
-  const labels = useLabels(durations, view);
-  const dataSets = useDataSets(durations, calendars, view);
+  const labels = React.useMemo(
+    () => getLabels(durations, view),
+    [durations, view]
+  );
+  const dataSets = React.useMemo(
+    () => getDataSets(durations, calendars, view),
+    [durations, calendars, view]
+  );
   const [loaded, handleLoaded] = useBooleanState();
   const transitionDuration = useTransitionDuration();
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
-    [dataSets]
+    [dataSets, handleLoaded]
   );
-  return loaded ? (
-    <Bar
-      data={{
-        labels,
-        datasets: dataSets,
-      }}
-      datasetIdKey="id"
-      options={{
-        responsive: true,
-        animation: {
-          duration: transitionDuration,
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: commonText('date'),
+
+  const getJsonExport = () =>
+    dataSets.map(({ label, data }) => ({
+      calendar: label,
+      virtualCalendars: data.map((value, index) => ({
+        date: labels[index],
+        duration: value,
+      })),
+    }));
+
+  const getTsvExport = () =>
+    getJsonExport().flatMap(({ calendar, virtualCalendars }) =>
+      virtualCalendars.map(({ date, duration }) => ({
+        [commonText('calendar')]: calendar,
+        [commonText('date')]: date,
+        [commonText('duration')]: duration,
+      }))
+    );
+
+  return (
+    <WidgetContainer
+      header={commonText('stackedChart')}
+      getJsonExport={getJsonExport}
+      getTsvExport={getTsvExport}
+    >
+      {loaded ? (
+        <Bar
+          data={{
+            labels,
+            datasets: dataSets,
+          }}
+          datasetIdKey="id"
+          options={{
+            responsive: true,
+            animation: {
+              duration: transitionDuration,
             },
-            stacked: true,
-          },
-          y: {
-            title: {
-              display: true,
-              text: commonText('duration'),
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: commonText('date'),
+                },
+                stacked: true,
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: commonText('duration'),
+                },
+                stacked: true,
+              },
             },
-            stacked: true,
-          },
-        },
-      }}
-    />
-  ) : null;
+          }}
+        />
+      ) : (
+        commonText('loading')
+      )}
+    </WidgetContainer>
+  );
 }
 
-function useLabels(
-  durations: EventsStore | undefined,
-  view: SupportedView
-): WritableArray<string> {
-  const currentView = React.useContext(CurrentViewContext)!;
-  return React.useMemo(
-    () =>
-      view === 'year'
-        ? (months as WritableArray<string>)
-        : Object.keys(
-            Object.values(durations ?? {})[0]?.[summedDurations] ?? []
-          ).map((duration) => formatLabel(new Date(duration), currentView)),
-    [view, durations, currentView]
-  );
-}
+const getLabels = (durations: EventsStore | undefined, view: SupportedView) =>
+  view === 'year'
+    ? (months as WritableArray<string>)
+    : Object.keys(
+        Object.values(durations ?? {})[0]?.[summedDurations] ?? []
+      ).map((duration) => formatDateLabel(new Date(duration), view));
 
-function useDataSets(
+const getDataSets = (
   durations: EventsStore | undefined,
   calendars: React.ContextType<typeof CalendarsContext>,
   view: SupportedView
@@ -95,29 +122,24 @@ function useDataSets(
   readonly label: string;
   readonly data: RA<number>;
   readonly backgroundColor: string;
-}> {
-  return React.useMemo(
-    () =>
-      durations === undefined || calendars === undefined
-        ? []
-        : calendars.map(({ id, summary, backgroundColor }) => ({
-            id,
-            label: summary,
-            backgroundColor,
-            data:
-              view === 'year'
-                ? group(
-                    Object.entries(durations[id]?.[summedDurations] ?? {}).map(
-                      ([date, duration]) =>
-                        [new Date(date).getMonth(), duration.total] as const
-                    )
-                  ).map(([_key, values]) =>
-                    values.reduce((total, value) => total + value, 0)
-                  )
-                : Object.values(durations[id]?.[summedDurations] ?? {}).map(
-                    ({ total }) => total
-                  ),
-          })),
-    [durations, calendars]
-  );
-}
+}> =>
+  durations === undefined || calendars === undefined
+    ? []
+    : calendars.map(({ id, summary, backgroundColor }) => ({
+        id,
+        label: summary,
+        backgroundColor,
+        data:
+          view === 'year'
+            ? group(
+                Object.entries(durations[id]?.[summedDurations] ?? {}).map(
+                  ([date, duration]) =>
+                    [new Date(date).getMonth(), duration.total] as const
+                )
+              ).map(([_key, values]) =>
+                values.reduce((total, value) => total + value, 0)
+              )
+            : Object.values(durations[id]?.[summedDurations] ?? {}).map(
+                ({ total }) => total
+              ),
+      }));

@@ -6,11 +6,10 @@ import { Button } from '../Atoms';
 import { icons } from '../Atoms/Icon';
 import { DoughnutChart } from '../Charts/DoughnutChart';
 import { StackedChart } from '../Charts/StackedChart';
+import { TimeChart } from '../Charts/TimeChart';
 import type { EventsStore } from '../EventsStore';
 import { GoalsWidget } from '../Goals/Widget';
-import { DataExport } from '../Widgets/DataExport';
 import { Synonyms } from '../Widgets/Synonyms';
-import { TimeChart } from '../Charts/TimeChart';
 import { Unknown } from '../Widgets/Unknown';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 import type { WidgetDefinition } from './index';
@@ -18,7 +17,6 @@ import type { WidgetDefinition } from './index';
 const widgets = {
   DoughnutChart,
   StackedChart,
-  DataExport,
   GoalsWidget,
   VirtualCalendars,
   Synonyms,
@@ -29,7 +27,6 @@ const widgets = {
 export const widgetLabels: RR<keyof typeof widgets, string> = {
   DoughnutChart: commonText('doughnutChart'),
   StackedChart: commonText('stackedChart'),
-  DataExport: commonText('dataExport'),
   GoalsWidget: commonText('goals'),
   VirtualCalendars: commonText('virtualCalendars'),
   Synonyms: commonText('shortNames'),

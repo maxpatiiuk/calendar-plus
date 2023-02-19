@@ -31,8 +31,38 @@ export function GoalsWidget({
   const calendars = React.useContext(CalendarsContext);
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
+
+  const doJsonExport = () =>
+    goals
+      ?.filter(({ view }) => view === currentView)
+      .map(({ calendarId, ...rest }) => ({
+        calendarName:
+          calendars?.find(({ id }) => id === calendarId)?.summary ?? calendarId,
+        completed:
+          typeof durations?.[calendarId] === 'object'
+            ? computeGoal(durations[calendarId], rest.virtualCalendar)
+            : 0,
+        ...rest,
+      })) ?? [];
+
+  const doTsvExport = () =>
+    doJsonExport().map(
+      ({ calendarName, virtualCalendar, duration, completed, view }) => ({
+        [commonText('calendar')]: calendarName,
+        [commonText('virtualCalendar')]: virtualCalendar,
+        [commonText('perDuration')]: view,
+        [commonText('goal')]: formatDuration(duration),
+        [commonText('completed')]: formatDuration(completed),
+      })
+    );
+
   return (
-    <WidgetContainer editing={[isEditing, setIsEditing]} header={label}>
+    <WidgetContainer
+      editing={[isEditing, setIsEditing]}
+      getJsonExport={doJsonExport}
+      getTsvExport={doTsvExport}
+      header={label}
+    >
       {goals === undefined || calendars === undefined ? (
         commonText('loading')
       ) : isEditing ? (
@@ -104,15 +134,10 @@ function GoalComponent({
 }): JSX.Element | null {
   const calendar = calendars.find(({ id }) => id === calendarId);
   const currentDurations = durations[calendarId];
-  const currentDuration = React.useMemo(() => {
-    const durations =
-      virtualCalendar === undefined
-        ? Object.values(currentDurations ?? {}).flatMap((durations) =>
-            Object.values(durations)
-          )
-        : Object.values(currentDurations?.[virtualCalendar] ?? {});
-    return durations.reduce((total, value) => total + value.total, 0);
-  }, [currentDurations, virtualCalendar]);
+  const currentDuration = React.useMemo(
+    () => computeGoal(currentDurations, virtualCalendar),
+    [currentDurations, virtualCalendar]
+  );
   return typeof calendar === 'object' ? (
     <Gage
       color={calendar.backgroundColor}
@@ -131,4 +156,17 @@ function GoalComponent({
       value={currentDuration}
     />
   ) : null;
+}
+
+function computeGoal(
+  currentDurations: EventsStore[string],
+  virtualCalendar?: string
+): number {
+  const durations =
+    virtualCalendar === undefined
+      ? Object.values(currentDurations ?? {}).flatMap((durations) =>
+          Object.values(durations)
+        )
+      : Object.values(currentDurations?.[virtualCalendar] ?? {});
+  return durations.reduce((total, value) => total + value.total, 0);
 }
