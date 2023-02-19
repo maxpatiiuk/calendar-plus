@@ -70,14 +70,16 @@ export function App(): JSX.Element | null {
           {debugOverlay}
           <Button.White
             aria-pressed={isOpen ? true : undefined}
-            onClick={
-              auth.authenticated
-                ? handleToggle
-                : (): void =>
-                    void auth
-                      .handleAuthenticate()
-                      .then(handleToggle)
-                      .catch(console.error)
+            /*
+             * Making the auth request even if already authenticated because
+             * the token may have expired. This is not a performance problem
+             * because token is cached by Google Chrome
+             */
+            onClick={(): void =>
+              void auth
+                .handleAuthenticate(true)
+                .then(handleToggle)
+                .catch(console.error)
             }
           >
             {commonText('calendarPlus')}

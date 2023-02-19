@@ -1,13 +1,15 @@
-import { emitEvent, Requests } from './messages';
-import { State } from 'typesafe-reducer';
+import type { State } from 'typesafe-reducer';
 
-// Based on https://stackoverflow.com/a/50548409/8584605
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
+import type { Requests } from './messages';
+import { emitEvent } from './messages';
+
+/** Based on https://stackoverflow.com/a/50548409/8584605 */
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo?.status === 'complete')
     emitEvent(tabId, { type: 'TabUpdate' }).catch(console.trace);
 });
 
-chrome.action.onClicked.addListener(function () {
+chrome.action.onClicked.addListener(() => {
   chrome.tabs.create({ url: 'https://calendar.google.com' });
 });
 
@@ -38,7 +40,7 @@ const requestHandlers: {
     request: Extract<Requests, State<TYPE>>['request']
   ) => Promise<Extract<Requests, State<TYPE>>['response']>;
 } = {
-  Authenticate: ({ interactive }) =>
+  Authenticate: async ({ interactive }) =>
     new Promise((resolve, reject) =>
       chrome.identity.getAuthToken({ interactive }, (token) =>
         typeof token === 'string'
@@ -46,12 +48,10 @@ const requestHandlers: {
           : reject(chrome.runtime.lastError)
       )
     ),
-  ReloadExtension: () =>
+  ReloadExtension: async () =>
     new Promise((resolve) => {
       chrome.tabs.reload();
       chrome.runtime.reload();
       resolve(undefined);
     }),
 };
-
-export {};
