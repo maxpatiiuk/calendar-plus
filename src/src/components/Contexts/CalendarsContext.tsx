@@ -1,27 +1,44 @@
-import { useAsyncState } from '../../hooks/useAsyncState';
-import { ajax } from '../../utils/ajax';
 import React from 'react';
-import { filterArray, GetOrSet, RA } from '../../utils/types';
-import { formatUrl } from '../../utils/queryString';
-import { sortFunction, split } from '../../utils/utils';
-import { listen } from '../../utils/events';
-import { AuthContext } from './AuthContext';
+
+import { useAsyncState } from '../../hooks/useAsyncState';
+import { useSimpleStorage } from '../../hooks/useStorage';
+import { ajax } from '../../utils/ajax';
 import { randomColor } from '../../utils/colors';
+import { listen } from '../../utils/events';
+import { formatUrl } from '../../utils/queryString';
+import type { GetSet, RA } from '../../utils/types';
+import { filterArray } from '../../utils/types';
+import { debounce, sortFunction, split } from '../../utils/utils';
+import { AuthContext } from './AuthContext';
 
 type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
-  'id' | 'summary' | 'primary' | 'backgroundColor'
+  'backgroundColor' | 'id' | 'primary' | 'summary'
 >;
 
 export type CalendarListEntry = RawCalendarListEntry & {
   readonly backgroundColor: string;
 };
 
+const emptyObject = [] as const;
+
 export function CalendarsSpy({
   children,
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
+  /*
+   * Cache the list of visible calendars so that we can use it if side menu
+   * is collapsed
+   */
+  const [visibleCalendars, setVisibleCalendars] = useSimpleStorage(
+    'visibleCalendars',
+    emptyObject,
+    'local'
+  );
+
+  const isCacheEmpty = visibleCalendars === emptyObject;
+
   const { token } = React.useContext(AuthContext);
   const isAuthenticated = typeof token === 'string';
   const [calendars] = useAsyncState<RA<CalendarListEntry>>(
@@ -54,11 +71,16 @@ export function CalendarsSpy({
     false
   );
 
-  const [visibleCalendars, setVisibleCalendars] = React.useState<
-    RA<string> | undefined
-  >(undefined);
+  /*
+   * If it's first time opening the extension, and the side bar is hidden,
+   * don't know which calendars are hidden so show all of them
+   */
+  React.useEffect(() => {
+    if (isCacheEmpty && Array.isArray(calendars))
+      setVisibleCalendars(calendars.map(({ id }) => id));
+  }, [isCacheEmpty, calendars, setVisibleCalendars]);
 
-  useVisibilityChangeSpy(calendars, setVisibleCalendars);
+  useVisibilityChangeSpy(calendars, [visibleCalendars, setVisibleCalendars]);
 
   const filteredCalendars = React.useMemo(
     () => calendars?.filter(({ id }) => visibleCalendars?.includes(id)),
@@ -76,32 +98,84 @@ export const CalendarsContext = React.createContext<
 >(undefined);
 CalendarsContext.displayName = 'CalendarsContext';
 
+function findSideBar(): HTMLElement | undefined {
+  const sideBar = document.querySelector('[role="complementary"]');
+  return (sideBar?.querySelector('input[type="checkbox"]') ?? undefined) ===
+    undefined
+    ? undefined
+    : (sideBar as HTMLElement) ?? undefined;
+}
+
 function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
-  handleChange: GetOrSet<RA<string> | undefined>[1]
+  [visibleCalendars, setVisibleCalendars]: GetSet<RA<string> | undefined>
 ): void {
-  const [sideBar] = useAsyncState(
-    React.useCallback(async () => {
-      if (calendars === undefined) return;
+  const [sideBar, setSideBar] = React.useState<Element | undefined>(undefined);
 
-      const sideBar = await awaitElement(() => {
-        const sideBar = document.querySelector('[role="complementary"]');
-        if (
-          (sideBar?.querySelector('input[type="checkbox"]') ?? undefined) ===
-          undefined
-        )
-          return undefined;
-        else return sideBar ?? undefined;
-      });
-      if (sideBar === undefined) console.error('Unable to locate the sidebar');
-      return sideBar;
-    }, [calendars]),
-    false
-  );
+  const visibleCalendarsRef = React.useRef(visibleCalendars);
+  const cacheLoaded = Array.isArray(visibleCalendars);
+  visibleCalendarsRef.current = visibleCalendars;
+
+  /*
+   * When side menu is collapsed/expanded, <body>'s class names change
+   * We can use that to detect when the sidebar is opened/closed
+   * Note, this may break in the future
+   */
   React.useEffect(() => {
-    if (calendars === undefined || sideBar === undefined) return;
+    let sideBarRef: HTMLElement | undefined = undefined;
 
-    handleChange(
+    function handleChange(): void {
+      if (sideBarRef === undefined) {
+        sideBarRef = findSideBar();
+        if (sideBarRef === undefined) return;
+        setSideBar(sideBarRef);
+      }
+      // If side bar is hidden, it has width of 0
+      const isVisible = sideBarRef.offsetWidth > 0;
+      setSideBar(isVisible ? sideBarRef : undefined);
+    }
+
+    handleChange();
+    const observer = new MutationObserver(debounce(handleChange, 60));
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    return (): void => observer.disconnect();
+  }, []);
+
+  const calendarsRef = React.useRef(calendars);
+  calendarsRef.current = calendars;
+  const parseCheckbox = React.useCallback(
+    (
+      checkbox: HTMLInputElement
+    ): readonly [id: string, checked: boolean] | undefined => {
+      if (calendarsRef.current === undefined) return undefined;
+      const calendarName = checkbox.ariaLabel;
+      const calendar =
+        calendarsRef.current.find(({ summary }) => summary === calendarName) ??
+        /*
+         * Summary for the primary calendar does not match what is displayed
+         * in the UI
+         */
+        calendarsRef.current.find(({ primary }) => primary);
+      if (calendar === undefined) {
+        console.error('Unable to locate the calendar', calendarName);
+        return undefined;
+      }
+      return [calendar.id, checkbox.checked];
+    },
+    []
+  );
+
+  /*
+   * Detect calendars being loaded (initially the side bar contains just the
+   * primary calendar)
+   */
+  React.useEffect(() => {
+    if (sideBar === undefined || !cacheLoaded) return undefined;
+
+    const getVisible = (): RA<string> =>
       filterArray(
         Array.from(
           sideBar.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'),
@@ -109,41 +183,49 @@ function useVisibilityChangeSpy(
         )
       )
         .filter(([_calendarId, checked]) => checked)
-        .map(([calendarId]) => calendarId)
-    );
+        .map(([calendarId]) => calendarId);
 
-    function parseCheckbox(
-      checkbox: HTMLInputElement
-    ): readonly [id: string, checked: boolean] | undefined {
-      if (calendars === undefined) return undefined;
-      const calendarName = checkbox.ariaLabel;
-      const calendar =
-        calendars.find(({ summary }) => summary === calendarName) ??
-        /*
-         * Summary for the primary calendar does not match what is displayed
-         * in the UI
-         */
-        calendars.find(({ primary }) => primary);
-      if (calendar === undefined) {
-        console.error('Unable to locate the calendar', calendarName);
-        return;
-      }
-      return [calendar.id, checkbox.checked];
+    let timeOut: ReturnType<typeof setTimeout>;
+
+    function handleChange(): void {
+      clearTimeout(timeOut);
+      setVisibleCalendars(getVisible());
     }
 
-    return listen(sideBar, 'click', ({ target }) => {
-      const element = target as HTMLInputElement;
-      if (element.tagName !== 'INPUT' || element.type !== 'checkbox') return;
-      const data = parseCheckbox(element)?.[0];
-      if (data === undefined) return;
-      const [calendarId, checked] = data;
-      handleChange((visibleCalendars) =>
-        checked
-          ? visibleCalendars?.filter((id) => id !== calendarId)
-          : [...(visibleCalendars ?? []), calendarId]
-      );
-    });
-  }, [calendars, sideBar]);
+    // Get list of calendars loaded so far
+    const visible = getVisible();
+    /*
+     * If side bar contains fewer elements than in the cache, it's likely
+     * that side bar hasn't been fully loaded yet. Wait and try it again
+     */
+    if (visible.length < visibleCalendarsRef.current!.length)
+      timeOut = setTimeout(handleChange, 2000);
+    else handleChange();
+
+    const observer = new MutationObserver(debounce(handleChange, 60));
+    observer.observe(sideBar, { childList: true, subtree: true });
+    return (): void => observer.disconnect();
+  }, [sideBar, parseCheckbox, setVisibleCalendars, cacheLoaded]);
+
+  React.useEffect(
+    () =>
+      sideBar === undefined
+        ? undefined
+        : listen(sideBar, 'click', ({ target }) => {
+            const element = target as HTMLInputElement;
+            if (element.tagName !== 'INPUT' || element.type !== 'checkbox')
+              return;
+            const data = parseCheckbox(element)?.[0];
+            if (data === undefined) return;
+            const [calendarId, checked] = data;
+            setVisibleCalendars(
+              checked
+                ? visibleCalendarsRef.current?.filter((id) => id !== calendarId)
+                : [...(visibleCalendarsRef.current ?? []), calendarId]
+            );
+          }),
+    [sideBar, setVisibleCalendars]
+  );
 }
 
 /**
