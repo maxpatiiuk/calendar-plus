@@ -24,9 +24,7 @@ export type WidgetDefinition = {
     | State<'DataExport'>
     | State<'DoughnutChart'>
     | State<'GoalsWidget'>
-    | State<'QuickActions'>
     | State<'StackedChart'>
-    | State<'Suggestions'>
     | State<'VirtualCalendars'>
     | State<'Synonyms'>
     | State<'TimeChart'>;

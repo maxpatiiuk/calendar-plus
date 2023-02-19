@@ -158,48 +158,6 @@ export const defaultLayout: RA<WidgetDefinition> = [
       type: 'Synonyms',
     },
   },
-  {
-    colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 2,
-      lg: 2,
-      xl: 2,
-      '2xl': 2,
-    },
-    rowSpan: {
-      xs: 1,
-      sm: 1,
-      md: 1,
-      lg: 1,
-      xl: 1,
-      '2xl': 1,
-    },
-    definition: {
-      type: 'QuickActions',
-    },
-  },
-  {
-    colSpan: {
-      xs: 1,
-      sm: 1,
-      md: 1,
-      lg: 2,
-      xl: 2,
-      '2xl': 2,
-    },
-    rowSpan: {
-      xs: 1,
-      sm: 1,
-      md: 1,
-      lg: 1,
-      xl: 1,
-      '2xl': 1,
-    },
-    definition: {
-      type: 'Suggestions',
-    },
-  },
 ];
 
 export const widgetGridColumnSizes: WidgetGridColumnSizes = {
