@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { sendRequest } from '../Background/messages';
 
 type Authenticated = {
@@ -19,10 +20,10 @@ export const unsafeGetToken = () => unsafeToken;
 export function AuthenticationProvider({
   children,
 }: {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }): JSX.Element {
   const handleAuthenticate = React.useCallback(
-    (interactive = true) =>
+    async (interactive = true) =>
       sendRequest('Authenticate', { interactive })
         .then(({ token }) => {
           if (typeof token === 'string') {
