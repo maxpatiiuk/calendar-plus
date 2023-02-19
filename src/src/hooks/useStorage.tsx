@@ -23,6 +23,7 @@ export type StorageDefinitions = {
   readonly customViewSize: number;
   readonly timeChartMode: TimeChartMode;
   readonly synonyms: RA<Synonym>;
+  readonly visibleCalendars: RA<string>;
 };
 
 /**

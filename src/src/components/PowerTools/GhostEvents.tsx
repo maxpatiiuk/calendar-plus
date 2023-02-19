@@ -7,7 +7,7 @@ import React from 'react';
 import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { f } from '../../utils/functools';
-import { findMainContainer } from '../Molecules/Portal';
+import { useMainContainer } from '../Molecules/Portal';
 import { usePref } from '../Preferences/usePref';
 import { usePageListener } from './PageListener';
 
@@ -33,10 +33,7 @@ export function GhostEvents(): null {
     );
   }, [ghostEventOpacity, isDisabled]);
 
-  const mainContainer = React.useMemo(
-    () => findMainContainer()?.parentElement ?? undefined,
-    []
-  );
+  const mainContainer = useMainContainer();
   const doGhosting = React.useCallback(
     (): void =>
       mainContainer === undefined
