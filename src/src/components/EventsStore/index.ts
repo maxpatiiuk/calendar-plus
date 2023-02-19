@@ -56,7 +56,7 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
-  // Clean temporary cache when overlay is closed
+  // Clear temporary cache when overlay is closed
   const clearCache = startDate === undefined || endDate === undefined;
   if (clearCache) eventsStore.current = {};
   const calendars = React.useContext(CalendarsContext);
@@ -145,14 +145,7 @@ export function useEvents(
         })
       );
       return extractData(eventsStore.current, calendars, startDate, endDate);
-    }, [
-      eventsStore,
-      calendars,
-      startDate,
-      endDate,
-      ignoreAllDayEvents,
-      virtualCalendars,
-    ]),
+    }, [calendars, startDate, endDate, ignoreAllDayEvents, virtualCalendars]),
     false
   );
   return durations;
@@ -331,7 +324,8 @@ function extractData(
       const totals: R<WritableDayHours> = Object.fromEntries(
         daysBetween.map((date) => [date, blankHours()])
       );
-      const entries = Object.entries(eventsStore[id])
+      // "eventsStore" won't have an entry for current calendar if fetching failed
+      const entries = Object.entries(eventsStore?.[id] ?? {})
         .map(([virtualCalendar, dates]) => {
           let categoryTotal = 0;
           return [
