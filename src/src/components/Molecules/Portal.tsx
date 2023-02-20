@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 let portalRoot: HTMLElement | undefined = undefined;
-let portalStack = new Set<unknown>();
+const portalStack = new Set<unknown>();
 
 /**
  * A React Portal wrapper
@@ -42,7 +42,7 @@ export function Portal({
 
       // Nearest parent for both main content and portal container
       const commonContainer = mainContainer.parentElement!;
-      commonContainer.appendChild(portalRoot);
+      commonContainer.append(portalRoot);
     }
     portalRoot.append(element);
 
@@ -65,6 +65,13 @@ export function Portal({
  */
 export const findMainContainer = (): Element | undefined =>
   document.querySelector('[role="main"]') ?? undefined;
+
+export function useMainContainer(): HTMLElement | undefined {
+  return React.useMemo(
+    () => findMainContainer()?.parentElement ?? undefined,
+    []
+  );
+}
 
 export const PortalContext = React.createContext<Element | undefined>(
   undefined

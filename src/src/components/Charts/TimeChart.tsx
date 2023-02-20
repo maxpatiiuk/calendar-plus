@@ -86,14 +86,17 @@ export function TimeChart({
             </tr>
           </thead>
           <tbody>
-            {calendars.map((calendar) => (
-              <CalendarRow
-                calendar={calendar}
-                durations={durations[calendar.id]}
-                key={calendar.id}
-                times={times[calendar.id]}
-              />
-            ))}
+            {calendars.map((calendar) =>
+              // If calendar has just been unhidden, it's data might not be loaded yet
+              typeof times[calendar.id] === 'object' ? (
+                <CalendarRow
+                  calendar={calendar}
+                  durations={durations[calendar.id] ?? {}}
+                  key={calendar.id}
+                  times={times[calendar.id]}
+                />
+              ) : undefined
+            )}
             <TotalsRow times={times} />
           </tbody>
         </table>
@@ -238,7 +241,10 @@ function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
   const totals = React.useMemo(
     () =>
       Array.from({ length: DAY / HOUR }, (_, index) =>
-        calendars.reduce((total, { id }) => total + times[id].hourly[index], 0)
+        calendars.reduce(
+          (total, { id }) => total + (times[id]?.hourly[index] ?? 0),
+          0
+        )
       ),
     [times, calendars]
   );
