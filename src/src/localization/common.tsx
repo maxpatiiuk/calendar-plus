@@ -23,6 +23,8 @@ export const commonText = createDictionary({
   dataExport: { 'en-us': 'Data Export' },
   // A verb
   export: { 'en-us': 'Export' },
+  exportAllSettings: { 'en-us': 'Export All Settings' },
+  importAllSettings: { 'en-us': 'Import All Settings' },
   save: { 'en-us': 'Save' },
   edit: { 'en-us': 'Edit' },
   cancel: { 'en-us': 'Cancel' },
@@ -83,6 +85,12 @@ export const commonText = createDictionary({
   },
   collapse: {
     'en-us': 'Collapse',
+  },
+  filePickerMessage: {
+    'en-us': 'Choose a file or drag it here',
+  },
+  selectedFileName: {
+    'en-us': 'Selected file',
   },
 });
 /* eslint-enable @typescript-eslint/naming-convention */

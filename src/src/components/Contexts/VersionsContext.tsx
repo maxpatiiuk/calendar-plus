@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { StorageDefinitions } from '../../hooks/useStorage';
-import { useSimpleStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import type { GetSet } from '../../utils/types';
 
 export function VersionsContextProvider({
@@ -9,7 +9,7 @@ export function VersionsContextProvider({
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const value = useSimpleStorage('storageVersions', {});
+  const value = useStorage('storageVersions');
   return (
     <VersionsContext.Provider value={value}>
       {children}
@@ -18,7 +18,7 @@ export function VersionsContextProvider({
 }
 
 export const VersionsContext = React.createContext<
-  GetSet<StorageDefinitions['storageVersions'] | undefined>
+  GetSet<StorageDefinitions['storageVersions']['defaultValue'] | undefined>
 >([
   {},
   () => {

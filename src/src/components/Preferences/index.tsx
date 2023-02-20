@@ -1,7 +1,10 @@
 import React from 'react';
 
+import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
+import type { IR } from '../../utils/types';
 import { Button, H3, Widget } from '../Atoms';
+import { downloadFile, FilePicker, fileToText } from '../Molecules/FilePicker';
 import { PageHeader } from '../Molecules/PageHeader';
 import { PreferencesContext } from './Context';
 import type {
@@ -17,10 +20,32 @@ export function PreferencesPage({
   readonly onClose: () => void;
 }): JSX.Element {
   const [_, setPreferences] = React.useContext(PreferencesContext);
+  const [isImporting, handleImport, handleImported] = useBooleanState();
 
-  return (
+  return isImporting ? (
+    <Import onCancel={handleImported} />
+  ) : (
     <>
       <PageHeader label={commonText('preferences')}>
+        <Button.White
+          onClick={(): void =>
+            void fetchDataForExport()
+              .then(async (data) =>
+                downloadFile(
+                  `${commonText(
+                    'calendarPlus'
+                  )} - ${new Date().toLocaleDateString()}.json`,
+                  JSON.stringify(data, null, 4)
+                )
+              )
+              .catch(console.error)
+          }
+        >
+          {commonText('exportAllSettings')}
+        </Button.White>
+        <Button.White onClick={handleImport}>
+          {commonText('importAllSettings')}
+        </Button.White>
         <Button.White onClick={(): void => setPreferences({})}>
           {commonText('resetToDefault')}
         </Button.White>
@@ -30,7 +55,7 @@ export function PreferencesPage({
         {Object.entries(
           preferenceDefinitions as GenericPreferencesCategories
         ).map(([categoryName, { title, items }]) => (
-          <Widget key={categoryName} className="gap-4 p-4">
+          <Widget className="gap-4 p-4" key={categoryName}>
             <H3>{title}</H3>
             <div className="flex flex-col gap-2">
               {Object.entries(items).map(([itemName, definition]) => {
@@ -72,6 +97,9 @@ export function PreferencesPage({
   );
 }
 
+const fetchDataForExport = async (): Promise<IR<unknown>> =>
+  chrome.storage.sync.get();
+
 function Item({
   categoryName,
   itemName,
@@ -83,4 +111,30 @@ function Item({
 }): JSX.Element {
   const [value, setValue] = usePref(categoryName, itemName as never);
   return definition.renderer({ value, onChange: setValue, definition });
+}
+
+function Import({
+  onCancel: handleCancel,
+}: {
+  readonly onCancel: () => void;
+}): JSX.Element {
+  return (
+    <>
+      <PageHeader label={commonText('preferences')}>
+        <Button.White onClick={handleCancel}>
+          {commonText('cancel')}
+        </Button.White>
+      </PageHeader>
+      <FilePicker
+        acceptedFormats={['.json']}
+        onSelected={(file) =>
+          void fileToText(file)
+            .then((text) => JSON.parse(text))
+            .then(async (data) => chrome.storage.sync.set(data))
+            .then(() => globalThis.location.reload())
+            .catch(console.error)
+        }
+      />
+    </>
+  );
 }

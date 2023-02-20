@@ -116,37 +116,6 @@ export function findLastIndex<T>(
   return -1;
 }
 
-export const downloadFile = async (
-  fileName: string,
-  text: string
-): Promise<void> =>
-  new Promise((resolve) => {
-    const iframe = document.createElement('iframe');
-    iframe.addEventListener('load', () => {
-      if (iframe.contentWindow === null) return;
-      const element = iframe.contentWindow.document.createElement('a');
-      element.setAttribute(
-        'href',
-        `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`
-      );
-      element.setAttribute('download', fileName);
-
-      element.style.display = 'none';
-      iframe.contentWindow.document.body.append(element);
-
-      element.click();
-      globalThis.setTimeout(() => {
-        iframe.remove();
-        resolve();
-      }, 100);
-    });
-    const html = '<body></body>';
-    document.body.append(iframe);
-    iframe.contentWindow?.document.open();
-    iframe.contentWindow?.document.write(html);
-    iframe.contentWindow?.document.close();
-  });
-
 /**
  * Convert an array of [key,value] tuples to a RA<[key, RA<value>]>
  *

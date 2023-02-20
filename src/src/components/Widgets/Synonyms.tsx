@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSafeStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input } from '../Atoms';
@@ -16,7 +16,7 @@ export type Synonym = {
 };
 
 export function Synonyms({ label }: { readonly label: string }): JSX.Element {
-  const [synonyms, setSynonyms] = useSafeStorage('synonyms', []);
+  const [synonyms, setSynonyms] = useStorage('synonyms');
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;
   const calendars = React.useContext(CalendarsContext);

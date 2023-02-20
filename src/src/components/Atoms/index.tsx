@@ -11,11 +11,8 @@ export const H3 = wrap('H3', 'h3', 'm-0 flex items-center gap-2');
 /**
  * Make button match Google Calendar's styling
  */
-const googleButton = `
-  border border-solid p-2 rounded flex items-center gap-2 cursor-pointer
-`;
 
-const button = (name: string, className: string) =>
+const button = (name: string, classList: string) =>
   wrap<
     'button',
     {
@@ -26,7 +23,7 @@ const button = (name: string, className: string) =>
   >(
     name,
     'button',
-    `${googleButton} ${className}`,
+    `${className.googleButton} ${classList}`,
     ({ onClick: handleClick, disabled = false, ...props }) => ({
       type: 'button' as const,
       onClick: handleClick,
@@ -35,12 +32,15 @@ const button = (name: string, className: string) =>
     })
   );
 
+export const className = {
+  googleButton:
+    'border border-solid p-2 rounded flex items-center gap-2 cursor-pointer cursor-pointer',
+  buttonWhite: `bg-white border-[#dadce0] active:bg-[#dadce0]
+    [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
+};
+
 export const Button = {
-  White: button(
-    'Button.White',
-    `bg-white border-[#dadce0] active:bg-[#dadce0]
-      [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`
-  ),
+  White: button('Button.White', className.buttonWhite),
   Blue: button(
     'Button.Blue',
     `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`
@@ -71,7 +71,7 @@ export const Label = {
 export const Input = {
   Number({
     isReadOnly,
-    className,
+    className: classList,
     value,
     onValueChange: handleValueChange,
     ...props
@@ -84,7 +84,7 @@ export const Input = {
     return (
       <input
         {...props}
-        className={`w-full ${googleButton} ${className ?? ''}`}
+        className={`w-full ${className.googleButton} ${classList ?? ''}`}
         readOnly={isReadOnly}
         type="number"
         value={hasValue ? value : ''}
@@ -141,7 +141,7 @@ export const Input = {
   >(
     'Input.Text',
     'input',
-    `w-full ${googleButton}`,
+    `w-full ${className.googleButton}`,
     ({ onValueChange, isReadOnly, ...props }) => ({
       ...props,
       type: 'text',
@@ -163,7 +163,7 @@ export const Input = {
   >(
     'Input.Generic',
     'input',
-    `w-full ${googleButton}`,
+    `w-full ${className.googleButton}`,
     ({ onValueChange, isReadOnly, ...props }) => ({
       ...props,
       onChange(event): void {
@@ -183,7 +183,7 @@ export const Select = wrap<
 >(
   'Select',
   'select',
-  `w-full pr-5 bg-right ${googleButton}`,
+  `w-full pr-5 bg-right ${className.googleButton}`,
   ({ onValueChange: handleValueChange, ...props }) => ({
     ...props,
     onChange(event): void {

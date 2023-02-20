@@ -3,9 +3,9 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import type { GetSet, IR, RA } from '../../utils/types';
 import { filterArray } from '../../utils/types';
-import { downloadFile } from '../../utils/utils';
 import { Button, H3 } from '../Atoms';
 import { usePref } from '../Preferences/usePref';
+import { downloadFile } from '../Molecules/FilePicker';
 
 export function WidgetContainer({
   header,
