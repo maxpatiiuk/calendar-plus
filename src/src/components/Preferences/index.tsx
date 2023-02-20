@@ -1,7 +1,11 @@
 import React from 'react';
 
+import { useBooleanState } from '../../hooks/useBooleanState';
+import { isOverSizeLimit, storageDefinitions } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
+import type { IR, RA } from '../../utils/types';
 import { Button, H3, Widget } from '../Atoms';
+import { downloadFile, FilePicker, fileToText } from '../Molecules/FilePicker';
 import { PageHeader } from '../Molecules/PageHeader';
 import { PreferencesContext } from './Context';
 import type {
@@ -17,10 +21,32 @@ export function PreferencesPage({
   readonly onClose: () => void;
 }): JSX.Element {
   const [_, setPreferences] = React.useContext(PreferencesContext);
+  const [isImporting, handleImport, handleImported] = useBooleanState();
 
-  return (
+  return isImporting ? (
+    <Import onCancel={handleImported} />
+  ) : (
     <>
       <PageHeader label={commonText('preferences')}>
+        <Button.White
+          onClick={(): void =>
+            void fetchDataForExport()
+              .then(async (data) =>
+                downloadFile(
+                  `${commonText(
+                    'calendarPlus'
+                  )} - ${new Date().toLocaleDateString()}.json`,
+                  JSON.stringify(data, null, 4)
+                )
+              )
+              .catch(console.error)
+          }
+        >
+          {commonText('exportAllSettings')}
+        </Button.White>
+        <Button.White onClick={handleImport}>
+          {commonText('exportAllSettings')}
+        </Button.White>
         <Button.White onClick={(): void => setPreferences({})}>
           {commonText('resetToDefault')}
         </Button.White>
@@ -30,7 +56,7 @@ export function PreferencesPage({
         {Object.entries(
           preferenceDefinitions as GenericPreferencesCategories
         ).map(([categoryName, { title, items }]) => (
-          <Widget key={categoryName} className="gap-4 p-4">
+          <Widget className="gap-4 p-4" key={categoryName}>
             <H3>{title}</H3>
             <div className="flex flex-col gap-2">
               {Object.entries(items).map(([itemName, definition]) => {
@@ -72,6 +98,26 @@ export function PreferencesPage({
   );
 }
 
+const fetchDataForExport = async (): Promise<IR<unknown>> =>
+  chrome.storage.sync
+    .get('overSizeStorage')
+    .then(async ({ overSizeStorage = [] }) =>
+      Promise.all(
+        Object.entries(storageDefinitions)
+          // Only export storage that is synced
+          .filter(([_key, { type }]) => type === 'sync')
+          .map(async ([key]) => [
+            key,
+            await chrome.storage[
+              (overSizeStorage as RA<string>).includes(key) ? 'local' : 'sync'
+            ]
+              .get(key)
+              .then((data) => data[key]),
+          ])
+      )
+    )
+    .then((data) => Object.fromEntries(data));
+
 function Item({
   categoryName,
   itemName,
@@ -83,4 +129,41 @@ function Item({
 }): JSX.Element {
   const [value, setValue] = usePref(categoryName, itemName as never);
   return definition.renderer({ value, onChange: setValue, definition });
+}
+
+function Import({
+  onCancel: handleCancel,
+}: {
+  readonly onCancel: () => void;
+}): JSX.Element {
+  return (
+    <>
+      <PageHeader label={commonText('preferences')}>
+        <Button.White onClick={handleCancel}>
+          {commonText('cancel')}
+        </Button.White>
+      </PageHeader>
+      <FilePicker
+        acceptedFormats={['.json']}
+        onSelected={(file) =>
+          // FIXME: update the "overSizeStorage" entry
+          void fileToText(file)
+            .then((text) => JSON.parse(text))
+            .then((data) =>
+              Promise.all(
+                Object.entries(data).map(async ([key, value]) => {
+                  const isOverLimit = isOverSizeLimit(key, value);
+                  await chrome.storage[isOverLimit ? 'local' : 'sync'].set({
+                    [key]: value,
+                  });
+                  return isOverLimit;
+                })
+              )
+            )
+            .then(() => globalThis.location.reload())
+            .catch(console.error)
+        }
+      />
+    </>
+  );
 }

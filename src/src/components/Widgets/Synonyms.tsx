@@ -16,7 +16,7 @@ export type Synonym = {
 };
 
 export function Synonyms({ label }: { readonly label: string }): JSX.Element {
-  const [synonyms, setSynonyms] = useSafeStorage('synonyms', []);
+  const [synonyms, setSynonyms] = useSafeStorage('synonyms');
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;
   const calendars = React.useContext(CalendarsContext);

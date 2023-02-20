@@ -12,12 +12,7 @@ import { usePref } from '../Preferences/usePref';
 import { usePageListener } from './PageListener';
 
 export function GhostEvents(): null {
-  const [ghostEvents = [], setGhostEvents] = useSafeStorage(
-    'ghostEvents',
-    [],
-    'sync',
-    '2'
-  );
+  const [ghostEvents = [], setGhostEvents] = useSafeStorage('ghostEvents', '2');
 
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
   const [ghostEventOpacity] = usePref('feature', 'ghostEventOpacity');

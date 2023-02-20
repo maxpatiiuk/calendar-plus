@@ -9,7 +9,7 @@ export function VersionsContextProvider({
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const value = useSimpleStorage('storageVersions', {});
+  const value = useSimpleStorage('storageVersions');
   return (
     <VersionsContext.Provider value={value}>
       {children}
@@ -18,7 +18,7 @@ export function VersionsContextProvider({
 }
 
 export const VersionsContext = React.createContext<
-  GetSet<StorageDefinitions['storageVersions'] | undefined>
+  GetSet<StorageDefinitions['storageVersions']['defaultValue'] | undefined>
 >([
   {},
   () => {

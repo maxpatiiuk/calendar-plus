@@ -1,43 +1,84 @@
 import React from 'react';
 
+import type { TimeChartMode } from '../components/Charts/TimeChart';
 import { VersionsContext } from '../components/Contexts/VersionsContext';
-import type { WidgetDefinition } from '../components/Dashboard';
 import type { Goal } from '../components/Goals/Widget';
 import type { UserPreferences } from '../components/Preferences/helpers';
+import type { Synonym } from '../components/Widgets/Synonyms';
 import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
 import { f } from '../utils/functools';
-import type { GetSet, RA, RR } from '../utils/types';
-import { setDevelopmentGlobal } from '../utils/types';
+import type { GetSet, IR, RA } from '../utils/types';
+import { ensure, setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
-import { Synonym } from '../components/Widgets/Synonyms';
-import { TimeChartMode } from '../components/Charts/TimeChart';
+import { defaultCustomViewSize } from '../components/Contexts/CurrentViewContext';
+import { defaultLayout } from '../components/Dashboard/definitions';
 
-export type StorageDefinitions = {
-  readonly layout: RA<WidgetDefinition>;
-  readonly goals: RA<Goal>;
-  readonly preferences: UserPreferences;
-  readonly ghostEvents: RA<string>;
-  readonly virtualCalendars: RA<VirtualCalendar>;
-  readonly overSizeStorage: RA<string>;
-  readonly storageVersions: Partial<RR<keyof StorageDefinitions, string>>;
-  readonly customViewSize: number;
-  readonly timeChartMode: TimeChartMode;
-  readonly synonyms: RA<Synonym>;
-  readonly visibleCalendars: RA<string>;
+type StorageItem<T> = {
+  readonly type: 'local' | 'sync';
+  readonly defaultValue: T;
 };
+
+export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
+  layout: {
+    type: 'sync',
+    defaultValue: defaultLayout,
+  },
+  goals: {
+    type: 'sync',
+    defaultValue: [] as RA<Goal>,
+  },
+  preferences: {
+    type: 'sync',
+    defaultValue: {} as UserPreferences,
+  },
+  ghostEvents: {
+    type: 'sync',
+    defaultValue: [] as RA<string>,
+  },
+  virtualCalendars: {
+    type: 'sync',
+    defaultValue: [] as RA<VirtualCalendar>,
+  },
+  overSizeStorage: {
+    type: 'sync',
+    defaultValue: [] as RA<string>,
+  },
+  storageVersions: {
+    type: 'sync',
+    // Keys are names of storage items
+    defaultValue: {} as Partial<IR<string>>,
+  },
+  customViewSize: {
+    type: 'sync',
+    defaultValue: defaultCustomViewSize,
+  },
+  timeChartMode: {
+    type: 'sync',
+    defaultValue: 'total' as TimeChartMode,
+  },
+  synonyms: {
+    type: 'sync',
+    defaultValue: [] as RA<Synonym>,
+  },
+  visibleCalendars: {
+    type: 'local',
+    defaultValue: [] as RA<string>,
+  },
+} as const);
+
+export type StorageDefinitions = typeof storageDefinitions;
 
 /**
  * A wrapper for extensions Storage API (with checks for value size being over
- * quota). If value size is over qouta, it automatically switches to using
+ * quota). If value size is over quota, it automatically switches to using
  * local storage.
  */
 export function useSafeStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
-  defaultValue: StorageDefinitions[NAME],
-  type: 'local' | 'sync' = 'sync',
   version?: string
-): GetSet<StorageDefinitions[NAME] | undefined> {
+): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
   const [isOverSize, setIsOverSize] = useOverSize(name);
+  const type = storageDefinitions[name].type;
   const resolvedType = isOverSize ? 'local' : type;
 
   /**
@@ -52,14 +93,9 @@ export function useSafeStorage<NAME extends keyof StorageDefinitions>(
     previousType.current = type;
   }, [name, type]);
 
-  const [value, rawUpdateValue] = useStorage(
-    name,
-    defaultValue,
-    resolvedType,
-    version
-  );
+  const [value, rawUpdateValue] = useStorage(name, resolvedType, version);
   const updateValue = React.useCallback(
-    (value: StorageDefinitions[NAME] | undefined) => {
+    (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
       const isNewlyOverSize = type === 'sync' && isOverSizeLimit(name, value);
       let updatedType: 'local' | 'sync' =
         resolvedType === 'local' || isNewlyOverSize ? 'local' : 'sync';
@@ -81,7 +117,7 @@ export function useSafeStorage<NAME extends keyof StorageDefinitions>(
   return React.useMemo(() => [value, updateValue], [value, updateValue]);
 }
 
-function isOverSizeLimit(name: string, value: unknown): boolean {
+export function isOverSizeLimit(name: string, value: unknown): boolean {
   if (value === undefined) return false;
   const size = JSON.stringify({ [name]: value }).length;
   return size > chrome.storage.sync.QUOTA_BYTES_PER_ITEM;
@@ -93,26 +129,26 @@ function isOverSizeLimit(name: string, value: unknown): boolean {
  */
 export function useStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
-  defaultValue: StorageDefinitions[NAME],
-  type: 'local' | 'sync' = 'sync',
+  type: 'local' | 'sync' = storageDefinitions[name].type,
   version?: string
 ): readonly [
-  StorageDefinitions[NAME] | undefined,
+  StorageDefinitions[NAME]['defaultValue'] | undefined,
   (
-    newValue: StorageDefinitions[NAME] | undefined,
+    newValue: StorageDefinitions[NAME]['defaultValue'] | undefined,
     typeOverride?: 'local' | 'sync'
   ) => void
 ] {
-  const [value, setValue] = useSimpleStorage(name, defaultValue, type);
+  const [value, setValue] = useSimpleStorage(name, type);
 
   // Reset to default if cache is outdated
   const [cacheVersions, setCacheVersions] = React.useContext(VersionsContext);
   React.useLayoutEffect(() => {
+    const defaultValue = storageDefinitions[name].defaultValue;
     if (cacheVersions === undefined || cacheVersions[name] === version) return;
     console.log('Cache version mismatch detected', { name, cacheVersions });
     if (cacheVersions[name] === undefined) setValue(defaultValue);
     setCacheVersions({ ...cacheVersions, [name]: version });
-  }, [name, cacheVersions, version, setCacheVersions, defaultValue, setValue]);
+  }, [name, cacheVersions, version, setCacheVersions, setValue]);
 
   return [value, setValue];
 }
@@ -123,23 +159,25 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
  */
 export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
-  defaultValue: StorageDefinitions[NAME],
-  type: 'local' | 'sync' = 'sync'
+  type: 'local' | 'sync' = storageDefinitions[name].type
 ): readonly [
-  StorageDefinitions[NAME] | undefined,
+  StorageDefinitions[NAME]['defaultValue'] | undefined,
   (
-    newValue: StorageDefinitions[NAME] | undefined,
+    newValue: StorageDefinitions[NAME]['defaultValue'] | undefined,
     typeOverride?: 'local' | 'sync'
   ) => void
 ] {
-  const [value, setValue] = useAsyncState<StorageDefinitions[NAME]>(
+  const [value, setValue] = useAsyncState<
+    StorageDefinitions[NAME]['defaultValue']
+  >(
     React.useCallback(
       async () =>
         chrome.storage[type].get(name).then((storage) => {
           const value = storage[name];
           setDevelopmentGlobal(`_${name}`, value);
           return (
-            (value as StorageDefinitions[NAME] | undefined) ?? defaultValue
+            (value as StorageDefinitions[NAME]['defaultValue'] | undefined) ??
+            storageDefinitions[name].defaultValue
           );
         }),
       [name, type]
@@ -149,7 +187,7 @@ export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
 
   const updateValue = React.useCallback(
     (
-      value: StorageDefinitions[NAME] | undefined,
+      value: StorageDefinitions[NAME]['defaultValue'] | undefined,
       typeOverride: 'local' | 'sync' = type
     ) => {
       chrome.storage[typeOverride]
@@ -170,11 +208,7 @@ export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
  * Stores and indicator of whether the storage is over size or no
  */
 function useOverSize(name: string): GetSet<boolean> {
-  const [overSize = [], setOverSize] = useSimpleStorage(
-    'overSizeStorage',
-    [],
-    'local'
-  );
+  const [overSize = [], setOverSize] = useSimpleStorage('overSizeStorage');
   return [
     overSize.includes(name),
     React.useCallback(

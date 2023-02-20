@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { useSimpleStorage } from '../../hooks/useStorage';
+import { storageDefinitions, useSimpleStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
 import { randomColor } from '../../utils/colors';
 import { listen } from '../../utils/events';
@@ -20,8 +20,6 @@ export type CalendarListEntry = RawCalendarListEntry & {
   readonly backgroundColor: string;
 };
 
-const emptyObject = [] as const;
-
 export function CalendarsSpy({
   children,
 }: {
@@ -31,13 +29,11 @@ export function CalendarsSpy({
    * Cache the list of visible calendars so that we can use it if side menu
    * is collapsed
    */
-  const [visibleCalendars, setVisibleCalendars] = useSimpleStorage(
-    'visibleCalendars',
-    emptyObject,
-    'local'
-  );
+  const [visibleCalendars, setVisibleCalendars] =
+    useSimpleStorage('visibleCalendars');
 
-  const isCacheEmpty = visibleCalendars === emptyObject;
+  const isCacheEmpty =
+    visibleCalendars === storageDefinitions.visibleCalendars.defaultValue;
 
   const { token } = React.useContext(AuthContext);
   const isAuthenticated = typeof token === 'string';

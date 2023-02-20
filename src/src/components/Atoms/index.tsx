@@ -35,12 +35,13 @@ const button = (name: string, className: string) =>
     })
   );
 
+export const className = {
+  buttonWhite: `bg-white border-[#dadce0] active:bg-[#dadce0]
+    [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
+};
+
 export const Button = {
-  White: button(
-    'Button.White',
-    `bg-white border-[#dadce0] active:bg-[#dadce0]
-      [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`
-  ),
+  White: button('Button.White', className.buttonWhite),
   Blue: button(
     'Button.Blue',
     `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`

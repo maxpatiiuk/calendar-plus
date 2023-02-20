@@ -9,7 +9,7 @@ export function PreferencesProvider({
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const preferences = useSimpleStorage('preferences', {});
+  const preferences = useSimpleStorage('preferences');
   const nonNullPreferences =
     preferences[0] === undefined
       ? ([{}, () => {}] as const)

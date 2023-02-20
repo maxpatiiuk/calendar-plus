@@ -63,7 +63,7 @@ function useCurrentTracker(
   setCurrentView: (newCurrentView: CurrentView | undefined) => void
 ) {
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
-    useSimpleStorage('customViewSize', defaultCustomViewSize);
+    useSimpleStorage('customViewSize');
   React.useEffect(() => {
     let lastPath = '';
 

@@ -44,7 +44,7 @@ export function Dashboard({
 }): JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
 
-  const [layout = [], setLayout] = useSimpleStorage('layout', defaultLayout);
+  const [layout = [], setLayout] = useSimpleStorage('layout');
   const originalLayout = React.useRef<RA<WidgetDefinition>>([]);
   React.useEffect(() => {
     if (isEditing) originalLayout.current = layout;

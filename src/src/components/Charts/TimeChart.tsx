@@ -24,7 +24,7 @@ export function TimeChart({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const [mode, setMode] = useSimpleStorage('timeChartMode', 'total');
+  const [mode, setMode] = useSimpleStorage('timeChartMode');
 
   const calendars = React.useContext(CalendarsContext)!;
   const times = React.useMemo(
@@ -341,7 +341,7 @@ function VirtualCalendarRow({
   readonly backgroundColor: string;
   readonly row: IR<DayHours>;
 }): JSX.Element {
-  const [mode = 'total'] = useSimpleStorage('timeChartMode', 'total');
+  const [mode = 'total'] = useSimpleStorage('timeChartMode');
   const times = React.useMemo(() => getRowData(row, mode), [row, mode]);
   return (
     <Row

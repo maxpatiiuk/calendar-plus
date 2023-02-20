@@ -46,10 +46,8 @@ export function VirtualCalendars({
   readonly label: string;
 }): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [virtualCalendars, setVirtualCalendars] = useSafeStorage(
-    'virtualCalendars',
-    []
-  );
+  const [virtualCalendars, setVirtualCalendars] =
+    useSafeStorage('virtualCalendars');
   const virtualCalendarsRef = React.useRef(virtualCalendars);
 
   // Don't update the shared state until the user is done editing.

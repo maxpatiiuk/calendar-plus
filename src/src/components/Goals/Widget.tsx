@@ -27,7 +27,7 @@ export function GoalsWidget({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const [goals, setGoals] = useSimpleStorage('goals', []);
+  const [goals, setGoals] = useSimpleStorage('goals');
   const calendars = React.useContext(CalendarsContext);
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
