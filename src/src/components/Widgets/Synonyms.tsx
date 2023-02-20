@@ -20,8 +20,27 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;
   const calendars = React.useContext(CalendarsContext);
+
+  const getJsonExport = () =>
+    synonyms?.map(({ calendar, synonym }) => ({
+      calendar:
+        calendars?.find(({ id }) => id === calendar)?.summary ?? calendar,
+      synonym,
+    })) ?? [];
+
+  const getTsvExport = () =>
+    getJsonExport().map(({ calendar, synonym }) => ({
+      [commonText('calendar')]: calendar,
+      [commonText('shortName')]: synonym,
+    })) ?? [];
+
   return (
-    <WidgetContainer editing={editing} header={label}>
+    <WidgetContainer
+      editing={editing}
+      getJsonExport={getJsonExport}
+      getTsvExport={getTsvExport}
+      header={label}
+    >
       {Array.isArray(calendars) && Array.isArray(synonyms) ? (
         <table className="text-left">
           <thead>

@@ -1,4 +1,3 @@
-import _default from 'chart.js/dist/plugins/plugin.tooltip';
 import React from 'react';
 
 import { useSimpleStorage } from '../../hooks/useStorage';
@@ -36,10 +35,46 @@ export function TimeChart({
     [durations, mode]
   );
 
+  const doJsonExport = () =>
+    Object.entries(times ?? {}).map(([calendarId, data]) => ({
+      ...data,
+      calendar:
+        calendars?.find(({ id }) => id === calendarId)?.summary ?? calendarId,
+      virtualCalendars: Object.fromEntries(
+        Object.entries(durations?.[calendarId] ?? {}).map(
+          ([virtualCalendar, durations]) => [
+            virtualCalendar,
+            getRowData(durations, mode ?? 'total'),
+          ]
+        )
+      ),
+    }));
+
+  function doTsvExport() {
+    const data = doJsonExport();
+    return data
+      .flatMap(({ calendar, virtualCalendars, ...data }) => [
+        { calendar, virtualCalendar: undefined, ...data },
+        ...Object.entries(virtualCalendars).map(([virtualCalendar, data]) => ({
+          calendar,
+          virtualCalendar,
+          ...data,
+        })),
+      ])
+      .map(({ calendar, virtualCalendar, total, hourly }) => ({
+        [commonText('calendar')]: calendar,
+        [commonText('virtualCalendar')]: virtualCalendar,
+        [commonText('totalHours')]: total,
+        ...Object.fromEntries(
+          hourly.map((duration, index) => [formatHour(index, 'long'), duration])
+        ),
+      }));
+  }
+
   return (
     <WidgetContainer
       buttons={
-        <div className="flex gap-2">
+        <>
           <span className="sr-only">{commonText('viewMode')}</span>
           <Button.White
             aria-pressed={mode === 'total' ? true : undefined}
@@ -55,8 +90,11 @@ export function TimeChart({
           >
             {commonText('averageMinutes')}
           </Button.White>
-        </div>
+          <span className="-ml-2 flex-1" />
+        </>
       }
+      getJsonExport={doJsonExport}
+      getTsvExport={doTsvExport}
       header={label}
     >
       {durations === undefined || times === undefined || mode === undefined ? (
@@ -76,8 +114,7 @@ export function TimeChart({
               </th>
               {Array.from({ length: DAY / HOUR }, (_, index) => (
                 <th className="justify-center" key={index} scope="col">
-                  {/* FEATURE: display AM/PM when appropriate */}
-                  {index}
+                  {formatHour(index, 'short')}
                 </th>
               ))}
               <th className={`justify-center ${darkened}`} scope="col">
@@ -104,6 +141,12 @@ export function TimeChart({
     </WidgetContainer>
   );
 }
+
+// FEATURE: display AM/PM when appropriate
+const formatHour = (hour: number, format: 'long' | 'short'): string =>
+  format === 'short'
+    ? hour.toString()
+    : `${hour.toString().padStart(2, '0')}:00`;
 
 /**
  * Sum durations for the current period

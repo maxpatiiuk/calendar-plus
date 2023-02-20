@@ -2,6 +2,7 @@
  * Definitions for User Interface preferences (scoped to a SpecifyUser)
  */
 
+import { commonText } from '../../localization/common';
 import { preferencesText } from '../../localization/preferences';
 import type { IR } from '../../utils/types';
 import { ensure } from '../../utils/types';
@@ -105,6 +106,21 @@ export const preferenceDefinitions = {
         description: preferencesText('lessInvasiveDialogDescription'),
         renderer: BooleanPref,
         defaultValue: false,
+      }),
+    },
+  },
+  export: {
+    title: commonText('dataExport'),
+    items: {
+      format: defineItem<'csv' | 'json' | 'tsv'>({
+        title: preferencesText('ghostEvent'),
+        description: preferencesText('ghostEventDescription'),
+        renderer: pickListPref<'csv' | 'json' | 'tsv'>([
+          { value: 'json', title: preferencesText('json') },
+          { value: 'tsv', title: preferencesText('tsv') },
+          { value: 'csv', title: preferencesText('csv') },
+        ]),
+        defaultValue: 'json' as const,
       }),
     },
   },

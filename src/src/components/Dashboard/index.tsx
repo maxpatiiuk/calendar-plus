@@ -21,12 +21,9 @@ export type WidgetDefinition = {
   readonly colSpan: WidgetGridColumnSizes;
   readonly rowSpan: WidgetGridColumnSizes;
   readonly definition:
-    | State<'DataExport'>
     | State<'DoughnutChart'>
     | State<'GoalsWidget'>
-    | State<'QuickActions'>
     | State<'StackedChart'>
-    | State<'Suggestions'>
     | State<'VirtualCalendars'>
     | State<'Synonyms'>
     | State<'TimeChart'>;

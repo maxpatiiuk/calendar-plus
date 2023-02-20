@@ -1,24 +1,50 @@
 import React from 'react';
-import { GetSet } from '../../utils/types';
+
 import { commonText } from '../../localization/common';
+import type { GetSet, IR, RA } from '../../utils/types';
+import { filterArray } from '../../utils/types';
+import { downloadFile } from '../../utils/utils';
 import { Button, H3 } from '../Atoms';
+import { usePref } from '../Preferences/usePref';
 
 export function WidgetContainer({
   header,
   buttons = <span className="-ml-2 flex-1" />,
   children,
   editing,
+  getJsonExport,
+  getTsvExport,
 }: {
   readonly header: string;
   readonly buttons?: JSX.Element;
   readonly children: React.ReactNode;
   readonly editing?: GetSet<boolean>;
+  readonly getJsonExport: (() => RA<unknown>) | undefined;
+  readonly getTsvExport:
+    | (() => RA<IR<number | string | undefined>>)
+    | undefined;
 }): JSX.Element {
+  const [exportFormat] = usePref('export', 'format');
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex gap-4">
-        <H3>{header}</H3>
+      <div className="flex gap-2">
+        <H3 className="pr-2">{header}</H3>
         {buttons}
+        {typeof getJsonExport === 'function' &&
+        typeof getTsvExport === 'function' ? (
+          <Button.White
+            onClick={(): void =>
+              void downloadFile(
+                `${header}.${exportFormat}`,
+                exportFormat === 'json'
+                  ? JSON.stringify(getJsonExport(), null, 4)
+                  : objectToTsv(getTsvExport(), exportFormat)
+              ).catch(console.error)
+            }
+          >
+            {commonText('export')}
+          </Button.White>
+        ) : undefined}
         {editing !== undefined && (
           <Button.White
             aria-pressed={editing[0] ? true : undefined}
@@ -31,4 +57,19 @@ export function WidgetContainer({
       <div className="flex flex-1 flex-col gap-2">{children}</div>
     </div>
   );
+}
+
+function objectToTsv(
+  data: RA<IR<number | string | undefined>>,
+  format: 'csv' | 'tsv'
+): string {
+  const delimiter = format === 'csv' ? ',' : '\t';
+  const keys = filterArray(
+    Object.entries(data[0] ?? {}).map(([key, value]) =>
+      typeof value === 'object' ? undefined : key
+    )
+  );
+  return [keys, ...data.map((values) => keys.map((key) => values[key] ?? ''))]
+    .map((row) => row.join(delimiter))
+    .join('\n');
 }

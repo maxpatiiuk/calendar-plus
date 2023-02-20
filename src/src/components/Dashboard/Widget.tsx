@@ -6,13 +6,10 @@ import { Button } from '../Atoms';
 import { icons } from '../Atoms/Icon';
 import { DoughnutChart } from '../Charts/DoughnutChart';
 import { StackedChart } from '../Charts/StackedChart';
+import { TimeChart } from '../Charts/TimeChart';
 import type { EventsStore } from '../EventsStore';
 import { GoalsWidget } from '../Goals/Widget';
-import { DataExport } from '../Widgets/DataExport';
-import { QuickActions } from '../Widgets/QuickActions';
-import { Suggestions } from '../Widgets/Suggestions';
 import { Synonyms } from '../Widgets/Synonyms';
-import { TimeChart } from '../Charts/TimeChart';
 import { Unknown } from '../Widgets/Unknown';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 import type { WidgetDefinition } from './index';
@@ -20,10 +17,7 @@ import type { WidgetDefinition } from './index';
 const widgets = {
   DoughnutChart,
   StackedChart,
-  DataExport,
   GoalsWidget,
-  QuickActions,
-  Suggestions,
   VirtualCalendars,
   Synonyms,
   Unknown,
@@ -33,10 +27,7 @@ const widgets = {
 export const widgetLabels: RR<keyof typeof widgets, string> = {
   DoughnutChart: commonText('doughnutChart'),
   StackedChart: commonText('stackedChart'),
-  DataExport: commonText('dataExport'),
   GoalsWidget: commonText('goals'),
-  QuickActions: commonText('quickActions'),
-  Suggestions: commonText('suggestions'),
   VirtualCalendars: commonText('virtualCalendars'),
   Synonyms: commonText('shortNames'),
   Unknown: commonText('unknownWidget'),

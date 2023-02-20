@@ -68,9 +68,29 @@ export function VirtualCalendars({
     [isEditing, localCalendars, setVirtualCalendars]
   );
 
+  const getJsonExport = () =>
+    virtualCalendars?.map(({ calendarId, ...rest }) => ({
+      calendar:
+        calendars.find(({ id }) => id === calendarId)?.summary ?? calendarId,
+      ...rest,
+    })) ?? [];
+
+  const getTsvExport = () =>
+    getJsonExport().map(({ calendar, rule, value, virtualCalendar }) => ({
+      [commonText('sourceCalendar')]: calendar,
+      [commonText('matchRule')]: ruleLabel[rule],
+      [commonText('value')]: value,
+      [commonText('category')]: virtualCalendar,
+    }));
+
   const calendars = React.useContext(CalendarsContext)!;
   return (
-    <WidgetContainer editing={[isEditing, setIsEditing]} header={label}>
+    <WidgetContainer
+      editing={[isEditing, setIsEditing]}
+      getJsonExport={getJsonExport}
+      getTsvExport={getTsvExport}
+      header={label}
+    >
       {Array.isArray(virtualCalendars) ? (
         !isEditing && virtualCalendars.length === 0 ? (
           commonText('noVirtualCalendars')

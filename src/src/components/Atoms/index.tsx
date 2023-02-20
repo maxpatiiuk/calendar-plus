@@ -6,7 +6,7 @@ import type { TagProps } from './wrapper';
 import { wrap } from './wrapper';
 
 export const H2 = wrap('H2', 'h2', 'm-0 flex items-center gap-2');
-export const H3 = wrap('H2', 'h2', 'm-0 flex items-center gap-2');
+export const H3 = wrap('H3', 'h3', 'm-0 flex items-center gap-2');
 
 /**
  * Make button match Google Calendar's styling

@@ -2,11 +2,11 @@
  * Various tools to help internationalize the application
  */
 
-import { capitalize } from '../../utils/utils';
 import { commonText } from '../../localization/common';
 import { LANGUAGE } from '../../localization/utils';
 import type { RA } from '../../utils/types';
-import { CurrentView } from '../Contexts/CurrentViewContext';
+import { capitalize } from '../../utils/utils';
+import type { SupportedView } from '../Contexts/CurrentViewContext';
 
 /* This is an incomplete definition. For complete, see MDN Docs */
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -182,7 +182,7 @@ const dateFormatters = {
   }),
 } as const;
 
-export const formatLabel = (date: Date, { view }: CurrentView): string =>
+export const formatDateLabel = (date: Date, view: SupportedView): string =>
   dateFormatters[view].format(date);
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
