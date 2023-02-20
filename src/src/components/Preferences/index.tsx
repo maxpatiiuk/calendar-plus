@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { useBooleanState } from '../../hooks/useBooleanState';
-import { isOverSizeLimit, storageDefinitions } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
-import type { IR, RA } from '../../utils/types';
+import type { IR } from '../../utils/types';
 import { Button, H3, Widget } from '../Atoms';
 import { downloadFile, FilePicker, fileToText } from '../Molecules/FilePicker';
 import { PageHeader } from '../Molecules/PageHeader';
@@ -45,7 +44,7 @@ export function PreferencesPage({
           {commonText('exportAllSettings')}
         </Button.White>
         <Button.White onClick={handleImport}>
-          {commonText('exportAllSettings')}
+          {commonText('importAllSettings')}
         </Button.White>
         <Button.White onClick={(): void => setPreferences({})}>
           {commonText('resetToDefault')}
@@ -99,24 +98,7 @@ export function PreferencesPage({
 }
 
 const fetchDataForExport = async (): Promise<IR<unknown>> =>
-  chrome.storage.sync
-    .get('overSizeStorage')
-    .then(async ({ overSizeStorage = [] }) =>
-      Promise.all(
-        Object.entries(storageDefinitions)
-          // Only export storage that is synced
-          .filter(([_key, { type }]) => type === 'sync')
-          .map(async ([key]) => [
-            key,
-            await chrome.storage[
-              (overSizeStorage as RA<string>).includes(key) ? 'local' : 'sync'
-            ]
-              .get(key)
-              .then((data) => data[key]),
-          ])
-      )
-    )
-    .then((data) => Object.fromEntries(data));
+  chrome.storage.sync.get();
 
 function Item({
   categoryName,
@@ -146,20 +128,9 @@ function Import({
       <FilePicker
         acceptedFormats={['.json']}
         onSelected={(file) =>
-          // FIXME: update the "overSizeStorage" entry
           void fileToText(file)
             .then((text) => JSON.parse(text))
-            .then((data) =>
-              Promise.all(
-                Object.entries(data).map(async ([key, value]) => {
-                  const isOverLimit = isOverSizeLimit(key, value);
-                  await chrome.storage[isOverLimit ? 'local' : 'sync'].set({
-                    [key]: value,
-                  });
-                  return isOverLimit;
-                })
-              )
-            )
+            .then(async (data) => chrome.storage.sync.set(data))
             .then(() => globalThis.location.reload())
             .catch(console.error)
         }

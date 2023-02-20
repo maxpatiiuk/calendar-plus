@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { useBooleanState } from '../../hooks/useBooleanState';
-import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
 import { className } from '../Atoms';
+import { commonText } from '../../localization/common';
 
 export function FilePicker({
   onSelected: handleSelected,
@@ -83,24 +83,20 @@ export function FilePicker({
       />
       <span
         className={`
-          align-center flex h-44 w-full justify-center text-center normal-case
+          flex h-44 w-full items-center justify-center text-center
           ${className.buttonWhite}
-          ${
-            isDragging
-              ? 'bg-white ring ring-brand-200 dark:bg-neutral-700 dark:ring-brand-400'
-              : ''
-          }
+          ${isDragging ? 'bg-white ring ring-blue-200' : ''}
           ${isFocused ? '!ring ring-blue-500' : ''}
         `}
         ref={filePickerButton}
       >
         <span>
-          {commonText.filePickerMessage()}
+          {commonText('filePickerMessage')}
           {typeof fileName === 'string' && (
             <>
               <br />
               <br />
-              <b>{`${commonText.selectedFileName()}: ${fileName}`}</b>
+              <b>{`${commonText('selectedFileName')}: ${fileName}`}</b>
             </>
           )}
         </span>
