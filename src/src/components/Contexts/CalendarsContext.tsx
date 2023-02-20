@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { storageDefinitions, useSimpleStorage } from '../../hooks/useStorage';
+import { storageDefinitions, useStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
 import { randomColor } from '../../utils/colors';
 import { listen } from '../../utils/events';
@@ -30,7 +30,7 @@ export function CalendarsSpy({
    * is collapsed
    */
   const [visibleCalendars, setVisibleCalendars] =
-    useSimpleStorage('visibleCalendars');
+    useStorage('visibleCalendars');
 
   const isCacheEmpty =
     visibleCalendars === storageDefinitions.visibleCalendars.defaultValue;

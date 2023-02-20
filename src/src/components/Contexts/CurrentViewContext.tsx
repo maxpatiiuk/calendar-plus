@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSimpleStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { f } from '../../utils/functools';
 import type { GetSet } from '../../utils/types';
 import { listenEvent } from '../Background/messages';
@@ -63,7 +63,7 @@ function useCurrentTracker(
   setCurrentView: (newCurrentView: CurrentView | undefined) => void
 ) {
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
-    useSimpleStorage('customViewSize');
+    useStorage('customViewSize');
   React.useEffect(() => {
     let lastPath = '';
 

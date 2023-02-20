@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSimpleStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { IR, RA } from '../../utils/types';
 import { Button } from '../Atoms';
@@ -24,7 +24,7 @@ export function TimeChart({
   readonly label: string;
   readonly durations: EventsStore | undefined;
 }): JSX.Element {
-  const [mode, setMode] = useSimpleStorage('timeChartMode');
+  const [mode, setMode] = useStorage('timeChartMode');
 
   const calendars = React.useContext(CalendarsContext)!;
   const times = React.useMemo(
@@ -341,7 +341,7 @@ function VirtualCalendarRow({
   readonly backgroundColor: string;
   readonly row: IR<DayHours>;
 }): JSX.Element {
-  const [mode = 'total'] = useSimpleStorage('timeChartMode');
+  const [mode = 'total'] = useStorage('timeChartMode');
   const times = React.useMemo(() => getRowData(row, mode), [row, mode]);
   return (
     <Row

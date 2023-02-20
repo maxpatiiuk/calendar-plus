@@ -1,17 +1,16 @@
 import React from 'react';
 
 import type { TimeChartMode } from '../components/Charts/TimeChart';
+import { defaultCustomViewSize } from '../components/Contexts/CurrentViewContext';
 import { VersionsContext } from '../components/Contexts/VersionsContext';
+import { defaultLayout } from '../components/Dashboard/definitions';
 import type { Goal } from '../components/Goals/Widget';
 import type { UserPreferences } from '../components/Preferences/helpers';
 import type { Synonym } from '../components/Widgets/Synonyms';
 import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
-import { f } from '../utils/functools';
-import type { GetSet, IR, RA } from '../utils/types';
+import type { GetSet, IR, R, RA } from '../utils/types';
 import { ensure, setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
-import { defaultCustomViewSize } from '../components/Contexts/CurrentViewContext';
-import { defaultLayout } from '../components/Dashboard/definitions';
 
 type StorageItem<T> = {
   readonly type: 'local' | 'sync';
@@ -39,10 +38,6 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
     type: 'sync',
     defaultValue: [] as RA<VirtualCalendar>,
   },
-  overSizeStorage: {
-    type: 'sync',
-    defaultValue: [] as RA<string>,
-  },
   storageVersions: {
     type: 'sync',
     // Keys are names of storage items
@@ -50,7 +45,7 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   },
   customViewSize: {
     type: 'sync',
-    defaultValue: defaultCustomViewSize,
+    defaultValue: defaultCustomViewSize as number,
   },
   timeChartMode: {
     type: 'sync',
@@ -69,76 +64,14 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
 export type StorageDefinitions = typeof storageDefinitions;
 
 /**
- * A wrapper for extensions Storage API (with checks for value size being over
- * quota). If value size is over quota, it automatically switches to using
- * local storage.
+ * A wrapper for extensions Storage API with checks for cache version.
+ * If cache is found to be outdated, it is removed
  */
-export function useSafeStorage<NAME extends keyof StorageDefinitions>(
+export function useVersionedStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
   version?: string
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
-  const [isOverSize, setIsOverSize] = useOverSize(name);
-  const type = storageDefinitions[name].type;
-  const resolvedType = isOverSize ? 'local' : type;
-
-  /**
-   * If storage is switched from local to sync, remove the value from local.
-   * Don't do the same for sync so as to leave the previous value available
-   * for other devices.
-   */
-  const previousType = React.useRef(type);
-  React.useEffect(() => {
-    if (type === 'sync' && previousType.current === 'local')
-      chrome.storage.sync.remove(name).catch(console.error);
-    previousType.current = type;
-  }, [name, type]);
-
-  const [value, rawUpdateValue] = useStorage(name, resolvedType, version);
-  const updateValue = React.useCallback(
-    (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
-      const isNewlyOverSize = type === 'sync' && isOverSizeLimit(name, value);
-      let updatedType: 'local' | 'sync' =
-        resolvedType === 'local' || isNewlyOverSize ? 'local' : 'sync';
-      if (resolvedType === 'sync' && isNewlyOverSize) {
-        setIsOverSize(true);
-        updatedType = 'local';
-      } else if (
-        resolvedType === 'local' &&
-        type === 'sync' &&
-        !isNewlyOverSize
-      ) {
-        setIsOverSize(false);
-        updatedType = 'sync';
-      }
-      rawUpdateValue(value, updatedType);
-    },
-    [resolvedType, type, rawUpdateValue]
-  );
-  return React.useMemo(() => [value, updateValue], [value, updateValue]);
-}
-
-export function isOverSizeLimit(name: string, value: unknown): boolean {
-  if (value === undefined) return false;
-  const size = JSON.stringify({ [name]: value }).length;
-  return size > chrome.storage.sync.QUOTA_BYTES_PER_ITEM;
-}
-
-/**
- * A wrapper for extensions Storage API (without checking for quota size)
- * with checks for cache version. If cache is found to be outdated, it is removed
- */
-export function useStorage<NAME extends keyof StorageDefinitions>(
-  name: NAME,
-  type: 'local' | 'sync' = storageDefinitions[name].type,
-  version?: string
-): readonly [
-  StorageDefinitions[NAME]['defaultValue'] | undefined,
-  (
-    newValue: StorageDefinitions[NAME]['defaultValue'] | undefined,
-    typeOverride?: 'local' | 'sync'
-  ) => void
-] {
-  const [value, setValue] = useSimpleStorage(name, type);
+  const [value, setValue] = useStorage(name);
 
   // Reset to default if cache is outdated
   const [cacheVersions, setCacheVersions] = React.useContext(VersionsContext);
@@ -154,30 +87,28 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
 }
 
 /**
- * A wrapper for extensions Storage API (without checking for quota size
- * or cache version)
+ * A wrapper for extensions Storage API (without checking for cache version)
  */
-export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
-  name: NAME,
-  type: 'local' | 'sync' = storageDefinitions[name].type
-): readonly [
-  StorageDefinitions[NAME]['defaultValue'] | undefined,
-  (
-    newValue: StorageDefinitions[NAME]['defaultValue'] | undefined,
-    typeOverride?: 'local' | 'sync'
-  ) => void
-] {
+export function useStorage<NAME extends keyof StorageDefinitions>(
+  name: NAME
+): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
+  const type = storageDefinitions[name].type;
   const [value, setValue] = useAsyncState<
     StorageDefinitions[NAME]['defaultValue']
   >(
     React.useCallback(
       async () =>
-        chrome.storage[type].get(name).then((storage) => {
+        chrome.storage[type].get(name).then(async (storage) => {
           const value = storage[name];
-          setDevelopmentGlobal(`_${name}`, value);
+          const resolvedValue =
+            typeof value === 'string' && type === 'sync'
+              ? await joinValue(name, value)
+              : value;
+          setDevelopmentGlobal(`_${name}`, resolvedValue);
           return (
-            (value as StorageDefinitions[NAME]['defaultValue'] | undefined) ??
-            storageDefinitions[name].defaultValue
+            (resolvedValue as
+              | StorageDefinitions[NAME]['defaultValue']
+              | undefined) ?? storageDefinitions[name].defaultValue
           );
         }),
       [name, type]
@@ -186,17 +117,21 @@ export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   );
 
   const updateValue = React.useCallback(
-    (
-      value: StorageDefinitions[NAME]['defaultValue'] | undefined,
-      typeOverride: 'local' | 'sync' = type
-    ) => {
-      chrome.storage[typeOverride]
-        .set({
-          [name]: value,
-        })
-        .catch(console.error);
-      setValue(value);
+    (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
+      const jsonValue = JSON.stringify(value);
+      const isOverLimit = type === 'sync' && isOverSizeLimit(name, jsonValue);
       setDevelopmentGlobal(`_${name}`, value);
+      setValue(value);
+      if (isOverLimit)
+        chrome.storage.sync
+          .set(splitValue(name, jsonValue))
+          .catch(console.error);
+      else
+        chrome.storage[type]
+          .set({
+            [name]: value,
+          })
+          .catch(console.error);
     },
     [setValue, name, type]
   );
@@ -205,20 +140,60 @@ export function useSimpleStorage<NAME extends keyof StorageDefinitions>(
 }
 
 /**
- * Stores and indicator of whether the storage is over size or no
+ * "sync" storage has item size limit :(
+ * "local" does not
  */
-function useOverSize(name: string): GetSet<boolean> {
-  const [overSize = [], setOverSize] = useSimpleStorage('overSizeStorage');
-  return [
-    overSize.includes(name),
-    React.useCallback(
-      (isOverSize: boolean) => {
-        const newArray = f.unique(
-          isOverSize ? [...overSize, name] : overSize.filter((n) => n !== name)
-        );
-        if (newArray.length !== overSize.length) setOverSize(newArray);
-      },
-      [name, setOverSize, overSize]
-    ),
-  ];
+export function isOverSizeLimit(name: string, value: string): boolean {
+  if (value === undefined) return false;
+  const size = JSON.stringify({ [name]: value }).length;
+  return size > chrome.storage.sync.QUOTA_BYTES_PER_ITEM;
+}
+
+/**
+ * Loosely based on https://stackoverflow.com/a/68427736/8584605
+ */
+function splitValue(
+  key: keyof StorageDefinitions,
+  originalJsonValue: string
+): IR<string> {
+  let jsonValue = originalJsonValue;
+  const storageObject: R<string> = {};
+  for (let index = 0; jsonValue.length > 0; index += 1) {
+    const fullKey = index === 0 ? key : `${key}_${index + 1}`;
+
+    const maxLength =
+      chrome.storage.sync.QUOTA_BYTES_PER_ITEM - fullKey.length - 2;
+    const splitLength = Math.min(jsonValue.length, maxLength);
+
+    let segment = jsonValue.slice(0, splitLength);
+    const jsonLength = JSON.stringify(segment).length;
+    const overSize = jsonLength - maxLength;
+    if (overSize > 0) segment = jsonValue.slice(0, splitLength - overSize);
+
+    storageObject[fullKey] = segment;
+    jsonValue = jsonValue.slice(segment.length);
+  }
+  return storageObject;
+}
+
+async function joinValue(
+  name: keyof StorageDefinitions,
+  value: string
+): Promise<string> {
+  try {
+    return JSON.parse(`${value}${await joinStorage(name)}`);
+  } catch {
+    return value;
+  }
+}
+
+async function joinStorage(
+  key: keyof StorageDefinitions,
+  index = 2
+): Promise<string> {
+  const fullKey = `${key}_${index}`;
+  const { [fullKey]: value } = await chrome.storage.sync.get(fullKey);
+  return typeof value === 'string'
+    ? `${value}${await joinStorage(key, index + 1)}`
+    : '';
 }

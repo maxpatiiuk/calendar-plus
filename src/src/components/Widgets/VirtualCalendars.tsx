@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useId } from '../../hooks/useId';
-import { useSafeStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { f } from '../../utils/functools';
 import type { RA, RR } from '../../utils/types';
@@ -47,7 +47,7 @@ export function VirtualCalendars({
 }): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
   const [virtualCalendars, setVirtualCalendars] =
-    useSafeStorage('virtualCalendars');
+    useStorage('virtualCalendars');
   const virtualCalendarsRef = React.useRef(virtualCalendars);
 
   // Don't update the shared state until the user is done editing.

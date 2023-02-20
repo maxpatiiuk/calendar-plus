@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useId } from '../../hooks/useId';
-import { useSafeStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import type { RA, RR } from '../../utils/types';
 import { filterArray } from '../../utils/types';
@@ -19,7 +19,7 @@ export function AutoComplete(): JSX.Element {
     virtualCalendarsRef.current = virtualCalendars;
   }, [virtualCalendars]);
 
-  const [synonyms = []] = useSafeStorage('synonyms');
+  const [synonyms = []] = useStorage('synonyms');
   const synonymsRef = React.useRef(synonyms);
   React.useEffect(() => {
     synonymsRef.current = synonyms;
@@ -115,7 +115,7 @@ export function AutoComplete(): JSX.Element {
 }
 
 export function useVirtualCalendars(): RA<VirtualCalendar> {
-  const [rawVirtualCalendars] = useSafeStorage('virtualCalendars');
+  const [rawVirtualCalendars] = useStorage('virtualCalendars');
 
   // Sort the rules according to their priority
   return React.useMemo(
