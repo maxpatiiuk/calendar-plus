@@ -13,6 +13,7 @@ import {
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
+import { AuthContext } from '../Contexts/AuthContext';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -56,7 +57,7 @@ export function useEvents(
   endDate: Date | undefined
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
-  // Clean temporary cache when overlay is closed
+  // Clear temporary cache when overlay is closed
   const clearCache = startDate === undefined || endDate === undefined;
   if (clearCache) eventsStore.current = {};
   const calendars = React.useContext(CalendarsContext);
@@ -67,6 +68,7 @@ export function useEvents(
   }, [ignoreAllDayEvents]);
 
   const virtualCalendars = useVirtualCalendars();
+  const auth = React.useContext(AuthContext);
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
@@ -77,6 +79,7 @@ export function useEvents(
         endDate === undefined
       )
         return undefined;
+      await auth.handleAuthenticate(true);
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
@@ -146,7 +149,7 @@ export function useEvents(
       );
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
-      eventsStore,
+      auth,
       calendars,
       startDate,
       endDate,
@@ -331,7 +334,8 @@ function extractData(
       const totals: R<WritableDayHours> = Object.fromEntries(
         daysBetween.map((date) => [date, blankHours()])
       );
-      const entries = Object.entries(eventsStore[id])
+      // "eventsStore" won't have an entry for current calendar if fetching failed
+      const entries = Object.entries(eventsStore?.[id] ?? {})
         .map(([virtualCalendar, dates]) => {
           let categoryTotal = 0;
           return [

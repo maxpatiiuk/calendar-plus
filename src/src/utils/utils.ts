@@ -3,8 +3,8 @@
  *
  * @module
  */
-import { IR, RA } from './types';
 import { f } from './functools';
+import type { IR, RA } from './types';
 
 export const capitalize = <T extends string>(string: T): Capitalize<T> =>
   (string.charAt(0).toUpperCase() + string.slice(1)) as Capitalize<T>;
@@ -26,6 +26,7 @@ export const sortFunction =
     else if (typeof leftValue === 'string' && typeof rightValue === 'string')
       return leftValue.localeCompare(rightValue) as -1 | 0 | 1;
     // Treat null and undefined as the same
+    // eslint-disable-next-line eqeqeq
     else if (leftValue == rightValue) return 0;
     return (leftValue ?? '') > (rightValue ?? '') ? 1 : -1;
   };
@@ -184,5 +185,23 @@ export function debounce(callback: () => void, timeout: number): () => void {
   return () => {
     clearTimeout(timer);
     timer = setTimeout(callback, timeout);
+  };
+}
+
+/**
+ * Based on simplified version of Underscore.js's throttle function
+ */
+export function throttle(callback: () => void, wait: number): () => void {
+  let timeout: ReturnType<typeof setTimeout>;
+  let previous = 0;
+
+  return (): void => {
+    const time = Date.now();
+    const remaining = wait - (time - previous);
+    if (remaining <= 0 || remaining > wait) {
+      clearTimeout(timeout);
+      previous = time;
+      callback();
+    }
   };
 }

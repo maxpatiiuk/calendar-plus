@@ -22,10 +22,11 @@ export function CalendarsSpy({
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const { authenticated } = React.useContext(AuthContext);
+  const { token } = React.useContext(AuthContext);
+  const isAuthenticated = typeof token === 'string';
   const [calendars] = useAsyncState<RA<CalendarListEntry>>(
     React.useCallback(async () => {
-      if (!authenticated) return undefined;
+      if (!isAuthenticated) return undefined;
       const response = await ajax(
         formatUrl(
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
@@ -49,7 +50,7 @@ export function CalendarsSpy({
         Array.from(calendars).sort(sortFunction(({ summary }) => summary))
       );
       return [...primary, ...secondary];
-    }, [authenticated]),
+    }, [isAuthenticated]),
     false
   );
 

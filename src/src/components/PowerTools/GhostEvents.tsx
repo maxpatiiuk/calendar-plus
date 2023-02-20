@@ -7,9 +7,9 @@ import React from 'react';
 import { useSafeStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { f } from '../../utils/functools';
-import { debounce } from '../../utils/utils';
 import { findMainContainer } from '../Molecules/Portal';
 import { usePref } from '../Preferences/usePref';
+import { usePageListener } from './PageListener';
 
 export function GhostEvents(): null {
   const [ghostEvents = [], setGhostEvents] = useSafeStorage(
@@ -37,7 +37,6 @@ export function GhostEvents(): null {
     () => findMainContainer()?.parentElement ?? undefined,
     []
   );
-
   const doGhosting = React.useCallback(
     (): void =>
       mainContainer === undefined
@@ -51,6 +50,7 @@ export function GhostEvents(): null {
           ),
     [mainContainer]
   );
+  usePageListener(mainContainer, doGhosting);
 
   const ghostEventsRef = React.useRef(new Set());
   React.useEffect(() => {
@@ -58,22 +58,13 @@ export function GhostEvents(): null {
     doGhosting();
   }, [ghostEvents, doGhosting]);
 
-  // Listen for DOM changes
-  React.useEffect(() => {
-    if (mainContainer === undefined) return undefined;
-    const config = { childList: true, subtree: true };
-    const observer = new MutationObserver(debounce(doGhosting, 60));
-    observer.observe(mainContainer, config);
-    return (): void => observer.disconnect();
-  }, [mainContainer, doGhosting]);
-
   // Listen for key press
   React.useEffect(
     () =>
-      ghostEventShortcut === 'none'
+      ghostEventShortcut === 'none' || mainContainer === undefined
         ? undefined
         : listen(
-            document.body,
+            mainContainer,
             'click',
             ({ shiftKey, ctrlKey, metaKey, target }) => {
               const keys = {
@@ -94,7 +85,7 @@ export function GhostEvents(): null {
               setGhostEvents(f.unique([...ghostEvents, eventName]));
             }
           ),
-    [ghostEventShortcut, ghostEvents, setGhostEvents]
+    [mainContainer, ghostEventShortcut, ghostEvents, setGhostEvents]
   );
 
   return null;
