@@ -5,7 +5,6 @@
 @tailwind base;
 
 @layer base {
-
   * {
     @apply !ring-inset;
   }
@@ -17,8 +16,8 @@
     }
 
     [title]:focus::after {
-      @apply w-fit absolute p-1 text-black bg-white border border-black
-      content-[attr(title)] top-[90%];
+      @apply absolute top-[90%] w-fit border border-black bg-white p-1
+      text-black content-[attr(title)];
     }
   }
 
@@ -33,31 +32,39 @@
   /*
    * Hide "Edit All", unless it is selected
    */
-  body.hide-edit-all [role="dialog"] [role="radiogroup"] label:nth-child(3):not(:has(input:checked)) {
-    @apply invisible pointer-events-none delay-[0s];
+  body.hide-edit-all
+    [role='dialog']
+    [role='radiogroup']
+    label:nth-child(3):not(:has(input:checked)) {
+    @apply pointer-events-none invisible delay-[0s];
   }
 
-  body.hide-edit-all [role="dialog"] [role="radiogroup"]:hover label:nth-child(3) {
-    @apply !visible !pointer-events-auto !delay-[3s];
+  body.hide-edit-all
+    [role='dialog']
+    [role='radiogroup']:hover
+    label:nth-child(3) {
+    @apply !pointer-events-auto !visible !delay-[3s];
   }
 
   .less-invasive-batch-edit {
     @apply !pointer-events-none !bg-transparent;
   }
 
-  .less-invasive-batch-edit [role="dialog"] + :nth-child(3) {
+  .less-invasive-batch-edit [role='dialog'] + :nth-child(3) {
     @apply !grow-0;
   }
 
-  .less-invasive-batch-edit [role="dialog"] {
-    @apply !pointer-events-auto !flex-row !max-w-[80vw];
+  .less-invasive-batch-edit [role='dialog'] {
+    @apply !pointer-events-auto !max-w-[80vw] !flex-row;
   }
 
-  .less-invasive-batch-edit [role="dialog"] > * {
+  .less-invasive-batch-edit [role='dialog'] > * {
     @apply !min-w-[unset] !max-w-[unset];
   }
 
-  .less-invasive-batch-edit [role="dialog"] :is([role="radiogroup"], div:has([role="heading"])) {
+  .less-invasive-batch-edit
+    [role='dialog']
+    :is([role='radiogroup'], div:has([role='heading'])) {
     @apply flex gap-4;
   }
 
@@ -69,22 +76,23 @@
    *   grid-cols-[repeat(4,1fr)_auto_auto_min-content_minmax(10rem,1fr)]
    * There is much more flexibility in how columns should be sized.
    */
-  .grid-table:is(table, [role~="table"]) {
+  .grid-table:is(table, [role~='table']) {
     @apply grid;
   }
 
-  .grid-table :is(thead, tbody, tr, [role~="rowgroup"], [role~="row"]) {
+  .grid-table :is(thead, tbody, tr, [role~='rowgroup'], [role~='row']) {
     @apply contents;
   }
 
-  .grid-table :is(th, td, [role~="columnheader"], [role~="rowheader"], [role~="cell"]) {
+  .grid-table
+    :is(th, td, [role~='columnheader'], [role~='rowheader'], [role~='cell']) {
     @apply flex items-center gap-1;
   }
 
   .link {
-    @apply text-black dark:text-gray-200 cursor-pointer disabled:!ring-0
-      enabled:hover:text-blue-300 gap-2 inline-flex items-center
-      active:underline text-left border-none bg-transparent;
+    @apply inline-flex cursor-pointer items-center gap-2
+    border-none bg-transparent text-left text-black
+    active:underline enabled:hover:text-blue-300 disabled:!ring-0 dark:text-gray-200;
   }
 
   a.link {
@@ -96,10 +104,10 @@
   }
 
   .icon {
-    @apply active:bg-blue-100 dark:active:bg-blue-500
-      disabled:!cursor-not-allowed disabled:!text-gray-400
-      disabled:hover:!text-gray-400 disabled:dark:!text-neutral-600
-      disabled:hover:dark:!text-neutral-600;
+    @apply active:bg-blue-100 disabled:!cursor-not-allowed
+    disabled:!text-gray-400 disabled:hover:!text-gray-400
+    dark:active:bg-blue-500 disabled:dark:!text-neutral-600
+    disabled:hover:dark:!text-neutral-600;
   }
 
   .ghosting-enabled .ghosted {
@@ -107,8 +115,86 @@
     pointer-events: none;
   }
 
+  /*
+   * Styles for condensing UI
+   * Hard-coding minified class names seems fragile, but these haven't changed
+   * much in over a year. It could be that these are hashed variants of longer
+   * class names, rather than purely minified
+   */
 
+  /* Hide useless UI elements */
+  body.condense-interface
+    :is(
+      /* "Terms" and "Privacy" links */
+      .erDb5d,
+      /* "Create event" button (redundant) */
+      .dwlvNd,
+      /* "Create event" button (redundant) */
+      .LXjtcc,
+      /* "Search for people" input box */
+      .ZtL5hd,
+      /* "Calendar" heading */
+      header [role="heading"],
+      /* "Google Apps" button */
+      .gb_0c
+    ),
+  body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb {
+    @apply hidden;
+  }
 
+  /* Free up space in the header */
+  body.condense-interface header div[style]:first-child {
+    @apply !min-w-[unset] !pr-[unset];
+  }
+
+  /* Reduce heading padding */
+  body.condense-interface .gb_Ea:not(.gb_Fa) .gb_Sd {
+    @apply !p-0;
+  }
+
+  body.condense-interface .SGWAac {
+    height: calc(100% - 48px);
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface .Az5uJd {
+    @apply pb-0;
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface .cr5Gle {
+    @apply pt-0;
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface.geSgge .qOsM1d.X8eWK {
+    @apply mt-1;
+  }
+
+  /* Reduce size of day numbers */
+  body.condense-interface .KSxb4d {
+    font-size: 22px !important;
+    line-height: 30px !important;
+    margin-top: 1px !important;
+    height: 30px !important;
+    width: 30px !important;
+  }
+
+  /* Reduce height of day header */
+  body.condense-interface .Uit9Se {
+    height: 35px !important;
+  }
+
+  /* Place week day name next to day number */
+  body.condense-interface .rpCPrc {
+    @apply relative !flex items-center justify-center;
+    flex-flow: row nowrap !important;
+  }
+
+  /* Center the day numbers */
+  body.condense-interface .qAeuG {
+    @apply !absolute left-0;
+  }
 }
 
 /**
