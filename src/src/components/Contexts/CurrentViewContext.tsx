@@ -4,6 +4,7 @@ import { useStorage } from '../../hooks/useStorage';
 import { f } from '../../utils/functools';
 import type { GetSet } from '../../utils/types';
 import { listenEvent } from '../Background/messages';
+import { Auth } from './AuthContext';
 import { awaitElement } from './CalendarsContext';
 
 const supportedViews = [
@@ -38,14 +39,16 @@ export type CurrentView = {
 
 export function TrackCurrentView({
   children,
+  authContext,
 }: {
   readonly children: React.ReactNode;
+  readonly authContext: Auth;
 }): JSX.Element {
   const [currentView, setCurrentView] = React.useState<CurrentView | undefined>(
     undefined
   );
 
-  useCurrentTracker(setCurrentView);
+  useCurrentTracker(setCurrentView, authContext.weekStart);
 
   return (
     <CurrentViewContext.Provider value={currentView}>
@@ -60,8 +63,10 @@ export const defaultCustomViewSize = 4;
  * Listen for changes to current URL
  */
 function useCurrentTracker(
-  setCurrentView: (newCurrentView: CurrentView | undefined) => void
+  setCurrentView: (newCurrentView: CurrentView | undefined) => void,
+  weekStart: Number
 ) {
+  console.log('Week Start', weekStart);
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
     useStorage('customViewSize');
   React.useEffect(() => {
