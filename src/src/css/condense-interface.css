@@ -1,0 +1,82 @@
+@layer components {
+  /*
+   * Styles for condensing UI
+   * Hard-coding minified class names seems fragile, but these haven't changed
+   * much in over a year. It could be that these are hashed variants of longer
+   * class names, rather than purely minified
+   */
+
+  /* Hide useless UI elements */
+  body.condense-interface
+    :is(
+      /* "Terms" and "Privacy" links */
+      .erDb5d,
+      /* "Create event" button (redundant) */
+      .dwlvNd,
+      /* "Create event" button (redundant) */
+      .LXjtcc,
+      /* "Search for people" input box */
+      .ZtL5hd,
+      /* "Google Apps" button */
+      .gb_0c
+    ),
+  /* "Calendar" heading */
+  body.condense-interface header [role="heading"],
+  body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb {
+    @apply hidden;
+  }
+
+  /* Free up space in the header */
+  body.condense-interface header div[style]:first-child {
+    @apply !min-w-[unset] !pr-[unset];
+  }
+
+  /* Reduce heading padding */
+  body.condense-interface .gb_Ea:not(.gb_Fa) .gb_Sd {
+    @apply !p-0;
+  }
+
+  body.condense-interface .SGWAac {
+    height: calc(100% - 48px);
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface .Az5uJd {
+    @apply pb-0;
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface .cr5Gle {
+    @apply pt-0;
+  }
+
+  /* Reduce side bar paddings */
+  body.condense-interface.geSgge .qOsM1d.X8eWK {
+    @apply mt-1;
+  }
+
+  /* Reduce size of day numbers */
+  body.condense-interface .KSxb4d {
+    font-size: 22px !important;
+    line-height: 30px !important;
+    margin-top: 1px !important;
+    height: 30px !important;
+    width: 30px !important;
+  }
+
+  /* Reduce height of day header */
+  body.condense-interface .Uit9Se {
+    height: 35px !important;
+  }
+
+  /* Place week day name next to day number */
+  body.condense-interface .rpCPrc {
+    @apply relative !flex items-center justify-center;
+    flex-flow: row nowrap !important;
+  }
+
+  /* Center the day numbers */
+  body.condense-interface .qAeuG {
+    @apply !absolute left-0;
+  }
+}
