@@ -51,4 +51,7 @@ export const preferencesText = createDictionary({
   csv: { 'en-us': 'CSV' },
   tsv: { 'en-us': 'TSV' },
   json: { 'en-us': 'JSON' },
+  condenseInterface: {
+    'en-us': 'Condense Interface',
+  },
 });

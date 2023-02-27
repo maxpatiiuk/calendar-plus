@@ -1,0 +1,6 @@
+@layer components {
+  .ghosting-enabled .ghosted {
+    opacity: var(--event-ghosting-opacity);
+    pointer-events: none;
+  }
+}

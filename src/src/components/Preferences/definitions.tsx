@@ -90,6 +90,11 @@ export const preferenceDefinitions = {
         renderer: rangePref({ min: 0, max: 100, step: 1 }),
         defaultValue: 30,
       }),
+      condenseInterface: defineItem<boolean>({
+        title: preferencesText('condenseInterface'),
+        renderer: BooleanPref,
+        defaultValue: false,
+      }),
     },
   },
   recurringEvents: {
@@ -113,8 +118,7 @@ export const preferenceDefinitions = {
     title: commonText('dataExport'),
     items: {
       format: defineItem<'csv' | 'json' | 'tsv'>({
-        title: preferencesText('ghostEvent'),
-        description: preferencesText('ghostEventDescription'),
+        title: preferencesText('exportFormat'),
         renderer: pickListPref<'csv' | 'json' | 'tsv'>([
           { value: 'json', title: preferencesText('json') },
           { value: 'tsv', title: preferencesText('tsv') },

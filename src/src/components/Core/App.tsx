@@ -14,6 +14,7 @@ import { useEvents } from '../EventsStore';
 import { Portal } from '../Molecules/Portal';
 import { AutoComplete } from '../PowerTools/AutoComplete';
 import { BetterEditRecurring } from '../PowerTools/BetterEditRecurring';
+import { CondenseInterface } from '../PowerTools/CondenseInterface';
 import { GhostEvents } from '../PowerTools/GhostEvents';
 import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
@@ -109,6 +110,7 @@ export function App(): JSX.Element | null {
       <GhostEvents />
       <HideEditAll />
       <BetterEditRecurring />
+      <CondenseInterface />
     </>
   );
 }
