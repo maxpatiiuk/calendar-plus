@@ -12,7 +12,7 @@ export function SettingsProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const authContext = React.useContext(AuthContext);
-  const [weekStart, setWeekStart] = React.useState<Number>(0);
+  const [weekStart, setWeekStart] = React.useState<number>(0);
   const [found, setFound] = React.useState<boolean>(false);
 
   // If the token has been set, try an update
@@ -46,6 +46,6 @@ export function SettingsProvider({
 }
 
 export const SettingsContext = React.createContext<UserSettings>({
-  weekStart: 0,
+  weekStart: 0 as number,
 });
 SettingsContext.displayName = 'SettingsContext';

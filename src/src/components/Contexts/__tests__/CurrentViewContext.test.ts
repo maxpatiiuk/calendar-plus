@@ -12,7 +12,7 @@ const day = testTime.getDate();
 
 theories(parsePath, [
   {
-    in: ['/calendar/u/0/r/day/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/day/', defaultCustomViewSize, 0],
     out: {
       view: 'day',
       selectedDay: new Date(year, month, day),
@@ -21,7 +21,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/week/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/week/', defaultCustomViewSize, 0],
     out: {
       view: 'week',
       selectedDay: new Date(year, month, day),
@@ -30,7 +30,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize, 0],
     out: {
       view: 'week',
       selectedDay: new Date(2022, 11, 31),
@@ -39,7 +39,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/month/2020/12/31/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/month/2020/12/31/', defaultCustomViewSize, 0],
     out: {
       view: 'month',
       selectedDay: new Date(2020, 11, 31),
@@ -48,7 +48,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/customday/2020/12/10/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/customday/2020/12/10/', defaultCustomViewSize, 0],
     out: {
       view: 'customday',
       selectedDay: new Date(2020, 11, 10),
@@ -57,7 +57,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/customweek/2020/12/10/', 14],
+    in: ['/calendar/u/0/r/customweek/2020/12/10/', 14, 0],
     out: {
       view: 'customweek',
       selectedDay: new Date(2020, 11, 10),
@@ -66,7 +66,7 @@ theories(parsePath, [
     },
   },
   {
-    in: ['/calendar/u/0/r/year/2023/', defaultCustomViewSize],
+    in: ['/calendar/u/0/r/year/2023/', defaultCustomViewSize, 0],
     out: {
       view: 'year',
       selectedDay: new Date(2023, month, day),
