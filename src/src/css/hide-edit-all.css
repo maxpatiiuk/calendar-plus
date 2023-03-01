@@ -1,0 +1,18 @@
+@layer components {
+  /*
+   * Hide "Edit All", unless it is selected
+   */
+  body.hide-edit-all
+    [role='dialog']
+    [role='radiogroup']
+    label:nth-child(3):not(:has(input:checked)) {
+    @apply pointer-events-none invisible delay-[0s];
+  }
+
+  body.hide-edit-all
+    [role='dialog']
+    [role='radiogroup']:hover
+    label:nth-child(3) {
+    @apply !pointer-events-auto !visible !delay-[3s];
+  }
+}

@@ -1,0 +1,23 @@
+@layer components {
+  .less-invasive-batch-edit {
+    @apply !pointer-events-none !bg-transparent;
+  }
+
+  .less-invasive-batch-edit [role='dialog'] + :nth-child(3) {
+    @apply !grow-0;
+  }
+
+  .less-invasive-batch-edit [role='dialog'] {
+    @apply !pointer-events-auto !max-w-[80vw] !flex-row;
+  }
+
+  .less-invasive-batch-edit [role='dialog'] > * {
+    @apply !min-w-[unset] !max-w-[unset];
+  }
+
+  .less-invasive-batch-edit
+    [role='dialog']
+    :is([role='radiogroup'], div:has([role='heading'])) {
+    @apply flex gap-4;
+  }
+}
