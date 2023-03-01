@@ -6,10 +6,11 @@ import type { RA } from '../../utils/types';
 import { crash, error } from '../Errors/assert';
 import { ErrorBoundary } from '../Errors/ErrorBoundary';
 import { PreferencesProvider } from '../Preferences/Context';
-import { AuthContext, AuthenticationProvider } from './AuthContext';
+import { AuthenticationProvider } from './AuthContext';
 import { CalendarsSpy } from './CalendarsContext';
 import { TrackCurrentView } from './CurrentViewContext';
 import { KeyboardListener } from './KeyboardContext';
+import { SettingsProvider } from './SettingsContext';
 import { VersionsContextProvider } from './VersionsContext';
 
 /**
@@ -56,13 +57,15 @@ export function Contexts({
         <React.Suspense fallback={<>{commonText('loading')}</>}>
           <PreferencesProvider>
             <AuthenticationProvider>
-              <TrackCurrentView authContext={React.useContext(AuthContext)}>
-                <VersionsContextProvider>
-                  <KeyboardListener>
-                    <CalendarsSpy>{children}</CalendarsSpy>
-                  </KeyboardListener>
-                </VersionsContextProvider>
-              </TrackCurrentView>
+              <SettingsProvider>
+                <TrackCurrentView>
+                  <VersionsContextProvider>
+                    <KeyboardListener>
+                      <CalendarsSpy>{children}</CalendarsSpy>
+                    </KeyboardListener>
+                  </VersionsContextProvider>
+                </TrackCurrentView>
+              </SettingsProvider>
             </AuthenticationProvider>
           </PreferencesProvider>
         </React.Suspense>
