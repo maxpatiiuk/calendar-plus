@@ -2,129 +2,22 @@
  * This injects Tailwind's base styles and any base styles registered by
  * plugins.
  */
-@tailwind base;
-
-@layer base {
-
-  * {
-    @apply !ring-inset;
-  }
-
-  /* Display tooltips as an overlay on touch-screen devices */
-  @media (pointer: coarse), (hover: none) {
-    [title] {
-      @apply relative inline-flex justify-center;
-    }
-
-    [title]:focus::after {
-      @apply w-fit absolute p-1 text-black bg-white border border-black
-      content-[attr(title)] top-[90%];
-    }
-  }
-
-  /*
-   * Without this, sr-only elements where causing scroll bars to appear in
-   * some browsers
-   */
-  .sr-only {
-    @apply top-0;
-  }
-
-  /*
-   * Hide "Edit All", unless it is selected
-   */
-  body.hide-edit-all [role="dialog"] [role="radiogroup"] label:nth-child(3):not(:has(input:checked)) {
-    @apply invisible pointer-events-none delay-[0s];
-  }
-
-  body.hide-edit-all [role="dialog"] [role="radiogroup"]:hover label:nth-child(3) {
-    @apply !visible !pointer-events-auto !delay-[3s];
-  }
-
-  .less-invasive-batch-edit {
-    @apply !pointer-events-none !bg-transparent;
-  }
-
-  .less-invasive-batch-edit [role="dialog"] + :nth-child(3) {
-    @apply !grow-0;
-  }
-
-  .less-invasive-batch-edit [role="dialog"] {
-    @apply !pointer-events-auto !flex-row !max-w-[80vw];
-  }
-
-  .less-invasive-batch-edit [role="dialog"] > * {
-    @apply !min-w-[unset] !max-w-[unset];
-  }
-
-  .less-invasive-batch-edit [role="dialog"] :is([role="radiogroup"], div:has([role="heading"])) {
-    @apply flex gap-4;
-  }
-
-  /*
-   * Grid-based table implementation for increased flexibility
-   * Does not sacrifice accessibility thanks to the [role] attributes
-   * Allows for things like sticky headers and having entire row be a link/button
-   * You can set column sizes by adding a className like this:
-   *   grid-cols-[repeat(4,1fr)_auto_auto_min-content_minmax(10rem,1fr)]
-   * There is much more flexibility in how columns should be sized.
-   */
-  .grid-table:is(table, [role~="table"]) {
-    @apply grid;
-  }
-
-  .grid-table :is(thead, tbody, tr, [role~="rowgroup"], [role~="row"]) {
-    @apply contents;
-  }
-
-  .grid-table :is(th, td, [role~="columnheader"], [role~="rowheader"], [role~="cell"]) {
-    @apply flex items-center gap-1;
-  }
-
-  .link {
-    @apply text-black dark:text-gray-200 cursor-pointer disabled:!ring-0
-      enabled:hover:text-blue-300 gap-2 inline-flex items-center
-      active:underline text-left border-none bg-transparent;
-  }
-
-  a.link {
-    @apply hover:text-blue-400 dark:hover:text-blue-300;
-  }
-
-  .link[aria-current]:not(.aria-handled) {
-    @apply text-blue-300;
-  }
-
-  .icon {
-    @apply active:bg-blue-100 dark:active:bg-blue-500
-      disabled:!cursor-not-allowed disabled:!text-gray-400
-      disabled:hover:!text-gray-400 disabled:dark:!text-neutral-600
-      disabled:hover:dark:!text-neutral-600;
-  }
-
-  .ghosting-enabled .ghosted {
-    opacity: var(--event-ghosting-opacity);
-    pointer-events: none;
-  }
-
-
-
-}
+@import 'tailwindcss/base';
+@import './base.css';
 
 /**
  * This injects Tailwind's component classes and any component classes
  * registered by plugins.
  */
-@tailwind components;
-
-@layer components {
-}
+@import 'tailwindcss/components';
+@import './hide-edit-all.css';
+@import './condense-interface.css';
+@import './less-invasive-batch-edit.css';
+@import './ghost-events.css';
 
 /**
  * This injects Tailwind's utility classes and any utility classes registered
  * by plugins.
  */
-@tailwind utilities;
-
-@layer utilities {
-}
+@import 'tailwindcss/utilities';
+@import './utilities.css';
