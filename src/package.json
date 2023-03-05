@@ -2,7 +2,7 @@
   "name": "calendar-stats",
   "version": "1.0.0",
   "private": true,
-  "description": "A Chrome extension for Google Calendar that allows to easily see what you spend your time, get insights on and set goals",
+  "description": "A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization",
   "license": "MIT",
   "repository": {
     "type": "git",
