@@ -2,6 +2,23 @@
 
 A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization
 
+## Screenshots
+
+Column chart:
+![Column chart](./docs/img/1.png)
+
+Time chart:
+![Time chart](./docs/img/2.png)
+
+Pie chart:
+![Pie chart](./docs/img/3.png)
+
+Settings:
+![Settings](./docs/img/4.png)
+
+Expanded time chart
+![Expanded time chart](./docs/img/5.png)
+
 ## Installation
 
 Pre-requisites:
