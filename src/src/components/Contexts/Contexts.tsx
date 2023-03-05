@@ -10,6 +10,7 @@ import { AuthenticationProvider } from './AuthContext';
 import { CalendarsSpy } from './CalendarsContext';
 import { TrackCurrentView } from './CurrentViewContext';
 import { KeyboardListener } from './KeyboardContext';
+import { SettingsProvider } from './SettingsContext';
 import { VersionsContextProvider } from './VersionsContext';
 
 /**
@@ -55,15 +56,17 @@ export function Contexts({
         {isLoading && commonText('loading')}
         <React.Suspense fallback={<>{commonText('loading')}</>}>
           <PreferencesProvider>
-            <TrackCurrentView>
-              <AuthenticationProvider>
-                <VersionsContextProvider>
-                  <KeyboardListener>
-                    <CalendarsSpy>{children}</CalendarsSpy>
-                  </KeyboardListener>
-                </VersionsContextProvider>
-              </AuthenticationProvider>
-            </TrackCurrentView>
+            <AuthenticationProvider>
+              <SettingsProvider>
+                <TrackCurrentView>
+                  <VersionsContextProvider>
+                    <KeyboardListener>
+                      <CalendarsSpy>{children}</CalendarsSpy>
+                    </KeyboardListener>
+                  </VersionsContextProvider>
+                </TrackCurrentView>
+              </SettingsProvider>
+            </AuthenticationProvider>
           </PreferencesProvider>
         </React.Suspense>
       </LoadingContext.Provider>

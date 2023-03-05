@@ -5,6 +5,7 @@ import { f } from '../../utils/functools';
 import type { GetSet } from '../../utils/types';
 import { listenEvent } from '../Background/messages';
 import { awaitElement } from './CalendarsContext';
+import { SettingsContext } from './SettingsContext';
 
 const supportedViews = [
   'day',
@@ -64,11 +65,18 @@ function useCurrentTracker(
 ) {
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
     useStorage('customViewSize');
+
+  const { weekStart } = React.useContext(SettingsContext);
+
   React.useEffect(() => {
     let lastPath = '';
 
     function parseUrl(): void {
-      const parsed = parsePath(window.location.pathname, customViewSize);
+      const parsed = parsePath(
+        window.location.pathname,
+        customViewSize,
+        weekStart
+      );
       setCurrentView(parsed);
       if (parsed?.view === 'customday' || parsed?.view === 'customweek')
         detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
@@ -84,7 +92,7 @@ function useCurrentTracker(
       lastPath = window.location.pathname;
       parseUrl();
     });
-  }, [setCurrentView, customViewSize, setCustomViewSize]);
+  }, [weekStart, setCurrentView, customViewSize, setCustomViewSize]);
 }
 
 const commonPrefix = `/calendar/u/0/r/`;
@@ -94,7 +102,8 @@ const commonPrefix = `/calendar/u/0/r/`;
  */
 function parsePath(
   path: string,
-  customViewSize: number
+  customViewSize: number,
+  weekStart: number
 ): CurrentView | undefined {
   if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
     const viewMode = document.querySelector('header div[data-active-view]');
@@ -109,7 +118,7 @@ function parsePath(
       return {
         view: viewName,
         selectedDay: today,
-        ...resolveBoundaries(viewName, today, customViewSize),
+        ...resolveBoundaries(viewName, today, customViewSize, weekStart),
       };
     }
   }
@@ -128,14 +137,15 @@ function parsePath(
   return {
     view: viewName,
     selectedDay,
-    ...resolveBoundaries(viewName, selectedDay, customViewSize),
+    ...resolveBoundaries(viewName, selectedDay, customViewSize, weekStart),
   };
 }
 
 function resolveBoundaries(
   viewName: SupportedView,
   selectedDay: Date,
-  customViewSize: number
+  customViewSize: number,
+  weekStart: number
 ): { readonly firstDay: Date; readonly lastDay: Date } {
   if (viewName === 'day')
     return {
@@ -151,8 +161,7 @@ function resolveBoundaries(
       ),
     };
   else if (viewName === 'week') {
-    // BUG: detect first day of the week. This incorrectly assumes Sunday is first
-    const dayOffset = selectedDay.getDate() - selectedDay.getDay();
+    const dayOffset = selectedDay.getDate() - selectedDay.getDay() + weekStart;
     return {
       firstDay: new Date(
         selectedDay.getFullYear(),
@@ -185,8 +194,7 @@ function resolveBoundaries(
     };
   } else if (viewName === 'customweek') {
     const firstDay = new Date(selectedDay);
-    // FEATURE: detect first day of the week
-    firstDay.setDate(firstDay.getDate() - firstDay.getDay());
+    firstDay.setDate(firstDay.getDate() - firstDay.getDay() + weekStart);
     return {
       firstDay,
       lastDay: new Date(

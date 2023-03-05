@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { sendRequest } from '../Background/messages';
 
 type Auth = {
@@ -16,6 +15,7 @@ export function AuthenticationProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const [token, setToken] = React.useState<string | undefined>(undefined);
+
   const handleAuthenticate = React.useCallback(
     async (interactive: boolean) =>
       sendRequest('Authenticate', { interactive })
