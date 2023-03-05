@@ -2,6 +2,14 @@
 
 A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization
 
+Features:
+- Plot your week/month/year using Bar Chart, Pie Chart or a Time Chart
+- Adds ability to ghost an event (make it semi transparent and non-interactive)
+- Adds ability to condense the interface to have more space for events
+- Adds autocomplete for event names when creating events
+- Allows to automatically place events into correct calendars based on defined rules
+- Supports exporting plotted data and exporting/importing plugin settings
+
 ## Screenshots
 
 Column chart:
