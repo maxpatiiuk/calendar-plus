@@ -1,7 +1,6 @@
 # Calendar Plus
 
-A Chrome extension for Google Calendar that allows to easily see what you spend
-your time, get insights on and set goals
+A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization
 
 ## Installation
 
