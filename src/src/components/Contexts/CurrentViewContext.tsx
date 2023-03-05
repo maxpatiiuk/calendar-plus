@@ -161,7 +161,6 @@ function resolveBoundaries(
       ),
     };
   else if (viewName === 'week') {
-    // BUG: detect first day of the week. This incorrectly assumes Sunday is first
     const dayOffset = selectedDay.getDate() - selectedDay.getDay() + weekStart;
     return {
       firstDay: new Date(
@@ -195,7 +194,6 @@ function resolveBoundaries(
     };
   } else if (viewName === 'customweek') {
     const firstDay = new Date(selectedDay);
-    // FEATURE: detect first day of the week
     firstDay.setDate(firstDay.getDate() - firstDay.getDay() + weekStart);
     return {
       firstDay,

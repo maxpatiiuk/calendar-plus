@@ -39,6 +39,24 @@ theories(parsePath, [
     },
   },
   {
+    in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize, 1],
+    out: {
+      view: 'week',
+      selectedDay: new Date(2022, 11, 31),
+      firstDay: new Date(2022, 11, 26),
+      lastDay: new Date(2023, 0, 2),
+    },
+  },
+  {
+    in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize, 6],
+    out: {
+      view: 'week',
+      selectedDay: new Date(2022, 11, 31),
+      firstDay: new Date(2022, 11, 31),
+      lastDay: new Date(2023, 0, 6),
+    },
+  },
+  {
     in: ['/calendar/u/0/r/month/2020/12/31/', defaultCustomViewSize, 0],
     out: {
       view: 'month',
