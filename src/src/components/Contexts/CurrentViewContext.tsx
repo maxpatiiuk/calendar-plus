@@ -161,7 +161,9 @@ function resolveBoundaries(
       ),
     };
   else if (viewName === 'week') {
-    const dayOffset = selectedDay.getDate() - selectedDay.getDay() + weekStart;
+    const dayOfWeek = selectedDay.getDay();
+    const offset = dayOfWeek < weekStart ? 7 - weekStart : -weekStart;
+    const dayOffset = selectedDay.getDate() - offset - dayOfWeek;
     return {
       firstDay: new Date(
         selectedDay.getFullYear(),
@@ -193,8 +195,11 @@ function resolveBoundaries(
       ),
     };
   } else if (viewName === 'customweek') {
+    const dayOfWeek = selectedDay.getDay();
+    const diff = dayOfWeek < weekStart ? 7 - weekStart : -weekStart;
+
     const firstDay = new Date(selectedDay);
-    firstDay.setDate(firstDay.getDate() - firstDay.getDay() + weekStart);
+    firstDay.setDate(firstDay.getDate() - diff - dayOfWeek);
     return {
       firstDay,
       lastDay: new Date(
