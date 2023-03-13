@@ -32,7 +32,7 @@
   }
 
   /* Reduce heading padding */
-  body.condense-interface .gb_Ea:not(.gb_Fa) .gb_Sd {
+  body.condense-interface header > div {
     @apply !p-0;
   }
 
