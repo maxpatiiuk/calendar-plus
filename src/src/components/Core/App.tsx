@@ -66,7 +66,7 @@ export function App(): JSX.Element | null {
 
   return (
     <>
-      {typeof currentView === 'object' && Array.isArray(calendars) ? (
+      {typeof currentView === 'object' ? (
         <>
           {debugOverlay}
           <Button.White
@@ -85,7 +85,7 @@ export function App(): JSX.Element | null {
           >
             {commonText('calendarPlus')}
           </Button.White>
-          {isOpen && (
+          {isOpen && Array.isArray(calendars) ? (
             <Portal>
               <main
                 className={`
@@ -107,7 +107,7 @@ export function App(): JSX.Element | null {
                 )}
               </main>
             </Portal>
-          )}
+          ) : undefined}
         </>
       ) : undefined}
       {debugOverlay}
