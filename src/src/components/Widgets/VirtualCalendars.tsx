@@ -150,7 +150,7 @@ function Table({
   return (
     <table
       className={`
-        grid-table max-h-[50vh] grid-cols-[min-content_auto_auto_auto_auto]
+        grid-table max-h-[60vh] grid-cols-[min-content_auto_auto_auto_auto]
         overflow-auto text-left [&_:is(th,td)]:p-1
       `}
     >
