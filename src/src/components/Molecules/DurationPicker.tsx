@@ -1,7 +1,8 @@
 import React from 'react';
+
+import { commonText } from '../../localization/common';
 import { Input } from '../Atoms';
 import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';
-import { commonText } from '../../localization/common';
 
 const maxMinutes = MINUTES_IN_HOUR - 1;
 
@@ -19,29 +20,33 @@ export function DurationPicker({
   return (
     <div className="flex items-center gap-1">
       <Input.Number
-        min={0}
-        step={1}
+        aria-label={commonText('hours')}
         max={maxHours}
-        value={hours}
+        min={0}
         required
+        step={1}
+        title={commonText('hours')}
+        value={hours}
+        className="no-arrows"
+        width="w-6"
         onValueChange={(hours): void =>
           handleChange(hours * MINUTES_IN_HOUR + minutes)
         }
-        title={commonText('hours')}
-        aria-label={commonText('hours')}
       />
-      {':'}
+      :
       <Input.Number
-        min={0}
-        step={1}
+        aria-label={commonText('minutes')}
+        className="no-arrows"
         max={maxMinutes}
-        value={minutes}
+        min={0}
         required
+        step={1}
+        title={commonText('minutes')}
+        value={minutes}
+        width="w-6"
         onValueChange={(minutes): void =>
           handleChange(hours * MINUTES_IN_HOUR + minutes)
         }
-        title={commonText('minutes')}
-        aria-label={commonText('minutes')}
       />
     </div>
   );

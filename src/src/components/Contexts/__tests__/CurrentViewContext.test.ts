@@ -48,6 +48,15 @@ theories(parsePath, [
     },
   },
   {
+    in: ['/calendar/u/0/r/week/2023/3/12/', defaultCustomViewSize, 1],
+    out: {
+      view: 'week',
+      selectedDay: new Date(2023, 2, 12),
+      firstDay: new Date(2023, 2, 6),
+      lastDay: new Date(2023, 2, 13),
+    },
+  },
+  {
     in: ['/calendar/u/0/r/week/2022/12/31/', defaultCustomViewSize, 6],
     out: {
       view: 'week',
@@ -81,6 +90,15 @@ theories(parsePath, [
       selectedDay: new Date(2020, 11, 10),
       firstDay: new Date(2020, 11, 6),
       lastDay: new Date(2020, 11, 20),
+    },
+  },
+  {
+    in: ['/calendar/u/0/r/customweek/2020/12/10/', 14, 2],
+    out: {
+      view: 'customweek',
+      selectedDay: new Date(2020, 11, 10),
+      firstDay: new Date(2020, 11, 8),
+      lastDay: new Date(2020, 11, 22),
     },
   },
   {

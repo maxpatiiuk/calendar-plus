@@ -59,6 +59,10 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
     type: 'local',
     defaultValue: [] as RA<string>,
   },
+  weekStart: {
+    type: 'sync',
+    defaultValue: 0 as number,
+  },
 } as const);
 
 export type StorageDefinitions = typeof storageDefinitions;

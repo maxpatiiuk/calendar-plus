@@ -31,4 +31,15 @@
     dark:active:bg-blue-500 disabled:dark:!text-neutral-600
     disabled:hover:dark:!text-neutral-600;
   }
+
+  /* Hide up/down arrows in Gecko */
+  [type='number'].no-arrows {
+    -moz-appearance: textfield;
+  }
+
+  /* Hide up/down arrows in Webkit */
+  [type='number'].no-arrows::-webkit-outer-spin-button,
+  [type='number'].no-arrows::-webkit-inner-spin-button {
+    @apply m-0 appearance-none;
+  }
 }

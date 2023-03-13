@@ -66,7 +66,7 @@ export function App(): JSX.Element | null {
 
   return (
     <>
-      {typeof currentView === 'object' && Array.isArray(calendars) ? (
+      {typeof currentView === 'object' ? (
         <>
           {debugOverlay}
           <Button.White
@@ -85,9 +85,14 @@ export function App(): JSX.Element | null {
           >
             {commonText('calendarPlus')}
           </Button.White>
-          {isOpen && (
+          {isOpen && Array.isArray(calendars) ? (
             <Portal>
-              <main className="relative z-[100] flex h-full flex-col gap-2 overflow-y-auto bg-gray-200 p-2 box-border">
+              <main
+                className={`
+                  relative z-[100] box-border flex h-full flex-col gap-2
+                  overflow-y-auto bg-gray-200 p-2 [&_*]:box-border
+                `}
+              >
                 {state.type === 'MainState' ? (
                   <Dashboard
                     durations={durations}
@@ -102,7 +107,7 @@ export function App(): JSX.Element | null {
                 )}
               </main>
             </Portal>
-          )}
+          ) : undefined}
         </>
       ) : undefined}
       {debugOverlay}
