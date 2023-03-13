@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useAsyncState } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
 import { AuthContext } from './AuthContext';
 
@@ -12,24 +14,24 @@ export function SettingsProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { token } = React.useContext(AuthContext);
-  const [weekStart, setWeekStart] = React.useState<number>(0);
-  const [found, setFound] = React.useState<boolean>(false);
-
-  // If the token has been set, try an update
-  // Also make sure we havent already fetched
-  React.useEffect(() => {
-    if (token && !found) {
-      ajax('https://www.googleapis.com/calendar/v3/users/me/settings/weekStart')
-        .then((res) => res.json())
-        .then((val) => {
-          if (typeof val['value'] === 'string') {
-            let wstart = Number.parseInt(val['value']);
-            setWeekStart(wstart);
-            setFound(true);
-          }
-        });
-    }
-  }, [token]);
+  const [weekStart = 0] = useAsyncState(
+    React.useCallback(
+      async () =>
+        typeof token === 'string'
+          ? ajax(
+              'https://www.googleapis.com/calendar/v3/users/me/settings/weekStart'
+            )
+              .then<{ readonly value: string }>(async (response) =>
+                response.json()
+              )
+              .then(({ value }) =>
+                typeof value === 'string' ? Number.parseInt(value) : undefined
+              )
+          : undefined,
+      [token]
+    ),
+    false
+  );
 
   const userSettings = React.useMemo(
     () => ({
