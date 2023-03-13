@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAsyncState } from '../../hooks/useAsyncState';
+import { useStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
 import { AuthContext } from './AuthContext';
 
@@ -14,24 +14,18 @@ export function SettingsProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { token } = React.useContext(AuthContext);
-  const [weekStart = 0] = useAsyncState(
-    React.useCallback(
-      async () =>
-        typeof token === 'string'
-          ? ajax(
-              'https://www.googleapis.com/calendar/v3/users/me/settings/weekStart'
-            )
-              .then<{ readonly value: string }>(async (response) =>
-                response.json()
-              )
-              .then(({ value }) =>
-                typeof value === 'string' ? Number.parseInt(value) : undefined
-              )
-          : undefined,
-      [token]
-    ),
-    false
-  );
+  const [weekStart = 0, setWeekStart] = useStorage('weekStart');
+  React.useEffect(() => {
+    if (token === undefined) return;
+    ajax('https://www.googleapis.com/calendar/v3/users/me/settings/weekStart')
+      .then<{ readonly value: string }>(async (response) => response.json())
+      .then(({ value }) =>
+        typeof value === 'string'
+          ? setWeekStart(Number.parseInt(value))
+          : undefined
+      )
+      .catch(console.error);
+  }, [token, setWeekStart]);
 
   const userSettings = React.useMemo(
     () => ({
