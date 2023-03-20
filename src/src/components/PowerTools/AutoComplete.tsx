@@ -51,17 +51,16 @@ export function AutoComplete(): JSX.Element {
           blurListeners.delete(element);
 
           const eventName = element.value.trim();
-          let calendarId = guessCalendar(eventName);
-          if (calendarId === undefined) {
-            const guessSynonym = synonymsRef.current.find(({ synonym }) =>
-              eventName.startsWith(`${synonym}:`)
-            );
-            if (guessSynonym === undefined) return;
-            calendarId = guessSynonym.calendar;
+          const guessSynonym = synonymsRef.current.find(({ synonym }) =>
+            eventName.startsWith(`${synonym}:`)
+          );
+          let calendarId = guessSynonym?.calendar;
+          if (typeof guessSynonym === 'object')
             element.value = eventName
               .slice(guessSynonym.synonym.length + 1)
               .trim();
-          }
+          else calendarId = guessCalendar(eventName);
+          if (calendarId === undefined) return;
 
           const parent = findParent(element);
           if (parent === undefined) return;

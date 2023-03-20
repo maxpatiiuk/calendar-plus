@@ -28,7 +28,7 @@ export function DurationPicker({
         title={commonText('hours')}
         value={hours}
         className="no-arrows"
-        width="w-6"
+        width="w-9"
         onValueChange={(hours): void =>
           handleChange(hours * MINUTES_IN_HOUR + minutes)
         }
@@ -43,7 +43,7 @@ export function DurationPicker({
         step={1}
         title={commonText('minutes')}
         value={minutes}
-        width="w-6"
+        width="w-9"
         onValueChange={(minutes): void =>
           handleChange(hours * MINUTES_IN_HOUR + minutes)
         }

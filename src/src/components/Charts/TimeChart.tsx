@@ -171,13 +171,15 @@ const toTotalHours = (durations: RA<number>): number =>
 const toAverageMinutes = (durations: RA<number>): number =>
   durations.reduce((sum, duration) => sum + duration, 0) / durations.length;
 
+const toTwoDecimal = (number: number): number => Math.round(number * 100) / 100;
+
 const summedTimes = (
   durations: RA<DayHours>,
   aggregate: (numbers: RA<number>) => number
 ): DayHours => ({
-  total: aggregate(durations.map(({ total }) => total)),
+  total: toTwoDecimal(aggregate(durations.map(({ total }) => total))),
   hourly: Array.from({ length: DAY / HOUR }, (_, index) =>
-    aggregate(durations.map(({ hourly }) => hourly[index]))
+    toTwoDecimal(aggregate(durations.map(({ hourly }) => hourly[index])))
   ),
 });
 
