@@ -59,10 +59,8 @@ export function AutoComplete(): JSX.Element {
             element.value = eventName
               .slice(guessSynonym.synonym.length + 1)
               .trim();
-          else {
-            calendarId = guessCalendar(eventName);
-            if (calendarId === undefined) return;
-          }
+          else calendarId = guessCalendar(eventName);
+          if (calendarId === undefined) return;
 
           const parent = findParent(element);
           if (parent === undefined) return;
