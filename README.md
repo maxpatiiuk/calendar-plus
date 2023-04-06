@@ -33,6 +33,9 @@ Settings:
 Expanded time chart
 ![Expanded time chart](./docs/img/5.png)
 
+Editing the layout
+![Editing the layout](./docs/img/6.png)
+
 ## Installation
 
 Pre-requisites:
