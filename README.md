@@ -17,26 +17,27 @@ Features:
 - Supports exporting plotted data and exporting/importing plugin settings
 
 [Privacy Policy](./docs/privacy/README.md)
+[Video Demo](https://youtu.be/FZ_468t033A)
 
 ## Screenshots
 
 Column chart:
-![Column chart](./docs/img/1.png)
+[![Column chart](./docs/img/1.png)](https://youtu.be/FZ_468t033A)
 
 Time chart:
-![Time chart](./docs/img/2.png)
+[![Time chart](./docs/img/2.png)](https://youtu.be/FZ_468t033A)
 
 Pie chart:
-![Pie chart](./docs/img/3.png)
+[![Pie chart](./docs/img/3.png)](https://youtu.be/FZ_468t033A)
 
 Settings:
-![Settings](./docs/img/4.png)
+[![Settings](./docs/img/4.png)](https://youtu.be/FZ_468t033A)
 
 Expanded time chart
-![Expanded time chart](./docs/img/5.png)
+[![Expanded time chart](./docs/img/5.png)](https://youtu.be/FZ_468t033A)
 
 Editing the layout
-![Editing the layout](./docs/img/6.png)
+[![Editing the layout](./docs/img/6.png)](https://youtu.be/FZ_468t033A)
 
 ## Installation
 
