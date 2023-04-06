@@ -3,7 +3,7 @@ import React from 'react';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import type { IR } from '../../utils/types';
-import { Button, H3, Widget } from '../Atoms';
+import { Button, H3, Link, Widget } from '../Atoms';
 import { downloadFile, FilePicker, fileToText } from '../Molecules/FilePicker';
 import { PageHeader } from '../Molecules/PageHeader';
 import { PreferencesContext } from './Context';
@@ -27,6 +27,20 @@ export function PreferencesPage({
   ) : (
     <>
       <PageHeader label={commonText('preferences')}>
+        <Link.White
+          href="https://github.com/maxxxxxdlp/calendar-plus#calendar-plus"
+          rel="noreferrer"
+          target="_blank"
+        >
+          {commonText('aboutExtension')}
+        </Link.White>
+        <Link.White
+          href="https://calendar-plus.patii.uk/privacy"
+          rel="noreferrer"
+          target="_blank"
+        >
+          {commonText('privacyPolicy')}
+        </Link.White>
         <Button.White
           onClick={(): void =>
             void fetchDataForExport()
