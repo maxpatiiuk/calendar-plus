@@ -16,6 +16,8 @@ Features:
   rules
 - Supports exporting plotted data and exporting/importing plugin settings
 
+[Privacy Policy](./docs/privacy/README.md)
+
 ## Screenshots
 
 Column chart:
