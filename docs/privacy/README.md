@@ -9,7 +9,8 @@ Plus", "the Extension", "we", "us", or "our") and is designed to inform users ("
 you", "your", or "user") about the collection, use, and protection of their data
 when using the Extension.
 
-The Extension is open source, and its source code is available at https://github.com/maxxxxxdlp/calendar-plus.
+The Extension is open source, and its source code is available
+at https://github.com/maxxxxxdlp/calendar-plus.
 
 ## Who is requesting Google user data?
 
@@ -34,7 +35,8 @@ and functionalities within the Extension:
 
 ## Data Collection and Usage
 
-**We do not collect, store, or share any of your personal data or Google Calendar
+**We do not collect, store, or share any of your personal data or Google
+Calendar
 data.** The Extension processes your calendar data locally on your device to
 provide the aforementioned features. None of this data leaves your Google
 account or is transmitted to any third-party services.
@@ -51,10 +53,20 @@ changes, we will notify you by posting the updated policy on this page, along
 with an updated effective date. Your continued use of the Extension after the
 changes are posted constitutes your acceptance of the updated Privacy Policy.
 
+## Limited Use Disclosure
+
+Calendar Plus's use and transfer of information received from Google APIs will
+adhere to
+the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy),
+including the Limited Use
+requirements.
+
+By using the Calendar Plus Chrome Extension, you consent to this Privacy Policy
+and our compliance with the Google API Services User Data Policy, including the
+Limited Use requirements.
+
 ## Contact Us
 
 If you have any questions or concerns about this Privacy Policy or our data
 handling practices, please contact us at [max@patii.uk](mailto:max@patii.uk) or
 open a [GitHub issue](https://github.com/maxxxxxdlp/calendar-plus/issues/new)
-
-By using the Calendar Plus Chrome Extension, you consent to this Privacy Policy.
