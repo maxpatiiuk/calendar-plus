@@ -64,6 +64,14 @@ export const Button = {
   })),
 };
 
+export const Link = {
+  White: wrap(
+    'Link.White',
+    'a',
+    `${className.googleButton} ${className.buttonWhite}`
+  ),
+};
+
 export const Label = {
   Block: wrap('Label.Block', 'label', 'flex flex-col'),
 };

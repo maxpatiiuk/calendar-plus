@@ -95,6 +95,9 @@ module.exports = (_env, argv) =>
     watchOptions: {
       ignored: '/node_modules/',
     },
+    optimization: {
+      minimize: false,
+    },
     performance: {
       // Disable bundle size warnings for bundles <2 MB
       maxEntrypointSize: 2 * 1024 * 1024,

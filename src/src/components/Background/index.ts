@@ -44,7 +44,12 @@ const requestHandlers: {
     new Promise((resolve, reject) =>
       chrome.identity.getAuthToken({ interactive }, (token) =>
         typeof token === 'string'
-          ? resolve({ token })
+          ? /*
+             * For some reason the token is not immediately available, so need to
+             * trigger a tab refresh. Still resolving the token just to satisfy
+             * TypeScript
+             */
+            chrome.tabs.reload().then(() => resolve({ token }))
           : reject(chrome.runtime.lastError)
       )
     ),

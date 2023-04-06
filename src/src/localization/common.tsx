@@ -92,5 +92,11 @@ export const commonText = createDictionary({
   selectedFileName: {
     'en-us': 'Selected file',
   },
+  aboutExtension: {
+    'en-us': 'About Extension',
+  },
+  privacyPolicy: {
+    'en-us': 'Privacy Policy',
+  },
 });
 /* eslint-enable @typescript-eslint/naming-convention */
