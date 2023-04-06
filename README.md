@@ -17,7 +17,10 @@ Features:
 - Supports exporting plotted data and exporting/importing plugin settings
 
 [Privacy Policy](https://calendar-plus.patii.uk/privacy)
+
 [Video Demo](https://youtu.be/FZ_468t033A)
+
+[Report a Bug/Feature Request](https://github.com/maxxxxxdlp/calendar-plus/issues/new)
 
 ## Screenshots
 
