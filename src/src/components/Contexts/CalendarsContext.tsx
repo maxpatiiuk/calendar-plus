@@ -49,7 +49,11 @@ export function CalendarsSpy({
             prettyPrint: false.toString(),
           }
         )
-      );
+      ).catch((error) => {
+        console.error(error);
+        return undefined;
+      });
+      if (response === undefined) return undefined;
       const results = await response.json();
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
       const calendars = rawCalendars.map((calendar) => ({
@@ -83,7 +87,9 @@ export function CalendarsSpy({
     [calendars, visibleCalendars]
   );
   return (
-    <CalendarsContext.Provider value={filteredCalendars}>
+    <CalendarsContext.Provider
+      value={isCacheEmpty ? calendars : filteredCalendars}
+    >
       {children}
     </CalendarsContext.Provider>
   );
@@ -140,28 +146,31 @@ function useVisibilityChangeSpy(
     return (): void => observer.disconnect();
   }, []);
 
-  const calendarsRef = React.useRef(calendars);
-  calendarsRef.current = calendars;
   const parseCheckbox = React.useCallback(
     (
       checkbox: HTMLInputElement
     ): readonly [id: string, checked: boolean] | undefined => {
-      if (calendarsRef.current === undefined) return undefined;
+      if (calendars === undefined) {
+        console.log(
+          'Calendar Plus: Unable to identify visible calendars before user signs in'
+        );
+        return undefined;
+      }
       const calendarName = checkbox.ariaLabel;
       const calendar =
-        calendarsRef.current.find(({ summary }) => summary === calendarName) ??
+        calendars.find(({ summary }) => summary === calendarName) ??
         /*
          * Summary for the primary calendar does not match what is displayed
          * in the UI
          */
-        calendarsRef.current.find(({ primary }) => primary);
+        calendars.find(({ primary }) => primary);
       if (calendar === undefined) {
         console.error('Unable to locate the calendar', calendarName);
         return undefined;
       }
       return [calendar.id, checkbox.checked];
     },
-    []
+    [calendars]
   );
 
   /*

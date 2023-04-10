@@ -18,3 +18,5 @@ export function error(message: Error | string, ...rest: RA<unknown>): never {
 
 // FEATURE: display the error message in a dialog
 export const crash = console.error;
+export const softFail =
+  process.env.NODE_ENV === 'production' ? console.error : error;

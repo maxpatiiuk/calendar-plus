@@ -39,6 +39,10 @@ export const className = {
     [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
 };
 
+export const Ul = wrap('Ul', 'ul', 'list-none p-0 m-0 flex flex-col gap-2', {
+  role: 'list',
+});
+
 export const Button = {
   White: button('Button.White', className.buttonWhite),
   Blue: button(

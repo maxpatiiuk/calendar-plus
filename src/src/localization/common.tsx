@@ -98,5 +98,18 @@ export const commonText = createDictionary({
   privacyPolicy: {
     'en-us': 'Privacy Policy',
   },
+  ghostedEvents: {
+    'en-us': 'Ghosted Events',
+  },
+  noGhostedEvents: {
+    'en-us': 'There are no ghosted events at the moment',
+  },
+  ghostEventInstruction: {
+    'en-us': (shortcut: string) =>
+      `To ghost an event, close the Calendar Plus overlay, and ${shortcut} on the event`,
+  },
+  eventGhostingDisabled: {
+    'en-us': 'Event ghosting is disabled',
+  },
 });
 /* eslint-enable @typescript-eslint/naming-convention */

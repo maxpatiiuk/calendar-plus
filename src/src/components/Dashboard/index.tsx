@@ -22,11 +22,12 @@ export type WidgetDefinition = {
   readonly rowSpan: WidgetGridColumnSizes;
   readonly definition:
     | State<'DoughnutChart'>
+    | State<'GhostedEvents'>
     | State<'GoalsWidget'>
     | State<'StackedChart'>
-    | State<'VirtualCalendars'>
     | State<'Synonyms'>
-    | State<'TimeChart'>;
+    | State<'TimeChart'>
+    | State<'VirtualCalendars'>;
 };
 
 const widgetClassName = `

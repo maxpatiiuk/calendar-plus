@@ -2,6 +2,7 @@ import React from 'react';
 
 import { commonText } from '../../localization/common';
 import type { RR } from '../../utils/types';
+import { ensure } from '../../utils/types';
 import { Button } from '../Atoms';
 import { icons } from '../Atoms/Icon';
 import { DoughnutChart } from '../Charts/DoughnutChart';
@@ -9,20 +10,31 @@ import { StackedChart } from '../Charts/StackedChart';
 import { TimeChart } from '../Charts/TimeChart';
 import type { EventsStore } from '../EventsStore';
 import { GoalsWidget } from '../Goals/Widget';
+import { GhostedEvents } from '../Widgets/GhostedEvents';
 import { Synonyms } from '../Widgets/Synonyms';
 import { Unknown } from '../Widgets/Unknown';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 import type { WidgetDefinition } from './index';
 
-const widgets = {
+const widgets = ensure<
+  RR<
+    WidgetDefinition['definition']['type'] | 'Unknown',
+    (props: {
+      readonly label: string;
+      readonly definition: WidgetDefinition['definition'];
+      readonly durations: EventsStore | undefined;
+    }) => JSX.Element | null
+  >
+>()({
   DoughnutChart,
   StackedChart,
   GoalsWidget,
   VirtualCalendars,
   Synonyms,
+  GhostedEvents,
   Unknown,
   TimeChart,
-} as const;
+} as const);
 
 export const widgetLabels: RR<keyof typeof widgets, string> = {
   DoughnutChart: commonText('doughnutChart'),
@@ -32,6 +44,7 @@ export const widgetLabels: RR<keyof typeof widgets, string> = {
   Synonyms: commonText('shortNames'),
   Unknown: commonText('unknownWidget'),
   TimeChart: commonText('timeChart'),
+  GhostedEvents: commonText('ghostedEvents'),
 };
 
 export function WidgetContent({
