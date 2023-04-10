@@ -56,7 +56,7 @@ export function WidgetContainer({
           </Button.White>
         )}
       </div>
-      <div className={`flex flex-1 flex-col gap-2 ${className}`}>
+      <div className={`flex flex-1 flex-col gap-4 ${className}`}>
         {children}
       </div>
     </div>

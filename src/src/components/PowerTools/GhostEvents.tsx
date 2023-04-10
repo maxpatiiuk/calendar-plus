@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-import { useVersionedStorage } from '../../hooks/useStorage';
+import { useStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { f } from '../../utils/functools';
 import { useMainContainer } from '../Molecules/Portal';
@@ -12,10 +12,7 @@ import { usePref } from '../Preferences/usePref';
 import { usePageListener } from './PageListener';
 
 export function GhostEvents(): null {
-  const [ghostEvents = [], setGhostEvents] = useVersionedStorage(
-    'ghostEvents',
-    '2'
-  );
+  const [ghostEvents = [], setGhostEvents] = useStorage('ghostEvents');
 
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
   const [ghostEventOpacity] = usePref('feature', 'ghostEventOpacity');

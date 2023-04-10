@@ -42,6 +42,14 @@ export type GenericPreferencesCategories = IR<{
   readonly description?: string;
   readonly items: IR<PreferenceItem<any>>;
 }>;
+
+export const ghostEventShortcuts = [
+  { value: 'none', title: preferencesText('disable') },
+  { value: 'shift', title: preferencesText('shiftClick') },
+  { value: 'cmd', title: preferencesText('cmdClick') },
+  { value: 'ctrl', title: preferencesText('ctrlClick') },
+] as const;
+
 export const preferenceDefinitions = {
   behavior: {
     title: preferencesText('behavior'),
@@ -77,12 +85,9 @@ export const preferenceDefinitions = {
       ghostEventShortcut: defineItem<'cmd' | 'ctrl' | 'none' | 'shift'>({
         title: preferencesText('ghostEvent'),
         description: preferencesText('ghostEventDescription'),
-        renderer: pickListPref<'cmd' | 'ctrl' | 'none' | 'shift'>([
-          { value: 'none', title: preferencesText('disable') },
-          { value: 'shift', title: preferencesText('shiftClick') },
-          { value: 'cmd', title: preferencesText('cmdClick') },
-          { value: 'ctrl', title: preferencesText('ctrlClick') },
-        ]),
+        renderer: pickListPref<'cmd' | 'ctrl' | 'none' | 'shift'>(
+          ghostEventShortcuts
+        ),
         defaultValue: 'shift' as const,
       }),
       ghostEventOpacity: defineItem<number>({

@@ -108,9 +108,9 @@ export const defaultLayout: RA<WidgetDefinition> = [
       xs: 1,
       sm: 1,
       md: 1,
-      lg: 3,
-      xl: 3,
-      '2xl': 3,
+      lg: 4,
+      xl: 4,
+      '2xl': 4,
     },
     definition: {
       type: 'VirtualCalendars',
@@ -120,7 +120,7 @@ export const defaultLayout: RA<WidgetDefinition> = [
     colSpan: {
       xs: 1,
       sm: 1,
-      md: 2,
+      md: 3,
       lg: 2,
       xl: 2,
       '2xl': 2,
@@ -135,6 +135,27 @@ export const defaultLayout: RA<WidgetDefinition> = [
     },
     definition: {
       type: 'Synonyms',
+    },
+  },
+  {
+    colSpan: {
+      xs: 1,
+      sm: 1,
+      md: 3,
+      lg: 2,
+      xl: 2,
+      '2xl': 2,
+    },
+    rowSpan: {
+      xs: 1,
+      sm: 1,
+      md: 1,
+      lg: 1,
+      xl: 1,
+      '2xl': 1,
+    },
+    definition: {
+      type: 'GhostedEvents',
     },
   },
 ];
