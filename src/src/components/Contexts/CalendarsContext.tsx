@@ -83,7 +83,9 @@ export function CalendarsSpy({
     [calendars, visibleCalendars]
   );
   return (
-    <CalendarsContext.Provider value={filteredCalendars}>
+    <CalendarsContext.Provider
+      value={isCacheEmpty ? calendars : filteredCalendars}
+    >
       {children}
     </CalendarsContext.Provider>
   );
