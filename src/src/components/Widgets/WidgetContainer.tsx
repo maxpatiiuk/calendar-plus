@@ -4,20 +4,22 @@ import { commonText } from '../../localization/common';
 import type { GetSet, IR, RA } from '../../utils/types';
 import { filterArray } from '../../utils/types';
 import { Button, H3 } from '../Atoms';
-import { usePref } from '../Preferences/usePref';
 import { downloadFile } from '../Molecules/FilePicker';
+import { usePref } from '../Preferences/usePref';
 
 export function WidgetContainer({
   header,
   buttons = <span className="-ml-2 flex-1" />,
   children,
   editing,
+  className = '',
   getJsonExport,
   getTsvExport,
 }: {
   readonly header: string;
   readonly buttons?: JSX.Element;
   readonly children: React.ReactNode;
+  readonly className?: string;
   readonly editing?: GetSet<boolean>;
   readonly getJsonExport: (() => RA<unknown>) | undefined;
   readonly getTsvExport:
@@ -54,7 +56,9 @@ export function WidgetContainer({
           </Button.White>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2">{children}</div>
+      <div className={`flex flex-1 flex-col gap-2 ${className}`}>
+        {children}
+      </div>
     </div>
   );
 }

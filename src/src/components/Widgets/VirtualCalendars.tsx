@@ -88,6 +88,7 @@ export function VirtualCalendars({
       getJsonExport={getJsonExport}
       getTsvExport={getTsvExport}
       header={label}
+      className="relative min-h-[theme(spacing.96)]"
     >
       {Array.isArray(virtualCalendars) ? (
         !isEditing && virtualCalendars.length === 0 ? (
@@ -150,8 +151,9 @@ function Table({
   return (
     <table
       className={`
-        grid-table max-h-[60vh] grid-cols-[min-content_auto_auto_auto_auto]
-        overflow-auto text-left [&_:is(th,td)]:p-1
+        grid-table absolute h-full w-full
+        grid-cols-[min-content_auto_auto_auto_auto] overflow-auto text-left
+        [&_:is(th,td)]:p-1
       `}
     >
       <thead>
