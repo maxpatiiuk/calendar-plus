@@ -15,6 +15,7 @@ import { useAsyncState } from './useAsyncState';
 type StorageItem<T> = {
   readonly type: 'local' | 'sync';
   readonly defaultValue: T;
+  readonly version?: string;
 };
 
 export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
@@ -33,6 +34,7 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   ghostEvents: {
     type: 'sync',
     defaultValue: [] as RA<string>,
+    version: '2',
   },
   virtualCalendars: {
     type: 'sync',
@@ -71,21 +73,27 @@ export type StorageDefinitions = typeof storageDefinitions;
  * A wrapper for extensions Storage API with checks for cache version.
  * If cache is found to be outdated, it is removed
  */
-export function useVersionedStorage<NAME extends keyof StorageDefinitions>(
-  name: NAME,
-  version?: string
+export function useStorage<NAME extends keyof StorageDefinitions>(
+  name: NAME
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
-  const [value, setValue] = useStorage(name);
+  const [value, setValue] = useSimpleStorage(name);
 
   // Reset to default if cache is outdated
   const [cacheVersions, setCacheVersions] = React.useContext(VersionsContext);
   React.useLayoutEffect(() => {
-    const defaultValue = storageDefinitions[name].defaultValue;
-    if (cacheVersions === undefined || cacheVersions[name] === version) return;
+    const definition = storageDefinitions[name];
+    const defaultValue = definition.defaultValue;
+    const version = 'version' in definition ? definition.version : undefined;
+    if (
+      version === undefined ||
+      cacheVersions === undefined ||
+      cacheVersions[name] === version
+    )
+      return;
     console.log('Cache version mismatch detected', { name, cacheVersions });
     if (cacheVersions[name] === undefined) setValue(defaultValue);
     setCacheVersions({ ...cacheVersions, [name]: version });
-  }, [name, cacheVersions, version, setCacheVersions, setValue]);
+  }, [name, cacheVersions, setCacheVersions, setValue]);
 
   return [value, setValue];
 }
@@ -93,10 +101,11 @@ export function useVersionedStorage<NAME extends keyof StorageDefinitions>(
 /**
  * A wrapper for extensions Storage API (without checking for cache version)
  */
-export function useStorage<NAME extends keyof StorageDefinitions>(
+function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   name: NAME
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
   const type = storageDefinitions[name].type;
+
   const [value, setValue] = useAsyncState<
     StorageDefinitions[NAME]['defaultValue']
   >(
