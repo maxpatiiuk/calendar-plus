@@ -193,8 +193,11 @@ async function fetchEvents(
         ...(typeof pageToken === 'string' ? { pageToken } : {}),
       }
     )
-  );
-  if (response.status !== 200) return undefined;
+  ).catch((error) => {
+    console.error(error);
+    return undefined;
+  });
+  if (response === undefined) return undefined;
   const results = await response.json();
   const events = results.items as RA<CalendarEvent>;
   const nextPageToken = results.nextPageToken as string | undefined;

@@ -31,6 +31,13 @@ export const ajax = async (
       typeof body === 'object' && !(body instanceof FormData)
         ? JSON.stringify(body)
         : body,
+  }).then((response) => {
+    if (!response.ok) {
+      console.error('Failed to fetch', response);
+      throw new Error(
+        `Failed to fetch ${url}: ${response.status} ${response.statusText}`
+      );
+    } else return response;
   });
 
 /**

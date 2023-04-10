@@ -49,7 +49,11 @@ export function CalendarsSpy({
             prettyPrint: false.toString(),
           }
         )
-      );
+      ).catch((error) => {
+        console.error(error);
+        return undefined;
+      });
+      if (response === undefined) return undefined;
       const results = await response.json();
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
       const calendars = rawCalendars.map((calendar) => ({
