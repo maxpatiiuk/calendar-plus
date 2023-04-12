@@ -1,5 +1,4 @@
 import { createDictionary } from './utils';
-import React from 'react';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 

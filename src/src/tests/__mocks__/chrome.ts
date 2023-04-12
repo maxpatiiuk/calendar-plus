@@ -30,5 +30,9 @@ Object.defineProperty(globalThis, 'chrome', {
         },
       },
     },
+    runtime: {
+      getURL: (path: string): string =>
+        `chrome-extension://kgbbebdcmdgkbopcffmpgkgcmcoomhmh/${path}`,
+    },
   },
 });
