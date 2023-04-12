@@ -19,6 +19,7 @@ import { GhostEvents } from '../PowerTools/GhostEvents';
 import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
 import { usePref } from '../Preferences/usePref';
+import { FirstAuthScreen } from './FirstAuthScreen';
 
 const debugOverlayPromise =
   process.env.NODE_ENV === 'development'
@@ -63,6 +64,9 @@ export function App(): JSX.Element | null {
   const [state, setState] = React.useState<
     State<'MainState'> | State<'PreferencesState'>
   >({ type: 'MainState' });
+  const [isFirstAuth, setIsFirstAuth] = React.useState(false);
+  const handleAuth = (): void =>
+    void auth.handleAuthenticate(true).then(handleToggle).catch(console.error);
 
   return (
     <>
@@ -77,14 +81,17 @@ export function App(): JSX.Element | null {
              * because token is cached by Google Chrome
              */
             onClick={(): void =>
-              void auth
-                .handleAuthenticate(true)
-                .then(handleToggle)
-                .catch(console.error)
+              auth.token === undefined ? setIsFirstAuth(true) : handleAuth()
             }
           >
             {commonText('calendarPlus')}
           </Button.White>
+          {isFirstAuth && (
+            <FirstAuthScreen
+              onClose={(): void => setIsFirstAuth(false)}
+              onAuth={handleAuth}
+            />
+          )}
           {isOpen && Array.isArray(calendars) ? (
             <Portal>
               <main

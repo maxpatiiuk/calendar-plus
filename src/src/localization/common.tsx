@@ -1,4 +1,5 @@
 import { createDictionary } from './utils';
+import React from 'react';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 
@@ -97,6 +98,22 @@ export const commonText = createDictionary({
   },
   privacyPolicy: {
     'en-us': 'Privacy Policy',
+  },
+  signInWithGoogle: {
+    'en-us': 'Sign in with Google',
+  },
+  signInDescription: {
+    'en-us': `
+      The Calendar Plus Chrome Extension requires read-only access to your
+      Google Calendar data to offer visualization functionality, such as various
+      chart options and power user tools.
+    `,
+  },
+  privacyPolicyDescription: {
+    'en-us': `
+      We ensure complete privacy by not collecting, storing, or sharing any
+      personal or calendar data, and we don't use analytics or tracking tools.
+    `,
   },
   ghostedEvents: {
     'en-us': 'Ghosted Events',

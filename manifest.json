@@ -14,6 +14,12 @@
   "action": {
     "default_title": "See where your time went"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["/src/public/images/btn_google_signin_light_normal_web@2x.png"],
+      "matches": ["https://calendar.google.com/*"]
+    }
+  ],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuldA6s8qQKAdu33VanYX4yhBYnTbMwARskX7rcwvuIKgRPbY41X1mcIDUHKV7pC5sWQ2QuL0EN5U6M57dJhe+veTDDktpWNXeGJtwvPM6HFbwICgD93TkzwBl4Fs+67eFlsmpoHIdWeryyEfIUAgUwsb8DxvQ8OYhVKet1xkqJRRo112iLZ1bn/ZI8P39jT4cc9pMIXSvEKmtzyqNb9l/5WS8F6reqsRGIwZqmr/9fb7CEhyKPzEtXokcfaTygMwF6rJ6530cLUegofpJed4wZfFCCRtok63aqCwQgfypOKWlXCrExTdD6QKP4941dYQMuCg9+wp/GslGwTUd+odGQIDAQAB",
   "current_locale": "en",
   "permissions": [
