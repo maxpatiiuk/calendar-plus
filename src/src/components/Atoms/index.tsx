@@ -74,6 +74,11 @@ export const Link = {
     'a',
     `${className.googleButton} ${className.buttonWhite}`
   ),
+  Default: wrap(
+    'Link.Default',
+    'a',
+    '!text-blue-500 hover:underline hover:!text-blue-600'
+  ),
 };
 
 export const Label = {
