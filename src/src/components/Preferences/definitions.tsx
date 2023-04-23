@@ -129,7 +129,7 @@ export const preferenceDefinitions = {
           { value: 'tsv', title: preferencesText('tsv') },
           { value: 'csv', title: preferencesText('csv') },
         ]),
-        defaultValue: 'json' as const,
+        defaultValue: 'csv' as const,
       }),
     },
   },
