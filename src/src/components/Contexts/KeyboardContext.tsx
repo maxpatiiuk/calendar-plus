@@ -13,6 +13,16 @@ import {
   resolveModifiers,
 } from '../Molecules/KeyboardShortcut';
 
+/**
+ * Allows to register a key listener
+ */
+export const KeyboardContext = React.createContext<
+  (shortcut: KeyboardShortcuts, callback: () => void) => () => void
+>(() => {
+  throw new Error('KeyboardListener is not initialized');
+});
+KeyboardContext.displayName = 'KeyboardContext';
+
 export function KeyboardListener({
   children,
 }: {
@@ -111,10 +121,3 @@ const isInInput = (): boolean =>
   document.activeElement?.tagName === 'INPUT' ||
   document.activeElement?.tagName === 'TEXTAREA' ||
   document.activeElement?.getAttribute('role') === 'textbox';
-
-export const KeyboardContext = React.createContext<
-  (shortcut: KeyboardShortcuts, callback: () => void) => () => void
->(() => {
-  throw new Error('KeyboardListener is not initialized');
-});
-KeyboardContext.displayName = 'KeyboardContext';

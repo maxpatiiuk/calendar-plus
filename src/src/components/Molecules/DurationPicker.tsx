@@ -6,6 +6,9 @@ import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';
 
 const maxMinutes = MINUTES_IN_HOUR - 1;
 
+/**
+ * UI for selecting goal duration
+ */
 export function DurationPicker({
   value,
   onChange: handleChange,

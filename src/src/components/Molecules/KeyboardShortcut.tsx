@@ -1,3 +1,7 @@
+/**
+ * Logic for setting and listening to keyboard shortcuts
+ */
+
 import React from 'react';
 
 import { useTriggerState } from '../../hooks/useTriggerState';

@@ -1,3 +1,8 @@
+/**
+ * Basic CSS styles common to all pages. Have to be careful with this not to
+ * overwrite default Google Calendar Styles
+ */
+
 @layer base {
   * {
     @apply !ring-inset;

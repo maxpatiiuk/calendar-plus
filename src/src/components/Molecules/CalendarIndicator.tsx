@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * A small circle colored with given calendar's theme color
+ */
 export function CalendarIndicator({
   color,
 }: {

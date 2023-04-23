@@ -1,7 +1,3 @@
-/*
- * Real calendar event ID length is around 74 characters, but in order to reduce
- * used storage, we store only the first 16 characters of the ID.
- */
 import React from 'react';
 
 import { useStorage } from '../../hooks/useStorage';
@@ -11,6 +7,11 @@ import { useMainContainer } from '../Molecules/Portal';
 import { usePref } from '../Preferences/usePref';
 import { usePageListener } from './PageListener';
 
+/**
+ * Ghosted events are displayed as semi-transparent and non-clickable
+ *
+ * Handles ghosting events (by name) and allow to ghost additional events
+ */
 export function GhostEvents(): null {
   const [ghostEvents = [], setGhostEvents] = useStorage('ghostEvents');
 

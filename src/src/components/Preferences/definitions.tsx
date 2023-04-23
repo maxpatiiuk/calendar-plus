@@ -1,5 +1,5 @@
 /**
- * Definitions for User Interface preferences (scoped to a SpecifyUser)
+ * Definitions for User Interface preferences
  */
 
 import { commonText } from '../../localization/common';
@@ -129,7 +129,7 @@ export const preferenceDefinitions = {
           { value: 'tsv', title: preferencesText('tsv') },
           { value: 'csv', title: preferencesText('csv') },
         ]),
-        defaultValue: 'json' as const,
+        defaultValue: 'csv' as const,
       }),
     },
   },

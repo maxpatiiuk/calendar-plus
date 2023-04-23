@@ -16,30 +16,13 @@ import { CalendarList } from '../Molecules/CalendarList';
 import { RegexInput } from '../Molecules/RegexInput';
 import { WidgetContainer } from './WidgetContainer';
 
-export const matchRules = [
-  'equals',
-  'endsWith',
-  'startsWith',
-  'contains',
-  'regex',
-] as const;
-export type MatchRule = typeof matchRules[number];
-
-export type VirtualCalendar = {
-  readonly calendarId: string;
-  readonly rule: MatchRule;
-  readonly value: string;
-  readonly virtualCalendar?: string;
-};
-
-const ruleLabel: RR<MatchRule, string> = {
-  equals: commonText('equals'),
-  endsWith: commonText('endsWith'),
-  startsWith: commonText('startsWith'),
-  contains: commonText('contains'),
-  regex: commonText('regex'),
-};
-
+/**
+ * UI for editing autocomplete rules for event names and automatic placement of
+ * events into correct calendar.
+ *
+ * Also handles defining virtual calendars, which are then used by the Doughnut
+ * chart and the Time chart to visually partition the event durations
+ */
 export function VirtualCalendars({
   label,
 }: {
@@ -111,6 +94,30 @@ export function VirtualCalendars({
     </WidgetContainer>
   );
 }
+
+export const matchRules = [
+  'equals',
+  'endsWith',
+  'startsWith',
+  'contains',
+  'regex',
+] as const;
+export type MatchRule = typeof matchRules[number];
+
+export type VirtualCalendar = {
+  readonly calendarId: string;
+  readonly rule: MatchRule;
+  readonly value: string;
+  readonly virtualCalendar?: string;
+};
+
+const ruleLabel: RR<MatchRule, string> = {
+  equals: commonText('equals'),
+  endsWith: commonText('endsWith'),
+  startsWith: commonText('startsWith'),
+  contains: commonText('contains'),
+  regex: commonText('regex'),
+};
 
 function Calendars({
   virtualCalendars,

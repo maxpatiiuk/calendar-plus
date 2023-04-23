@@ -5,6 +5,9 @@ import type { RA } from '../../utils/types';
 import { className } from '../Atoms';
 import { commonText } from '../../localization/common';
 
+/**
+ * File picker, with drag and drop and screen reader support
+ */
 export function FilePicker({
   onSelected: handleSelected,
   acceptedFormats,
@@ -105,6 +108,9 @@ export function FilePicker({
   );
 }
 
+/**
+ * Prompt browser to download a given text string as a file
+ */
 export const downloadFile = async (
   fileName: string,
   text: string
@@ -136,6 +142,9 @@ export const downloadFile = async (
     iframe.contentWindow?.document.close();
   });
 
+/**
+ * Read the file user picked and convert it to a text string
+ */
 export const fileToText = async (
   file: File,
   encoding = 'utf-8'

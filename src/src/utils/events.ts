@@ -1,3 +1,7 @@
+/**
+ * A wrapper for `addEventListener` that returns a destructor for convenient
+ * usage in useEffect
+ */
 export function listen<EVENT_NAME extends keyof GlobalEventHandlersEventMap>(
   element: EventTarget,
   eventName: EVENT_NAME,

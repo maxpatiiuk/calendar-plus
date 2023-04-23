@@ -30,7 +30,7 @@ file tree.
 
 Create a directory for each feature in the `./components` folder.
 
-What constitutes a single feature depends on your jugement, and the number of
+What constitutes a single feature depends on your judgement, and the number of
 files included in the feature.
 
 Utils and hook files that are applicable to a single feature only should be
@@ -73,6 +73,6 @@ The benefit of using several types of comments rather than just `TODO`:
 - If you IDE has a tool that displays a list of all TODOs, you can set a filter
   there to see only a single type of TODOs at a time.
 - When `grep`ing tcode, there are fewer `TODOs` to grep for, if you know the
-  category your `TODO` belosngs to.
+  category your `TODO` belongs to.
 - Can visually scan a `TODO` and immediately know what it involves doing
   (testing / bug fixing / refactoring / adding a feature)

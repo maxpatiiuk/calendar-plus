@@ -1,3 +1,7 @@
+/**
+ * This is run in the background (service worker) to support the extension.
+ */
+
 import type { State } from 'typesafe-reducer';
 
 import type { Requests } from './messages';

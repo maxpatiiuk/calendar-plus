@@ -19,6 +19,10 @@ function useReducedMotion(): boolean {
 
 const defaultTransitionDuration = 100;
 
+/**
+ * Duration to use for any animations/transitions. Will be set to 0 if user
+ * chose to disable animations
+ */
 export function useTransitionDuration(): number {
   const reduceMotion = useReducedMotion();
   return React.useMemo(

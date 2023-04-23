@@ -4,6 +4,14 @@ import { useStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
 import { AuthContext } from './AuthContext';
 
+/**
+ * Holds relevant user's Google Calendar settings. Can be expanded in the future
+ */
+export const SettingsContext = React.createContext<UserSettings>({
+  weekStart: 0,
+});
+SettingsContext.displayName = 'SettingsContext';
+
 type UserSettings = {
   readonly weekStart: number;
 };
@@ -40,8 +48,3 @@ export function SettingsProvider({
     </SettingsContext.Provider>
   );
 }
-
-export const SettingsContext = React.createContext<UserSettings>({
-  weekStart: 0,
-});
-SettingsContext.displayName = 'SettingsContext';

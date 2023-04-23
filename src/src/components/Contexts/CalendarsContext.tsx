@@ -11,6 +11,15 @@ import { filterArray } from '../../utils/types';
 import { debounce, sortFunction, split } from '../../utils/utils';
 import { AuthContext } from './AuthContext';
 
+/**
+ * Holds a list of user's calendars. If user changed visibility of some calendar,
+ * this array is updated
+ */
+export const CalendarsContext = React.createContext<
+  RA<CalendarListEntry> | undefined
+>(undefined);
+CalendarsContext.displayName = 'CalendarsContext';
+
 type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
   'backgroundColor' | 'id' | 'primary' | 'summary'
@@ -94,11 +103,6 @@ export function CalendarsSpy({
     </CalendarsContext.Provider>
   );
 }
-
-export const CalendarsContext = React.createContext<
-  RA<CalendarListEntry> | undefined
->(undefined);
-CalendarsContext.displayName = 'CalendarsContext';
 
 function findSideBar(): HTMLElement | undefined {
   const sideBar = document.querySelector('[role="complementary"]');

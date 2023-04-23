@@ -14,6 +14,10 @@ type Elements = {
   readonly submitButton: HTMLElement;
 };
 
+/**
+ * Less invasive "Edit Recurring Event" dialog. Optimized for speed for power
+ * users
+ */
 export function BetterEditRecurring(): null {
   const [lessInvasiveDialog] = usePref('recurringEvents', 'lessInvasiveDialog');
 

@@ -1,3 +1,7 @@
+/**
+ * Localization strings for user preferences
+ */
+
 import { createDictionary } from './utils';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file

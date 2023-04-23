@@ -4,6 +4,19 @@ import type { StorageDefinitions } from '../../hooks/useStorage';
 import { useStorage } from '../../hooks/useStorage';
 import type { GetSet } from '../../utils/types';
 
+/**
+ * Powers storage versioning. Stores current versions of different storage keys
+ */
+export const VersionsContext = React.createContext<
+  GetSet<StorageDefinitions['storageVersions']['defaultValue'] | undefined>
+>([
+  {},
+  () => {
+    throw new Error('VersionsContext setter is not defined');
+  },
+]);
+VersionsContext.displayName = 'VersionsContext';
+
 export function VersionsContextProvider({
   children,
 }: {
@@ -16,13 +29,3 @@ export function VersionsContextProvider({
     </VersionsContext.Provider>
   );
 }
-
-export const VersionsContext = React.createContext<
-  GetSet<StorageDefinitions['storageVersions']['defaultValue'] | undefined>
->([
-  {},
-  () => {
-    throw new Error('VersionsContext setter is not defined');
-  },
-]);
-VersionsContext.displayName = 'VersionsContext';

@@ -8,6 +8,9 @@ import { ghostEventShortcuts } from '../Preferences/definitions';
 import { usePref } from '../Preferences/usePref';
 import { WidgetContainer } from './WidgetContainer';
 
+/**
+ * Show list of currently ghosted events and allow to unghost them
+ */
 export function GhostedEvents({
   label,
 }: {

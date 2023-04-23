@@ -1,6 +1,17 @@
 import React from 'react';
 import { sendRequest } from '../Background/messages';
 
+/**
+ * Holds user token (if authenticated) and callback to authenticate
+ */
+export const AuthContext = React.createContext<Auth>({
+  token: undefined,
+  handleAuthenticate: () => {
+    throw new Error('AuthContext is not defined');
+  },
+});
+AuthContext.displayName = 'AuthContext';
+
 type Auth = {
   readonly token: string | undefined;
   readonly handleAuthenticate: (interactive: boolean) => Promise<void>;
@@ -39,11 +50,3 @@ export function AuthenticationProvider({
   );
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
-
-export const AuthContext = React.createContext<Auth>({
-  token: undefined,
-  handleAuthenticate: () => {
-    throw new Error('AuthContext is not defined');
-  },
-});
-AuthContext.displayName = 'AuthContext';
