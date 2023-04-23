@@ -2,6 +2,9 @@ import React from 'react';
 
 import { sendRequest } from '../Background/messages';
 
+/**
+ * Used when in development. Adds a button to reload the extension
+ */
 export function DebugOverlay(): JSX.Element {
   return (
     <div className="absolute top-0 left-0">

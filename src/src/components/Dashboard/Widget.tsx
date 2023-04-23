@@ -16,6 +16,9 @@ import { Unknown } from '../Widgets/Unknown';
 import { VirtualCalendars } from '../Widgets/VirtualCalendars';
 import type { WidgetDefinition } from './index';
 
+/**
+ * Holds definitions of available widgets for the dashboard
+ */
 const widgets = ensure<
   RR<
     WidgetDefinition['definition']['type'] | 'Unknown',

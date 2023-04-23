@@ -7,6 +7,14 @@ import { listenEvent } from '../Background/messages';
 import { awaitElement } from './CalendarsContext';
 import { SettingsContext } from './SettingsContext';
 
+/**
+ * Keep track of what week/month/year is currently displayed
+ */
+export const CurrentViewContext = React.createContext<CurrentView | undefined>(
+  undefined
+);
+CurrentViewContext.displayName = 'LoadingContext';
+
 const supportedViews = [
   'day',
   'week',
@@ -234,11 +242,6 @@ async function detectCustomViewSize([
   ).size;
   if (duration !== customViewSize) setCustomViewSize(duration);
 }
-
-export const CurrentViewContext = React.createContext<CurrentView | undefined>(
-  undefined
-);
-CurrentViewContext.displayName = 'LoadingContext';
 
 export const exportsForTests = {
   parsePath,

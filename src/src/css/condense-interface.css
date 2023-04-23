@@ -1,6 +1,9 @@
+/**
+ * Styles for condensing UI
+ */
+
 @layer components {
   /*
-   * Styles for condensing UI
    * Hard-coding minified class names seems fragile, but these haven't changed
    * much in over a year. It could be that these are hashed variants of longer
    * class names, rather than purely minified

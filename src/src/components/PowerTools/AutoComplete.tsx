@@ -10,6 +10,10 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
 
+/**
+ * Provide autocomplete for calendar event names and automatically put events
+ * into correct calendars based on rules defined by the user
+ */
 export function AutoComplete(): JSX.Element {
   const calendars = React.useContext(CalendarsContext);
 

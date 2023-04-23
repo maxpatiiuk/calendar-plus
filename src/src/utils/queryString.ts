@@ -1,5 +1,8 @@
-import { IR } from './types';
+import type { IR } from './types';
 
+/**
+ * Add query string parameters to a URL. Preserve current parameters if present
+ */
 export function formatUrl(url: string, parameters: IR<string>): string {
   const urlObject = new URL(url, getUrl());
   urlObject.search = new URLSearchParams({

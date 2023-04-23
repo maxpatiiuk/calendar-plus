@@ -1,7 +1,8 @@
+/**
+ * Hide "Edit All", unless it is selected
+ */
+
 @layer components {
-  /*
-   * Hide "Edit All", unless it is selected
-   */
   body.hide-edit-all
     [role='dialog']
     [role='radiogroup']

@@ -1,3 +1,8 @@
+/**
+ * Reposition the "Edit recurring event" dialog to the bottom of the screen and
+ * make it non-modal
+ */
+
 @layer components {
   .less-invasive-batch-edit {
     @apply !pointer-events-none !bg-transparent;

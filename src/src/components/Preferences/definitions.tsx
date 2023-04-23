@@ -1,5 +1,5 @@
 /**
- * Definitions for User Interface preferences (scoped to a SpecifyUser)
+ * Definitions for User Interface preferences
  */
 
 import { commonText } from '../../localization/common';

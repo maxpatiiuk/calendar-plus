@@ -1,3 +1,7 @@
+/**
+ * Components used to render individual preference items
+ */
+
 import React from 'react';
 
 import type { RA } from '../../utils/types';

@@ -14,6 +14,9 @@ const resizeButton = `
   ${buttonCommon} absolute pointer-events-auto bg-blue-600 hover:bg-blue-700
 `;
 
+/**
+ * Adds razing and edition controls for an individual widget
+ */
 export function WidgetEditorOverlay({
   breakpoint,
   widget,

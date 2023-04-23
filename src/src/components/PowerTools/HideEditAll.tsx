@@ -1,14 +1,14 @@
-/**
- * Add a "hide-edit-all" class name to body which hides the "Edit All" option
- * from the "Edit recurring event" dialog unless until user hover over the
- * dialog for 3 seconds.
- */
 import React from 'react';
 
 import { usePref } from '../Preferences/usePref';
 
 const className = 'hide-edit-all';
 
+/**
+ * Add a "hide-edit-all" class name to body which hides the "Edit All" option
+ * from the "Edit recurring event" dialog unless until user hover over the
+ * dialog for 3 seconds.
+ */
 export function HideEditAll(): null {
   const [hideEditAll] = usePref('recurringEvents', 'hideEditAll');
   React.useEffect(() => {

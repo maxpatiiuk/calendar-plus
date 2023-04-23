@@ -7,6 +7,9 @@ import { Select } from '../Atoms';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import type { VirtualCalendar } from '../Widgets/VirtualCalendars';
 
+/**
+ * Combo box to select a calendar
+ */
 export function CalendarList({
   value,
   calendars,
@@ -33,6 +36,9 @@ export function CalendarList({
   );
 }
 
+/**
+ * Combo box to select a virtual calendar
+ */
 export function VirtualCalendarsList({
   value,
   calendarId,

@@ -1,8 +1,17 @@
 import React from 'react';
 
+import { useStorage } from '../../hooks/useStorage';
 import type { GetSet } from '../../utils/types';
 import type { UserPreferences } from './helpers';
-import { useStorage } from '../../hooks/useStorage';
+
+/**
+ * Hold User Preferences
+ */
+export const PreferencesContext = React.createContext<GetSet<UserPreferences>>([
+  {},
+  () => {},
+]);
+PreferencesContext.displayName = 'PreferencesContext';
 
 export function PreferencesProvider({
   children,
@@ -20,9 +29,3 @@ export function PreferencesProvider({
     </PreferencesContext.Provider>
   );
 }
-
-export const PreferencesContext = React.createContext<GetSet<UserPreferences>>([
-  {},
-  () => {},
-]);
-PreferencesContext.displayName = 'PreferencesContext';

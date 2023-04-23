@@ -1,18 +1,6 @@
 import React from 'react';
 import { PortalContext } from '../Molecules/Portal';
 
-const breakpointsTailwind = {
-  xs: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536,
-};
-const breakpoints = Object.entries(breakpointsTailwind).reverse();
-
-export type BreakPoint = keyof typeof breakpointsTailwind;
-
 /**
  * Find a TailWind breakpoint corresponding to current portal container width
  */
@@ -36,6 +24,18 @@ export function useBreakpoint(): BreakPoint {
 
   return breakpoint;
 }
+
+const breakpointsTailwind = {
+  xs: 0,
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  '2xl': 1536,
+};
+const breakpoints = Object.entries(breakpointsTailwind).reverse();
+
+export type BreakPoint = keyof typeof breakpointsTailwind;
 
 const resolveBreakpoint = (width: number) =>
   breakpoints.find(([_name, breakpoint]) => width > breakpoint)?.[0] ?? 'xs';

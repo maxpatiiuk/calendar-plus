@@ -2,6 +2,9 @@ import React from 'react';
 
 import { H2 } from '../Atoms';
 
+/**
+ * Reusable dashboard/preferences page header
+ */
 export function PageHeader({
   label,
   children,

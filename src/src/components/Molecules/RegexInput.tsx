@@ -3,6 +3,9 @@ import React from 'react';
 import { useValidation } from '../../hooks/useValidation';
 import { Input } from '../Atoms';
 
+/**
+ * An input field for a regular expression with syntax validation
+ */
 export function RegexInput({
   value,
   onChange: handleChange,

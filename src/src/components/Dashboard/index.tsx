@@ -9,33 +9,15 @@ import { removeItem, replaceItem } from '../../utils/utils';
 import { Button, Widget } from '../Atoms';
 import type { EventsStore } from '../EventsStore';
 import { PageHeader } from '../Molecules/PageHeader';
-import { defaultLayout, singleRow, widgetGridColumnSizes } from './definitions';
+import { defaultLayout, widgetGridColumnSizes } from './definitions';
 import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { AddWidgetButton, WidgetContent } from './Widget';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
 
-export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
-
-export type WidgetDefinition = {
-  readonly colSpan: WidgetGridColumnSizes;
-  readonly rowSpan: WidgetGridColumnSizes;
-  readonly definition:
-    | State<'DoughnutChart'>
-    | State<'GhostedEvents'>
-    | State<'GoalsWidget'>
-    | State<'StackedChart'>
-    | State<'Synonyms'>
-    | State<'TimeChart'>
-    | State<'VirtualCalendars'>;
-};
-
-const widgetClassName = `
-  relative
-  col-[span_var(--col-span)_/_span_var(--col-span)] 
-  row-[span_var(--row-span)_/_span_var(--row-span)]
-`;
-
+/**
+ * The widget container. Also handles editing the layout
+ */
 export function Dashboard({
   durations,
   onOpenPreferences: handleOpenPreferences,
@@ -155,3 +137,33 @@ export function Dashboard({
     </>
   );
 }
+
+export type WidgetGridColumnSizes = Readonly<Record<BreakPoint, number>>;
+
+export type WidgetDefinition = {
+  readonly colSpan: WidgetGridColumnSizes;
+  readonly rowSpan: WidgetGridColumnSizes;
+  readonly definition:
+    | State<'DoughnutChart'>
+    | State<'GhostedEvents'>
+    | State<'GoalsWidget'>
+    | State<'StackedChart'>
+    | State<'Synonyms'>
+    | State<'TimeChart'>
+    | State<'VirtualCalendars'>;
+};
+
+const widgetClassName = `
+  relative
+  col-[span_var(--col-span)_/_span_var(--col-span)] 
+  row-[span_var(--row-span)_/_span_var(--row-span)]
+`;
+
+const singleRow = {
+  xs: 1,
+  sm: 1,
+  md: 1,
+  lg: 1,
+  xl: 1,
+  '2xl': 1,
+} as const;

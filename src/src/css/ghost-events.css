@@ -1,3 +1,7 @@
+/**
+ * Make ghosted events semi-transparent and non-interactive
+ */
+
 @layer components {
   .ghosting-enabled .ghosted {
     opacity: var(--event-ghosting-opacity);

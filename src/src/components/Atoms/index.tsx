@@ -1,3 +1,7 @@
+/**
+ * Wrappers arround HTML elements with some styling applied
+ */
+
 import React from 'react';
 
 import type { IconProps } from './Icon';

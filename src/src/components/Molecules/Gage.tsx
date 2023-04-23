@@ -2,6 +2,9 @@ import React from 'react';
 import { formatNumber } from '../Atoms/Internationalization';
 
 /**
+ * UI for a gage/indicator
+ *
+ * @remarks
  * Based on https://www.youtube.com/watch?v=Ft73g5Kyknw
  */
 export function Gage({

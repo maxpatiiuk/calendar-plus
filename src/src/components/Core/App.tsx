@@ -21,11 +21,9 @@ import { PreferencesPage } from '../Preferences';
 import { usePref } from '../Preferences/usePref';
 import { FirstAuthScreen } from './FirstAuthScreen';
 
-const debugOverlayPromise =
-  process.env.NODE_ENV === 'development'
-    ? import('../DebugOverlay').then(({ DebugOverlay }) => <DebugOverlay />)
-    : undefined;
-
+/**
+ * Entrypoint react component for the extension
+ */
 export function App(): JSX.Element | null {
   const [isOpen, handleOpen, handleClose, handleToggle] = useBooleanState();
 
@@ -126,3 +124,8 @@ export function App(): JSX.Element | null {
     </>
   );
 }
+
+const debugOverlayPromise =
+  process.env.NODE_ENV === 'development'
+    ? import('../DebugOverlay').then(({ DebugOverlay }) => <DebugOverlay />)
+    : undefined;

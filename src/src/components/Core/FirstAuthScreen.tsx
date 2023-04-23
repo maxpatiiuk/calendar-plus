@@ -3,10 +3,10 @@ import React from 'react';
 import { commonText } from '../../localization/common';
 import { Button, Link } from '../Atoms';
 
-const imageUrl = chrome.runtime.getURL(
-  '/src/public/images/btn_google_signin_light_normal_web@2x.png'
-);
-
+/**
+ * This dialog is displayed on first use promoting user to sign in with Google
+ * and give us read-only access to calendar.
+ */
 export function FirstAuthScreen({
   onClose: handleClose,
   onAuth: handleAuth,
@@ -74,3 +74,7 @@ export function FirstAuthScreen({
     </dialog>
   );
 }
+
+const imageUrl = chrome.runtime.getURL(
+  '/src/public/images/btn_google_signin_light_normal_web@2x.png'
+);
