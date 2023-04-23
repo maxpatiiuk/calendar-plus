@@ -119,5 +119,5 @@ npm run unitTests:watch
 
 ```
 cd src
-npx typedoc --out docs src
+npm run docs
 ```
