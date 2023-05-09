@@ -25,7 +25,7 @@ Features:
 ## Screenshots
 
 Column chart:
-[![Column chart](./docs/img/1.png)](https://youtu.be/FZ_468t033A)
+[![Column chart](./docs/img/1.jpg)](https://youtu.be/FZ_468t033A)
 
 Time chart:
 [![Time chart](./docs/img/2.png)](https://youtu.be/FZ_468t033A)
