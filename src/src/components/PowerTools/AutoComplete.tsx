@@ -156,7 +156,7 @@ function isEventNameInput(element: HTMLInputElement): boolean {
     return false;
   const isInMiniEditor =
     element.hasAttribute('autofocus') && element.getAttribute('value') === '';
-  const isInEditor = element.hasAttribute('dir');
+  const isInEditor = element.hasAttribute('placeholder');
   return isInMiniEditor || isInEditor;
 }
 
