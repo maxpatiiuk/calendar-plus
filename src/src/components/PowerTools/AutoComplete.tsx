@@ -173,7 +173,7 @@ function findParent(element: HTMLInputElement): HTMLElement | undefined {
 
 function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
   const select = parent.querySelector<HTMLElement>(
-    '[role="listbox"]:not([tabindex])[id]'
+    '[role="listbox"][aria-expanded]'
   );
   if (select === null) {
     console.warn('Unable to find calendar selector box');
