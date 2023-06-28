@@ -1,6 +1,6 @@
 {
   "name": "calendar-stats",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "private": true,
   "description": "A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization",
   "license": "MIT",
