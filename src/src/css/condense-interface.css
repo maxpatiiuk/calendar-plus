@@ -21,12 +21,17 @@
       /* "Search for people" input box */
       .ZtL5hd,
       /* "Google Apps" button */
-      .gb_0c
+      #gbwa
     ),
   /* "Calendar" heading */
   body.condense-interface header [role="heading"],
   body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb {
     @apply hidden;
+  }
+
+  /* Remove padding right where "Google Apps" button was */
+  body.condense-interface div[data-ogsr-up] {
+    @apply !p-0
   }
 
   /* Free up space in the header */
