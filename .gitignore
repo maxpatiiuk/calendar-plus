@@ -22,3 +22,6 @@
 /src/npm-debug.log*
 /src/yarn-debug.log*
 /src/yarn-error.log*
+
+# packaged extension
+calendar-plus.zip
