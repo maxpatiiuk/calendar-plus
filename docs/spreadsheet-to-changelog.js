@@ -32,7 +32,7 @@ const group = (entries) =>
 const assignees = new Set(parsed.map((data) => data["Assignee"]));
 
 const assigneeMapper = {
-  Max: "maxxxxxdlp",
+  Max: "maxpatiiuk",
   Will: "Durbatuluk1701",
   Jet: "jetsemr",
   Jacob: "jakeangus",
@@ -64,7 +64,7 @@ const githubLink = (type) => (value) =>
         .map((value) => value.slice(value.lastIndexOf("/") + 1))
         .map(
           (number) =>
-            `<a href="https://github.com/maxxxxxdlp/calendar-plus/${type}/${number}">#${number}</a>`
+            `<a href="https://github.com/maxpatiiuk/calendar-plus/${type}/${number}">#${number}</a>`
         )
         .join(" and ");
 

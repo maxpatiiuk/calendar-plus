@@ -10,7 +10,7 @@ you", "your", or "user") about the collection, use, and protection of their data
 when using the Extension.
 
 The Extension is open source, and its source code is available
-at https://github.com/maxxxxxdlp/calendar-plus.
+at https://github.com/maxpatiiuk/calendar-plus.
 
 ## Who is requesting Google user data?
 
@@ -69,4 +69,4 @@ Limited Use requirements.
 
 If you have any questions or concerns about this Privacy Policy or our data
 handling practices, please contact us at [max@patii.uk](mailto:max@patii.uk) or
-open a [GitHub issue](https://github.com/maxxxxxdlp/calendar-plus/issues/new)
+open a [GitHub issue](https://github.com/maxpatiiuk/calendar-plus/issues/new)

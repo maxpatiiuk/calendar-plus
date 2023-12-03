@@ -33,14 +33,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        // Specify brand colors
-        brand: {
-          100: 'var(--accent-color-100)',
-          200: 'var(--accent-color-200)',
-          300: 'var(--accent-color-300)',
-          400: 'var(--accent-color-400)',
-          500: 'var(--accent-color-500)',
-        },
         // Some in-between shades:
         gray: {
           350: 'hsl(218deg 12% 79%)',

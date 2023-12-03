@@ -1,5 +1,5 @@
 /**
- * Message passing utils. Used both by the context and background scripts
+ * Message passing utils. Used both by the content and background scripts
  */
 
 import { State } from 'typesafe-reducer';

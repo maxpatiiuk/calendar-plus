@@ -26,7 +26,6 @@ If applicable, add screenshots to help explain your problem.
 **Desktop:**
  - OS: [e.g. Windows 10]
  - Browser: [e.g. Chrome, Safari]
- - Specify 7 Version: [e.g. 7.6.1]
 
 **Additional context**
 Any other context about the problem.

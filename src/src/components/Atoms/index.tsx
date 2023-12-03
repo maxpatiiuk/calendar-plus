@@ -38,7 +38,7 @@ const button = (name: string, classList: string) =>
 
 export const className = {
   googleButton:
-    'border border-solid p-2 rounded flex items-center gap-2 cursor-pointer cursor-pointer',
+    'border border-solid p-2 rounded flex items-center gap-2 cursor-pointer',
   buttonWhite: `bg-white border-[#dadce0] active:bg-[#dadce0]
     [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
 };

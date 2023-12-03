@@ -28,7 +28,7 @@ export function PreferencesPage({
     <>
       <PageHeader label={commonText('preferences')}>
         <Link.White
-          href="https://github.com/maxxxxxdlp/calendar-plus#calendar-plus"
+          href="https://github.com/maxpatiiuk/calendar-plus#calendar-plus"
           rel="noreferrer"
           target="_blank"
         >

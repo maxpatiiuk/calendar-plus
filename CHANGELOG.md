@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 			<td>5</td>
 			<td>🏕 Medium</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/158">#158</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/158">#158</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -35,7 +35,7 @@ All notable changes to this project will be documented in this file.
 			<td>5</td>
 			<td>🏝 Low</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/174">#174</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/174">#174</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -50,8 +50,8 @@ All notable changes to this project will be documented in this file.
 			<td>Make extension work in Firefox</td>
 			<td>13</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/150">#150</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/150">#150</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -62,7 +62,7 @@ All notable changes to this project will be documented in this file.
 			<td>13</td>
 			<td>🏝 Low</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/173">#173</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/173">#173</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -76,7 +76,7 @@ All notable changes to this project will be documented in this file.
 			<td>Add a faster way to set notifications</td>
 			<td>13</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>No</td>
 			<td></td>
@@ -88,7 +88,7 @@ All notable changes to this project will be documented in this file.
 			<td>13</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/76">#76</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/76">#76</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -99,7 +99,7 @@ All notable changes to this project will be documented in this file.
 			<td>8</td>
 			<td>🏝 Low</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/155">#155</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/155">#155</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -113,7 +113,7 @@ All notable changes to this project will be documented in this file.
 			<td>8</td>
 			<td>🏕 Medium</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/181">#181</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/181">#181</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -148,10 +148,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add an explicit "Sign in with Google" button</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/214">#214</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/214">#214</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/213">#213</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/213">#213</a></td>
 			<td>Yes</td>
 			<td>
 				Our OAuth Consent Screen application was rejected again.<br>
@@ -163,7 +163,7 @@ All notable changes to this project will be documented in this file.
 			<td>Record an introductory demo video</td>
 			<td>3</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
 			<td></td>
@@ -178,9 +178,9 @@ All notable changes to this project will be documented in this file.
 			<td>5</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/59">#59</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/59">#59</a></td>
 			<td>No</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/202">#202</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/202">#202</a></td>
 			<td>No</td>
 			<td>
 				Currently, the plugin assumes that Google Calendar's time zone matched the system time zone.<br>
@@ -203,13 +203,13 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/151">#151</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/151">#151</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
 			<td>
 				Guide: https://extensionworkshop.com/documentation/develop/browser-compatibility/Documentation: https://learn.microsoft.com/en-us/microsoft-edge/extensions-chromium/developer-guide/port-chrome-extension<br>
-				See also https://github.com/maxxxxxdlp/calendar-plus/issues/150
+				See also https://github.com/maxpatiiuk/calendar-plus/issues/150
 			</td>
 		</tr>
 		<tr>
@@ -217,7 +217,7 @@ All notable changes to this project will be documented in this file.
 			<td>8</td>
 			<td>🏔 High</td>
 			<td><a href="https://github.com/jetsemr">jetsemr</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/124">#124</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/124">#124</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -242,7 +242,7 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏕 Medium</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/179">#179</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/179">#179</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -264,7 +264,7 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏕 Medium</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/129">#129</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/129">#129</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -275,7 +275,7 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/157">#157</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/157">#157</a></td>
 			<td>No</td>
 			<td></td>
 			<td>No</td>
@@ -285,7 +285,7 @@ All notable changes to this project will be documented in this file.
 			<td>Fill out CHANGELOG.md</td>
 			<td>2</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>No</td>
 			<td></td>
@@ -327,21 +327,21 @@ All notable changes to this project will be documented in this file.
 			<td>Investigate migrating to Firefox</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/150">#150</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/150">#150</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
-			<td>Results of investigation: https://github.com/maxxxxxdlp/calendar-plus/issues/150#issuecomment-1494660524</td>
+			<td>Results of investigation: https://github.com/maxpatiiuk/calendar-plus/issues/150#issuecomment-1494660524</td>
 		</tr>
 		<tr>
 			<td>Write privacy policy</td>
 			<td>5</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/210">#210</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/210">#210</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/209">#209</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/209">#209</a></td>
 			<td>Yes</td>
 			<td>It is required by Google to pass OAuth Consent Screen. Limited Use disclosure is needed too</td>
 		</tr>
@@ -349,7 +349,7 @@ All notable changes to this project will be documented in this file.
 			<td>Comply with OAuth Consent Screen requirements</td>
 			<td>5</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
 			<td></td>
@@ -366,10 +366,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a way to unghost an event</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/207">#207</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/207">#207</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/212">#212</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/212">#212</a></td>
 			<td>Yes</td>
 			<td>In case you accidentally ghosted an event or wanted to just temporary ghost it</td>
 		</tr>
@@ -377,10 +377,10 @@ All notable changes to this project will be documented in this file.
 			<td>Extension does not work on first sign in</td>
 			<td>5</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/211">#211</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/211">#211</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/212">#212</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/212">#212</a></td>
 			<td>Yes</td>
 			<td>Seems to be fixed after reloading the page. Quite strange</td>
 		</tr>
@@ -408,7 +408,7 @@ All notable changes to this project will be documented in this file.
 			<td>Record video snippets for the demo</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
 			<td></td>
@@ -420,9 +420,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/127">#127</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/127">#127</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/203">#203</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/203">#203</a></td>
 			<td>Yes</td>
 			<td>The overlay container is cut off a bit at the bottom</td>
 		</tr>
@@ -430,10 +430,10 @@ All notable changes to this project will be documented in this file.
 			<td>Fix a dozen discovered small issues</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/201">#201</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/201">#201</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/204">#204</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/204">#204</a></td>
 			<td>Yes</td>
 			<td>
 				Things needed to fix:<br>
@@ -451,7 +451,7 @@ All notable changes to this project will be documented in this file.
 			<td>Research promotion strategy for extension</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
 			<td></td>
@@ -463,9 +463,9 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/201">#201</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/201">#201</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/204">#204</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/204">#204</a></td>
 			<td>Yes</td>
 			<td>User Settings should be stored in local storage and retrieved periodically, where default is to pull from Local Storage</td>
 		</tr>
@@ -494,9 +494,9 @@ All notable changes to this project will be documented in this file.
 			<td>5</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/60">#60</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/60">#60</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/199">#199</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/199">#199</a></td>
 			<td>Yes</td>
 			<td>
 				Currently, the extension assumes Sunday is the first day of the week.<br>
@@ -507,10 +507,10 @@ All notable changes to this project will be documented in this file.
 			<td>Publish extension to Google WebStore</td>
 			<td>5</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/152">#152</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/152">#152</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/200">#200</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/200">#200</a></td>
 			<td>Yes</td>
 			<td>
 				So that it's publicly visible<br>
@@ -541,10 +541,10 @@ All notable changes to this project will be documented in this file.
 			<td>Handle auth token expiration</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/188">#188</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/188">#188</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/189">#189</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/189">#189</a></td>
 			<td>Yes</td>
 			<td>
 				Need to refresh the access token when necessary.<br>
@@ -555,10 +555,10 @@ All notable changes to this project will be documented in this file.
 			<td>Extension is broken if page is loaded with sidebar collapsed</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/101">#101</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/101">#101</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/190">#190</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/190">#190</a></td>
 			<td>Yes</td>
 			<td>
 				If the page is loaded with sidebar collapsed (Google Calendar remembers if you collapsed it in previous session), then Calendar Plus extension fails to read the list of currently visible calendars, leading it to treat all calendars as disabled.<br>
@@ -569,10 +569,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add settings import/export feature</td>
 			<td>2</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/193">#193</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/193">#193</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/194">#194</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/194">#194</a></td>
 			<td>Yes</td>
 			<td>Add ability to export layout, preferences, autocomplete predictions and other settings (but also to import them)</td>
 		</tr>
@@ -580,10 +580,10 @@ All notable changes to this project will be documented in this file.
 			<td>Extend export to JSON/TSV to every widget</td>
 			<td>3</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/191">#191</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/191">#191</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/192">#192</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/192">#192</a></td>
 			<td>Yes</td>
 			<td></td>
 		</tr>
@@ -591,10 +591,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a "Condenced" UI mode</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/161">#161</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/161">#161</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/197">#197</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/197">#197</a></td>
 			<td>Yes</td>
 			<td>
 				Google Calendar does not show previews of descriptions for events that have descriptions nor does it provide an indicator that even has a description.<br>
@@ -626,10 +626,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a 24hr time allocation visualization</td>
 			<td>13</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/165">#165</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/165">#165</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/175">#175</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/175">#175</a></td>
 			<td>Yes</td>
 			<td>
 				See https://www.reddit.com/r/dataisbeautiful/comments/101hvnv/oc_i_tracked_every_hour_of_my_life_for_5_years/<br>
@@ -642,9 +642,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/154">#154</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/154">#154</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/184">#184</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/184">#184</a></td>
 			<td>Yes</td>
 			<td>
 				Currently, data export to CSV and TSV is supported.<br>
@@ -655,13 +655,13 @@ All notable changes to this project will be documented in this file.
 			<td>Make event ghosting smarter</td>
 			<td>5</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/153">#153</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/153">#153</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/182">#182</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/182">#182</a></td>
 			<td>Yes</td>
 			<td>
-				See https://github.com/maxxxxxdlp/calendar-plus/pull/102#discussion_r1009769566<br>
+				See https://github.com/maxpatiiuk/calendar-plus/pull/102#discussion_r1009769566<br>
 				Define the ghost events using event names rather than even IDs
 			</td>
 		</tr>
@@ -669,10 +669,10 @@ All notable changes to this project will be documented in this file.
 			<td>Doughnut chart labels are incorrect</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/183">#183</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/183">#183</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/182">#182</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/182">#182</a></td>
 			<td>Yes</td>
 			<td>When you have several calendars and virtual calendars, the labels on the doughnut chart seem to be off by one (calendars seem to get the label from virtual calendars)</td>
 		</tr>
@@ -700,8 +700,8 @@ All notable changes to this project will be documented in this file.
 			<td>Validate RegExp</td>
 			<td>2</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/126">#126</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/126">#126</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -711,8 +711,8 @@ All notable changes to this project will be documented in this file.
 			<td>Auto calendar switcher should not try to switch calendar if correct calendar is already selected</td>
 			<td>3</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/121">#121</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/121">#121</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -722,8 +722,8 @@ All notable changes to this project will be documented in this file.
 			<td>Fetch repeated events more efficiently</td>
 			<td>8</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/148">#148</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/148">#148</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -737,8 +737,8 @@ All notable changes to this project will be documented in this file.
 			<td>Ability to supress "Edit recurring event" dialog</td>
 			<td>8</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/128">#128</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/128">#128</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -752,8 +752,8 @@ All notable changes to this project will be documented in this file.
 			<td>Handle pagination when fetching events</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/149">#149</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/149">#149</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -767,8 +767,8 @@ All notable changes to this project will be documented in this file.
 			<td>Improve Caching Strategy</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/82">#82</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/82">#82</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -783,8 +783,8 @@ All notable changes to this project will be documented in this file.
 			<td>Allow hiding dangerous "Edit All" option</td>
 			<td>2</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/160">#160</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/160">#160</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -794,8 +794,8 @@ All notable changes to this project will be documented in this file.
 			<td>Fetch events for current year</td>
 			<td>13</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/90">#90</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/90">#90</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -805,8 +805,8 @@ All notable changes to this project will be documented in this file.
 			<td>Make stacked area chart work when in year view</td>
 			<td>5</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/91">#91</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/91">#91</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -836,10 +836,10 @@ All notable changes to this project will be documented in this file.
 			<td>Allow defining calendar name shortcuts</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/122">#122</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/122">#122</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/135">#135</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/135">#135</a></td>
 			<td>Yes</td>
 			<td>Add a UI for defining shorter names for calendars. Shorter versions should be accepted by future components, and is to be treated as a synonym - to speed up data entry</td>
 		</tr>
@@ -847,10 +847,10 @@ All notable changes to this project will be documented in this file.
 			<td>Support using calendar name shortcuts in event names</td>
 			<td>3</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/123">#123</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/123">#123</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/135">#135</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/135">#135</a></td>
 			<td>Yes</td>
 			<td>Need to support a syntax like this for event names: synonym: eventName. If user is creating an event by that name, and synonym, matches a defined calendar synonym, it should automatically switch to corresponding calendar and remove the synonym: part from the event name</td>
 		</tr>
@@ -858,19 +858,19 @@ All notable changes to this project will be documented in this file.
 			<td>Charts is double or tripple counting the durations</td>
 			<td>5</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/134">#134</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/134">#134</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/142">#142</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/142">#142</a></td>
 			<td>Yes</td>
-			<td>Seems like every time you open the chart, the total durations increase. See https://github.com/maxxxxxdlp/calendar-plus/issues/134</td>
+			<td>Seems like every time you open the chart, the total durations increase. See https://github.com/maxpatiiuk/calendar-plus/issues/134</td>
 		</tr>
 		<tr>
 			<td>Fix test depending on Daylight Savings Time</td>
 			<td>3</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/114">#114</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/114">#114</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -883,10 +883,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a button to UI to refetch events for current view</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/125">#125</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/125">#125</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/142">#142</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/142">#142</a></td>
 			<td>Yes</td>
 			<td>There should be button to explicitly recompute the durations for current view (day, week or month)` into a separate issue</td>
 		</tr>
@@ -915,9 +915,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jetsemr">jetsemr</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/89">#89</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/89">#89</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/141">#141</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/141">#141</a></td>
 			<td>Yes</td>
 			<td>This will improve user experience and enhance accessibility compliance</td>
 		</tr>
@@ -925,10 +925,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make Doughnut Chart factor in virtual calendars</td>
 			<td>8</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/116">#116</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/116">#116</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/119">#119</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/119">#119</a></td>
 			<td>Yes</td>
 			<td>Virtual calendars can be defined now. Next, need to make Doughnut Chart display the virtual calendars</td>
 		</tr>
@@ -936,10 +936,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add support for "customday" view</td>
 			<td>5</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/61">#61</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/61">#61</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/132">#132</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/132">#132</a></td>
 			<td>Yes</td>
 			<td>
 				Google Calendar has one user-customizable view that can be set to display X days at once. The extension should detect the preferences for that view.<br>
@@ -950,10 +950,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add an option to ignore all-day events</td>
 			<td>3</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/105">#105</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/105">#105</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/119">#119</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/119">#119</a></td>
 			<td>Yes</td>
 			<td>
 				Currently, an all-day event is treated as an event that spans entire days, and thus contributes 24 hours to the plots.<br>
@@ -967,9 +967,9 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/106">#106</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/106">#106</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/115">#115</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/115">#115</a></td>
 			<td>Yes</td>
 			<td>This would be useful for power users who would save a lot of time with a keyboard shortcut rather than have to use the mouse to open the overlay</td>
 		</tr>
@@ -977,10 +977,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make keyboard shorctut that opens the overlay customizable</td>
 			<td>5</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/107">#107</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/107">#107</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/130">#130</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/130">#130</a></td>
 			<td>Yes</td>
 			<td>Once a keyboard shortcut is added, it needs to be customizable to improve usability and to be compliant with the accessibility standards</td>
 		</tr>
@@ -1030,10 +1030,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add user preferences menu</td>
 			<td>5</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/99">#99</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/99">#99</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/102">#102</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/102">#102</a></td>
 			<td>Yes</td>
 			<td>For UI and behavior customization. Also, would improve accessibility</td>
 		</tr>
@@ -1041,10 +1041,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a way to "ghost" an event</td>
 			<td>3</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/100">#100</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/100">#100</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/102">#102</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/102">#102</a></td>
 			<td>Yes</td>
 			<td>
 				Need to add a keyboard shortcut for marking an event as "ghosted".<br>
@@ -1055,10 +1055,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a way to customize the "ghost event" shortcut</td>
 			<td>2</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/99">#99</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/99">#99</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/102">#102</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/102">#102</a></td>
 			<td>Yes</td>
 			<td></td>
 		</tr>
@@ -1066,10 +1066,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add UI for defining virtual calendars and autocomplete rules</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/86">#86</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/86">#86</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/102">#102</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/102">#102</a></td>
 			<td>Yes</td>
 			<td>Let user set rules that determine how to subdivide a calendar (i.e, create a virtual calendar for all events in "KU Homework" calendar that begin with "EECS 665")</td>
 		</tr>
@@ -1077,10 +1077,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add autocomplete when user is creating a new event</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/87">#87</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/87">#87</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/104">#104</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/104">#104</a></td>
 			<td>Yes</td>
 			<td>This is useful for power users who are creating a lot of events</td>
 		</tr>
@@ -1088,10 +1088,10 @@ All notable changes to this project will be documented in this file.
 			<td>Automatically switch to correct calendar when creating a calendar event</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/88">#88</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/88">#88</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/104">#104</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/104">#104</a></td>
 			<td>Yes</td>
 			<td>Automatically put the newly created event into a correct calendar based on the event name</td>
 		</tr>
@@ -1120,9 +1120,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/58">#58</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/58">#58</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/113">#113</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/113">#113</a></td>
 			<td>Yes</td>
 			<td>- When the view mode is changed, the overlay closes and is no longer visible</td>
 		</tr>
@@ -1130,10 +1130,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make the widget grid customizable</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/71">#71</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/71">#71</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/85">#85</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/85">#85</a></td>
 			<td>Yes</td>
 			<td>Allow changing the size of each widge, removing widgets and adding widgets. Make sure everything is keyboard accessible and screen reader accessible</td>
 		</tr>
@@ -1141,10 +1141,10 @@ All notable changes to this project will be documented in this file.
 			<td>Display a stacked area chart</td>
 			<td>13</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/72">#72</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/72">#72</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/83">#83</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/83">#83</a></td>
 			<td>Yes</td>
 			<td>Display a stacked area chart in a widget when in week view. The chart should show the daily time spent on events from each calendar</td>
 		</tr>
@@ -1152,10 +1152,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make stacked area chart work when in day view</td>
 			<td>2</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/72">#72</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/72">#72</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/83">#83</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/83">#83</a></td>
 			<td>Yes</td>
 			<td>Display a stacked area chart in a widget when in week view. The chart should show the daily time spent on events from each calendar</td>
 		</tr>
@@ -1163,10 +1163,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make stacked area chart work when in month view</td>
 			<td>8</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/72">#72</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/72">#72</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/83">#83</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/83">#83</a></td>
 			<td>Yes</td>
 			<td>Display a stacked area chart in a widget when in week view. The chart should show the daily time spent on events from each calend</td>
 		</tr>
@@ -1174,10 +1174,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a doughnut chart</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/83">#83</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/83">#83</a></td>
 			<td>Yes</td>
 			<td>For easily summarizing the total number of hours spent on a task in a given period</td>
 		</tr>
@@ -1186,9 +1186,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jetsemr">jetsemr</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/11">#11</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/11">#11</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/94">#94</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/94">#94</a></td>
 			<td>No</td>
 			<td>Add a github-bot that comments the current code coverage percentage on each Pull Request</td>
 		</tr>
@@ -1197,9 +1197,9 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/73">#73</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/73">#73</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/93">#93</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/93">#93</a></td>
 			<td>Yes</td>
 			<td>Allow exporting data from the stacked area chart as a JSON or CSV</td>
 		</tr>
@@ -1207,10 +1207,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add ability to set goals</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/74">#74</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/74">#74</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/92">#92</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/92">#92</a></td>
 			<td>Yes</td>
 			<td>Add ability to set, edit and remove goals for total number of hours of events in a given calendar. Goals should be synced with Google Extension Storage API</td>
 		</tr>
@@ -1218,10 +1218,10 @@ All notable changes to this project will be documented in this file.
 			<td>Calculate progress towards goals</td>
 			<td>2</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/75">#75</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/75">#75</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/92">#92</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/92">#92</a></td>
 			<td>Yes</td>
 			<td>Calculate the current progress toward each goal the user set</td>
 		</tr>
@@ -1229,10 +1229,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a badge for showing progress towards each goal</td>
 			<td>2</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/77">#77</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/77">#77</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/92">#92</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/92">#92</a></td>
 			<td>Yes</td>
 			<td>Display the progress toward each goal in a widget in the dashboard</td>
 		</tr>
@@ -1240,7 +1240,7 @@ All notable changes to this project will be documented in this file.
 			<td>Record the footage for the demo video</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
 			<td></td>
 			<td>Yes</td>
 			<td></td>
@@ -1272,9 +1272,9 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jetsemr">jetsemr</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/10">#10</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/10">#10</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/65">#65</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/65">#65</a></td>
 			<td>Yes</td>
 			<td>To generate human-friendly documentation</td>
 		</tr>
@@ -1283,9 +1283,9 @@ All notable changes to this project will be documented in this file.
 			<td>5</td>
 			<td>🏔 High</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/9">#9</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/9">#9</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/80">#80</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/80">#80</a></td>
 			<td>Yes</td>
 			<td>
 				Integrating with Google Drive API won't be needed.<br>
@@ -1297,9 +1297,9 @@ All notable changes to this project will be documented in this file.
 			<td>2</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/40">#40</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/40">#40</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/78">#78</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/78">#78</a></td>
 			<td>Yes</td>
 			<td>The button to launch the Calendar Plus overlay does not appear on the default landing page</td>
 		</tr>
@@ -1308,9 +1308,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🏝 Low</td>
 			<td><a href="https://github.com/jakeangus">jakeangus</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/42">#42</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/42">#42</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/79">#79</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/79">#79</a></td>
 			<td>Yes</td>
 			<td>
 				When user click on our extension in the list of extensions some action should happen.<br>
@@ -1321,8 +1321,8 @@ All notable changes to this project will be documented in this file.
 			<td>Look for useful manifest.json and service_worker commands</td>
 			<td>3</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/43">#43</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/43">#43</a></td>
 			<td>Yes</td>
 			<td></td>
 			<td>Yes</td>
@@ -1335,10 +1335,10 @@ All notable changes to this project will be documented in this file.
 			<td>Sync the list of visible calendars</td>
 			<td>5</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/45">#45</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/45">#45</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/62">#62</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/62">#62</a></td>
 			<td>Yes</td>
 			<td>
 				Users can enable/disable calendars by clicking on them on the sidebar. The plugin should intercept that action somehow to keep the list of visible calendars synchronized.
@@ -1348,10 +1348,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add documentation for getting React DevTools to work</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/46">#46</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/46">#46</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/53">#53</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/53">#53</a></td>
 			<td>Yes</td>
 			<td>
 				React DevTools Extension does not work for debugging Chrome Extension out of the box.<br>
@@ -1362,10 +1362,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make reloading extension easier</td>
 			<td>3</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/54">#54</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/54">#54</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/55">#55</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/55">#55</a></td>
 			<td>Yes</td>
 			<td>
 				After each webpack rebuild, you need to go to the "Extensions" page in Google Chrome and press the "Update" button to reload the extension and see the newest changes.<br>
@@ -1376,10 +1376,10 @@ All notable changes to this project will be documented in this file.
 			<td>Fetch events for current day</td>
 			<td>3</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/41">#41</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/41">#41</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/67">#67</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/67">#67</a></td>
 			<td>Yes</td>
 			<td>
 				- Standard data objects to an event object<br>
@@ -1391,10 +1391,10 @@ All notable changes to this project will be documented in this file.
 			<td>Fetch events for current week</td>
 			<td>5</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/41">#41</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/41">#41</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/67">#67</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/67">#67</a></td>
 			<td>Yes</td>
 			<td></td>
 		</tr>
@@ -1402,10 +1402,10 @@ All notable changes to this project will be documented in this file.
 			<td>Fetch events for current month</td>
 			<td>8</td>
 			<td>🏕 Medium</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/41">#41</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/41">#41</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/67">#67</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/67">#67</a></td>
 			<td>Yes</td>
 			<td></td>
 		</tr>
@@ -1434,9 +1434,9 @@ All notable changes to this project will be documented in this file.
 			<td>3</td>
 			<td>🌋 Urgent</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/3">#3</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/3">#3</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/1">#1</a> and <a href="https://github.com/maxxxxxdlp/calendar-plus/pull/2">#2</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/1">#1</a> and <a href="https://github.com/maxpatiiuk/calendar-plus/pull/2">#2</a></td>
 			<td>Yes</td>
 			<td>
 				- The code repository should be accessible via GitHub<br>
@@ -1448,10 +1448,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add and populate the manifest.json file to make the project be recognized as a Chrome Extension</td>
 			<td>2</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/4">#4</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/4">#4</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/2">#2</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/2">#2</a></td>
 			<td>Yes</td>
 			<td>
 				- The manifest.json file should include necessary project information to for the package to be recognized as a Chrome extension<br>
@@ -1462,10 +1462,10 @@ All notable changes to this project will be documented in this file.
 			<td>Make extension add a button to the Google Calendar page</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/5">#5</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/5">#5</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/27">#27</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/27">#27</a></td>
 			<td>Yes</td>
 			<td>
 				- When a user launches Google calendar while the extension is installed, a placeholder button should appear on the page<br>
@@ -1476,10 +1476,10 @@ All notable changes to this project will be documented in this file.
 			<td>Display a full-page overlay, or a modal dialog when a button is pressed</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/6">#6</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/6">#6</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/27">#27</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/27">#27</a></td>
 			<td>Yes</td>
 			<td>
 				- When the button from requirement 3 is pressed, a dialog or modal will appear<br>
@@ -1492,9 +1492,9 @@ All notable changes to this project will be documented in this file.
 			<td>1</td>
 			<td>🏕 Medium</td>
 			<td><a href="https://github.com/Durbatuluk1701">Durbatuluk1701</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/7">#7</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/7">#7</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/34">#34</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/34">#34</a></td>
 			<td>Yes</td>
 			<td>
 				- There should be a dashboard page with blank widget slots<br>
@@ -1506,10 +1506,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a day/week/month/year selection option to the header of the overlay. Changing the view mode should also change the view mode in the Google Calendar behind the extension</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/29">#29</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/29">#29</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/36">#36</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/36">#36</a></td>
 			<td>Yes</td>
 			<td>
 				- The full page overlay references in #4 should have headers with the outlined options displayed<br>
@@ -1520,10 +1520,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add a button to go to next/previous week. Also, support N and P keyboard shortcuts (which are already used by Google Calendar). Make sure the week displayed in the extension and in Google Calendar is synchronized</td>
 			<td>3</td>
 			<td>🌋 Urgent</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/29">#29</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/29">#29</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/36">#36</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/36">#36</a></td>
 			<td>Yes</td>
 			<td>
 				- The overlay should add buttons for week traversal<br>
@@ -1535,10 +1535,10 @@ All notable changes to this project will be documented in this file.
 			<td>Copy the name of current week/month/year from the Google Calendar header to the header of our overlay and make sure it stays in sync on changes to view mode or when going to next/previous week</td>
 			<td>3</td>
 			<td>🏝 Low</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/29">#29</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/29">#29</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/36">#36</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/36">#36</a></td>
 			<td>Yes</td>
 			<td>
 				- The overlay header should show the date<br>
@@ -1549,10 +1549,10 @@ All notable changes to this project will be documented in this file.
 			<td>Add an oAuth integration so that the extension can get access to Google APIs on user's behalf</td>
 			<td>8</td>
 			<td>🏔 High</td>
-			<td><a href="https://github.com/maxxxxxdlp">maxxxxxdlp</a></td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/issues/8">#8</a></td>
+			<td><a href="https://github.com/maxpatiiuk">maxpatiiuk</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/issues/8">#8</a></td>
 			<td>Yes</td>
-			<td><a href="https://github.com/maxxxxxdlp/calendar-plus/pull/44">#44</a></td>
+			<td><a href="https://github.com/maxpatiiuk/calendar-plus/pull/44">#44</a></td>
 			<td>Yes</td>
 			<td>
 				- The user should be able to login with an existing google account<br>

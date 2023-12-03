@@ -20,7 +20,7 @@ Features:
 
 [Video Demo](https://youtu.be/FZ_468t033A)
 
-[Report a Bug/Feature Request](https://github.com/maxxxxxdlp/calendar-plus/issues/new)
+[Report a Bug/Feature Request](https://github.com/maxpatiiuk/calendar-plus/issues/new)
 
 ## Screenshots
 
@@ -42,7 +42,7 @@ Expanded time chart
 Editing the layout
 [![Editing the layout](./docs/img/6.png)](https://youtu.be/FZ_468t033A)
 
-## Installation
+## Local Installation
 
 Pre-requisites:
 
@@ -111,13 +111,13 @@ npm t
 
 Alternatively, you can start Jest in watch mode:
 
-```
+```sh
 npm run unitTests:watch
 ```
 
 ## Generating Docs
 
-```
+```sh
 cd src
 npm run docs
 ```
