@@ -246,13 +246,12 @@ export async function awaitElement<T>(
   limit = 100
 ): Promise<T | undefined> {
   const result = callback();
-  if (limit === 0) return undefined;
-  if (result === undefined)
-    return new Promise((resolve) =>
-      setTimeout(
-        () => resolve(awaitElement(callback, pollInterval, limit - 1)),
-        pollInterval
-      )
-    );
-  return result;
+  if (result !== undefined) return result;
+  if (limit <= 0) return undefined;
+  return new Promise((resolve) =>
+    setTimeout(
+      () => resolve(awaitElement(callback, pollInterval, limit - 1)),
+      pollInterval
+    )
+  );
 }
