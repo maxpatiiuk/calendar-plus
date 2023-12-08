@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { awaitElement } from '../Contexts/CalendarsContext';
+import { useAsyncState } from '../../hooks/useAsyncState';
 
 let portalRoot: HTMLElement | undefined = undefined;
 const portalStack = new Set<unknown>();
@@ -67,10 +69,10 @@ export const findMainContainer = (): Element | undefined =>
   document.querySelector('[role="main"]') ?? undefined;
 
 export function useMainContainer(): HTMLElement | undefined {
-  return React.useMemo(
-    () => findMainContainer()?.parentElement ?? undefined,
-    []
-  );
+  return useAsyncState(
+    () => awaitElement(()=>findMainContainer()?.parentElement ?? undefined),
+    false 
+  )[0];
 }
 
 export const PortalContext = React.createContext<Element | undefined>(
