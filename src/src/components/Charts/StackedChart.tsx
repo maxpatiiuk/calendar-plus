@@ -72,6 +72,7 @@ export function StackedChart({
       getJsonExport={getJsonExport}
       getTsvExport={getTsvExport}
       header={commonText('stackedChart')}
+      className="aspect-[2/1]"
     >
       {loaded ? (
         <Bar

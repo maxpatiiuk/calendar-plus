@@ -104,6 +104,7 @@ export function DoughnutChart({
       header={commonText('doughnutChart')}
       getJsonExport={getJsonExport}
       getTsvExport={getTsvExport}
+      className="aspect-square"
     >
       {loaded ? (
         <Doughnut
