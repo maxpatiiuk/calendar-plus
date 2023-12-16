@@ -104,8 +104,14 @@ function findElements(overlay: HTMLElement): Elements | undefined {
   const options = overlay.querySelectorAll(
     '[role="dialog"] [role="radiogroup"] label',
   );
+  /**
+   * When moving within day, the "All events" option is present. If moving
+   * between days, that option is not present
+   */
+  const optionsCount = [2, 3];
   // Confirm we are in the correct dialog
-  if (options === undefined || options.length !== 3) return undefined;
+  if (options === undefined || !optionsCount.includes(options.length))
+    return undefined;
 
   const submitButton = overlay.querySelector(
     '[role="dialog"] [role="button"][autofocus]',
