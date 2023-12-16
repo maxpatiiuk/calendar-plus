@@ -69,12 +69,11 @@ export function Portal({
 export const findMainContainer = (): Element | undefined =>
   document.querySelector('[role="main"]') ?? undefined;
 
+const awaitMainContainer = async (): Promise<HTMLElement | undefined> =>
+  awaitElement(() => findMainContainer()?.parentElement ?? undefined);
+
 export function useMainContainer(): HTMLElement | undefined {
-  return useAsyncState(
-    async () =>
-      awaitElement(() => findMainContainer()?.parentElement ?? undefined),
-    false
-  )[0];
+  return useAsyncState(awaitMainContainer, false)[0];
 }
 
 export const PortalContext = React.createContext<Element | undefined>(
