@@ -13,7 +13,11 @@ import { useTransitionDuration } from '../../hooks/useTransitionDuration';
 import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
 import { group } from '../../utils/utils';
-import { formatDateLabel, months } from '../Atoms/Internationalization';
+import {
+  formatDateLabel,
+  formatDuration,
+  months,
+} from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
@@ -65,9 +69,9 @@ export function StackedChart({
 
   return (
     <WidgetContainer
-      header={commonText('stackedChart')}
       getJsonExport={getJsonExport}
       getTsvExport={getTsvExport}
+      header={commonText('stackedChart')}
     >
       {loaded ? (
         <Bar
@@ -77,6 +81,14 @@ export function StackedChart({
           }}
           datasetIdKey="id"
           options={{
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: ({ dataset, parsed }) =>
+                    `${dataset.label!}: ${formatDuration(parsed.y)}`,
+                },
+              },
+            },
             responsive: true,
             animation: {
               duration: transitionDuration,

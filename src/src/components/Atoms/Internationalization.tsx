@@ -204,5 +204,7 @@ export function formatDuration(duration: number): string {
   const formattedMinutes = `${minutes} ${commonText('minutes')}`;
   return hours === 0
     ? formattedMinutes
-    : `${hours} ${commonText('hours')} ${formattedMinutes}`;
+    : `${hours} ${commonText('hours')}${
+        minutes === 0 ? '' : ` ${formattedMinutes}`
+      }`;
 }
