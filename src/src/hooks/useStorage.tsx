@@ -74,7 +74,7 @@ export type StorageDefinitions = typeof storageDefinitions;
  * If cache is found to be outdated, it is removed
  */
 export function useStorage<NAME extends keyof StorageDefinitions>(
-  name: NAME
+  name: NAME,
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
   const [value, setValue] = useSimpleStorage(name);
 
@@ -102,35 +102,57 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
  * A wrapper for extensions Storage API (without checking for cache version)
  */
 function useSimpleStorage<NAME extends keyof StorageDefinitions>(
-  name: NAME
+  name: NAME,
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
   const type = storageDefinitions[name].type;
 
+  const fetchValue = React.useCallback(
+    async () =>
+      chrome.storage[type].get(name).then(async (storage) => {
+        const value = storage[name];
+        const resolvedValue =
+          typeof value === 'string' && type === 'sync'
+            ? await joinValue(name, value)
+            : value;
+        setDevelopmentGlobal(`_${name}`, resolvedValue);
+        return (
+          (resolvedValue as
+            | StorageDefinitions[NAME]['defaultValue']
+            | undefined) ?? storageDefinitions[name].defaultValue
+        );
+      }),
+    [name, type],
+  );
+
   const [value, setValue] = useAsyncState<
     StorageDefinitions[NAME]['defaultValue']
-  >(
-    React.useCallback(
-      async () =>
-        chrome.storage[type].get(name).then(async (storage) => {
-          const value = storage[name];
-          const resolvedValue =
-            typeof value === 'string' && type === 'sync'
-              ? await joinValue(name, value)
-              : value;
-          setDevelopmentGlobal(`_${name}`, resolvedValue);
-          return (
-            (resolvedValue as
-              | StorageDefinitions[NAME]['defaultValue']
-              | undefined) ?? storageDefinitions[name].defaultValue
-          );
-        }),
-      [name, type]
-    ),
-    false
-  );
+  >(fetchValue, false);
+  const currentValue = React.useRef(value);
+  currentValue.current = value;
+
+  // Listen for changes
+  React.useEffect(() => {
+    let destructorCalled = false;
+    function callback(changes: IR<chrome.storage.StorageChange>): void {
+      const changed = Object.keys(changes).some(
+        (key) => key.split('_')[0] === name,
+      );
+      if (!changed) return;
+      // LOW: possible race condition here
+      fetchValue()
+        .then((value) => (destructorCalled ? undefined : setValue(value)))
+        .catch(console.error);
+    }
+    chrome.storage[type].onChanged.addListener(callback);
+    return (): void => {
+      destructorCalled = true;
+      chrome.storage[type].onChanged.addListener(callback);
+    };
+  }, [name, type]);
 
   const updateValue = React.useCallback(
     (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
+      if (currentValue.current === value) return;
       const jsonValue = JSON.stringify(value);
       const isOverLimit = type === 'sync' && isOverSizeLimit(name, jsonValue);
       setDevelopmentGlobal(`_${name}`, value);
@@ -146,7 +168,7 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
           })
           .catch(console.error);
     },
-    [setValue, name, type]
+    [setValue, name, type],
   );
 
   return [value, updateValue];
@@ -167,7 +189,7 @@ export function isOverSizeLimit(name: string, value: string): boolean {
  */
 function splitValue(
   key: keyof StorageDefinitions,
-  originalJsonValue: string
+  originalJsonValue: string,
 ): IR<string> {
   let jsonValue = originalJsonValue;
   const storageObject: R<string> = {};
@@ -191,7 +213,7 @@ function splitValue(
 
 async function joinValue(
   name: keyof StorageDefinitions,
-  value: string
+  value: string,
 ): Promise<string> {
   try {
     return JSON.parse(`${value}${await joinStorage(name)}`);
@@ -202,7 +224,7 @@ async function joinValue(
 
 async function joinStorage(
   key: keyof StorageDefinitions,
-  index = 2
+  index = 2,
 ): Promise<string> {
   const fullKey = `${key}_${index}`;
   const { [fullKey]: value } = await chrome.storage.sync.get(fullKey);
