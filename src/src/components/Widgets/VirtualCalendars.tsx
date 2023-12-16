@@ -5,7 +5,7 @@ import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { f } from '../../utils/functools';
 import type { RA, RR } from '../../utils/types';
-import { filterArray } from '../../utils/types';
+import { isDefined } from '../../utils/types';
 import { group, removeItem, replaceItem } from '../../utils/utils';
 import { Button, Input, Select } from '../Atoms';
 import { icons } from '../Atoms/Icon';
@@ -204,7 +204,7 @@ function EditableCalendarList({
           ]),
         ).map(([calendarId, categories]) => [
           calendarId,
-          filterArray(f.unique(categories)),
+          f.unique(categories).filter(isDefined),
         ]),
       ),
     [],

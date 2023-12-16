@@ -4,7 +4,7 @@ import { useId } from '../../hooks/useId';
 import { useStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import type { RA, RR } from '../../utils/types';
-import { filterArray } from '../../utils/types';
+import { isDefined } from '../../utils/types';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
@@ -91,15 +91,15 @@ export function AutoComplete(): JSX.Element {
 
   const eventNames = React.useMemo(
     () =>
-      filterArray(
-        virtualCalendars.map(({ rule, value }) =>
+      virtualCalendars
+        .map(({ rule, value }) =>
           rule === 'startsWith'
             ? { label: `${value}*`, value }
             : rule === 'equals'
               ? { label: value, value }
               : undefined,
-        ) ?? [],
-      ),
+        )
+        .filter(isDefined) ?? [],
     [virtualCalendars],
   );
 

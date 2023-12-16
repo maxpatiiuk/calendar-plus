@@ -1,6 +1,6 @@
 import React from 'react';
 import { listen } from '../../utils/events';
-import { GetSet, RA, filterArray } from '../../utils/types';
+import { GetSet, RA, isDefined } from '../../utils/types';
 import { debounce } from '../../utils/utils';
 import {
   CalendarsContext,
@@ -27,12 +27,11 @@ export function useVisibilityChangeSpy(
       return undefined;
 
     const getVisible = (): RA<string> =>
-      filterArray(
-        Array.from(
-          sideBar.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'),
-          (checkbox) => parseCheckbox(calendars, checkbox),
-        ),
+      Array.from(
+        sideBar.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'),
+        (checkbox) => parseCheckbox(calendars, checkbox),
       )
+        .filter(isDefined)
         .filter(([_calendarId, checked]) => checked)
         .map(([calendarId]) => calendarId);
 

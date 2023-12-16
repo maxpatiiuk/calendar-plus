@@ -39,8 +39,8 @@ export function defined<T>(value: T | undefined, message?: string): T {
 }
 
 /** Filter undefined items out of the array */
-export const filterArray = <T>(array: RA<T | undefined>): RA<T> =>
-  array.filter((item): item is T => item !== undefined);
+export const isDefined = <T>(value: T | undefined): value is T =>
+  value !== undefined;
 
 // eslint-disable-next-line functional/prefer-readonly-type
 export type Writable<T> = {

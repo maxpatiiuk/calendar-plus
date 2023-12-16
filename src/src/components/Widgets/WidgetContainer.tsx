@@ -2,7 +2,7 @@ import React from 'react';
 
 import { commonText } from '../../localization/common';
 import type { GetSet, IR, RA } from '../../utils/types';
-import { filterArray } from '../../utils/types';
+import { isDefined } from '../../utils/types';
 import { Button, H3 } from '../Atoms';
 import { downloadFile } from '../Molecules/FilePicker';
 import { usePref } from '../Preferences/usePref';
@@ -68,11 +68,9 @@ function objectToTsv(
   format: 'csv' | 'tsv',
 ): string {
   const delimiter = format === 'csv' ? ',' : '\t';
-  const keys = filterArray(
-    Object.entries(data[0] ?? {}).map(([key, value]) =>
-      typeof value === 'object' ? undefined : key,
-    ),
-  );
+  const keys = Object.entries(data[0] ?? {})
+    .map(([key, value]) => (typeof value === 'object' ? undefined : key))
+    .filter(isDefined);
   return [keys, ...data.map((values) => keys.map((key) => values[key] ?? ''))]
     .map((row) => row.join(delimiter))
     .join('\n');
