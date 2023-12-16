@@ -21,17 +21,18 @@
       /* "Search for people" input box */
       .ZtL5hd,
       /* "Google Apps" button */
-      #gbwa
-    ),
+      #gbwa),
   /* "Calendar" heading */
   body.condense-interface header [role="heading"],
-  body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb {
+  body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb,
+  /* Hide obtrucive "Tasks" split button */
+  div.wc0xVe {
     @apply hidden;
   }
 
   /* Remove padding right where "Google Apps" button was */
   body.condense-interface div[data-ogsr-up] {
-    @apply !p-0
+    @apply !p-0;
   }
 
   /* Free up space in the header */
