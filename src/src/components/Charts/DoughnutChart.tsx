@@ -132,7 +132,7 @@ export function DoughnutChart({
               },
             },
           }}
-          ref={(chart) => setChart(chart ?? undefined)}
+          ref={(chart:Chart<'doughnut', RA<number>, string> | undefined | null) => setChart(chart ?? undefined)}
         />
       ) : (
         commonText('loading')

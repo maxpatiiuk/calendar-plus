@@ -19,9 +19,7 @@ export function AutoComplete(): JSX.Element {
 
   const virtualCalendars = useVirtualCalendars();
   const virtualCalendarsRef = React.useRef(virtualCalendars);
-  React.useEffect(() => {
-    virtualCalendarsRef.current = virtualCalendars;
-  }, [virtualCalendars]);
+  virtualCalendarsRef.current = virtualCalendars;
 
   const [synonyms = []] = useStorage('synonyms');
   const synonymsRef = React.useRef(synonyms);
