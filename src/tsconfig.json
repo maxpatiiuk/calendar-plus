@@ -43,17 +43,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": [
-      "jest",
-      "node",
-      "chrome",
-      "gapi",
-      "gapi.client",
-      "gapi.calendar"
-    ]
+    "types": ["jest", "node", "chrome", "gapi", "gapi.client", "gapi.calendar"]
   },
-  "typedocOptions" : {
-    "entryPoints" : ["src"],
+  "typedocOptions": {
+    "entryPoints": ["src"],
     "out": "docs"
   }
 }

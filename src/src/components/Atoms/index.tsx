@@ -33,7 +33,7 @@ const button = (name: string, classList: string) =>
       onClick: handleClick,
       disabled: disabled || handleClick === undefined,
       ...props,
-    })
+    }),
   );
 
 export const className = {
@@ -51,11 +51,11 @@ export const Button = {
   White: button('Button.White', className.buttonWhite),
   Blue: button(
     'Button.Blue',
-    `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`
+    `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`,
   ),
   Red: button(
     'Button.Blue',
-    `border-red-600 bg-red-600 hover:bg-red-700 active:bg-red-500 text-white`
+    `border-red-600 bg-red-600 hover:bg-red-700 active:bg-red-500 text-white`,
   ),
   Icon: wrap<
     'button',
@@ -76,12 +76,12 @@ export const Link = {
   White: wrap(
     'Link.White',
     'a',
-    `${className.googleButton} ${className.buttonWhite}`
+    `${className.googleButton} ${className.buttonWhite}`,
   ),
   Default: wrap(
     'Link.Default',
     'a',
-    '!text-blue-500 hover:underline hover:!text-blue-600'
+    '!text-blue-500 hover:underline hover:!text-blue-600',
   ),
 };
 
@@ -113,7 +113,7 @@ export const Input = {
         value={hasValue ? value : ''}
         onChange={(event): void => {
           const rawHumber = Number.parseInt(
-            (event.target as HTMLInputElement).value
+            (event.target as HTMLInputElement).value,
           );
           const number = Number.isNaN(rawHumber) ? undefined : rawHumber;
           if (number === undefined) setHasValue(false);
@@ -150,7 +150,7 @@ export const Input = {
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
-    })
+    }),
   ),
   Text: wrap<
     'input',
@@ -173,7 +173,7 @@ export const Input = {
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
-    })
+    }),
   ),
   Generic: wrap<
     'input',
@@ -194,7 +194,7 @@ export const Input = {
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
-    })
+    }),
   ),
 };
 
@@ -220,11 +220,11 @@ export const Select = wrap<
         handleValueChange?.(value);
       props.onChange?.(event);
     },
-  })
+  }),
 );
 
 export const Widget = wrap(
   'Widget',
   'section',
-  'flex flex-col gap-2 rounded bg-white'
+  'flex flex-col gap-2 rounded bg-white',
 );

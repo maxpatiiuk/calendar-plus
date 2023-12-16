@@ -34,7 +34,7 @@ export type PreferenceRenderer<VALUE> = (props: {
  * This is used to enforce the same generic value be used inside a PreferenceItem
  */
 const defineItem = <VALUE,>(
-  definition: PreferenceItem<VALUE>
+  definition: PreferenceItem<VALUE>,
 ): PreferenceItem<VALUE> => definition;
 
 export type GenericPreferencesCategories = IR<{
@@ -86,7 +86,7 @@ export const preferenceDefinitions = {
         title: preferencesText('ghostEvent'),
         description: preferencesText('ghostEventDescription'),
         renderer: pickListPref<'cmd' | 'ctrl' | 'none' | 'shift'>(
-          ghostEventShortcuts
+          ghostEventShortcuts,
         ),
         defaultValue: 'shift' as const,
       }),

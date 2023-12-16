@@ -46,7 +46,7 @@ export function Contexts({
         })
         .catch(crash);
     },
-    [handleLoading, handleLoaded]
+    [handleLoading, handleLoaded],
   );
 
   return (

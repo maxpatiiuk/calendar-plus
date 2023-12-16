@@ -14,10 +14,10 @@ export function usePref<
   CATEGORY extends keyof Preferences,
   ITEM extends CATEGORY extends keyof typeof preferenceDefinitions
     ? string & keyof Preferences[CATEGORY]['items']
-    : never
+    : never,
 >(
   category: CATEGORY,
-  item: ITEM
+  item: ITEM,
 ): GetSet<Preferences[CATEGORY]['items'][ITEM]['defaultValue']> {
   const [preferences, setPreferences] = React.useContext(PreferencesContext);
   const definition = getPrefDefinition(category, item);
@@ -31,7 +31,7 @@ export function usePref<
       if (isDefault) {
         const items = removeKey(
           (preferences[category] as IR<unknown>) ?? {},
-          item
+          item,
         );
         setPreferences(
           Object.keys(items).length === 0
@@ -39,7 +39,7 @@ export function usePref<
             : {
                 ...preferences,
                 [category]: items,
-              }
+              },
         );
       } else
         setPreferences({
@@ -50,7 +50,7 @@ export function usePref<
           },
         });
     },
-    [category, item, preferences, setPreferences]
+    [category, item, preferences, setPreferences],
   );
 
   return [value, updatePref] as const;

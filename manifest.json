@@ -16,33 +16,26 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["/src/public/images/btn_google_signin_light_normal_web@2x.png"],
+      "resources": [
+        "/src/public/images/btn_google_signin_light_normal_web@2x.png"
+      ],
       "matches": ["https://calendar.google.com/*"]
     }
   ],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuldA6s8qQKAdu33VanYX4yhBYnTbMwARskX7rcwvuIKgRPbY41X1mcIDUHKV7pC5sWQ2QuL0EN5U6M57dJhe+veTDDktpWNXeGJtwvPM6HFbwICgD93TkzwBl4Fs+67eFlsmpoHIdWeryyEfIUAgUwsb8DxvQ8OYhVKet1xkqJRRo112iLZ1bn/ZI8P39jT4cc9pMIXSvEKmtzyqNb9l/5WS8F6reqsRGIwZqmr/9fb7CEhyKPzEtXokcfaTygMwF6rJ6530cLUegofpJed4wZfFCCRtok63aqCwQgfypOKWlXCrExTdD6QKP4941dYQMuCg9+wp/GslGwTUd+odGQIDAQAB",
   "current_locale": "en",
-  "permissions": [
-    "identity",
-    "storage"
-  ],
+  "permissions": ["identity", "storage"],
   "oauth2": {
     "client_id": "626996674772-iegg1iono3q4g3u8e3ajcp37fbuauuh1.apps.googleusercontent.com",
-    "scopes":[
-      "https://www.googleapis.com/auth/calendar.readonly"
-    ]
+    "scopes": ["https://www.googleapis.com/auth/calendar.readonly"]
   },
   "background": {
-    "service_worker":"./src/dist/background.bundle.js"
+    "service_worker": "./src/dist/background.bundle.js"
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://calendar.google.com/calendar/u/0/r/*"
-      ],
-      "js": [
-        "./src/dist/main.bundle.js"
-      ]
+      "matches": ["https://calendar.google.com/calendar/u/0/r/*"],
+      "js": ["./src/dist/main.bundle.js"]
     }
   ],
   "cross_origin_embedder_policy": {

@@ -56,12 +56,12 @@ export function VirtualCalendarsList({
         .unique(
           virtualCalendars
             .filter(
-              (virtualCalendar) => virtualCalendar.calendarId === calendarId
+              (virtualCalendar) => virtualCalendar.calendarId === calendarId,
             )
-            .map(({ virtualCalendar }) => virtualCalendar)
+            .map(({ virtualCalendar }) => virtualCalendar),
         )
         .filter((category) => category !== undefined),
-    [virtualCalendars, calendarId]
+    [virtualCalendars, calendarId],
   );
   return (
     <Select

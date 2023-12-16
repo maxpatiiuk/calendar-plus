@@ -45,7 +45,7 @@ export function AutoComplete(): JSX.Element {
 
         const guessCalendar = (input: string): string | undefined =>
           virtualCalendarsRef.current.find(({ rule, value }) =>
-            ruleMatchers[rule](input, value)
+            ruleMatchers[rule](input, value),
           )?.calendarId;
 
         function handleBlur(): void {
@@ -54,7 +54,7 @@ export function AutoComplete(): JSX.Element {
 
           const eventName = element.value.trim();
           const guessSynonym = synonymsRef.current.find(({ synonym }) =>
-            eventName.startsWith(`${synonym}:`)
+            eventName.startsWith(`${synonym}:`),
           );
           let calendarId = guessSynonym?.calendar;
           if (typeof guessSynonym === 'object')
@@ -70,9 +70,8 @@ export function AutoComplete(): JSX.Element {
           if (select === undefined) return;
 
           // Don't change calendar if correct one is already selected
-          const currentCalendar = select.querySelector(
-            '[aria-selected="true"]'
-          )?.textContent;
+          const currentCalendar = select.querySelector('[aria-selected="true"]')
+            ?.textContent;
           if (
             currentCalendar ===
             calendars?.find(({ id }) => id === calendarId)?.summary
@@ -87,7 +86,7 @@ export function AutoComplete(): JSX.Element {
           });
         }
       }),
-    [calendars, dataListId]
+    [calendars, dataListId],
   );
 
   const eventNames = React.useMemo(
@@ -97,11 +96,11 @@ export function AutoComplete(): JSX.Element {
           rule === 'startsWith'
             ? { label: `${value}*`, value }
             : rule === 'equals'
-            ? { label: value, value }
-            : undefined
-        ) ?? []
+              ? { label: value, value }
+              : undefined,
+        ) ?? [],
       ),
-    [virtualCalendars]
+    [virtualCalendars],
   );
 
   return (
@@ -123,10 +122,10 @@ export function useVirtualCalendars(): RA<VirtualCalendar> {
     () =>
       Array.isArray(rawVirtualCalendars)
         ? matchRules.flatMap((ruleName) =>
-            rawVirtualCalendars.filter(({ rule }) => rule === ruleName)
+            rawVirtualCalendars.filter(({ rule }) => rule === ruleName),
           )
         : [],
-    [rawVirtualCalendars]
+    [rawVirtualCalendars],
   );
 }
 
@@ -171,7 +170,7 @@ function findParent(element: HTMLInputElement): HTMLElement | undefined {
 
 function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
   const select = parent.querySelector<HTMLElement>(
-    '[role="listbox"][aria-expanded]'
+    '[role="listbox"][aria-expanded]',
   );
   if (select === null) {
     console.warn('Unable to find calendar selector box');
@@ -186,10 +185,10 @@ function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
 function waitAndClick(
   parent: HTMLElement,
   select: HTMLElement,
-  callback: () => void
+  callback: () => void,
 ): void {
   const calendarsButton = parent.querySelector<HTMLElement>(
-    '[data-key="calendar"]'
+    '[data-key="calendar"]',
   );
   const clickable =
     calendarsButton ?? select.querySelector('[role="presentation"]');
@@ -203,14 +202,14 @@ function waitAndClick(
 function findOption(
   calendars: RA<CalendarListEntry>,
   calendarId: string,
-  select: HTMLElement
+  select: HTMLElement,
 ): HTMLElement {
   const options = Array.from(
-    select.querySelectorAll<HTMLElement>('[role="option"]')
+    select.querySelectorAll<HTMLElement>('[role="option"]'),
   );
   const calendar = calendars.find(({ id }) => id === calendarId)!;
   const option = options.find(
-    (option) => option.textContent === calendar.summary
+    (option) => option.textContent === calendar.summary,
   );
   /*
    * User's primary calendar (the first in the list) has name that doesn't

@@ -46,7 +46,7 @@ export function VirtualCalendars({
       isEditing || localCalendars === undefined
         ? undefined
         : setVirtualCalendars(localCalendars),
-    [isEditing, localCalendars, setVirtualCalendars]
+    [isEditing, localCalendars, setVirtualCalendars],
   );
 
   const getJsonExport = () =>
@@ -102,7 +102,7 @@ export const matchRules = [
   'contains',
   'regex',
 ] as const;
-export type MatchRule = typeof matchRules[number];
+export type MatchRule = (typeof matchRules)[number];
 
 export type VirtualCalendar = {
   readonly calendarId: string;
@@ -142,7 +142,7 @@ function Calendars({
               <td>{virtualCalendar}</td>
             </tr>
           ) : undefined;
-        }
+        },
       )}
     </Table>
   );
@@ -201,13 +201,13 @@ function EditableCalendarList({
           virtualCalendars.map(({ calendarId, virtualCalendar }) => [
             calendarId,
             virtualCalendar,
-          ])
+          ]),
         ).map(([calendarId, categories]) => [
           calendarId,
           filterArray(f.unique(categories)),
-        ])
+        ]),
       ),
-    []
+    [],
   );
   const id = useId('virtual-calendar');
 
@@ -224,16 +224,16 @@ function EditableCalendarList({
         {virtualCalendars.map((definition, index) => {
           const { calendarId, rule, value, virtualCalendar } = definition;
           const handleEdited = (
-            newDefinition: Partial<VirtualCalendar>
+            newDefinition: Partial<VirtualCalendar>,
           ): void =>
             handleChange(
               replaceItem(virtualCalendars, index, {
                 ...definition,
                 ...newDefinition,
-              })
+              }),
             );
           const calendar: CalendarListEntry | undefined = calendars.find(
-            ({ id }) => id === calendarId
+            ({ id }) => id === calendarId,
           );
           return typeof calendar === 'object' ? (
             <tr key={index}>

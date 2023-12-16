@@ -48,8 +48,8 @@ export const SetKeyboardShortcuts: PreferenceRenderer<KeyboardShortcuts> = ({
       replaceKey(
         value,
         platform,
-        shortcuts.length === 0 ? undefined : shortcuts
-      )
+        shortcuts.length === 0 ? undefined : shortcuts,
+      ),
     );
 
   return (
@@ -69,7 +69,7 @@ export const SetKeyboardShortcuts: PreferenceRenderer<KeyboardShortcuts> = ({
                   setShortcuts(
                     shortcut === undefined
                       ? removeItem(shortcuts, index)
-                      : replaceItem(shortcuts, index, shortcut)
+                      : replaceItem(shortcuts, index, shortcut),
                   );
                   setEditingIndex(false);
                 }
@@ -121,16 +121,16 @@ function SetKeyboardShortcut({
           const modifiers = resolveModifiers(event);
           setLocalState((localState) => ({
             modifiers: Array.from(
-              new Set([...localState.modifiers, ...modifiers])
+              new Set([...localState.modifiers, ...modifiers]),
             ).sort(sortFunction((key) => key)),
             keys: Array.from(new Set([...localState.keys, key])).sort(
-              sortFunction((key) => key)
+              sortFunction((key) => key),
             ),
           }));
           event.preventDefault();
           event.stopPropagation();
         },
-        true
+        true,
       );
     }
     return undefined;
@@ -172,7 +172,7 @@ function SetKeyboardShortcut({
 }
 
 export const resolveModifiers = (
-  event: KeyboardEvent
+  event: KeyboardEvent,
 ): RA<keyof typeof modifierLocalization> =>
   Object.entries({
     alt: event.altKey,
@@ -193,5 +193,5 @@ export const platform: Platform =
   navigator.platform.toLowerCase().includes('ip')
     ? 'macOS'
     : navigator.platform.toLowerCase().includes('win')
-    ? 'windows'
-    : 'linux';
+      ? 'windows'
+      : 'linux';

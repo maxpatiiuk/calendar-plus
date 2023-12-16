@@ -16,15 +16,15 @@ import { Contexts } from '../Contexts/Contexts';
  * is localizable (has different value depending on user's language).
  */
 const icon = Array.from(document.querySelectorAll('header i')).find(
-  (icon) => icon?.textContent === 'search'
+  (icon) => icon?.textContent === 'search',
 );
 // Find an element that contains more that one icon
 const findContainer = (element: Element | undefined): Element | undefined =>
   element === undefined
     ? undefined
     : element.querySelectorAll('i').length > 1
-    ? element
-    : findContainer(element.parentElement ?? undefined);
+      ? element
+      : findContainer(element.parentElement ?? undefined);
 const container = findContainer(icon);
 if (typeof container === 'object') {
   const reactContainer = document.createElement('div');
@@ -36,6 +36,6 @@ if (typeof container === 'object') {
       <Contexts>
         <App />
       </Contexts>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 } else console.error('Failed to attach Calendar Plus plugin');

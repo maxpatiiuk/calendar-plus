@@ -10,8 +10,8 @@ is similar to how most modern React projects are structured.
 
 ### Utils
 
-There is an `utils` folder that contains all the utility functions
-that don't belong to any single component, but are used by many of them.
+There is an `utils` folder that contains all the utility functions that don't
+belong to any single component, but are used by many of them.
 
 The files in the `utils` folder must not be React components or React hooks (for
 the sake of consistency). React hooks that are used by several components should

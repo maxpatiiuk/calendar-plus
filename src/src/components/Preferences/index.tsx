@@ -47,10 +47,10 @@ export function PreferencesPage({
               .then(async (data) =>
                 downloadFile(
                   `${commonText(
-                    'calendarPlus'
+                    'calendarPlus',
                   )} - ${new Date().toLocaleDateString()}.json`,
-                  JSON.stringify(data, null, 4)
-                )
+                  JSON.stringify(data, null, 4),
+                ),
               )
               .catch(console.error)
           }
@@ -67,14 +67,14 @@ export function PreferencesPage({
       </PageHeader>
       <div className="flex flex-1 flex-col gap-4">
         {Object.entries(
-          preferenceDefinitions as GenericPreferencesCategories
+          preferenceDefinitions as GenericPreferencesCategories,
         ).map(([categoryName, { title, items }]) => (
           <Widget className="gap-4 p-4" key={categoryName}>
             <H3>{title}</H3>
             <div className="flex flex-col gap-2">
               {Object.entries(items).map(([itemName, definition]) => {
                 const hasLabel = !noLabelRenderers.includes(
-                  definition.renderer
+                  definition.renderer,
                 );
                 return React.createElement(
                   hasLabel ? 'label' : 'div',
@@ -100,7 +100,7 @@ export function PreferencesPage({
                         itemName={itemName}
                       />
                     </div>
-                  </>
+                  </>,
                 );
               })}
             </div>

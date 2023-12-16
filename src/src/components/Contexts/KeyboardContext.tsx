@@ -43,11 +43,11 @@ export function KeyboardListener({
       listenersRef.current = [...listenersRef.current, entry];
       return () => {
         listenersRef.current = listenersRef.current.filter(
-          (listener) => listener !== entry
+          (listener) => listener !== entry,
         );
       };
     },
-    []
+    [],
   );
 
   const pressedKeys = React.useRef<KeyboardShortcut['keys']>([]);
@@ -60,11 +60,11 @@ export function KeyboardListener({
           event.key.length === 1 ? event.key.toUpperCase() : event.key;
         if (modifierKeyNames.has(event.key)) return;
         pressedKeys.current = Array.from(
-          new Set([...pressedKeys.current, key])
+          new Set([...pressedKeys.current, key]),
         ).sort(sortFunction((key) => key));
         checkListeners(resolveModifiers(event));
       }),
-    []
+    [],
   );
 
   React.useEffect(
@@ -78,7 +78,7 @@ export function KeyboardListener({
           .sort(sortFunction((key) => key));
         checkListeners(resolveModifiers(event));
       }),
-    []
+    [],
   );
 
   const checkListeners = React.useCallback(
@@ -103,11 +103,11 @@ export function KeyboardListener({
               shortcut.modifiers.filter((modifier) => modifier !== 'shift')
                 .length === 0 && isInputting()
             );
-          })
+          }),
         )
         .forEach((listener) => listener.callback());
     },
-    []
+    [],
   );
 
   return (

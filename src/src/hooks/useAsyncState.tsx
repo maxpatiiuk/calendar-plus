@@ -31,7 +31,7 @@ import { LoadingContext } from '../components/Contexts/Contexts';
 export function useAsyncState<T>(
   callback: () => Promise<T | undefined> | T | undefined,
   // Show the loading screen while the promise is being resolved
-  loadingScreen: boolean
+  loadingScreen: boolean,
 ): GetOrSet<T | undefined> {
   const [state, setState] = React.useState<T | undefined>(undefined);
   const loading = React.useContext(LoadingContext);
@@ -48,8 +48,8 @@ export function useAsyncState<T>(
       : (promise: Promise<unknown>): void => void promise.catch(crash);
     wrapped(
       Promise.resolve(callback()).then((newState) =>
-        destructorCalled ? undefined : setState(newState)
-      )
+        destructorCalled ? undefined : setState(newState),
+      ),
     );
 
     let destructorCalled = false;

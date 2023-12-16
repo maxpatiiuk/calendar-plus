@@ -30,7 +30,7 @@ export function SettingsProvider({
       .then(({ value }) =>
         typeof value === 'string'
           ? setWeekStart(Number.parseInt(value))
-          : undefined
+          : undefined,
       )
       .catch(console.error);
   }, [token, setWeekStart]);
@@ -39,7 +39,7 @@ export function SettingsProvider({
     () => ({
       weekStart,
     }),
-    [weekStart]
+    [weekStart],
   );
 
   return (

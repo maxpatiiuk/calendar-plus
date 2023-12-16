@@ -24,9 +24,9 @@ const group = (entries) =>
       .reduce(
         (grouped, [key, value]) =>
           grouped.set(key, [...(grouped.get(key) ?? []), value]),
-        new Map()
+        new Map(),
       )
-      .entries()
+      .entries(),
   );
 
 const assignees = new Set(parsed.map((data) => data["Assignee"]));
@@ -64,7 +64,7 @@ const githubLink = (type) => (value) =>
         .map((value) => value.slice(value.lastIndexOf("/") + 1))
         .map(
           (number) =>
-            `<a href="https://github.com/maxpatiiuk/calendar-plus/${type}/${number}">#${number}</a>`
+            `<a href="https://github.com/maxpatiiuk/calendar-plus/${type}/${number}">#${number}</a>`,
         )
         .join(" and ");
 
@@ -104,7 +104,7 @@ function formatItem(item) {
                 .filter(Boolean)
                 .join("<br>\n\t\t\t\t")}\n\t\t\t`
             : value ?? ""
-        }</td>`
+        }</td>`,
     )
     .join("\n")}\n\t\t</tr>`;
 }

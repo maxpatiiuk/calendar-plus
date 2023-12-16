@@ -94,7 +94,7 @@ export function Dashboard({
                     setLayout(
                       newWidget === undefined
                         ? removeItem(layout, index)
-                        : replaceItem(layout, index, newWidget)
+                        : replaceItem(layout, index, newWidget),
                     )
                   }
                 />

@@ -39,14 +39,14 @@ export function BetterEditRecurring(): null {
                   container.querySelector('iframe') === null &&
                   container.hasAttribute('id') &&
                   !container.hasAttribute('aria-live') &&
-                  !container.hasAttribute('aria-hidden')
+                  !container.hasAttribute('aria-hidden'),
               );
               return containers.length === 0 ? undefined : containers;
             })
           : undefined,
-      [lessInvasiveDialog]
+      [lessInvasiveDialog],
     ),
-    false
+    false,
   );
 
   const elements = React.useRef<Elements | undefined>(undefined);
@@ -60,10 +60,10 @@ export function BetterEditRecurring(): null {
 
     const observer = new MutationObserver((mutationList) => {
       const targets = f.unique(
-        mutationList.map(({ target }) => target as HTMLElement)
+        mutationList.map(({ target }) => target as HTMLElement),
       );
       const overlays = targets.flatMap((target) =>
-        Array.from<HTMLElement>(target.querySelectorAll('[isfullscreen]'))
+        Array.from<HTMLElement>(target.querySelectorAll('[isfullscreen]')),
       );
       const potentialElements = mappedFind(overlays, findElements);
       potentialElements?.overlay.classList.add(className);
@@ -71,7 +71,7 @@ export function BetterEditRecurring(): null {
     });
 
     dialogContainers.forEach((container) =>
-      observer.observe(container, { childList: true })
+      observer.observe(container, { childList: true }),
     );
 
     return () => {
@@ -89,9 +89,9 @@ export function BetterEditRecurring(): null {
             target === null ||
             elements.current?.overlay.contains(target as Element) !== false
               ? undefined
-              : elements.current?.submitButton.click()
+              : elements.current?.submitButton.click(),
           ),
-    [dialogContainers]
+    [dialogContainers],
   );
 
   return null;
@@ -102,13 +102,13 @@ export function BetterEditRecurring(): null {
  */
 function findElements(overlay: HTMLElement): Elements | undefined {
   const options = overlay.querySelectorAll(
-    '[role="dialog"] [role="radiogroup"] label'
+    '[role="dialog"] [role="radiogroup"] label',
   );
   // Confirm we are in the correct dialog
   if (options === undefined || options.length !== 3) return undefined;
 
   const submitButton = overlay.querySelector(
-    '[role="dialog"] [role="button"][autofocus]'
+    '[role="dialog"] [role="button"][autofocus]',
   );
   if (submitButton === null) return undefined;
 

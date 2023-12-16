@@ -11,7 +11,7 @@ import { SettingsContext } from './SettingsContext';
  * Keep track of what week/month/year is currently displayed
  */
 export const CurrentViewContext = React.createContext<CurrentView | undefined>(
-  undefined
+  undefined,
 );
 CurrentViewContext.displayName = 'LoadingContext';
 
@@ -36,7 +36,7 @@ const viewMapper = {
   custom_weeks: 'customweek',
 } as const;
 
-export type SupportedView = typeof supportedViews[number];
+export type SupportedView = (typeof supportedViews)[number];
 
 export type CurrentView = {
   readonly view: SupportedView;
@@ -51,7 +51,7 @@ export function TrackCurrentView({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const [currentView, setCurrentView] = React.useState<CurrentView | undefined>(
-    undefined
+    undefined,
   );
 
   useCurrentTracker(setCurrentView);
@@ -69,7 +69,7 @@ export const defaultCustomViewSize = 4;
  * Listen for changes to current URL
  */
 function useCurrentTracker(
-  setCurrentView: (newCurrentView: CurrentView | undefined) => void
+  setCurrentView: (newCurrentView: CurrentView | undefined) => void,
 ) {
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
     useStorage('customViewSize');
@@ -83,12 +83,12 @@ function useCurrentTracker(
       const parsed = parsePath(
         window.location.pathname,
         customViewSize,
-        weekStart
+        weekStart,
       );
       setCurrentView(parsed);
       if (parsed?.view === 'customday' || parsed?.view === 'customweek')
         detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
-          console.error
+          console.error,
         );
     }
 
@@ -111,7 +111,7 @@ const commonPrefix = `/calendar/u/0/r/`;
 function parsePath(
   path: string,
   customViewSize: number,
-  weekStart: number
+  weekStart: number,
 ): CurrentView | undefined {
   if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
     const viewMode = document.querySelector('header div[data-active-view]');
@@ -140,7 +140,7 @@ function parsePath(
     Number.parseInt(year),
     // Month is 0-based
     Number.parseInt(month) - 1,
-    Number.parseInt(day)
+    Number.parseInt(day),
   );
   return {
     view: viewName,
@@ -153,19 +153,19 @@ function resolveBoundaries(
   viewName: SupportedView,
   selectedDay: Date,
   customViewSize: number,
-  weekStart: number
+  weekStart: number,
 ): { readonly firstDay: Date; readonly lastDay: Date } {
   if (viewName === 'day')
     return {
       firstDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        selectedDay.getDate()
+        selectedDay.getDate(),
       ),
       lastDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        selectedDay.getDate() + 1
+        selectedDay.getDate() + 1,
       ),
     };
   else if (viewName === 'week') {
@@ -176,12 +176,12 @@ function resolveBoundaries(
       firstDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        dayOffset
+        dayOffset,
       ),
       lastDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        dayOffset + 7
+        dayOffset + 7,
       ),
     };
   } else if (viewName === 'month')
@@ -190,7 +190,7 @@ function resolveBoundaries(
       lastDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth() + 1,
-        0
+        0,
       ),
     };
   else if (viewName === 'customday') {
@@ -199,7 +199,7 @@ function resolveBoundaries(
       lastDay: new Date(
         selectedDay.getFullYear(),
         selectedDay.getMonth(),
-        selectedDay.getDate() + customViewSize
+        selectedDay.getDate() + customViewSize,
       ),
     };
   } else if (viewName === 'customweek') {
@@ -213,7 +213,7 @@ function resolveBoundaries(
       lastDay: new Date(
         firstDay.getFullYear(),
         firstDay.getMonth(),
-        firstDay.getDate() + customViewSize
+        firstDay.getDate() + customViewSize,
       ),
     };
   } else if (viewName === 'year')
@@ -238,7 +238,7 @@ async function detectCustomViewSize([
   if (dateKeys === undefined) return;
   // Find out how many days are displayed
   const duration = new Set(
-    Array.from(dateKeys, (dateKey) => dateKey.getAttribute('data-datekey'))
+    Array.from(dateKeys, (dateKey) => dateKey.getAttribute('data-datekey')),
   ).size;
   if (duration !== customViewSize) setCustomViewSize(duration);
 }

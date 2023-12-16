@@ -48,7 +48,7 @@ export function DoughnutChart({
       },
       (_, index) => {
         writable(chart.data.datasets[0].data)[index] = outerData[index];
-      }
+      },
     );
     Array.from(
       {
@@ -56,7 +56,7 @@ export function DoughnutChart({
       },
       (_, index) => {
         writable(chart.data.datasets[1].data)[index] = innerData[index];
-      }
+      },
     );
     chart.update();
   }, [innerData, outerData, chart, handleLoaded]);
@@ -133,7 +133,9 @@ export function DoughnutChart({
               },
             },
           }}
-          ref={(chart:Chart<'doughnut', RA<number>, string> | undefined | null) => setChart(chart ?? undefined)}
+          ref={(
+            chart: Chart<'doughnut', RA<number>, string> | undefined | null,
+          ) => setChart(chart ?? undefined)}
         />
       ) : (
         commonText('loading')
@@ -150,7 +152,7 @@ type Layer = {
 
 function useDataSets(
   durations: EventsStore | undefined,
-  calendars: React.ContextType<typeof CalendarsContext>
+  calendars: React.ContextType<typeof CalendarsContext>,
 ): readonly [Layer, Layer] {
   return React.useMemo(() => {
     const { data, ...rest } = getCategoryData(durations, calendars);
@@ -162,8 +164,8 @@ function useDataSets(
             label ||
             (data.length === 1
               ? calendars?.[index].summary ?? index.toString()
-              : commonText('other'))
-        )
+              : commonText('other')),
+        ),
       ),
       ...rest,
     };
@@ -182,7 +184,7 @@ function useDataSets(
 
 function getCategoryData(
   durations: EventsStore | undefined,
-  calendars: React.ContextType<typeof CalendarsContext>
+  calendars: React.ContextType<typeof CalendarsContext>,
 ): {
   readonly data: RA<RA<{ readonly label: string; readonly minutes: number }>>;
   readonly backgroundColor: RA<string>;
@@ -198,10 +200,10 @@ function getCategoryData(
               label,
               minutes: Object.values(durations).reduce(
                 (total, durations) => total + durations.total,
-                0
+                0,
               ),
             };
-          })
+          }),
         ) ?? [];
   return {
     data: categoryData,
@@ -211,13 +213,13 @@ function getCategoryData(
 
 const getCalendarData = (
   durations: EventsStore | undefined,
-  calendars: React.ContextType<typeof CalendarsContext>
+  calendars: React.ContextType<typeof CalendarsContext>,
 ) =>
   durations === undefined
     ? []
     : calendars?.map(({ id }) =>
         Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
           (total, durations) => total + durations.total,
-          0
-        )
+          0,
+        ),
       ) ?? [];

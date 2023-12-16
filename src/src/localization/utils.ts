@@ -7,11 +7,11 @@
 import { camelToHuman } from '../utils/utils';
 import type { IR, RA, RR } from '../utils/types';
 import { isFunction } from '../utils/types';
-import {f} from '../utils/functools';
+import { f } from '../utils/functools';
 
 export const languages = ['en-us'] as const;
 
-export type Language = typeof languages[number];
+export type Language = (typeof languages)[number];
 export const DEFAULT_LANGUAGE = 'en-us';
 export const LANGUAGE: Language =
   (typeof document === 'object' &&
@@ -61,7 +61,7 @@ function assertExhaustive(key: string): never {
           typeof value[proto] === 'function'
             ? value[proto].bind(value)
             : value[proto];
-      }
+      },
     );
     return defaultValue as never;
   }
@@ -74,18 +74,18 @@ function assertExhaustive(key: string): never {
 export function createDictionary<DICT extends Dictionary>(dictionary: DICT) {
   const resolver = <KEY extends string & keyof typeof dictionary>(
     key: KEY,
-    ...args: typeof dictionary[typeof key][Language] extends (
+    ...args: (typeof dictionary)[typeof key][Language] extends (
       ...args: RA<never>
     ) => Line
-      ? Parameters<typeof dictionary[typeof key][Language]>
+      ? Parameters<(typeof dictionary)[typeof key][Language]>
       : RA<never>
-  ): GetValueType<typeof dictionary[typeof key]> =>
+  ): GetValueType<(typeof dictionary)[typeof key]> =>
     (key in dictionary
       ? typeof dictionary[key][LANGUAGE] === 'function' &&
         isFunction(dictionary[key][LANGUAGE])
         ? (dictionary[key][LANGUAGE] as (...args: RA<unknown>) => Line)(...args)
         : dictionary[key][LANGUAGE] ?? assertExhaustive(key)
-      : assertExhaustive(key)) as GetValueType<typeof dictionary[typeof key]>;
+      : assertExhaustive(key)) as GetValueType<(typeof dictionary)[typeof key]>;
   // This can be used in localization tests
   resolver.dictionary = dictionary;
   return resolver;

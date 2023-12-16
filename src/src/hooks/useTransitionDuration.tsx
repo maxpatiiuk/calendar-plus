@@ -27,6 +27,6 @@ export function useTransitionDuration(): number {
   const reduceMotion = useReducedMotion();
   return React.useMemo(
     () => (reduceMotion ? 0 : defaultTransitionDuration),
-    [reduceMotion]
+    [reduceMotion],
   );
 }

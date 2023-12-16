@@ -8,7 +8,7 @@ import { throttle } from '../../utils/utils';
  */
 export function usePageListener(
   mainContainer: HTMLElement | undefined,
-  callback: () => void
+  callback: () => void,
 ): void {
   // Listen for DOM changes
   React.useEffect(() => {

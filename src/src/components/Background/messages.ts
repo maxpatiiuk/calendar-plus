@@ -32,7 +32,7 @@ export type Requests = AuthenticateRequest | ReloadExtension;
  */
 export const sendRequest = async <TYPE extends Requests['type']>(
   type: TYPE,
-  request: Extract<Requests, State<TYPE>>['request']
+  request: Extract<Requests, State<TYPE>>['request'],
 ): Promise<Extract<Requests, State<TYPE>>['response']> =>
   // This function has a lot of overloads, which confuses TypeScript
   chrome.runtime.sendMessage<unknown, void>({
@@ -48,7 +48,7 @@ type BackgroundEvents = TabUpdate;
  */
 export function emitEvent(
   tabId: number,
-  response: BackgroundEvents
+  response: BackgroundEvents,
 ): Promise<void> {
   if (chrome.tabs === undefined)
     throw new Error('This must only be called from the background script');
@@ -61,7 +61,7 @@ export function emitEvent(
  */
 export function listenEvent<TYPE extends BackgroundEvents['type']>(
   type: TYPE,
-  callback: (payload: BackgroundEvents & State<TYPE>) => void
+  callback: (payload: BackgroundEvents & State<TYPE>) => void,
 ): () => void {
   const handleUpdate = (event: BackgroundEvents & State<TYPE>) =>
     typeof event === 'object' && event !== null && event.type === type

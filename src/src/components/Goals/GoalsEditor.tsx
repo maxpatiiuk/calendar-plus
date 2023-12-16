@@ -43,7 +43,7 @@ export function GoalsEditor({
                   replaceItem(goals, index, {
                     ...goal,
                     calendarId,
-                  })
+                  }),
                 )
               }
             />
@@ -56,7 +56,7 @@ export function GoalsEditor({
                   replaceItem(goals, index, {
                     ...goal,
                     virtualCalendar,
-                  })
+                  }),
                 )
               }
             />
@@ -67,12 +67,12 @@ export function GoalsEditor({
                   replaceItem(goals, index, {
                     ...goal,
                     duration,
-                  })
+                  }),
                 )
               }
             />
           </div>
-        ) : undefined
+        ) : undefined,
       )}
       <div>
         <Button.White

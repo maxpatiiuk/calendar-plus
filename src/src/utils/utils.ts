@@ -16,7 +16,7 @@ export const camelToHuman = (value: string): string =>
 export const sortFunction =
   <T, V extends boolean | number | string | null | undefined>(
     mapper: (value: T) => V,
-    reverse = false
+    reverse = false,
   ): ((left: T, right: T) => -1 | 0 | 1) =>
   (left: T, right: T): -1 | 0 | 1 => {
     const [leftValue, rightValue] = reverse
@@ -38,22 +38,22 @@ export const split = <LEFT_ITEM, RIGHT_ITEM = LEFT_ITEM>(
   discriminator: (
     item: LEFT_ITEM | RIGHT_ITEM,
     index: number,
-    array: RA<LEFT_ITEM | RIGHT_ITEM>
-  ) => boolean
+    array: RA<LEFT_ITEM | RIGHT_ITEM>,
+  ) => boolean,
 ): readonly [left: RA<LEFT_ITEM>, right: RA<RIGHT_ITEM>] =>
   array
     .map((item, index) => [item, discriminator(item, index, array)] as const)
     .reduce<
       readonly [
         left: RA<LEFT_ITEM | RIGHT_ITEM>,
-        right: RA<LEFT_ITEM | RIGHT_ITEM>
+        right: RA<LEFT_ITEM | RIGHT_ITEM>,
       ]
     >(
       ([left, right], [item, isRight]) => [
         [...left, ...(isRight ? [] : [item])],
         [...right, ...(isRight ? [item] : [])],
       ],
-      [[], []]
+      [[], []],
     ) as readonly [left: RA<LEFT_ITEM>, right: RA<RIGHT_ITEM>];
 
 /** Remove item from array if present, otherwise, add it */
@@ -76,7 +76,7 @@ export const replaceItem = <T>(array: RA<T>, index: number, item: T): RA<T> =>
 export const replaceKey = <T extends IR<unknown>>(
   object: T,
   targetKey: keyof T,
-  newValue: T[keyof T]
+  newValue: T[keyof T],
 ): T =>
   object[targetKey] === newValue
     ? object
@@ -97,19 +97,19 @@ export const removeItem = <T>(array: RA<T>, index: number): RA<T> =>
  */
 export const removeKey = <
   DICTIONARY extends IR<unknown>,
-  OMIT extends keyof DICTIONARY
+  OMIT extends keyof DICTIONARY,
 >(
   object: DICTIONARY,
   ...toOmit: RA<OMIT>
 ): Omit<DICTIONARY, OMIT> =>
   // @ts-expect-error
   Object.fromEntries(
-    Object.entries(object).filter(([key]) => !f.includes(toOmit, key))
+    Object.entries(object).filter(([key]) => !f.includes(toOmit, key)),
   );
 
 export function findLastIndex<T>(
   array: RA<T>,
-  mapping: (item: T, index: number) => boolean
+  mapping: (item: T, index: number) => boolean,
 ): number {
   for (let index = array.length - 1; index >= 0; index--)
     if (mapping(array[index], index)) return index;
@@ -123,7 +123,7 @@ export function findLastIndex<T>(
  * KEY doesn't have to be a string. It can be of any time
  */
 export const group = <KEY, VALUE>(
-  entries: RA<readonly [key: KEY, value: VALUE]>
+  entries: RA<readonly [key: KEY, value: VALUE]>,
 ): RA<readonly [key: KEY, values: RA<VALUE>]> =>
   Array.from(
     entries
@@ -131,15 +131,15 @@ export const group = <KEY, VALUE>(
       .reduce<Map<KEY, RA<VALUE>>>(
         (grouped, [key, value]) =>
           grouped.set(key, [...(grouped.get(key) ?? []), value]),
-        new Map()
+        new Map(),
       )
-      .entries()
+      .entries(),
   );
 
 // Find a value in an array, and return it's mapped variant
 export function mappedFind<ITEM, RETURN_TYPE>(
   array: RA<ITEM>,
-  callback: (item: ITEM, index: number) => RETURN_TYPE | undefined
+  callback: (item: ITEM, index: number) => RETURN_TYPE | undefined,
 ): RETURN_TYPE | undefined {
   let value = undefined;
   array.some((item, index) => {

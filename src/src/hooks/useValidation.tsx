@@ -16,10 +16,10 @@ import type { RA } from '../utils/types';
 export function useValidation<
   T extends HTMLInputElement | HTMLTextAreaElement =
     | HTMLInputElement
-    | HTMLTextAreaElement
+    | HTMLTextAreaElement,
 >(
   // Can set validation message from state or a prop
-  message: RA<string> | string = ''
+  message: RA<string> | string = '',
 ): {
   // Set this as a ref prop on an input
   readonly validationRef: React.RefCallback<T>;
@@ -28,7 +28,7 @@ export function useValidation<
   // Can set validation message via this callback
   readonly setValidation: (
     message: RA<string> | string,
-    type?: 'auto' | 'focus' | 'silent'
+    type?: 'auto' | 'focus' | 'silent',
   ) => void;
 } {
   const inputRef = React.useRef<T | null>(null);
@@ -39,7 +39,7 @@ export function useValidation<
    * rendered
    */
   const validationMessageRef = React.useRef<string>(
-    Array.isArray(message) ? message.join('\n') : message
+    Array.isArray(message) ? message.join('\n') : message,
   );
   const isFirstError = React.useRef(validationMessageRef.current !== '');
 
@@ -70,7 +70,7 @@ export function useValidation<
 
   const setValidation = React.useCallback(function setValidation(
     message: RA<string> | string,
-    type: 'auto' | 'focus' | 'silent' = 'auto'
+    type: 'auto' | 'focus' | 'silent' = 'auto',
   ): void {
     const joined = Array.isArray(message) ? message.join('\n') : message;
     if (validationMessageRef.current === joined && type !== 'focus') return;
@@ -86,8 +86,7 @@ export function useValidation<
       isFirstError.current = false;
       input.reportValidity();
     }
-  },
-  []);
+  }, []);
 
   React.useEffect(() => setValidation(message), [message, setValidation]);
 
@@ -98,7 +97,7 @@ export function useValidation<
         inputRef.current = input;
         setValidation(validationMessageRef.current, 'focus');
       },
-      [setValidation]
+      [setValidation],
     ),
     setValidation,
   };

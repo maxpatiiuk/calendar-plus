@@ -6,10 +6,10 @@ import { preferenceDefinitions } from './definitions';
 
 export const getPrefDefinition = <
   CATEGORY extends keyof Preferences,
-  ITEM extends keyof Preferences[CATEGORY]['items']
+  ITEM extends keyof Preferences[CATEGORY]['items'],
 >(
   category: CATEGORY,
-  item: ITEM
+  item: ITEM,
 ): Preferences[CATEGORY]['items'][ITEM] =>
   // @ts-expect-error
   preferenceDefinitions[category].items[item];

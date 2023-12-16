@@ -19,7 +19,7 @@ export const ajax = async (
   }: Omit<RequestInit, 'body'> & {
     // If object is passed to body, it is stringified
     readonly body?: IR<unknown> | RA<unknown> | string | FormData;
-  } = {}
+  } = {},
 ): Promise<Response> =>
   fetch(url, {
     ...options,
@@ -35,7 +35,7 @@ export const ajax = async (
     if (!response.ok) {
       console.error('Failed to fetch', response);
       throw new Error(
-        `Failed to fetch ${url}: ${response.status} ${response.statusText}`
+        `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
       );
     } else return response;
   });
@@ -48,7 +48,7 @@ function putToken(url: string): { readonly Authorization: string } | undefined {
     const token = unsafeGetToken();
     if (token === undefined)
       throw new Error(
-        `Tried to access Google API before authentication: ${url}`
+        `Tried to access Google API before authentication: ${url}`,
       );
     else return { Authorization: `Bearer ${token}` };
   } else return undefined;

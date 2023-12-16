@@ -19,7 +19,7 @@ export function FilePicker({
   const filePickerButton = React.useRef<HTMLButtonElement>(null);
 
   function handleFileSelected(
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ): void {
     if (handleFileChange(event.target.files?.[0])) event.target.value = '';
   }
@@ -113,7 +113,7 @@ export function FilePicker({
  */
 export const downloadFile = async (
   fileName: string,
-  text: string
+  text: string,
 ): Promise<void> =>
   new Promise((resolve) => {
     const iframe = document.createElement('iframe');
@@ -122,7 +122,7 @@ export const downloadFile = async (
       const element = iframe.contentWindow.document.createElement('a');
       element.setAttribute(
         'href',
-        `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`
+        `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
       );
       element.setAttribute('download', fileName);
 
@@ -147,14 +147,14 @@ export const downloadFile = async (
  */
 export const fileToText = async (
   file: File,
-  encoding = 'utf-8'
+  encoding = 'utf-8',
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.addEventListener('load', ({ target }) =>
       typeof target?.result === 'string'
         ? resolve(target.result)
-        : reject(new Error('File is not a text file'))
+        : reject(new Error('File is not a text file')),
     );
     fileReader.addEventListener('error', () => reject(fileReader.error));
     fileReader.readAsText(file, encoding);

@@ -85,7 +85,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
                             replaceItem(synonyms, index, {
                               calendar,
                               synonym,
-                            })
+                            }),
                           )
                         }
                       />
@@ -102,7 +102,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
                             replaceItem(synonyms, index, {
                               calendar: calendarId,
                               synonym,
-                            })
+                            }),
                           )
                         }
                       />

@@ -53,7 +53,7 @@ export function GoalsWidget({
         [commonText('perDuration')]: view,
         [commonText('goal')]: formatDuration(duration),
         [commonText('completed')]: formatDuration(completed),
-      })
+      }),
     );
 
   return (
@@ -136,7 +136,7 @@ function GoalComponent({
   const currentDurations = durations[calendarId];
   const currentDuration = React.useMemo(
     () => computeGoal(currentDurations, virtualCalendar),
-    [currentDurations, virtualCalendar]
+    [currentDurations, virtualCalendar],
   );
   return typeof calendar === 'object' ? (
     <Gage
@@ -149,7 +149,7 @@ function GoalComponent({
       } - ${commonText(
         'aOutOfB',
         formatDuration(currentDuration),
-        formatDuration(goalDuration)
+        formatDuration(goalDuration),
       )}`}
       max={goalDuration}
       size={size}
@@ -160,12 +160,12 @@ function GoalComponent({
 
 function computeGoal(
   currentDurations: EventsStore[string],
-  virtualCalendar?: string
+  virtualCalendar?: string,
 ): number {
   const durations =
     virtualCalendar === undefined
       ? Object.values(currentDurations ?? {}).flatMap((durations) =>
-          Object.values(durations)
+          Object.values(durations),
         )
       : Object.values(currentDurations?.[virtualCalendar] ?? {});
   return durations.reduce((total, value) => total + value.total, 0);

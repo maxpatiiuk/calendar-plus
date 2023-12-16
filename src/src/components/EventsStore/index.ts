@@ -54,7 +54,7 @@ type CalendarEvent = Pick<
  */
 export function useEvents(
   startDate: Date | undefined,
-  endDate: Date | undefined
+  endDate: Date | undefined,
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
   // Clear temporary cache when overlay is closed
@@ -87,7 +87,7 @@ export function useEvents(
             eventsStore,
             id,
             startDate,
-            daysBetween
+            daysBetween,
           );
           if (bounds === undefined) return;
           const [timeMin, timeMax] = bounds;
@@ -97,7 +97,7 @@ export function useEvents(
           const guessCalendar = (input: string): string | undefined =>
             virtualCalendars.find(
               ({ calendarId, rule, value }) =>
-                calendarId === id && ruleMatchers[rule](input, value)
+                calendarId === id && ruleMatchers[rule](input, value),
             )?.virtualCalendar;
 
           const durations = group(
@@ -116,7 +116,7 @@ export function useEvents(
               const [startDate, endDate] = dates;
               const data = calculateEventDuration(startDate, endDate);
               return [guessCalendar(summary) ?? '', data] as const;
-            })
+            }),
           );
 
           /*
@@ -142,10 +142,10 @@ export function useEvents(
                   calendarDurations[date].total += duration;
                   calendarDurations[date].hourly[hour] = duration;
                 });
-              })
+              }),
             );
           });
-        })
+        }),
       );
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
@@ -156,7 +156,7 @@ export function useEvents(
       ignoreAllDayEvents,
       virtualCalendars,
     ]),
-    false
+    false,
   );
   return durations;
 }
@@ -174,12 +174,12 @@ async function fetchEvents(
   id: string,
   timeMin: Date,
   timeMax: Date,
-  pageToken?: string
+  pageToken?: string,
 ): Promise<RA<CalendarEvent> | undefined> {
   const response = await ajax(
     formatUrl(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
-        id
+        id,
       )}/events`,
       {
         maxAttendees: (1).toString(),
@@ -191,8 +191,8 @@ async function fetchEvents(
           'nextPageToken,items(summary,start(dateTime,date),end(dateTime,date))',
         singleEvents: true.toString(),
         ...(typeof pageToken === 'string' ? { pageToken } : {}),
-      }
-    )
+      },
+    ),
   ).catch((error) => {
     console.error(error);
     return undefined;
@@ -220,7 +220,7 @@ function calculateBounds(
   eventsStore: React.MutableRefObject<RawEventsStore>,
   id: string,
   startDate: Date,
-  daysBetween: RA<string>
+  daysBetween: RA<string>,
 ): readonly [timeMin: Date, timeMax: Date] | undefined {
   const durations = eventsStore.current[id]?.[''];
   const firstDayToFetch =
@@ -232,7 +232,7 @@ function calculateBounds(
       ? daysBetween.length
       : findLastIndex(
           daysBetween,
-          (date) => typeof durations[date] !== 'object'
+          (date) => typeof durations[date] !== 'object',
         ) + 1;
   if (firstDayToFetch === -1) return undefined;
   const timeMin = new Date(startDate);
@@ -257,7 +257,7 @@ export const getDatesBetween = (startDate: Date, endDate: Date): RA<string> =>
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + index);
       return dateToString(date);
-    }
+    },
   );
 
 /**
@@ -282,31 +282,31 @@ function resolveEventDates(
   timeMin: Date,
   timeMax: Date,
   start: CalendarEvent['start'],
-  end: CalendarEvent['end']
+  end: CalendarEvent['end'],
 ): readonly [start: Date, end: Date] | undefined {
   // Date is defined instead of DateTime for multi-day events
   const unboundedStartDate =
     typeof start.dateTime === 'string'
       ? new Date(start.dateTime)
       : typeof start.date === 'string'
-      ? dateToDateTime(start.date)
-      : undefined;
+        ? dateToDateTime(start.date)
+        : undefined;
   const unboundedEndDate =
     typeof end.dateTime === 'string'
       ? new Date(end.dateTime)
       : typeof end.date === 'string'
-      ? dateToDateTime(end.date)
-      : undefined;
+        ? dateToDateTime(end.date)
+        : undefined;
 
   if (unboundedStartDate === undefined || unboundedEndDate === undefined)
     return undefined;
 
   // Multi-date events might begin/end outside of current preview range
   const startDate = new Date(
-    Math.max(unboundedStartDate.getTime(), timeMin.getTime())
+    Math.max(unboundedStartDate.getTime(), timeMin.getTime()),
   );
   const endDate = new Date(
-    Math.min(unboundedEndDate.getTime(), timeMax.getTime())
+    Math.min(unboundedEndDate.getTime(), timeMax.getTime()),
   );
   return [startDate, endDate];
 }
@@ -329,13 +329,13 @@ function extractData(
   eventsStore: RawEventsStore,
   calendars: Exclude<React.ContextType<typeof CalendarsContext>, undefined>,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): EventsStore {
   const daysBetween = getDatesBetween(startDate, endDate);
   return Object.fromEntries(
     calendars.map(({ id }) => {
       const totals: R<WritableDayHours> = Object.fromEntries(
-        daysBetween.map((date) => [date, blankHours()])
+        daysBetween.map((date) => [date, blankHours()]),
       );
       // "eventsStore" won't have an entry for current calendar if fetching failed
       const entries = Object.entries(eventsStore?.[id] ?? {})
@@ -352,7 +352,7 @@ function extractData(
                 });
                 categoryTotal += total.total;
                 return [date, total];
-              })
+              }),
             ),
             categoryTotal,
           ] as const;
@@ -360,11 +360,11 @@ function extractData(
         .sort(
           sortFunction(
             ([_label, _durations, categoryTotal]) => categoryTotal,
-            true
-          )
+            true,
+          ),
         );
       return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
-    })
+    }),
   );
 }
 
@@ -374,7 +374,7 @@ function extractData(
  */
 function calculateEventDuration(
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): IR<RA<number>> {
   const results: R<WritableArray<number>> = {};
   const startDateString = dateToString(startDate);

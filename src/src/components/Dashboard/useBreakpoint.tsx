@@ -10,12 +10,12 @@ export function useBreakpoint(): BreakPoint {
     throw new Error('Cannot invoke usePortalWidth outside a portal');
 
   const [breakpoint, setBreakpoint] = React.useState(() =>
-    resolveBreakpoint(container.clientWidth)
+    resolveBreakpoint(container.clientWidth),
   );
 
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver(() =>
-      setBreakpoint(resolveBreakpoint(container.clientWidth))
+      setBreakpoint(resolveBreakpoint(container.clientWidth)),
     );
 
     resizeObserver.observe(container);

@@ -35,13 +35,13 @@ import React from 'react';
  * ```
  */
 export function useBooleanState(
-  value = false
+  value = false,
 ): Readonly<
   readonly [
     state: boolean,
     enable: () => void,
     disable: () => void,
-    toggle: () => void
+    toggle: () => void,
   ]
 > {
   const [state, setState] = useTriggerState(value);
@@ -51,19 +51,19 @@ export function useBooleanState(
       function enable() {
         setState(true);
       },
-      [setState]
+      [setState],
     ),
     React.useCallback(
       function disable() {
         setState(false);
       },
-      [setState]
+      [setState],
     ),
     React.useCallback(
       function toggle() {
         setState((value) => !value);
       },
-      [setState]
+      [setState],
     ),
   ];
 }

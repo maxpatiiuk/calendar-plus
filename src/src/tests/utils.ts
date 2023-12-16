@@ -24,7 +24,7 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
             readonly in: ARGUMENTS_TYPE;
             readonly out: RETURN_TYPE;
           }
-      >
+      >,
 ): void {
   const items = Array.isArray(inputOutputSet)
     ? inputOutputSet
@@ -42,7 +42,7 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
           readonly in: ARGUMENTS_TYPE;
           readonly out: RETURN_TYPE;
         },
-    index: number
+    index: number,
   ): void {
     const {
       in: input,
@@ -70,7 +70,7 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
         in: Array.isArray(items[0]) ? items[0][0] : items[0].in,
         out: Array.isArray(items[0]) ? items[0][1] : items[0].out,
       },
-      0
+      0,
     );
   else describe(testFunction.name, () => items.forEach(runTest));
 }

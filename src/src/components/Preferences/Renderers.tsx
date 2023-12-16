@@ -23,7 +23,7 @@ export const pickListPref = <T extends string>(
         readonly value: T;
         readonly title?: string;
       }>
-    | RA<T>
+    | RA<T>,
 ) =>
   function PickListPref({
     value,

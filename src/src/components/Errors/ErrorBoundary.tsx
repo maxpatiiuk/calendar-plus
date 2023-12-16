@@ -6,38 +6,42 @@
  */
 
 import React from 'react';
-import type {State} from 'typesafe-reducer';
+import type { State } from 'typesafe-reducer';
 
 type ErrorBoundaryState =
-  | State<'Error',
-  {
-    readonly hasError: true;
-    readonly error: Error;
-    readonly errorInfo: { readonly componentStack: string };
-  }>
+  | State<
+      'Error',
+      {
+        readonly hasError: true;
+        readonly error: Error;
+        readonly errorInfo: { readonly componentStack: string };
+      }
+    >
   | State<'Main'>
   | State<'Silenced'>;
 
-export class ErrorBoundary extends React.Component<{
-  readonly children: React.ReactNode;
-  /*
-   * Can wrap a component in an <ErrorBoundary> with silentErrors
-   * to silence all errors from it (on error, the component is quietly
-   * deRendered), if in production
-   * Useful for ensuring non-critical and experimental components don't
-   * crash the whole application
-   */
-  readonly silentErrors?: boolean;
-  readonly dismissable?: boolean;
-},
-  ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<
+  {
+    readonly children: React.ReactNode;
+    /*
+     * Can wrap a component in an <ErrorBoundary> with silentErrors
+     * to silence all errors from it (on error, the component is quietly
+     * deRendered), if in production
+     * Useful for ensuring non-critical and experimental components don't
+     * crash the whole application
+     */
+    readonly silentErrors?: boolean;
+    readonly dismissable?: boolean;
+  },
+  ErrorBoundaryState
+> {
   public readonly state: ErrorBoundaryState = {
     type: 'Main',
   };
 
   public componentDidCatch(
     error: Error,
-    errorInfo: { readonly componentStack: string }
+    errorInfo: { readonly componentStack: string },
   ): void {
     console.error(error.toString());
     this.setState({
@@ -58,12 +62,11 @@ export class ErrorBoundary extends React.Component<{
     else
       return this.state.type === 'Error' ? (
         <pre>
-          Unexpected error has occurred<br/>
+          Unexpected error has occurred
+          <br />
           {this.state.error?.toString()}
-          <br/>
-          <pre>
-            {this.state.errorInfo.componentStack}
-          </pre>
+          <br />
+          <pre>{this.state.errorInfo.componentStack}</pre>
         </pre>
       ) : (
         this.props.children ?? null

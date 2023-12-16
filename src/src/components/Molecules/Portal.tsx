@@ -77,6 +77,6 @@ export function useMainContainer(): HTMLElement | undefined {
 }
 
 export const PortalContext = React.createContext<Element | undefined>(
-  undefined
+  undefined,
 );
 PortalContext.displayName = 'PortalContext';

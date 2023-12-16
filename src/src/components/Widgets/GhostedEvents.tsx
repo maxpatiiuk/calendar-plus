@@ -20,7 +20,7 @@ export function GhostedEvents({
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
   const isDisabled = ghostEventShortcut === 'none';
   const shortcutLabel = ghostEventShortcuts.find(
-    ({ value }) => value === ghostEventShortcut
+    ({ value }) => value === ghostEventShortcut,
   )?.title;
 
   const getJsonExport = () => ghostedEvents ?? [];

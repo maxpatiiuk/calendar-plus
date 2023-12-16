@@ -32,7 +32,7 @@ export function TimeChart({
       durations === undefined || mode === undefined
         ? undefined
         : getTimes(durations, mode),
-    [durations, mode]
+    [durations, mode],
   );
 
   const doJsonExport = () =>
@@ -45,8 +45,8 @@ export function TimeChart({
           ([virtualCalendar, durations]) => [
             virtualCalendar,
             getRowData(durations, mode ?? 'total'),
-          ]
-        )
+          ],
+        ),
       ),
     }));
 
@@ -66,7 +66,10 @@ export function TimeChart({
         [commonText('virtualCalendar')]: virtualCalendar,
         [commonText('totalHours')]: total,
         ...Object.fromEntries(
-          hourly.map((duration, index) => [formatHour(index, 'long'), duration])
+          hourly.map((duration, index) => [
+            formatHour(index, 'long'),
+            duration,
+          ]),
         ),
       }));
   }
@@ -132,7 +135,7 @@ export function TimeChart({
                   key={calendar.id}
                   times={times[calendar.id]}
                 />
-              ) : undefined
+              ) : undefined,
             )}
             <TotalsRow times={times} />
           </tbody>
@@ -156,13 +159,13 @@ const getTimes = (durations: EventsStore, mode: TimeChartMode): IR<DayHours> =>
     Object.entries(durations).map(([id, durations]) => [
       id,
       getRowData(durations[summedDurations], mode),
-    ])
+    ]),
   );
 
 const getRowData = (data: IR<DayHours>, mode: TimeChartMode): DayHours =>
   summedTimes(
     Object.values(data),
-    mode === 'total' ? toTotalHours : toAverageMinutes
+    mode === 'total' ? toTotalHours : toAverageMinutes,
   );
 
 const toTotalHours = (durations: RA<number>): number =>
@@ -175,11 +178,11 @@ const toTwoDecimal = (number: number): number => Math.round(number * 100) / 100;
 
 const summedTimes = (
   durations: RA<DayHours>,
-  aggregate: (numbers: RA<number>) => number
+  aggregate: (numbers: RA<number>) => number,
 ): DayHours => ({
   total: toTwoDecimal(aggregate(durations.map(({ total }) => total))),
   hourly: Array.from({ length: DAY / HOUR }, (_, index) =>
-    toTwoDecimal(aggregate(durations.map(({ hourly }) => hourly[index])))
+    toTwoDecimal(aggregate(durations.map(({ hourly }) => hourly[index]))),
   ),
 });
 
@@ -288,10 +291,10 @@ function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
       Array.from({ length: DAY / HOUR }, (_, index) =>
         calendars.reduce(
           (total, { id }) => total + (times[id]?.hourly[index] ?? 0),
-          0
-        )
+          0,
+        ),
       ),
-    [times, calendars]
+    [times, calendars],
   );
   return (
     <tr>
@@ -306,7 +309,7 @@ function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
       ))}
       <td className={extraDarkened}>
         {number(
-          totals.map((total) => total).reduce((sum, total) => sum + total, 0)
+          totals.map((total) => total).reduce((sum, total) => sum + total, 0),
         )}
       </td>
     </tr>

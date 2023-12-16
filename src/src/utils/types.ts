@@ -16,7 +16,7 @@ export type RA<V> = readonly V[];
 export type GetSet<T> = readonly [T, (value: T) => void];
 export type GetOrSet<T> = readonly [
   T,
-  (value: T | ((oldValue: T) => T)) => void
+  (value: T | ((oldValue: T) => T)) => void,
 ];
 
 /**
@@ -59,7 +59,7 @@ export const writable = <T>(value: T): Writable<T> => value;
  * See more: https://github.com/microsoft/TypeScript/issues/37663
  */
 export const isFunction = <T>(
-  value: T
+  value: T,
 ): value is T & ((...args: RA<unknown>) => unknown) =>
   typeof value === 'function';
 

@@ -42,19 +42,19 @@ export function App(): JSX.Element | null {
       openOverlayShortcut,
       handleOpen,
       handleClose,
-    ]
+    ],
   );
 
   const currentView = React.useContext(CurrentViewContext);
   const durations = useEvents(
     // Don't fetch until the overlay is opened
     isOpen ? currentView?.firstDay : undefined,
-    currentView?.lastDay
+    currentView?.lastDay,
   );
 
   const [debugOverlay] = useAsyncState(
     React.useCallback(() => debugOverlayPromise, []),
-    false
+    false,
   );
 
   const calendars = React.useContext(CalendarsContext);

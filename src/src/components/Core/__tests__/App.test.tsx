@@ -17,7 +17,7 @@ test('does not render until current date is extracted', () =>
             <App />
           </KeyboardListener>
         </VersionsContextProvider>
-      </CurrentViewContext.Provider>
+      </CurrentViewContext.Provider>,
     );
     expect(container.textContent).toEqual('');
   }));
@@ -38,7 +38,7 @@ test.skip('renders a button after current date is extracted', () =>
             <App />
           </KeyboardListener>
         </VersionsContextProvider>
-      </CurrentViewContext.Provider>
+      </CurrentViewContext.Provider>,
     );
     const linkElement = getByRole('button', {
       name: commonText('calendarPlus'),

@@ -1,4 +1,4 @@
-import {R} from '../utils/types';
+import { R } from '../utils/types';
 import React from 'react';
 
 const idStore: R<number> = {};
@@ -42,6 +42,6 @@ export function useId(prefix: string): (suffix: string) => string {
   return React.useCallback(
     (suffix = ''): string =>
       `${resolvedPrefix}${id.current}${suffix ? `-${suffix}` : ''}`,
-    [resolvedPrefix]
+    [resolvedPrefix],
   );
 }

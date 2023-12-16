@@ -76,5 +76,5 @@ export function FirstAuthScreen({
 }
 
 const imageUrl = chrome.runtime.getURL(
-  '/src/public/images/btn_google_signin_light_normal_web@2x.png'
+  '/src/public/images/btn_google_signin_light_normal_web@2x.png',
 );

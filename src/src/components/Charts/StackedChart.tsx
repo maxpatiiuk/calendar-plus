@@ -36,17 +36,17 @@ export function StackedChart({
   const calendars = React.useContext(CalendarsContext);
   const labels = React.useMemo(
     () => getLabels(durations, view),
-    [durations, view]
+    [durations, view],
   );
   const dataSets = React.useMemo(
     () => getDataSets(durations, calendars, view),
-    [durations, calendars, view]
+    [durations, calendars, view],
   );
   const [loaded, handleLoaded] = useBooleanState();
   const transitionDuration = useTransitionDuration();
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
-    [dataSets, handleLoaded]
+    [dataSets, handleLoaded],
   );
 
   const getJsonExport = () =>
@@ -64,7 +64,7 @@ export function StackedChart({
         [commonText('calendar')]: calendar,
         [commonText('date')]: date,
         [commonText('duration')]: duration,
-      }))
+      })),
     );
 
   return (
@@ -123,13 +123,13 @@ const getLabels = (durations: EventsStore | undefined, view: SupportedView) =>
   view === 'year'
     ? (months as WritableArray<string>)
     : Object.keys(
-        Object.values(durations ?? {})[0]?.[summedDurations] ?? []
+        Object.values(durations ?? {})[0]?.[summedDurations] ?? [],
       ).map((duration) => formatDateLabel(new Date(duration), view));
 
 const getDataSets = (
   durations: EventsStore | undefined,
   calendars: React.ContextType<typeof CalendarsContext>,
-  view: SupportedView
+  view: SupportedView,
 ): WritableArray<{
   readonly id: string;
   readonly label: string;
@@ -147,12 +147,12 @@ const getDataSets = (
             ? group(
                 Object.entries(durations[id]?.[summedDurations] ?? {}).map(
                   ([date, duration]) =>
-                    [new Date(date).getMonth(), duration.total] as const
-                )
+                    [new Date(date).getMonth(), duration.total] as const,
+                ),
               ).map(([_key, values]) =>
-                values.reduce((total, value) => total + value, 0)
+                values.reduce((total, value) => total + value, 0),
               )
             : Object.values(durations[id]?.[summedDurations] ?? {}).map(
-                ({ total }) => total
+                ({ total }) => total,
               ),
       }));

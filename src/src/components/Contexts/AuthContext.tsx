@@ -37,7 +37,7 @@ export function AuthenticationProvider({
           } else console.warn('Authentication canceled');
         })
         .catch(console.error),
-    []
+    [],
   );
   React.useEffect(() => void handleAuthenticate(false), [handleAuthenticate]);
 
@@ -46,7 +46,7 @@ export function AuthenticationProvider({
       token,
       handleAuthenticate,
     }),
-    [token, handleAuthenticate]
+    [token, handleAuthenticate],
   );
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }

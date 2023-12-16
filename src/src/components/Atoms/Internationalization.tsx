@@ -17,7 +17,7 @@ declare namespace Intl {
       options?: {
         readonly type?: 'conjunction' | 'disjunction';
         readonly style?: 'long' | 'narrow' | 'short';
-      }
+      },
     );
 
     public format(values: RA<string>): string;
@@ -34,7 +34,7 @@ declare namespace Intl {
           | 'language'
           | 'region'
           | 'script';
-      }
+      },
     );
 
     public of(code: string): string;
@@ -52,12 +52,12 @@ declare namespace Intl {
       options?: {
         readonly numeric: 'always' | 'auto';
         readonly style: 'long' | 'narrow' | 'short';
-      }
+      },
     );
 
     public format(
       count: number,
-      type: 'day' | 'hour' | 'minute' | 'month' | 'second' | 'week' | 'year'
+      type: 'day' | 'hour' | 'minute' | 'month' | 'second' | 'week' | 'year',
     ): string;
   }
 
@@ -70,7 +70,7 @@ declare namespace Intl {
         readonly month?: 'long' | 'short';
         readonly weekday?: 'long' | 'short';
         readonly day?: 'numeric';
-      }
+      },
     );
 
     public format(value: Readonly<Date>): string;
@@ -83,7 +83,7 @@ declare namespace Intl {
         readonly sensitivity?: 'accent' | 'base' | 'case' | 'variant';
         readonly caseFirst?: 'lower' | 'upper' | false;
         readonly ignorePunctuation?: boolean;
-      }
+      },
     );
 
     public compare(left: string, right: string): -1 | 0 | 1;
@@ -93,7 +93,7 @@ declare namespace Intl {
 function getMonthNames(monthFormat: 'long' | 'short'): RA<string> {
   const months = new Intl.DateTimeFormat(LANGUAGE, { month: monthFormat });
   return Array.from({ length: 12 }, (_, month) =>
-    months.format(new Date(0, month, 2, 0, 0, 0))
+    months.format(new Date(0, month, 2, 0, 0, 0)),
   );
 }
 
@@ -192,7 +192,7 @@ export const compareStrings = new Intl.Collator(
     sensitivity: 'base',
     caseFirst: 'upper',
     ignorePunctuation: true,
-  }
+  },
 ).compare;
 
 /**

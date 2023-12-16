@@ -3,8 +3,8 @@
 ## Guidelines for Programmers
 
 - All keys must use strict camel case, unless absolutely necessary to do
-  otherwise (e.x, in case of proper nouns that contain numbers or
-  capitalized letters)
+  otherwise (e.x, in case of proper nouns that contain numbers or capitalized
+  letters)
 
 - Prefer full terms rather than acronyms or shortened variants. Some people may
   be unfamiliar with the acronyms used.
@@ -99,7 +99,7 @@
    ```javascript
    textarea.value = textarea.value.replaceAll(
      /(?<key>\w+):\s{\s+'en-us':([\s\S]+?(?=['`\)],\n)['`\)],\n)([\s\S]+?(?=\},\n))\},/g,
-     "$1: {\n    'en-us':$2$3  'es-es':$2  },"
+     "$1: {\n    'en-us':$2$3  'es-es':$2  },",
    );
    ```
 
@@ -116,9 +116,9 @@
    dictionary = Object.fromEntries(
      Array.from(
        textarea.value.matchAll(
-         /(?<key>\w+):\s{\s+'en-us':\s+(?:\(\s*\w[^)]+[^>]+>\s+)?\w*\(?['"`]?\n?(?<enUS>[\s\S]*?)['"`)]\s*\)?,\s+'ru-ru':\s+(?:\(\s*\w[^)]+[^>]+>\s+)?\w*\(?['"`]?\n?(?<ruRU>[\s\S]*?)['"`)]\s*\)?,/g
+         /(?<key>\w+):\s{\s+'en-us':\s+(?:\(\s*\w[^)]+[^>]+>\s+)?\w*\(?['"`]?\n?(?<enUS>[\s\S]*?)['"`)]\s*\)?,\s+'ru-ru':\s+(?:\(\s*\w[^)]+[^>]+>\s+)?\w*\(?['"`]?\n?(?<ruRU>[\s\S]*?)['"`)]\s*\)?,/g,
        ),
-       ({ groups: { key, ...strings } }) => [key, strings]
-     )
+       ({ groups: { key, ...strings } }) => [key, strings],
+     ),
    );
    ```

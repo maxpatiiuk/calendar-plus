@@ -56,8 +56,8 @@ export function CalendarsSpy({
             minAccessRole: 'reader',
             fields: 'items(id,summary,primary,backgroundColor)',
             prettyPrint: false.toString(),
-          }
-        )
+          },
+        ),
       ).catch((error) => {
         console.error(error);
         return undefined;
@@ -71,13 +71,13 @@ export function CalendarsSpy({
       }));
       const [secondary, primary] = split(
         calendars,
-        ({ primary }) => primary === true
+        ({ primary }) => primary === true,
       ).map((calendars) =>
-        Array.from(calendars).sort(sortFunction(({ summary }) => summary))
+        Array.from(calendars).sort(sortFunction(({ summary }) => summary)),
       );
       return [...primary, ...secondary];
     }, [isAuthenticated]),
-    false
+    false,
   );
 
   /*
@@ -93,7 +93,7 @@ export function CalendarsSpy({
 
   const filteredCalendars = React.useMemo(
     () => calendars?.filter(({ id }) => visibleCalendars?.includes(id)),
-    [calendars, visibleCalendars]
+    [calendars, visibleCalendars],
   );
   return (
     <CalendarsContext.Provider
@@ -114,7 +114,7 @@ function findSideBar(): HTMLElement | undefined {
 
 function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
-  [visibleCalendars, setVisibleCalendars]: GetSet<RA<string> | undefined>
+  [visibleCalendars, setVisibleCalendars]: GetSet<RA<string> | undefined>,
 ): void {
   const [sideBar, setSideBar] = React.useState<Element | undefined>(undefined);
 
@@ -152,11 +152,11 @@ function useVisibilityChangeSpy(
 
   const parseCheckbox = React.useCallback(
     (
-      checkbox: HTMLInputElement
+      checkbox: HTMLInputElement,
     ): readonly [id: string, checked: boolean] | undefined => {
       if (calendars === undefined) {
         console.log(
-          'Calendar Plus: Unable to identify visible calendars before user signs in'
+          'Calendar Plus: Unable to identify visible calendars before user signs in',
         );
         return undefined;
       }
@@ -174,7 +174,7 @@ function useVisibilityChangeSpy(
       }
       return [calendar.id, checkbox.checked];
     },
-    [calendars]
+    [calendars],
   );
 
   /*
@@ -188,8 +188,8 @@ function useVisibilityChangeSpy(
       filterArray(
         Array.from(
           sideBar.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'),
-          parseCheckbox
-        )
+          parseCheckbox,
+        ),
       )
         .filter(([_calendarId, checked]) => checked)
         .map(([calendarId]) => calendarId);
@@ -230,10 +230,10 @@ function useVisibilityChangeSpy(
             setVisibleCalendars(
               checked
                 ? visibleCalendarsRef.current?.filter((id) => id !== calendarId)
-                : [...(visibleCalendarsRef.current ?? []), calendarId]
+                : [...(visibleCalendarsRef.current ?? []), calendarId],
             );
           }),
-    [sideBar, setVisibleCalendars]
+    [sideBar, setVisibleCalendars],
   );
 }
 
@@ -243,7 +243,7 @@ function useVisibilityChangeSpy(
 export async function awaitElement<T>(
   callback: () => T | undefined,
   pollInterval = 50,
-  limit = 100
+  limit = 100,
 ): Promise<T | undefined> {
   const result = callback();
   if (result !== undefined) return result;
@@ -251,7 +251,7 @@ export async function awaitElement<T>(
   return new Promise((resolve) =>
     setTimeout(
       () => resolve(awaitElement(callback, pollInterval, limit - 1)),
-      pollInterval
-    )
+      pollInterval,
+    ),
   );
 }

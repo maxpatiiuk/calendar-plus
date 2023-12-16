@@ -25,7 +25,7 @@ export function GhostEvents(): null {
     document.body.classList.toggle('ghosting-enabled', !isDisabled);
     document.body.style.setProperty(
       '--event-ghosting-opacity',
-      (ghostEventOpacity / 100).toString()
+      (ghostEventOpacity / 100).toString(),
     );
   }, [ghostEventOpacity, isDisabled]);
 
@@ -39,9 +39,9 @@ export function GhostEvents(): null {
             (element) =>
               ghostEventsRef.current.has(getEventName(element))
                 ? element.classList.add('ghosted')
-                : undefined
+                : undefined,
           ),
-    [mainContainer]
+    [mainContainer],
   );
   usePageListener(mainContainer, doGhosting);
 
@@ -70,15 +70,15 @@ export function GhostEvents(): null {
                 [shiftKey, ctrlKey, metaKey].filter(Boolean).length === 1;
               if (!isSingleKey) return;
               const eventElement = (target as HTMLElement).closest(
-                '[data-eventid]'
+                '[data-eventid]',
               );
               if (eventElement === null) return;
               const eventName = getEventName(eventElement) ?? '';
               if (eventName.length === 0) return;
               setGhostEvents(f.unique([...ghostEvents, eventName]));
-            }
+            },
           ),
-    [mainContainer, ghostEventShortcut, ghostEvents, setGhostEvents]
+    [mainContainer, ghostEventShortcut, ghostEvents, setGhostEvents],
   );
 
   return null;

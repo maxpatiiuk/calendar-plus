@@ -40,7 +40,7 @@ export function WidgetContainer({
                 `${header}.${exportFormat}`,
                 exportFormat === 'json'
                   ? JSON.stringify(getJsonExport(), null, 4)
-                  : objectToTsv(getTsvExport(), exportFormat)
+                  : objectToTsv(getTsvExport(), exportFormat),
               ).catch(console.error)
             }
           >
@@ -65,13 +65,13 @@ export function WidgetContainer({
 
 function objectToTsv(
   data: RA<IR<number | string | undefined>>,
-  format: 'csv' | 'tsv'
+  format: 'csv' | 'tsv',
 ): string {
   const delimiter = format === 'csv' ? ',' : '\t';
   const keys = filterArray(
     Object.entries(data[0] ?? {}).map(([key, value]) =>
-      typeof value === 'object' ? undefined : key
-    )
+      typeof value === 'object' ? undefined : key,
+    ),
   );
   return [keys, ...data.map((values) => keys.map((key) => values[key] ?? ''))]
     .map((row) => row.join(delimiter))

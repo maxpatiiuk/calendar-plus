@@ -11,9 +11,9 @@ export function CondenseInterface(): null {
     () =>
       void document.body.classList.toggle(
         'condense-interface',
-        condenseInterface
+        condenseInterface,
       ),
-    [condenseInterface]
+    [condenseInterface],
   );
   return null;
 }
