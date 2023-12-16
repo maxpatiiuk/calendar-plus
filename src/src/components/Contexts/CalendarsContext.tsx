@@ -6,7 +6,7 @@ import { ajax } from '../../utils/ajax';
 import { randomColor } from '../../utils/colors';
 import { formatUrl } from '../../utils/queryString';
 import type { RA } from '../../utils/types';
-import { sortFunction, split } from '../../utils/utils';
+import { multiSortFunction, sortFunction, split } from '../../utils/utils';
 import { AuthContext } from './AuthContext';
 import { useVisibilityChangeSpy } from './useVisibilityChangeSpy';
 
@@ -21,7 +21,7 @@ CalendarsContext.displayName = 'CalendarsContext';
 
 type RawCalendarListEntry = Pick<
   gapi.client.calendar.CalendarListEntry,
-  'backgroundColor' | 'id' | 'primary' | 'summary'
+  'backgroundColor' | 'id' | 'primary' | 'summary' | 'summaryOverride'
 >;
 
 export type CalendarListEntry = RawCalendarListEntry & {
@@ -53,7 +53,8 @@ export function CalendarsSpy({
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
           {
             minAccessRole: 'reader',
-            fields: 'items(id,summary,primary,backgroundColor)',
+            // FEATURE: consider using "selected" from this response rather than checkbox for initial state
+            fields: 'items(id,summary,summaryOverride,primary,backgroundColor)',
             prettyPrint: false.toString(),
           },
         ),
@@ -64,17 +65,19 @@ export function CalendarsSpy({
       if (response === undefined) return undefined;
       const results = await response.json();
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
-      const calendars = rawCalendars.map((calendar) => ({
-        ...calendar,
-        backgroundColor: calendar.backgroundColor ?? randomColor(),
-      }));
-      const [secondary, primary] = split(
-        calendars,
-        ({ primary }) => primary === true,
-      ).map((calendars) =>
-        Array.from(calendars).sort(sortFunction(({ summary }) => summary)),
-      );
-      return [...primary, ...secondary];
+      return rawCalendars
+        .map((calendar) => ({
+          ...calendar,
+          backgroundColor: calendar.backgroundColor ?? randomColor(),
+          summary: calendar.summaryOverride ?? calendar.summary,
+        }))
+        .sort(
+          multiSortFunction(
+            ({ primary }) => primary === true,
+            true,
+            ({ summary }) => summary,
+          ),
+        );
     }, [isAuthenticated]),
     false,
   );

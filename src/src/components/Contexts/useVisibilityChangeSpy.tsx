@@ -136,10 +136,12 @@ function parseCheckbox(
      * Summary for the primary calendar does not match what is displayed
      * in the UI
      */
-    calendars.find(({ primary }) => primary);
-  if (calendar === undefined) {
-    console.error('Unable to locate the calendar', calendarName);
-    return undefined;
-  }
-  return [calendar.id, checkbox.checked];
+    (isFirstCalendar(checkbox)
+      ? calendars.find(({ primary }) => primary)
+      : undefined);
+
+  return calendar === undefined ? undefined : [calendar.id, checkbox.checked];
 }
+
+const isFirstCalendar = (child: HTMLElement): boolean =>
+  child.closest('li[aria-posinset="1"]') !== null;

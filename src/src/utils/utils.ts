@@ -4,7 +4,7 @@
  * @module
  */
 import { f } from './functools';
-import type { IR, RA } from './types';
+import { isDefined, type IR, type RA } from './types';
 
 export const capitalize = <T extends string>(string: T): Capitalize<T> =>
   (string.charAt(0).toUpperCase() + string.slice(1)) as Capitalize<T>;
@@ -29,6 +29,42 @@ export const sortFunction =
     // eslint-disable-next-line eqeqeq
     else if (leftValue == rightValue) return 0;
     return (leftValue ?? '') > (rightValue ?? '') ? 1 : -1;
+  };
+
+/** Like sortFunction, but can sort based on multiple fields */
+export const multiSortFunction =
+  <ORIGINAL_TYPE>(
+    ...payload: readonly (
+      | true
+      | ((value: ORIGINAL_TYPE) => Date | boolean | number | string)
+    )[]
+  ): ((left: ORIGINAL_TYPE, right: ORIGINAL_TYPE) => -1 | 0 | 1) =>
+  (left: ORIGINAL_TYPE, right: ORIGINAL_TYPE): -1 | 0 | 1 => {
+    const mappers = payload
+      .map((value, index) =>
+        typeof value === 'function'
+          ? ([
+              value,
+              typeof payload[index + 1] === 'boolean'
+                ? (payload[index + 1] as boolean)
+                : false,
+            ] as const)
+          : undefined,
+      )
+      .filter(isDefined);
+
+    for (const [mapper, isReverse] of mappers) {
+      const [leftValue, rightValue] = isReverse
+        ? [mapper(right), mapper(left)]
+        : [mapper(left), mapper(right)];
+      if (leftValue === rightValue) continue;
+      return typeof leftValue === 'string' && typeof rightValue === 'string'
+        ? (leftValue.localeCompare(rightValue) as -1 | 0 | 1)
+        : leftValue > rightValue
+          ? 1
+          : -1;
+    }
+    return 0;
   };
 
 /** Split array in half according to a discriminator function */
