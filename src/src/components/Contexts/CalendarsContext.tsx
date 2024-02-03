@@ -6,7 +6,7 @@ import { ajax } from '../../utils/ajax';
 import { randomColor } from '../../utils/colors';
 import { formatUrl } from '../../utils/queryString';
 import type { RA } from '../../utils/types';
-import { multiSortFunction, sortFunction, split } from '../../utils/utils';
+import { multiSortFunction } from '../../utils/utils';
 import { AuthContext } from './AuthContext';
 import { useVisibilityChangeSpy } from './useVisibilityChangeSpy';
 

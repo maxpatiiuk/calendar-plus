@@ -16,7 +16,7 @@ Features:
   rules
 - Supports exporting plotted data and exporting/importing plugin settings
 
-[Privacy Policy](https://calendar-plus.patii.uk/docs/privacy)
+[Privacy Policy](https://calendar-plus.patii.uk/docs/privacy/)
 
 [Video Demo](https://youtu.be/FZ_468t033A)
 

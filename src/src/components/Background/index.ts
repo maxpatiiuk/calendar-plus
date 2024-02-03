@@ -45,11 +45,9 @@ const requestHandlers: {
   ) => Promise<Extract<Requests, State<TYPE>>['response']>;
 } = {
   Authenticate: async ({ interactive }) =>
-    new Promise((resolve, reject) =>
+    new Promise((resolve) =>
       chrome.identity.getAuthToken({ interactive }, (token) =>
-        typeof token === 'string'
-          ? resolve({ token })
-          : reject(chrome.runtime.lastError),
+        resolve({ token, error: chrome.runtime.lastError?.message }),
       ),
     ),
   ReloadExtension: async () =>

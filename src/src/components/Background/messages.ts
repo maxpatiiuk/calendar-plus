@@ -12,6 +12,7 @@ type AuthenticateRequest = State<
     };
     readonly response: {
       readonly token: string | undefined;
+      readonly error: string | undefined;
     };
   }
 >;

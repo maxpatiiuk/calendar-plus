@@ -63,8 +63,8 @@ export function App(): JSX.Element | null {
     State<'MainState'> | State<'PreferencesState'>
   >({ type: 'MainState' });
   const [isFirstAuth, setIsFirstAuth] = React.useState(false);
-  const handleAuth = (): void =>
-    void auth.handleAuthenticate(true).then(handleToggle).catch(console.error);
+  const handleAuth = (): Promise<void> =>
+    auth.handleAuthenticate(true).then(handleToggle);
 
   return (
     <>
@@ -79,7 +79,9 @@ export function App(): JSX.Element | null {
              * because token is cached by Google Chrome
              */
             onClick={(): void =>
-              auth.token === undefined ? setIsFirstAuth(true) : handleAuth()
+              auth.token === undefined
+                ? setIsFirstAuth(true)
+                : void handleAuth().catch(console.error)
             }
           >
             {commonText('calendarPlus')}

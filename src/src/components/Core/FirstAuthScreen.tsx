@@ -12,13 +12,16 @@ export function FirstAuthScreen({
   onAuth: handleAuth,
 }: {
   readonly onClose: () => void;
-  readonly onAuth: () => void;
+  readonly onAuth: () => Promise<void>;
 }): JSX.Element {
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
   React.useEffect(() => {
     dialogRef.current?.showModal();
     return (): void => dialogRef.current?.close();
   }, []);
+
+  const [error, setError] = React.useState<string>('');
+
   return (
     <dialog
       ref={dialogRef}
@@ -54,10 +57,12 @@ export function FirstAuthScreen({
         <button
           type="button"
           className="w-full cursor-pointer border-none p-0 [background:none] hover:brightness-90"
-          onClick={(): void => {
-            handleAuth();
-            handleClose();
-          }}
+          onClick={(): void =>
+            void handleAuth()
+              .then(() => handleClose())
+              .then(() => setError(''))
+              .catch((error) => setError(error.toString()))
+          }
         >
           <img
             alt={commonText('signInWithGoogle')}
@@ -65,6 +70,11 @@ export function FirstAuthScreen({
             className="max-w-[200px]"
           />
         </button>
+        {error && (
+          <p role="alert" className="text-red-600">
+            {error}
+          </p>
+        )}
         <div className="flex justify-end">
           <Button.White onClick={handleClose}>
             {commonText('cancel')}

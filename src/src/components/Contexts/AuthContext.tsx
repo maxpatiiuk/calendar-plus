@@ -29,14 +29,17 @@ export function AuthenticationProvider({
 
   const handleAuthenticate = React.useCallback(
     async (interactive: boolean) =>
-      sendRequest('Authenticate', { interactive })
-        .then(({ token }) => {
-          if (typeof token === 'string') {
-            unsafeToken = token;
-            setToken(token);
-          } else console.warn('Authentication canceled');
-        })
-        .catch(console.error),
+      sendRequest('Authenticate', { interactive }).then(({ token, error }) => {
+        if (typeof token === 'string') {
+          unsafeToken = token;
+          setToken(token);
+          return;
+        } else if (error === 'The user is not signed in.') {
+          console.log(error);
+          return;
+        }
+        throw new Error(error || 'Authentication canceled');
+      }),
     [],
   );
   React.useEffect(() => void handleAuthenticate(false), [handleAuthenticate]);
