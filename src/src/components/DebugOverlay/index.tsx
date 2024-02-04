@@ -10,13 +10,13 @@ export function DebugOverlay(): JSX.Element {
     <div className="absolute top-0 left-0">
       <button
         type="button"
-        onClick={async (): Promise<void> =>
+        onClick={(): void =>
           /**
            * Inspired by:
            * https://60devs.com/hot-reloading-for-chrome-extensions.html
            * https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid
            */
-          sendRequest('ReloadExtension', undefined)
+          void sendRequest('ReloadExtension', undefined).catch(console.error)
         }
       >
         Reload Extension

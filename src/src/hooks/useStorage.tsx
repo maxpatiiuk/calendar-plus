@@ -19,6 +19,10 @@ type StorageItem<T> = {
 };
 
 export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
+  token: {
+    type: 'sync',
+    defaultValue: undefined as undefined | string,
+  },
   layout: {
     type: 'sync',
     defaultValue: defaultLayout,

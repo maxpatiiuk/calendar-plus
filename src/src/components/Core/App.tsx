@@ -63,8 +63,6 @@ export function App(): JSX.Element | null {
     State<'MainState'> | State<'PreferencesState'>
   >({ type: 'MainState' });
   const [isFirstAuth, setIsFirstAuth] = React.useState(false);
-  const handleAuth = (): Promise<void> =>
-    auth.handleAuthenticate(true).then(handleToggle);
 
   return (
     <>
@@ -73,15 +71,8 @@ export function App(): JSX.Element | null {
           {debugOverlay}
           <Button.White
             aria-pressed={isOpen ? true : undefined}
-            /*
-             * Making the auth request even if already authenticated because
-             * the token may have expired. This is not a performance problem
-             * because token is cached by Google Chrome
-             */
             onClick={(): void =>
-              auth.token === undefined
-                ? setIsFirstAuth(true)
-                : void handleAuth().catch(console.error)
+              auth.token === undefined ? setIsFirstAuth(true) : handleToggle()
             }
           >
             {commonText('calendarPlus')}
@@ -89,7 +80,9 @@ export function App(): JSX.Element | null {
           {isFirstAuth && (
             <FirstAuthScreen
               onClose={(): void => setIsFirstAuth(false)}
-              onAuth={handleAuth}
+              onAuth={(): Promise<void> =>
+                auth.handleAuthenticate(true).then(handleToggle)
+              }
             />
           )}
           {isOpen && Array.isArray(calendars) ? (

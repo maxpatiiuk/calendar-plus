@@ -1,5 +1,6 @@
 import React from 'react';
 import { sendRequest } from '../Background/messages';
+import { useStorage } from '../../hooks/useStorage';
 
 /**
  * Holds user token (if authenticated) and callback to authenticate
@@ -14,35 +15,43 @@ AuthContext.displayName = 'AuthContext';
 
 type Auth = {
   readonly token: string | undefined;
-  readonly handleAuthenticate: (interactive: boolean) => Promise<void>;
+  readonly handleAuthenticate: (
+    interactive: boolean,
+    force?: boolean,
+  ) => Promise<void>;
 };
 
-let unsafeToken: string | undefined = undefined;
-export const unsafeGetToken = () => unsafeToken;
+/**
+ * Allow access to auth outside the hook (in ajax())
+ * "unsafe" because it's not guaranteed to be defined by the time it's used
+ */
+let unsafeAuth: Auth | undefined = undefined;
+export const unsafeGetAuth = () => unsafeAuth;
+
+/**
+ * Prevent simultaneous authentication requests
+ */
+let authPromise: Promise<void> | undefined = undefined;
 
 export function AuthenticationProvider({
   children,
 }: {
   readonly children: React.ReactNode;
 }): JSX.Element {
-  const [token, setToken] = React.useState<string | undefined>(undefined);
+  const [token, setToken] = useStorage('token');
 
   const handleAuthenticate = React.useCallback(
-    async (interactive: boolean) =>
-      sendRequest('Authenticate', { interactive }).then(({ token, error }) => {
-        if (typeof token === 'string') {
-          unsafeToken = token;
-          setToken(token);
-          return;
-        } else if (error === 'The user is not signed in.') {
-          console.log(error);
-          return;
-        }
-        throw new Error(error || 'Authentication canceled');
-      }),
+    async (interactive: boolean, force = false) => {
+      authPromise ??= sendRequest('Authenticate', {
+        interactive,
+        oldToken: force ? unsafeAuth?.token : undefined,
+      })
+        .then(({ token }) => setToken(token))
+        .finally(() => (authPromise = undefined));
+      return authPromise;
+    },
     [],
   );
-  React.useEffect(() => void handleAuthenticate(false), [handleAuthenticate]);
 
   const auth = React.useMemo(
     () => ({
@@ -51,5 +60,7 @@ export function AuthenticationProvider({
     }),
     [token, handleAuthenticate],
   );
+  unsafeAuth = auth;
+
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }

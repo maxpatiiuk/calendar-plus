@@ -1,5 +1,9 @@
 import { IR, RA } from './types';
-import { unsafeGetToken } from '../components/Contexts/AuthContext';
+import { unsafeGetAuth } from '../components/Contexts/AuthContext';
+
+const http = {
+  notAuthorized: 401,
+} as const;
 
 /**
  * All front-end network requests should go through this utility.
@@ -13,12 +17,14 @@ import { unsafeGetToken } from '../components/Contexts/AuthContext';
 export const ajax = async (
   url: string,
   {
+    retryAuth = true,
     headers,
     body,
     ...options
   }: Omit<RequestInit, 'body'> & {
     // If object is passed to body, it is stringified
     readonly body?: IR<unknown> | RA<unknown> | string | FormData;
+    readonly retryAuth?: boolean;
   } = {},
 ): Promise<Response> =>
   fetch(url, {
@@ -32,12 +38,23 @@ export const ajax = async (
         ? JSON.stringify(body)
         : body,
   }).then((response) => {
-    if (!response.ok) {
-      console.error('Failed to fetch', response);
-      throw new Error(
-        `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    if (response.ok) return response;
+    const handleAuth = unsafeGetAuth()?.handleAuthenticate;
+    if (
+      response.status === http.notAuthorized &&
+      retryAuth &&
+      typeof handleAuth === 'function'
+    ) {
+      console.log('Unauthorized, retrying with new token');
+      return handleAuth(true, true).then(() =>
+        ajax(url, { ...options, body, headers, retryAuth: false }),
       );
-    } else return response;
+    }
+
+    console.error('Failed to fetch', response);
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
   });
 
 /**
@@ -45,7 +62,7 @@ export const ajax = async (
  */
 function putToken(url: string): { readonly Authorization: string } | undefined {
   if (isGoogleApiUrl(url)) {
-    const token = unsafeGetToken();
+    const token = unsafeGetAuth()?.token;
     if (token === undefined)
       throw new Error(
         `Tried to access Google API before authentication: ${url}`,

@@ -68,18 +68,18 @@ export function useEvents(
   }, [ignoreAllDayEvents]);
 
   const virtualCalendars = useVirtualCalendars();
-  const auth = React.useContext(AuthContext);
+  const { token } = React.useContext(AuthContext);
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
+        token === undefined ||
         eventsStore === undefined ||
         calendars === undefined ||
         startDate === undefined ||
         endDate === undefined
       )
         return undefined;
-      await auth.handleAuthenticate(true);
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
@@ -149,7 +149,7 @@ export function useEvents(
       );
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
-      auth,
+      token,
       calendars,
       startDate,
       endDate,
