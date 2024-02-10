@@ -1,6 +1,6 @@
 # Privacy Policy for Calendar Plus Chrome Extension
 
-Effective Date: March 1st, 2023
+Effective Date: February 10th, 2024
 
 ## Introduction
 
@@ -46,12 +46,19 @@ account or is transmitted to any third-party services.
 We do not use any analytics, crash reporting, or tracking tools within the
 Extension. We are committed to respecting your privacy and protecting your data.
 
+However, in interest of all users of the extension, we do encourage you to
+[report any issues you encounter and feature requests](https://github.com/maxpatiiuk/calendar-plus/issues/new/choose)
+on GitHub.
+
 ## Changes to the Privacy Policy
 
 We may update this Privacy Policy from time to time. If we make any significant
 changes, we will notify you by posting the updated policy on this page, along
 with an updated effective date. Your continued use of the Extension after the
 changes are posted constitutes your acceptance of the updated Privacy Policy.
+
+The Privacy Policy is stored in a GitHub repository, and changes to the policy
+are [tracked in the repository's commit history](https://github.com/maxpatiiuk/calendar-plus/commits/main/docs/privacy/README.md).
 
 ## Limited Use Disclosure
 
