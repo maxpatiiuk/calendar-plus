@@ -46,7 +46,11 @@ export function AuthenticationProvider({
         interactive,
         oldToken: force ? unsafeAuth?.token : undefined,
       })
-        .then(({ token }) => setToken(token))
+        .then(({ token }) => {
+          setToken(token);
+          // Make new token available sooner (next re-render is too late for ajax())
+          if (unsafeAuth !== undefined) unsafeAuth = { ...unsafeAuth, token };
+        })
         .finally(() => (authPromise = undefined));
       return authPromise;
     },
