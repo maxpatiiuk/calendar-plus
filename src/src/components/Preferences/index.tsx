@@ -13,6 +13,7 @@ import type {
 } from './definitions';
 import { noLabelRenderers, preferenceDefinitions } from './definitions';
 import { usePref } from './usePref';
+import { dateToIso } from '../Atoms/Internationalization';
 
 export function PreferencesPage({
   onClose: handleClose,
@@ -46,9 +47,9 @@ export function PreferencesPage({
             void fetchDataForExport()
               .then(async (data) =>
                 downloadFile(
-                  `${commonText(
-                    'calendarPlus',
-                  )} - ${new Date().toLocaleDateString()}.json`,
+                  `${commonText('calendarPlus')} - ${dateToIso(
+                    new Date(),
+                  )}.json`,
                   JSON.stringify(data, null, 4),
                 ),
               )

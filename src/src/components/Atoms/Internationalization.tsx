@@ -185,6 +185,12 @@ const dateFormatters = {
 export const formatDateLabel = (date: Date, view: SupportedView): string =>
   dateFormatters[view].format(date);
 
+export const dateToIso = (date: Date): string =>
+  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date
+    .getDate()
+    .toString()
+    .padStart(2, '0')}`;
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 export const compareStrings = new Intl.Collator(
   globalThis.navigator?.language ?? 'en-us',
