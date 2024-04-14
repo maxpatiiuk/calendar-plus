@@ -17,7 +17,7 @@
     "url": "https://github.com/maxpatiiuk/calendar-stats/issues"
   },
   "scripts": {
-    "package": "npm run build && (cd .. && zip -r ../calendar-plus.zip . -x .github/\\* index.html .git/\\* src/node_modules/\\* .idea/\\* .vscode/\\*)",
+    "package": "npm run build && (cd .. && zip -r ../calendar-plus.zip . -x .github/\\* index.html .git/\\* src/node_modules/\\* backend/\\* .idea/\\* .vscode/\\*)",
     "build": "npx webpack --mode production",
     "watch": "npx webpack --mode development --watch",
     "test": "npm run typeCheck && npm run unitTests",
