@@ -44,9 +44,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "types": ["jest", "node", "chrome", "gapi", "gapi.client", "gapi.calendar"]
-  },
-  "typedocOptions": {
-    "entryPoints": ["src"],
-    "out": "docs"
   }
 }
