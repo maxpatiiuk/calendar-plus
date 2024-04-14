@@ -3,6 +3,7 @@
   "private": true,
   "description": "A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/maxpatiiuk/calendar-stats.git"

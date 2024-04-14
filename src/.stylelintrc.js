@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+export default {
   extends: '@maxxxxxdlp/stylelint-config',
   rules: {
     'at-rule-no-unknown': [

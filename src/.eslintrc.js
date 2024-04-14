@@ -1,10 +1,10 @@
-require('@rushstack/eslint-patch/modern-module-resolution');
+import '@rushstack/eslint-patch/modern-module-resolution';
 
 const OFF = 'off';
 const WARN = 'warn';
 const ERROR = 'error';
 
-module.exports = {
+export default {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
