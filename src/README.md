@@ -1,91 +1,64 @@
-# Getting Started with Create React App
+# Calendar Plus extension
 
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+## Installation
 
-## Available Scripts
+Install dependencies:
 
-In the src directory of the project, you can run:
+```sh
+npm install
+```
 
-### `npm start`
+## Running
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Build the front-end for production:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```sh
+npm run build
+```
 
-### `npm test`
+## Development
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
+Start the watcher script which would rebuild the code on any changes:
 
-### `npm run build`
+```sh
+npm run watch
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best
-performance.
+Load unpacked extension into Chrome by
+[following the instructions](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Note, on any code change, you will have to press the `Reload Extension` button
+in the top left corner of Google Calendar in order to see the newest changes.
 
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
+## React DevTools
 
-### `npm run eject`
+You may have noticed that despite our app being built with React, React DevTools
+browser extension does not work for debugging it.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Instead, a standalone React DevTools (an Electron app) needs to be used.
+[Installation Instructions](https://github.com/facebook/react/tree/main/packages/react-devtools#installation),
 
-If you aren't satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
+Note, this will only work for when WebPack is run in development mode as we
+disabled react DevTools integration in production to reduce bundle size.
 
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you're on your own.
+## Testing
 
-You don't have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn't feel obligated to use this
-feature. However we understand that this tool wouldn't be useful if you couldn't
-customize it when you are ready for it.
+Unit tests are powered by Jest. Static Typechecking is powered by TypeScript.
 
-## Learn More
+You can run both like this:
 
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+npm test
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+or:
 
-### Code Splitting
+```sh
+npm t
+```
 
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Alternatively, you can start Jest in watch mode:
 
-### Analyzing the Bundle Size
-
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here:
-[https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```sh
+npm run unitTests:watch
+```

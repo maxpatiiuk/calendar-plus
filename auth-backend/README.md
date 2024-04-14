@@ -8,41 +8,44 @@ This backend is used to generate a more-persistent token.
 
 ## Installation
 
-Clone this repository and open current folder:
+1. Clone this repository and open current folder:
 
-```sh
-git clone https://github.com/maxpatiiuk/calendar-plus
-cd calendar-plus
-cd auth-backend
-```
+   ```sh
+   git clone https://github.com/maxpatiiuk/calendar-plus
+   cd calendar-plus
+   cd auth-backend
+   ```
 
-Install dependencies:
+2. Create
+   [Google OAuth2 client](https://github.com/googleapis/google-api-nodejs-client?tab=readme-ov-file#oauth2-client)
 
-```sh
-npm install
-```
+   - Create 2 clients - one for development, another for production
+   - Set type to "Web application"
+   - Set authorized redirect URI to `https://EXTENSION_ID.chromiumapp.org/`
+     (replace `EXTENSION_ID` with the extension ID)
+   - For development set:
+     - Authorized redirect URIs: `https://calendar-plus.patii.uk/api/route`
+   - For production set:
+     - Authorized JavaScript origins: set to domain on which `auth-backend` will
+       be hosted (`https://calendar-plus.patii.uk`)
 
-## Deployment
+3. Copy [./example.config.js](./example.config.js) into `./config.js` and fill
+   it in according to instructions in that file and the credentials you received
+   in the previous file. Fill it out with development credentials in
+   development, and production credentials when the app is deployed to Vercel.
+
+4. Install dependencies:
+
+   ```sh
+   npm install
+   ```
 
 ### Development
 
-1. Copy [./example.env.local](./example.env.local) into `.env.local` and fill it
-   in according to instructions in that file.
-2. Run `npm install`
-3. Run `npm run dev` to start the development server
-4. The server will be accessible on the `http://localhost:3000` address.
-
-   Note, if you try to open this URL in the browser, you will see a 405 error -
-   that is expected, as the server only accepts POST requests.
-
-   Copy this URL as it will be needed later.
+1. Run `npm run dev` to start the development server
 
 ### Production
 
 1. Create new vercel.com project from this repository
 2. Change the "Root Directory" setting to current directory
-   (/packages/cors-auth-middleware)
-3. Set up the environmental variables according to the instructions in the
-   `example.env.local` file
-4. Keep note of the URL at which the project is deployed - you will need it
-   later
+   (/packages/auth-backend)
