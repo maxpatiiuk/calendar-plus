@@ -2,24 +2,48 @@
  * WebPack config for development and production
  */
 
-import path from 'path';
+import path from 'node:path';
 import webpack from 'webpack';
-import {
-  developmentAuthUrl,
-  productionAuthUrl,
-  googleClientId,
-} from '../backend/config.js';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+function parseEnv(name) {
+  /*
+   * Next.js expects env files to be in it's root. Webpack needs to reuse some
+   * of those variables, so we must piggyback on Next.js's env files.
+   */
+  const envFileLocation = `../auth-backend/${name}`;
+  const envFile = fs.readFileSync(envFileLocation, 'utf8');
+  return Object.fromEntries(
+    envFile
+      .split('\n')
+      .filter((line) => line.includes('=') && !line.startsWith('#'))
+      .map((line) => line.split('='))
+      .map(([name, value]) => [name.trim(), value.trim()]),
+  );
+}
+
+const productionGoogleClientId = parseEnv(
+  '.env.production.local',
+).GOOGLE_CLIENT_ID;
+if (productionGoogleClientId === undefined)
+  throw new Error('Production GOOGLE_CLIENT_ID is not defined');
+const developmentGoogleClientId = parseEnv(
+  '.env.development.local',
+).GOOGLE_CLIENT_ID;
+if (developmentGoogleClientId === undefined)
+  throw new Error('Development GOOGLE_CLIENT_ID is not defined');
+const productionAuthUrl = parseEnv('.env.production').AUTH_URL;
+if (productionAuthUrl === undefined)
+  throw new Error('Production AUTH_URL is not defined');
+const developmentAuthUrl = parseEnv('.env.development').AUTH_URL;
+if (developmentAuthUrl === undefined)
+  throw new Error('Development AUTH_URL is not defined');
 
 const outputPath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   'dist',
 );
-
-function ensureDefined(value, error) {
-  if (value === undefined) throw new Error(error);
-  return value;
-}
 
 export default (_env, argv) =>
   /** @type { import('webpack').Configuration } */ ({
@@ -70,7 +94,7 @@ export default (_env, argv) =>
     // Set appropriate process.env.NODE_ENV
     mode: argv.mode,
     /*
-     * User recommended source map type in production
+     * Use recommended source map type in production
      * Can't use the recommended "eval-source-map" in development due to
      * https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
      */
@@ -86,15 +110,12 @@ export default (_env, argv) =>
     plugins: [
       new webpack.DefinePlugin({
         'process.env.AUTH_URL': JSON.stringify(
-          ensureDefined(
-            argv.mode === 'development'
-              ? developmentAuthUrl
-              : productionAuthUrl,
-            'AUTH_URL is not defined',
-          ),
+          argv.mode === 'development' ? developmentAuthUrl : productionAuthUrl,
         ),
         'process.env.GOOGLE_CLIENT_ID': JSON.stringify(
-          ensureDefined(googleClientId, 'GOOGLE_CLIENT_ID is not defined'),
+          argv.mode === 'development'
+            ? developmentGoogleClientId
+            : productionGoogleClientId,
         ),
       }),
       argv.mode === 'development'

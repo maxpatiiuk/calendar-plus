@@ -1,4 +1,4 @@
-/config.js
+/.env*.local
 .next
 .swc
 /node_modules

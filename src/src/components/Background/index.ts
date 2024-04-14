@@ -106,6 +106,14 @@ const requestHandlers: {
     const response = await fetch(resolveUrl, { method: 'POST' });
 
     const responseText = await response.text();
+    // Example response:
+    // {
+    //   "access_token": "REDACTED",
+    //   "expires_in": 3599,
+    //   "scope": "https://www.googleapis.com/auth/calendar.readonly",
+    //   "token_type": "Bearer"
+    // }
+
     if (response.status === 200) {
       try {
         const data = JSON.parse(responseText);
@@ -132,8 +140,15 @@ const requestHandlers: {
     });
 
     const response = await fetch(authUrl, { method: 'POST' });
-
     const responseText = await response.text();
+    // Example response:
+    // {
+    //   "access_token": "REDACTED",
+    //   "expires_in": 3599,
+    //   "scope": "https://www.googleapis.com/auth/calendar.readonly",
+    //   "token_type": "Bearer"
+    // }
+
     if (response.status === 200) {
       try {
         const data = JSON.parse(responseText);

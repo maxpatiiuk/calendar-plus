@@ -4,18 +4,18 @@
  */
 
 import { NextRequest } from 'next/server';
-import {
-  googleClientId,
-  googleClientSecret,
-  accessControlAllowOrigin,
-} from '../../../config.js';
 
 export const runtime = 'edge';
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
 if (googleClientId === undefined)
   throw new Error('GOOGLE_CLIENT_ID is not defined');
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 if (googleClientSecret === undefined)
   throw new Error('GOOGLE_CLIENT_SECRET is not defined');
+const accessControlAllowOrigin = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
+if (accessControlAllowOrigin === undefined)
+  throw new Error('ACCESS_CONTROL_ALLOW_ORIGIN is not defined');
 
 export async function POST(request: NextRequest): Promise<Response> {
   const origin = request.headers.get('origin');
@@ -46,8 +46,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     const response = await fetch(
       formatUrl('https://oauth2.googleapis.com/token', {
         ...payload,
-        client_id: googleClientId,
-        client_secret: googleClientSecret,
+        client_id: googleClientId!,
+        client_secret: googleClientSecret!,
       }),
       {
         method: 'POST',
