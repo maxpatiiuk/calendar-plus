@@ -1,4 +1,18 @@
 {
-  "include": ["**/*.ts", ".next/types/**/*.ts", "next-env.d.ts"],
-  "extends": "../tsconfig.json"
+  "include": [
+    "**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts"
+  ],
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "incremental": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "module": "esnext"
+  }
 }

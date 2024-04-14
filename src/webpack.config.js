@@ -2,12 +2,26 @@
  * WebPack config for development and production
  */
 
-const path = require('path');
-const webpack = require('webpack');
+import path from 'path';
+import webpack from 'webpack';
+import {
+  developmentAuthUrl,
+  productionAuthUrl,
+  googleClientId,
+} from '../auth-backend/config.js';
+import { fileURLToPath } from 'url';
 
-const outputPath = path.resolve(__dirname, 'dist');
+const outputPath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'dist',
+);
 
-module.exports = (_env, argv) =>
+function ensureDefined(value, error) {
+  if (value === undefined) throw new Error(error);
+  return value;
+}
+
+export default (_env, argv) =>
   /** @type { import('webpack').Configuration } */ ({
     module: {
       rules: [
@@ -69,14 +83,26 @@ module.exports = (_env, argv) =>
           : './src/components/Core/index.tsx',
       background: './src/components/Background/index.ts',
     },
-    plugins:
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.AUTH_URL': JSON.stringify(
+          ensureDefined(
+            argv.mode === 'development'
+              ? developmentAuthUrl
+              : productionAuthUrl,
+            'AUTH_URL is not defined',
+          ),
+        ),
+        'process.env.GOOGLE_CLIENT_ID': JSON.stringify(
+          ensureDefined(googleClientId, 'GOOGLE_CLIENT_ID is not defined'),
+        ),
+      }),
       argv.mode === 'development'
-        ? [
-            new webpack.optimize.LimitChunkCountPlugin({
-              maxChunks: 1,
-            }),
-          ]
+        ? new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1,
+          })
         : undefined,
+    ],
     output: {
       path: outputPath,
       clean: true,

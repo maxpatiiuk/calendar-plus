@@ -46,15 +46,14 @@ export const ajax = async (
       typeof handleAuth === 'function'
     ) {
       console.log('Unauthorized, retrying with new token');
-      return handleAuth(true, true).then(() =>
+      return handleAuth().then(() =>
         ajax(url, { ...options, body, headers, retryAuth: false }),
       );
     }
 
-    console.error('Failed to fetch', response);
-    throw new Error(
-      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
-    );
+    const error = `Failed to fetch ${url}: ${response.status} ${response.statusText}`;
+    console.error(error);
+    throw new Error(error);
   });
 
 /**

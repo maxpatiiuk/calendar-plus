@@ -13,23 +13,19 @@
   },
   "scripts": {
     "build": "next build",
-    "debug": "NODE_OPTIONS='--inspect' next dev",
     "dev": "next dev",
+    "debug": "NODE_OPTIONS='--inspect' next dev",
     "start": "next start",
     "test": "npm run type-check && npm run build",
     "type-check": "tsc"
   },
   "dependencies": {
-    "@googleapis/oauth2": "^1.0.5",
     "next": "^14.2.1"
   },
   "devDependencies": {
     "@maxxxxxdlp/prettier-config": "^1.0.4",
-    "@types/chrome": "^0.0.266",
-    "@types/gapi": "^0.0.47",
-    "@types/gapi.calendar": "^3.0.11",
-    "@types/gapi.client": "^1.0.8",
     "@types/node": "^20.12.7",
+    "@types/react": "18.2.78",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },

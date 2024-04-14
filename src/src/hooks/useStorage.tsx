@@ -23,6 +23,10 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
     type: 'sync',
     defaultValue: undefined as undefined | string,
   },
+  refreshToken: {
+    type: 'sync',
+    defaultValue: undefined as undefined | string,
+  },
   layout: {
     type: 'sync',
     defaultValue: defaultLayout,

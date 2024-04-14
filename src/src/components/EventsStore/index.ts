@@ -69,11 +69,12 @@ export function useEvents(
 
   const virtualCalendars = useVirtualCalendars();
   const { token } = React.useContext(AuthContext);
+  const isAuthenticated = typeof token === 'string';
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
       if (
-        token === undefined ||
+        !isAuthenticated ||
         eventsStore === undefined ||
         calendars === undefined ||
         startDate === undefined ||
@@ -149,7 +150,7 @@ export function useEvents(
       );
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
-      token,
+      isAuthenticated,
       calendars,
       startDate,
       endDate,

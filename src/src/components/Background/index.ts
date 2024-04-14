@@ -40,6 +40,12 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   return undefined;
 });
 
+const authBackendUrl = process.env.AUTH_URL;
+if (authBackendUrl === undefined) throw new Error('AUTH_URL is not defined');
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+if (googleClientId === undefined)
+  throw new Error('GOOGLE_CLIENT_ID is not defined');
+
 /**
  * Handlers for the front-end requests
  */
@@ -48,43 +54,101 @@ const requestHandlers: {
     request: Extract<Requests, State<TYPE>>['request'],
   ) => Promise<Extract<Requests, State<TYPE>>['response']>;
 } = {
-  async Authenticate({ interactive, oldToken }) {
+  /**
+   * Documentation:
+   * https://developers.google.com/identity/protocols/oauth2/web-server
+   */
+  async Authenticate({ oldToken }) {
     if (typeof oldToken === 'string')
       chrome.identity.removeCachedAuthToken({ token: oldToken });
 
+    // "redirectUrl" looks like this:
+    // https://kgbbebdcmdgkbopcffmpgkgcmcoomhmh.chromiumapp.org/
     const redirectUrl = chrome.identity.getRedirectURL();
 
     // For protection against CSRF attacks
     const state = Math.random().toString().slice(2);
+    const scopes = ['https://www.googleapis.com/auth/calendar.readonly'];
     const authUrl = formatUrl(`https://accounts.google.com/o/oauth2/v2/auth`, {
-      client_id:
-        '626996674772-vjva8ps72tr51cb92q3ragsqsg15br6f.apps.googleusercontent.com',
+      client_id: googleClientId,
       redirect_uri: redirectUrl,
-      response_type: 'token',
-      scope: 'https://www.googleapis.com/auth/calendar.readonly',
+      response_type: 'code',
+      access_type: 'offline',
+      scope: scopes.join(' '),
+      prompt: 'consent',
       state,
     });
 
     const callbackUrl = await chrome.identity.launchWebAuthFlow({
       url: authUrl,
-      interactive,
+      interactive: true,
     });
     if (callbackUrl === undefined)
       throw new Error('Authentication was canceled');
 
-    // callbackUrl looks like this:
-    // https://kgbbebdcmdgkbopcffmpgkgcmcoomhmh.chromiumapp.org/#state=9534841398505214&access_token=REDACTED&token_type=Bearer&expires_in=3599&scope=https://www.googleapis.com/auth/calendar.readonly
-    const parametersString = new URL(callbackUrl).hash.slice(1);
-    // Parse hash as a query string
-    const parameters = new URL(`?${parametersString}`, globalThis.origin)
-      .searchParams;
+    // "callbackUrl" will look like this:
+    // https://kgbbebdcmdgkbopcffmpgkgcmcoomhmh.chromiumapp.org/?state=926157865108874&code=REDACTED&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.readonly
+    const parameters = new URL(callbackUrl).searchParams;
 
     const returnedState = parameters.get('state');
-    const token = parameters.get('access_token');
-    if (state !== returnedState || typeof token !== 'string')
-      throw new Error('Authentication failed');
+    const code = parameters.get('code');
+    const error = parameters.get('error');
+    if (state !== returnedState || typeof code !== 'string')
+      throw new Error(
+        `Authentication failed${error === null ? '' : `: ${error}`}`,
+      );
 
-    return { token };
+    const resolveUrl = formatUrl(authBackendUrl, {
+      code,
+      redirectUrl,
+    });
+
+    const response = await fetch(resolveUrl, { method: 'POST' });
+
+    const responseText = await response.text();
+    if (response.status === 200) {
+      try {
+        const data = JSON.parse(responseText);
+        if ('access_token' in data && 'refresh_token' in data)
+          return {
+            accessToken: data.access_token,
+            refreshToken: data.refresh_token,
+          };
+        else throw new Error(`Invalid response: ${responseText}`);
+      } catch (error: unknown) {
+        throw new Error(`Invalid response: ${String(error)}\n${responseText}`);
+      }
+    }
+    throw new Error(
+      `Failed to authenticate: ${response.status}\n${responseText}`,
+    );
+  },
+  async RefreshToken({ refreshToken, oldToken }) {
+    if (typeof oldToken === 'string')
+      chrome.identity.removeCachedAuthToken({ token: oldToken });
+
+    const authUrl = formatUrl(authBackendUrl, {
+      refreshToken,
+    });
+
+    const response = await fetch(authUrl, { method: 'POST' });
+
+    const responseText = await response.text();
+    if (response.status === 200) {
+      try {
+        const data = JSON.parse(responseText);
+        if ('access_token' in data)
+          return {
+            accessToken: data.access_token,
+          };
+        else throw new Error(`Invalid response: ${responseText}`);
+      } catch (error: unknown) {
+        throw new Error(`Invalid response: ${String(error)}\n${responseText}`);
+      }
+    }
+    throw new Error(
+      `Failed to authenticate: ${response.status}\n${responseText}`,
+    );
   },
   ReloadExtension: async () =>
     new Promise((resolve) => {

@@ -15,10 +15,7 @@ AuthContext.displayName = 'AuthContext';
 
 type Auth = {
   readonly token: string | undefined;
-  readonly handleAuthenticate: (
-    interactive: boolean,
-    force?: boolean,
-  ) => Promise<void>;
+  readonly handleAuthenticate: () => Promise<void>;
 };
 
 /**
@@ -39,23 +36,43 @@ export function AuthenticationProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const [token, setToken] = useStorage('token');
+  const [refreshToken, setRefreshToken] = useStorage('refreshToken');
 
-  const handleAuthenticate = React.useCallback(
-    async (interactive: boolean, force = false) => {
-      authPromise ??= sendRequest('Authenticate', {
-        interactive,
-        oldToken: force ? unsafeAuth?.token : undefined,
-      })
-        .then(({ token }) => {
-          setToken(token);
-          // Make new token available sooner (next re-render is too late for ajax())
-          if (unsafeAuth !== undefined) unsafeAuth = { ...unsafeAuth, token };
-        })
-        .finally(() => (authPromise = undefined));
-      return authPromise;
-    },
-    [],
-  );
+  const handleAuthenticate = React.useCallback(async () => {
+    function resolve({
+      accessToken,
+      refreshToken,
+    }: {
+      readonly accessToken: string;
+      readonly refreshToken?: string;
+    }) {
+      setToken(accessToken);
+      if (typeof refreshToken === 'string') setRefreshToken(refreshToken);
+      // Make new token available sooner (next re-render is too late for ajax())
+      if (unsafeAuth !== undefined)
+        unsafeAuth = { ...unsafeAuth, token: accessToken };
+    }
+
+    const oldToken = unsafeAuth?.token;
+
+    const authenticate = () =>
+      sendRequest('Authenticate', { oldToken }).then(resolve);
+
+    authPromise ??= (
+      typeof refreshToken === 'string'
+        ? sendRequest('RefreshToken', { refreshToken, oldToken })
+            .then(resolve)
+            .catch((error) => {
+              console.error(error);
+              return authenticate();
+            })
+        : authenticate()
+    ).finally(() => {
+      authPromise = undefined;
+    });
+
+    return authPromise;
+  }, [refreshToken]);
 
   const auth = React.useMemo(
     () => ({

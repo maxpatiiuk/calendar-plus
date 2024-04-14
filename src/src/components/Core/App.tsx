@@ -62,26 +62,25 @@ export function App(): JSX.Element | null {
   const [state, setState] = React.useState<
     State<'MainState'> | State<'PreferencesState'>
   >({ type: 'MainState' });
-  const [isFirstAuth, setIsFirstAuth] = React.useState(false);
+  const [showFirstAuth, setShowFirstAuth] = React.useState(false);
 
   return (
     <>
       {typeof currentView === 'object' ? (
         <>
-          {debugOverlay}
           <Button.White
             aria-pressed={isOpen ? true : undefined}
             onClick={(): void =>
-              auth.token === undefined ? setIsFirstAuth(true) : handleToggle()
+              auth.token === undefined ? setShowFirstAuth(true) : handleToggle()
             }
           >
             {commonText('calendarPlus')}
           </Button.White>
-          {isFirstAuth && (
+          {showFirstAuth && (
             <FirstAuthScreen
-              onClose={(): void => setIsFirstAuth(false)}
+              onClose={(): void => setShowFirstAuth(false)}
               onAuth={(): Promise<void> =>
-                auth.handleAuthenticate(true).then(handleToggle)
+                auth.handleAuthenticate().then(handleOpen)
               }
             />
           )}

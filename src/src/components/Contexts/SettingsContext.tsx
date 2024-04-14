@@ -22,9 +22,10 @@ export function SettingsProvider({
   readonly children: React.ReactNode;
 }): JSX.Element {
   const { token } = React.useContext(AuthContext);
+  const isAuthenticated = typeof token === 'string';
   const [weekStart = 0, setWeekStart] = useStorage('weekStart');
   React.useEffect(() => {
-    if (token === undefined) return;
+    if (!isAuthenticated) return;
     ajax('https://www.googleapis.com/calendar/v3/users/me/settings/weekStart')
       .then<{ readonly value: string }>(async (response) => response.json())
       .then(({ value }) =>
@@ -33,7 +34,7 @@ export function SettingsProvider({
           : undefined,
       )
       .catch(console.error);
-  }, [token, setWeekStart]);
+  }, [isAuthenticated, setWeekStart]);
 
   const userSettings = React.useMemo(
     () => ({

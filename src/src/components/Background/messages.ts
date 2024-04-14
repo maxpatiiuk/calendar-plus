@@ -4,15 +4,28 @@
 
 import { State } from 'typesafe-reducer';
 
-type AuthenticateRequest = State<
+type Authenticate = State<
   'Authenticate',
   {
     readonly request: {
-      readonly interactive: boolean;
       readonly oldToken: string | undefined;
     };
     readonly response: {
-      readonly token: string;
+      readonly accessToken: string;
+      readonly refreshToken: string;
+    };
+  }
+>;
+
+type RefreshToken = State<
+  'RefreshToken',
+  {
+    readonly request: {
+      readonly oldToken: string | undefined;
+      readonly refreshToken: string;
+    };
+    readonly response: {
+      readonly accessToken: string;
     };
   }
 >;
@@ -25,7 +38,7 @@ type ReloadExtension = State<
   }
 >;
 
-export type Requests = AuthenticateRequest | ReloadExtension;
+export type Requests = Authenticate | ReloadExtension | RefreshToken;
 
 /**
  * Send a request to the background script and await the response.
