@@ -8,7 +8,7 @@ import {
   developmentAuthUrl,
   productionAuthUrl,
   googleClientId,
-} from '../auth-backend/config.js';
+} from '../backend/config.js';
 import { fileURLToPath } from 'url';
 
 const outputPath = path.resolve(

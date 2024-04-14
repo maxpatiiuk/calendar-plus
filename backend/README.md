@@ -13,7 +13,7 @@ This backend is used to generate a more-persistent token.
    ```sh
    git clone https://github.com/maxpatiiuk/calendar-plus
    cd calendar-plus
-   cd auth-backend
+   cd backend
    ```
 
 2. Create
@@ -26,8 +26,8 @@ This backend is used to generate a more-persistent token.
    - For development set:
      - Authorized redirect URIs: `https://calendar-plus.patii.uk/api/route`
    - For production set:
-     - Authorized JavaScript origins: set to domain on which `auth-backend` will
-       be hosted (`https://calendar-plus.patii.uk`)
+     - Authorized JavaScript origins: set to domain on which `backend` will be
+       hosted (`https://calendar-plus.patii.uk`)
 
 3. Copy [./example.config.js](./example.config.js) into `./config.js` and fill
    it in according to instructions in that file and the credentials you received
@@ -47,5 +47,4 @@ This backend is used to generate a more-persistent token.
 ### Production
 
 1. Create new vercel.com project from this repository
-2. Change the "Root Directory" setting to current directory
-   (/packages/auth-backend)
+2. Change the "Root Directory" setting to current directory (/packages/backend)

@@ -47,6 +47,6 @@ Editing the layout
    Npm 8
    ```
 
-2. Complete installation steps in [./auth-backend](./auth-backend/)
+2. Complete installation steps in [./backend](./backend/)
 
 3. Complete installation steps in [./src](./src/)

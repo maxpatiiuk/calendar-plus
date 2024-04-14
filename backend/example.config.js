@@ -11,6 +11,6 @@ export const googleClientRedirectUrl='https://kgbbebdcmdgkbopcffmpgkgcmcoomhmh.c
 // origins by setting ACCESS_CONTROL_ALLOW_ORIGIN=*
 export const accessControlAllowOrigin='chrome-extension://kgbbebdcmdgkbopcffmpgkgcmcoomhmh';
 
-// The URL at which the /api/auth endpoint from the auth-backend is hosted
+// The URL at which the /api/auth endpoint from the backend is hosted
 export const productionAuthUrl = 'https://calendar-plus.patii.uk/api/auth';
 export const developmentAuthUrl = 'http://localhost:3000/api/auth';

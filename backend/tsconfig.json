@@ -1,9 +1,5 @@
 {
-  "include": [
-    "**/*.ts",
-    ".next/types/**/*.ts",
-    "next-env.d.ts"
-  ],
+  "include": ["**/*.ts", ".next/types/**/*.ts", "next-env.d.ts"],
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "incremental": true,
