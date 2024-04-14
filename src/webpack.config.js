@@ -12,7 +12,7 @@ function parseEnv(name) {
    * Next.js expects env files to be in it's root. Webpack needs to reuse some
    * of those variables, so we must piggyback on Next.js's env files.
    */
-  const envFileLocation = `../auth-backend/${name}`;
+  const envFileLocation = `../backend/${name}`;
   const envFile = fs.readFileSync(envFileLocation, 'utf8');
   return Object.fromEntries(
     envFile
