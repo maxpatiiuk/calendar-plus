@@ -70,8 +70,9 @@ export function AutoComplete(): JSX.Element {
           if (select === undefined) return;
 
           // Don't change calendar if correct one is already selected
-          const currentCalendar = select.querySelector('[aria-selected="true"]')
-            ?.textContent;
+          const currentCalendar = select.querySelector(
+            '[aria-selected="true"]',
+          )?.textContent;
           if (
             currentCalendar ===
             calendars?.find(({ id }) => id === calendarId)?.summary

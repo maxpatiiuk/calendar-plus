@@ -23,14 +23,12 @@ type Line = JSX.Element | string;
 export type Value =
   | RR<Language, (...args: RA<never>) => Line>
   | RR<Language, Line>;
-type GetValueType<VALUE extends Value> = VALUE extends RR<
-  Language,
-  infer ValueType
->
-  ? ValueType extends (...args: RA<never>) => Line
-    ? ReturnType<ValueType>
-    : ValueType
-  : never;
+type GetValueType<VALUE extends Value> =
+  VALUE extends RR<Language, infer ValueType>
+    ? ValueType extends (...args: RA<never>) => Line
+      ? ReturnType<ValueType>
+      : ValueType
+    : never;
 export type Dictionary = IR<Value>;
 
 /**

@@ -22,9 +22,10 @@ jobs:
         run: npm ci
 
       - name: Create mock env files
+        working-directory: ./backend
         run: |
-          cp ./backend/.env.example ./backend/.env.production.local
-          cp ./backend/.env.example ./backend/.env.development.local
+          cp .env.example .env.production.local
+          cp .env.example .env.development.local
 
       - name: Build front-end
         run: npx webpack --mode production
