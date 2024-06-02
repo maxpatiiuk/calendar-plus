@@ -9,6 +9,7 @@ import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
+import { Synonym } from '../Widgets/Synonyms';
 
 /**
  * Provide autocomplete for calendar event names and automatically put events
@@ -29,6 +30,10 @@ export function AutoComplete(): JSX.Element {
 
   const dataListId = useId('autocomplete-list')('');
 
+  const [activeMatch, setActiveMatch] = React.useState<Synonym | undefined>(
+    undefined,
+  );
+
   React.useEffect(
     () =>
       listen(document.body, 'input', ({ target }) => {
@@ -39,39 +44,58 @@ export function AutoComplete(): JSX.Element {
         if (!element.hasAttribute('list'))
           element.setAttribute('list', dataListId);
 
-        if (blurListeners.has(element)) return;
-        element.addEventListener('blur', handleBlur);
-        blurListeners.set(element, handleBlur);
-
         const guessCalendar = (input: string): string | undefined =>
           virtualCalendarsRef.current.find(({ rule, value }) =>
             ruleMatchers[rule](input, value),
           )?.calendarId;
 
-        function handleBlur(): void {
-          element.removeEventListener('blur', blurListeners.get(element)!);
-          blurListeners.delete(element);
-
+        function findMatch(): (Synonym & { eventName: string }) | undefined {
           const eventName = element.value.trim();
           const guessSynonym = synonymsRef.current.find(({ synonym }) =>
             eventName.startsWith(`${synonym}:`),
           );
-          let calendarId = guessSynonym?.calendar;
           if (typeof guessSynonym === 'object')
-            element.value = eventName
-              .slice(guessSynonym.synonym.length + 1)
+            return {
+              eventName,
+              synonym: guessSynonym.synonym + ':',
+              calendar: guessSynonym.calendar,
+            };
+          const guess =
+            guessCalendar(eventName) ??
+            (eventName.startsWith('.')
+              ? guessCalendar(eventName.slice(1))
+              : undefined);
+
+          return guess === undefined
+            ? undefined
+            : {
+                eventName,
+                calendar: guess,
+                synonym: '',
+              };
+        }
+
+        setActiveMatch(findMatch());
+
+        if (blurListeners.has(element)) return;
+        element.addEventListener('blur', handleBlur);
+        blurListeners.set(element, handleBlur);
+
+        function handleBlur(): void {
+          element.removeEventListener('blur', blurListeners.get(element)!);
+          blurListeners.delete(element);
+
+          const match = findMatch();
+          if (match === undefined) return;
+          if (match.synonym.length > 0)
+            element.value = match.eventName
+              .slice(match.synonym.length)
+              .slice()
               .trim();
-          else
-            calendarId =
-              guessCalendar(eventName) ??
-              (eventName.startsWith('.')
-                ? guessCalendar(eventName.slice(1))
-                : undefined);
-          if (calendarId === undefined) return;
 
           if (calendars === undefined)
             console.error('Unable to retrieve calendars');
-          const calendar = calendars?.find(({ id }) => id === calendarId);
+          const calendar = calendars?.find(({ id }) => id === match.calendar);
           if (calendar === undefined) {
             console.error('Unable to find current calendar');
             return;
@@ -109,7 +133,7 @@ export function AutoComplete(): JSX.Element {
           // Don't change calendar if correct one is already selected
           if (trigger.textContent === calendar.summary) return;
 
-          clicAndWait(trigger, alreadyOpened, () => {
+          clickAndWait(trigger, alreadyOpened, () => {
             const listbox = closestSibling(
               combobox,
               '[role="listbox"]:not([aria-hidden])',
@@ -136,20 +160,32 @@ export function AutoComplete(): JSX.Element {
   const eventNames = React.useMemo(
     () =>
       virtualCalendars
-        .map(({ rule, value }) =>
+        .map(({ rule, value, calendarId }) =>
           rule === 'startsWith'
-            ? { label: `${value}*`, value }
+            ? { label: `${value}*`, value, calendarId }
             : rule === 'equals'
-              ? { label: value, value }
+              ? { label: value, value, calendarId }
               : undefined,
         )
         .filter(isDefined) ?? [],
     [virtualCalendars],
   );
 
+  console.log(activeMatch);
+  const activeEventNames = React.useMemo(() => {
+    if (activeMatch === undefined || activeMatch.synonym.length === 0)
+      return eventNames;
+    return eventNames
+      .filter(({ calendarId }) => calendarId === activeMatch.calendar)
+      .map(({ label, value }) => ({
+        label: `${activeMatch.synonym}${label}`,
+        value,
+      }));
+  }, [eventNames, activeMatch]);
+
   return (
     <datalist id={dataListId}>
-      {eventNames.map(({ label, value }, index) => (
+      {activeEventNames.map(({ label, value }, index) => (
         <option key={index} value={value}>
           {label}
         </option>
@@ -239,7 +275,7 @@ function findCalendarsButton(parent: HTMLElement): HTMLElement | undefined {
 /**
  * Open the list of calendars and wait for it to be rendered
  */
-function clicAndWait(
+function clickAndWait(
   target: HTMLElement,
   opened: boolean,
   callback: () => void,
