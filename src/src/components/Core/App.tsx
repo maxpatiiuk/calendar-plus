@@ -81,7 +81,7 @@ export function App(): JSX.Element | null {
             <Portal>
               <main
                 className={`
-                  relative z-[100] box-border flex h-full flex-col gap-2
+                  relative z-[1000] box-border flex h-full flex-col gap-2
                   overflow-y-auto bg-gray-200 p-2 [&_*]:box-border
                 `}
               >
