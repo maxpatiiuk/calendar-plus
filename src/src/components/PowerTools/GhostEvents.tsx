@@ -75,7 +75,7 @@ export function GhostEvents(): null {
               if (eventElement === null) return;
               const eventName = getEventName(eventElement) ?? '';
               if (eventName.length === 0) return;
-              setGhostEvents(f.unique([...ghostEvents, eventName]));
+              setGhostEvents(f.unique([...ghostEvents, eventName].sort()));
             },
           ),
     [mainContainer, ghostEventShortcut, ghostEvents, setGhostEvents],
