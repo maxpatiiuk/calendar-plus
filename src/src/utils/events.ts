@@ -6,7 +6,7 @@ export function listen<EVENT_NAME extends keyof GlobalEventHandlersEventMap>(
   element: EventTarget,
   eventName: EVENT_NAME,
   callback: (event: GlobalEventHandlersEventMap[EVENT_NAME]) => void,
-  options: AddEventListenerOptions,
+  options?: AddEventListenerOptions,
 ): () => void {
   element.addEventListener(
     eventName,
