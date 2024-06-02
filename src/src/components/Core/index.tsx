@@ -28,6 +28,7 @@ const findContainer = (element: Element | undefined): Element | undefined =>
 const container = findContainer(icon);
 if (typeof container === 'object') {
   const reactContainer = document.createElement('div');
+  reactContainer.id = 'calendar-plus';
   container.prepend(reactContainer);
 
   const root = ReactDOM.createRoot(reactContainer);

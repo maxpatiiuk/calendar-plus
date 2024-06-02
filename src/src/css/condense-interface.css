@@ -13,20 +13,21 @@
   body.condense-interface
     :is(
       /* "Terms" and "Privacy" links */
-      .erDb5d,
+      #drawerMiniMonthNavigator ~ :last-child,
       /* "Create event" button (redundant) */
-      .dwlvNd,
+      header ~ [data-is-drawer-closed],
       /* "Create event" button (redundant) */
       .LXjtcc,
       /* "Search for people" input box */
-      .ZtL5hd,
+      #drawerMiniMonthNavigator ~ [role="search"],
       /* "Google Apps" button */
       #gbwa),
   /* "Calendar" heading */
   body.condense-interface header [role="heading"],
-  body.condense-interface[data-viewfamily='EVENT'] .h8Aqhb,
+  /* Hide "Support" button */
+  body.condense-interface header .h8Aqhb,
   /* Hide obtrucive "Tasks" split button */
-  div.wc0xVe {
+  body.condense-interface header #calendar-plus ~ :last-child > :last-child {
     @apply hidden;
   }
 
@@ -60,12 +61,17 @@
   }
 
   /* Reduce side bar paddings */
-  body.condense-interface.geSgge .qOsM1d.X8eWK {
+  body.condense-interface #drawerMiniMonthNavigator {
     @apply mt-1;
   }
 
   /* Reduce size of day numbers */
-  body.condense-interface .KSxb4d {
+  body.condense-interface
+    [role='main']
+    [role='grid']
+    [role='row']
+    [role='columnheader']
+    [role='link'] {
     font-size: 22px !important;
     line-height: 30px !important;
     margin-top: 1px !important;
@@ -74,18 +80,33 @@
   }
 
   /* Reduce height of day header */
-  body.condense-interface .Uit9Se {
+  body.condense-interface
+    [role='main']
+    [role='grid']
+    [role='row']
+    [role='columnheader'] {
     height: 35px !important;
   }
 
   /* Place week day name next to day number */
-  body.condense-interface .rpCPrc {
+  body.condense-interface
+    [role='main']
+    [role='grid']
+    [role='row']
+    [role='columnheader']
+    h2 {
     @apply relative !flex items-center justify-center;
     flex-flow: row nowrap !important;
   }
 
   /* Center the day numbers */
-  body.condense-interface .qAeuG {
+  body.condense-interface
+    [role='main']
+    [role='grid']
+    [role='row']
+    [role='columnheader']
+    h2
+    > [aria-hidden] {
     @apply !absolute left-0;
   }
 }
