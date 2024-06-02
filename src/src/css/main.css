@@ -14,6 +14,7 @@
 @import './condense-interface.css';
 @import './less-invasive-batch-edit.css';
 @import './ghost-events.css';
+@import './autocomplete-indicator.css';
 
 /**
  * This injects Tailwind's utility classes and any utility classes registered

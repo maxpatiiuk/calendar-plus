@@ -11,6 +11,9 @@ import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
 import { Synonym } from '../Widgets/Synonyms';
 
+const indicator = document.createElement('div');
+indicator.id = 'calendar-plus-autocomplete-indicator';
+
 /**
  * Provide autocomplete for calendar event names and automatically put events
  * into correct calendars based on rules defined by the user
@@ -75,7 +78,17 @@ export function AutoComplete(): JSX.Element {
               };
         }
 
-        setActiveMatch(findMatch());
+        const match = findMatch();
+        setActiveMatch(match);
+
+        // Show autocomplete prediction indicator
+        const parent = element.parentElement;
+        if (match) {
+          const calendar = calendars.find(({ id }) => id === match.calendar);
+          indicator.style.background =
+            calendar?.backgroundColor ?? 'transparent';
+          parent?.append(indicator);
+        } else indicator.remove();
 
         if (blurListeners.has(element)) return;
         element.addEventListener('blur', handleBlur);
@@ -127,7 +140,7 @@ export function AutoComplete(): JSX.Element {
           const expandCalendarsButton = findCalendarsButton(parent);
           const alreadyOpened =
             expandCalendarsButton === undefined ||
-            expandCalendarsButton.getBoundingClientRect().height === 0;
+            expandCalendarsButton.offsetWidth === 0;
 
           const trigger = expandCalendarsButton ?? combobox;
           // Don't change calendar if correct one is already selected
@@ -171,7 +184,6 @@ export function AutoComplete(): JSX.Element {
     [virtualCalendars],
   );
 
-  console.log(activeMatch);
   const activeEventNames = React.useMemo(() => {
     if (activeMatch === undefined || activeMatch.synonym.length === 0)
       return eventNames;
