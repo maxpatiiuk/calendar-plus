@@ -1,8 +1,6 @@
 import React from 'react';
-import type { State } from 'typesafe-reducer';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import { Button } from '../Atoms';
 import { AuthContext } from '../Contexts/AuthContext';
@@ -25,24 +23,20 @@ import { FirstAuthScreen } from './FirstAuthScreen';
  * Entrypoint react component for the extension
  */
 export function App(): JSX.Element | null {
-  const [isOpen, handleOpen, handleClose, handleToggle] = useBooleanState();
+  const [state, setState] = React.useState<'closed' | 'main' | 'preferences'>(
+    'closed',
+  );
+  const isOpen = state !== 'closed';
 
   const [openOverlayShortcut] = usePref('feature', 'openOverlayShortcut');
   const [closeOverlayShortcut] = usePref('feature', 'closeOverlayShortcut');
-  const handleRegisterKey = React.useContext(KeyboardContext);
+  const handleKeyboardShortcut = React.useContext(KeyboardContext);
   React.useEffect(
     () =>
       isOpen
-        ? handleRegisterKey(closeOverlayShortcut, handleClose)
-        : handleRegisterKey(openOverlayShortcut, handleOpen),
-    [
-      isOpen,
-      handleRegisterKey,
-      closeOverlayShortcut,
-      openOverlayShortcut,
-      handleOpen,
-      handleClose,
-    ],
+        ? handleKeyboardShortcut(closeOverlayShortcut, () => setState('closed'))
+        : handleKeyboardShortcut(openOverlayShortcut, () => setState('main')),
+    [isOpen, handleKeyboardShortcut, closeOverlayShortcut, openOverlayShortcut],
   );
 
   const currentView = React.useContext(CurrentViewContext);
@@ -59,9 +53,6 @@ export function App(): JSX.Element | null {
 
   const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
-  const [state, setState] = React.useState<
-    State<'MainState'> | State<'PreferencesState'>
-  >({ type: 'MainState' });
   const [showFirstAuth, setShowFirstAuth] = React.useState(false);
 
   return (
@@ -71,7 +62,9 @@ export function App(): JSX.Element | null {
           <Button.White
             aria-pressed={isOpen ? true : undefined}
             onClick={(): void =>
-              auth.token === undefined ? setShowFirstAuth(true) : handleToggle()
+              auth.token === undefined
+                ? setShowFirstAuth(true)
+                : setState(isOpen ? 'closed' : 'main')
             }
           >
             {commonText('calendarPlus')}
@@ -80,7 +73,7 @@ export function App(): JSX.Element | null {
             <FirstAuthScreen
               onClose={(): void => setShowFirstAuth(false)}
               onAuth={(): Promise<void> =>
-                auth.handleAuthenticate().then(handleOpen)
+                auth.handleAuthenticate().then(() => setState('main'))
               }
             />
           )}
@@ -92,17 +85,13 @@ export function App(): JSX.Element | null {
                   overflow-y-auto bg-gray-200 p-2 [&_*]:box-border
                 `}
               >
-                {state.type === 'MainState' ? (
+                {state === 'main' ? (
                   <Dashboard
                     durations={durations}
-                    onOpenPreferences={(): void =>
-                      setState({ type: 'PreferencesState' })
-                    }
+                    onOpenPreferences={(): void => setState('preferences')}
                   />
                 ) : (
-                  <PreferencesPage
-                    onClose={(): void => setState({ type: 'MainState' })}
-                  />
+                  <PreferencesPage onClose={(): void => setState('main')} />
                 )}
               </main>
             </Portal>

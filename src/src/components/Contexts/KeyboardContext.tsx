@@ -35,7 +35,7 @@ export function KeyboardListener({
     }>
   >([]);
 
-  const handleRegisterKey = React.useCallback(
+  const handleKeyboardShortcut = React.useCallback(
     (shortcut: KeyboardShortcuts, callback: () => void) => {
       const shortcuts: RA<KeyboardShortcut> = shortcut[platform] ?? [];
       if (shortcuts.length === 0) return () => undefined;
@@ -111,7 +111,7 @@ export function KeyboardListener({
   );
 
   return (
-    <KeyboardContext.Provider value={handleRegisterKey}>
+    <KeyboardContext.Provider value={handleKeyboardShortcut}>
       {children}
     </KeyboardContext.Provider>
   );
