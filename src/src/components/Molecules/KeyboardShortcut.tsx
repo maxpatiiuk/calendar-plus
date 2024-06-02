@@ -130,7 +130,7 @@ function SetKeyboardShortcut({
           event.preventDefault();
           event.stopPropagation();
         },
-        true,
+        { capture: true },
       );
     }
     return undefined;

@@ -61,19 +61,26 @@ export function useVisibilityChangeSpy(
     () =>
       sideBar === undefined || calendars === undefined
         ? undefined
-        : listen(sideBar, 'click', ({ target }) => {
-            const element = target as HTMLInputElement;
-            if (element.tagName !== 'INPUT' || element.type !== 'checkbox')
-              return;
-            const data = parseCheckbox(calendars, element)?.[0];
-            if (data === undefined) return;
-            const [calendarId, checked] = data;
-            setVisibleCalendars(
-              checked
-                ? visibleCalendarsRef.current?.filter((id) => id !== calendarId)
-                : [...(visibleCalendarsRef.current ?? []), calendarId],
-            );
-          }),
+        : listen(
+            sideBar,
+            'change',
+            ({ target }) => {
+              const element = target as HTMLInputElement;
+              if (element.tagName !== 'INPUT' || element.type !== 'checkbox')
+                return;
+              const data = parseCheckbox(calendars, element);
+              if (data === undefined) return;
+              const [calendarId, isNowChecked] = data;
+              setVisibleCalendars(
+                isNowChecked
+                  ? [...(visibleCalendarsRef.current ?? []), calendarId]
+                  : visibleCalendarsRef.current?.filter(
+                      (id) => id !== calendarId,
+                    ),
+              );
+            },
+            { passive: true },
+          ),
     [sideBar, calendars, setVisibleCalendars],
   );
 }
