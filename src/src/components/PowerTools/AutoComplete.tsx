@@ -64,23 +64,61 @@ export function AutoComplete(): JSX.Element {
           else calendarId = guessCalendar(eventName);
           if (calendarId === undefined) return;
 
+          if (calendars === undefined)
+            console.error('Unable to retrieve calendars');
+          const calendar = calendars?.find(({ id }) => id === calendarId);
+          if (calendar === undefined) {
+            console.error('Unable to find current calendar');
+            return;
+          }
+
           const parent = findParent(element);
           if (parent === undefined) return;
-          const select = findCalendarSelector(parent);
-          if (select === undefined) return;
 
-          // Don't change calendar if correct one is already selected
-          const currentCalendar = select.querySelector(
-            '[aria-selected="true"]',
-          )?.textContent;
-          if (
-            currentCalendar ===
-            calendars?.find(({ id }) => id === calendarId)?.summary
+          /**
+           * In full-screen editor there will be only 1 such icon.
+           * In mini-editor, there will be 3. 1st is used in the
+           * collapsed calendar selector. 2nd is used in expanded calendar
+           * selector (the one we want). 3rd is used in some sort of read-only
+           * UI.
+           */
+          const calendarIcon = Array.from(
+            parent.querySelectorAll<HTMLElement>('.google-material-icons'),
           )
+            .filter((icon) => icon.textContent === 'event')
+            .slice(0, 2)
+            .at(-1);
+          const combobox = closestSibling(calendarIcon, '[role="combobox"]');
+          if (combobox === undefined) {
+            console.error('Unable to find the calendars combobox');
             return;
+          }
 
-          waitAndClick(parent, select, () => {
-            const option = findOption(calendars!, calendarId!, select);
+          // This button does not exist in the full-page editor
+          const expandCalendarsButton = findCalendarsButton(parent);
+          const alreadyOpened =
+            expandCalendarsButton === undefined ||
+            expandCalendarsButton.getBoundingClientRect().height === 0;
+
+          const trigger = expandCalendarsButton ?? combobox;
+          // Don't change calendar if correct one is already selected
+          if (trigger.textContent === calendar.summary) return;
+
+          clicAndWait(trigger, alreadyOpened, () => {
+            const listbox = closestSibling(
+              combobox,
+              '[role="listbox"]:not([aria-hidden])',
+            );
+
+            if (listbox === undefined) {
+              console.error('Unable to find the calendars listbox');
+              return;
+            }
+            const option = findOption(calendar, listbox);
+            if (option === undefined) {
+              console.error('Unable to find the calendar option');
+              return;
+            }
             option.click();
             // The option click is not registering if focusing the input too soon
             setTimeout(() => element.focus(), 200);
@@ -113,6 +151,19 @@ export function AutoComplete(): JSX.Element {
       ))}
     </datalist>
   );
+}
+
+function closestSibling(
+  initial: HTMLElement | undefined,
+  selector: string,
+): HTMLElement | undefined {
+  let current: HTMLElement | undefined = initial;
+  while (current !== undefined) {
+    const sibling = current.querySelector<HTMLElement>(selector);
+    if (sibling !== null) return sibling;
+    current = current.parentElement ?? undefined;
+  }
+  return undefined;
 }
 
 export function useVirtualCalendars(): RA<VirtualCalendar> {
@@ -169,46 +220,41 @@ function findParent(element: HTMLInputElement): HTMLElement | undefined {
   return parent;
 }
 
-function findCalendarSelector(parent: HTMLElement): HTMLElement | undefined {
-  const select = parent.querySelector<HTMLElement>(
-    '[role="listbox"][aria-expanded]',
+function findCalendarsButton(parent: HTMLElement): HTMLElement | undefined {
+  const calendarsButton = parent.querySelector<HTMLElement>(
+    '[aria-expanded] [data-key="calendar"]',
   );
-  if (select === null) {
+  if (calendarsButton === null) {
     console.warn('Unable to find calendar selector box');
     return undefined;
   }
-  return select;
+  return calendarsButton;
 }
 
 /**
  * Open the list of calendars and wait for it to be rendered
  */
-function waitAndClick(
-  parent: HTMLElement,
-  select: HTMLElement,
+function clicAndWait(
+  target: HTMLElement,
+  opened: boolean,
   callback: () => void,
 ): void {
-  const calendarsButton = parent.querySelector<HTMLElement>(
-    '[data-key="calendar"]',
-  );
-  const clickable =
-    calendarsButton ?? select.querySelector('[role="presentation"]');
-  clickable?.click();
-  const timeOut = calendarsButton === null ? 200 : 440;
+  target.click();
+  // If the listbox was already opened, the animation is shorter
+  const timeOut = opened ? 200 : 440;
 
   // Unfortunately, the listbox has JS animation (can't be disabled with CSS)
   setTimeout(callback, timeOut);
 }
 
 function findOption(
-  calendars: RA<CalendarListEntry>,
-  calendarId: string,
+  calendar: CalendarListEntry,
   select: HTMLElement,
 ): HTMLElement {
   const options = Array.from(
     select.querySelectorAll<HTMLElement>('[role="option"]'),
   );
-  const calendar = calendars.find(({ id }) => id === calendarId)!;
+
   const option = options.find(
     (option) => option.textContent === calendar.summary,
   );
