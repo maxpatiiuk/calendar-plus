@@ -43,6 +43,7 @@ export function StackedChart({
     [durations, calendars, view],
   );
   const [loaded, handleLoaded] = useBooleanState();
+  const isEmpty = dataSets.length === 0;
   const transitionDuration = useTransitionDuration();
   React.useEffect(
     () => (dataSets.length > 0 ? handleLoaded() : undefined),
@@ -69,8 +70,8 @@ export function StackedChart({
 
   return (
     <WidgetContainer
-      getJsonExport={getJsonExport}
-      getTsvExport={getTsvExport}
+      getJsonExport={isEmpty ? undefined : getJsonExport}
+      getTsvExport={isEmpty ? undefined : getTsvExport}
       header={commonText('stackedChart')}
       className="aspect-[2/1]"
     >

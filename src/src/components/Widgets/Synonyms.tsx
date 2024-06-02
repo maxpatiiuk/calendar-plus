@@ -23,6 +23,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;
   const calendars = React.useContext(CalendarsContext);
+  const isEmpty = (synonyms?.length ?? 0) === 0;
 
   const getJsonExport = () =>
     synonyms?.map(({ calendar, synonym }) => ({
@@ -40,8 +41,8 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
   return (
     <WidgetContainer
       editing={editing}
-      getJsonExport={getJsonExport}
-      getTsvExport={getTsvExport}
+      getJsonExport={isEmpty ? undefined : getJsonExport}
+      getTsvExport={isEmpty ? undefined : getTsvExport}
       header={label}
     >
       {Array.isArray(calendars) && Array.isArray(synonyms) ? (

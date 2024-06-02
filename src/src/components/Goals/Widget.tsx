@@ -32,18 +32,18 @@ export function GoalsWidget({
   const [isEditing, setIsEditing] = React.useState(false);
   const { view: currentView } = React.useContext(CurrentViewContext)!;
 
+  const activeGoals = goals?.filter(({ view }) => view === currentView);
+  const isEmpty = activeGoals?.length === 0;
   const doJsonExport = () =>
-    goals
-      ?.filter(({ view }) => view === currentView)
-      .map(({ calendarId, ...rest }) => ({
-        calendarName:
-          calendars?.find(({ id }) => id === calendarId)?.summary ?? calendarId,
-        completed:
-          typeof durations?.[calendarId] === 'object'
-            ? computeGoal(durations[calendarId], rest.virtualCalendar)
-            : 0,
-        ...rest,
-      })) ?? [];
+    activeGoals?.map(({ calendarId, ...rest }) => ({
+      calendarName:
+        calendars?.find(({ id }) => id === calendarId)?.summary ?? calendarId,
+      completed:
+        typeof durations?.[calendarId] === 'object'
+          ? computeGoal(durations[calendarId], rest.virtualCalendar)
+          : 0,
+      ...rest,
+    })) ?? [];
 
   const doTsvExport = () =>
     doJsonExport().map(
@@ -59,11 +59,13 @@ export function GoalsWidget({
   return (
     <WidgetContainer
       editing={[isEditing, setIsEditing]}
-      getJsonExport={doJsonExport}
-      getTsvExport={doTsvExport}
+      getJsonExport={isEmpty ? undefined : doJsonExport}
+      getTsvExport={isEmpty ? undefined : doTsvExport}
       header={label}
     >
-      {goals === undefined || calendars === undefined ? (
+      {goals === undefined ||
+      activeGoals === undefined ||
+      calendars === undefined ? (
         commonText('loading')
       ) : isEditing ? (
         <GoalsEditor
@@ -75,7 +77,7 @@ export function GoalsWidget({
         <Goals
           calendars={calendars}
           durations={durations}
-          goals={goals.filter(({ view }) => view === currentView)}
+          goals={activeGoals}
         />
       )}
     </WidgetContainer>

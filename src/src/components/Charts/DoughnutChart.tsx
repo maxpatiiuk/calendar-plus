@@ -38,6 +38,7 @@ export function DoughnutChart({
   const innerDataRef = React.useRef(innerData);
   const outerDataRef = React.useRef(outerData);
   const [loaded, handleLoaded] = useBooleanState();
+  const isEmpty = innerData.length === 0 && outerData.length === 0;
 
   React.useEffect(() => {
     if (outerData.length > 0) handleLoaded();
@@ -102,8 +103,8 @@ export function DoughnutChart({
   return (
     <WidgetContainer
       header={commonText('doughnutChart')}
-      getJsonExport={getJsonExport}
-      getTsvExport={getTsvExport}
+      getJsonExport={isEmpty ? undefined : getJsonExport}
+      getTsvExport={isEmpty ? undefined : getTsvExport}
       className="aspect-square"
     >
       {loaded ? (

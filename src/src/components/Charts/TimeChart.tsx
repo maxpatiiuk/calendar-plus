@@ -34,6 +34,7 @@ export function TimeChart({
         : getTimes(durations, mode),
     [durations, mode],
   );
+  const isEmpty = calendars.length === 0 || times === undefined;
 
   const doJsonExport = () =>
     Object.entries(times ?? {}).map(([calendarId, data]) => ({
@@ -96,8 +97,8 @@ export function TimeChart({
           <span className="-ml-2 flex-1" />
         </>
       }
-      getJsonExport={doJsonExport}
-      getTsvExport={doTsvExport}
+      getJsonExport={isEmpty ? undefined : doJsonExport}
+      getTsvExport={isEmpty ? undefined : doTsvExport}
       header={label}
     >
       {durations === undefined || times === undefined || mode === undefined ? (

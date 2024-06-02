@@ -32,6 +32,7 @@ export function VirtualCalendars({
   const [virtualCalendars, setVirtualCalendars] =
     useStorage('virtualCalendars');
   const virtualCalendarsRef = React.useRef(virtualCalendars);
+  const isEmpty = (virtualCalendars?.length ?? 0) === 0;
 
   // Don't update the shared state until the user is done editing.
   const [localCalendars, setLocalCalendars] = React.useState<
@@ -68,8 +69,8 @@ export function VirtualCalendars({
   return (
     <WidgetContainer
       editing={[isEditing, setIsEditing]}
-      getJsonExport={getJsonExport}
-      getTsvExport={getTsvExport}
+      getJsonExport={isEmpty ? undefined : getJsonExport}
+      getTsvExport={isEmpty ? undefined : getTsvExport}
       header={label}
       className="relative min-h-[theme(spacing.96)]"
     >

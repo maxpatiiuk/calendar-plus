@@ -18,6 +18,7 @@ export function GhostedEvents({
 }): JSX.Element {
   const [ghostedEvents, setGhostedEvents] = useStorage('ghostEvents');
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
+  const isEmpty = (ghostedEvents?.length ?? 0) === 0;
   const isDisabled = ghostEventShortcut === 'none';
   const shortcutLabel = ghostEventShortcuts.find(
     ({ value }) => value === ghostEventShortcut,
@@ -33,8 +34,8 @@ export function GhostedEvents({
   return (
     <WidgetContainer
       editing={undefined}
-      getJsonExport={getJsonExport}
-      getTsvExport={getTsvExport}
+      getJsonExport={isEmpty ? undefined : getJsonExport}
+      getTsvExport={isEmpty ? undefined : getTsvExport}
       header={label}
     >
       {ghostedEvents === undefined ? (
