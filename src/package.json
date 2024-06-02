@@ -1,5 +1,5 @@
 {
-  "name": "calendar-stats",
+  "name": "calendar-plus",
   "private": true,
   "description": "A browser extension for Google Calendar that provides insights into where your time goes. Includes power user tools, data export and customization",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "author": "Max Patiiuk",
   "contributors": [
-    "EECS 581 Team 19 2023-2024"
+    "EECS 581 Team 19 2022-2023"
   ],
   "homepage": "https://github.com/maxpatiiuk/calendar-stats#readme",
   "bugs": {
