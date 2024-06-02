@@ -3,6 +3,8 @@ import React from 'react';
 import { crash } from '../components/Errors/assert';
 import { LoadingContext } from '../components/Contexts/Contexts';
 
+const loadingTimeout = 1000;
+
 /**
  * Like React.useState, but initial value is retrieved asynchronously
  * While value is being retrieved, hook returns undefined, which can be
@@ -41,15 +43,18 @@ export function useAsyncState<T>(
    * callback change, rather than give inconsistent state.
    */
   React.useLayoutEffect(() => {
-    // If callback changes, state is reset while new state is fetching
-    setState(undefined);
+    /*
+     * If callback changes, state is reset to show the loading screen if
+     * new state takes more than 1s to load
+     */
+    let timeout = setTimeout(() => setState(undefined), loadingTimeout);
     const wrapped = loadingScreen
       ? loading
       : (promise: Promise<unknown>): void => void promise.catch(crash);
     wrapped(
-      Promise.resolve(callback()).then((newState) =>
-        destructorCalled ? undefined : setState(newState),
-      ),
+      Promise.resolve(callback())
+        .then((newState) => (destructorCalled ? undefined : setState(newState)))
+        .finally(() => clearTimeout(timeout)),
     );
 
     let destructorCalled = false;
