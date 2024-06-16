@@ -3,7 +3,7 @@ import React from 'react';
 import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
-import { formatDuration } from '../Atoms/Internationalization';
+import { formatMinutesDuration } from '../Atoms/Internationalization';
 import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
@@ -51,8 +51,8 @@ export function GoalsWidget({
         [commonText('calendar')]: calendarName,
         [commonText('virtualCalendar')]: virtualCalendar,
         [commonText('perDuration')]: view,
-        [commonText('goal')]: formatDuration(duration),
-        [commonText('completed')]: formatDuration(completed),
+        [commonText('goal')]: formatMinutesDuration(duration),
+        [commonText('completed')]: formatMinutesDuration(completed),
       }),
     );
 
@@ -150,8 +150,8 @@ function GoalComponent({
           : `${virtualCalendar} (${calendar.summary})`
       } - ${commonText(
         'aOutOfB',
-        formatDuration(currentDuration),
-        formatDuration(goalDuration),
+        formatMinutesDuration(currentDuration),
+        formatMinutesDuration(goalDuration),
       )}`}
       max={goalDuration}
       size={size}

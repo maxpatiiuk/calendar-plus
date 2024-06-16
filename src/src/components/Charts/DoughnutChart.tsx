@@ -7,7 +7,7 @@ import { useTransitionDuration } from '../../hooks/useTransitionDuration';
 import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
 import { writable } from '../../utils/types';
-import { formatDuration } from '../Atoms/Internationalization';
+import { formatMinutesDuration } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
@@ -129,7 +129,7 @@ export function DoughnutChart({
                   label: ({ datasetIndex, dataIndex, parsed }) =>
                     `${
                       layers[datasetIndex].labels[dataIndex]
-                    }: ${formatDuration(parsed)}`,
+                    }: ${formatMinutesDuration(parsed)}`,
                 },
               },
             },

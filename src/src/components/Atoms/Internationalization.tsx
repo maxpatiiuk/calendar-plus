@@ -204,7 +204,7 @@ export const compareStrings = new Intl.Collator(
 /**
  * Format duration in minutes into an hours+minutes string
  */
-export function formatDuration(duration: number): string {
+export function formatMinutesDuration(duration: number): string {
   const hours = Math.floor(duration / MINUTES_IN_HOUR);
   const minutes = duration % MINUTES_IN_HOUR;
   const formattedMinutes = `${minutes} ${commonText('minutes')}`;
@@ -214,3 +214,9 @@ export function formatDuration(duration: number): string {
         minutes === 0 ? '' : ` ${formattedMinutes}`
       }`;
 }
+
+/**
+ * Format duration in hours into an hours+minutes string
+ */
+export const formatHoursDuration = (duration: number): string =>
+  formatMinutesDuration(duration * MINUTES_IN_HOUR);

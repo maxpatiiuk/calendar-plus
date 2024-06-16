@@ -14,8 +14,9 @@ import { commonText } from '../../localization/common';
 import type { RA, WritableArray } from '../../utils/types';
 import { group } from '../../utils/utils';
 import {
+  MINUTES_IN_HOUR,
   formatDateLabel,
-  formatDuration,
+  formatHoursDuration,
   months,
 } from '../Atoms/Internationalization';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
@@ -87,7 +88,7 @@ export function StackedChart({
               tooltip: {
                 callbacks: {
                   label: ({ dataset, parsed }) =>
-                    `${dataset.label!}: ${formatDuration(parsed.y)}`,
+                    `${dataset.label!}: ${formatHoursDuration(parsed.y)}`,
                 },
               },
             },
@@ -151,9 +152,13 @@ const getDataSets = (
                     [new Date(date).getMonth(), duration.total] as const,
                 ),
               ).map(([_key, values]) =>
-                values.reduce((total, value) => total + value, 0),
+                minutesToHours(
+                  values.reduce((total, value) => total + value, 0),
+                ),
               )
             : Object.values(durations[id]?.[summedDurations] ?? {}).map(
-                ({ total }) => total,
+                ({ total }) => minutesToHours(total),
               ),
       }));
+
+const minutesToHours = (minutes: number) => minutes / MINUTES_IN_HOUR;
