@@ -46,7 +46,6 @@ type CalendarEvent = Pick<
   'end' | 'start' | 'summary'
 >;
 
-// TEST: test daylight savings time switch and back
 /**
  * Fetch the events between the provided dates for all visible calendars,
  * calculate the total durations of all events in a given day for a given
@@ -113,11 +112,9 @@ export function useEvents(
             events.map(({ summary, start, end }) => {
               if (
                 ignoreAllDayEvents &&
-                // Event does not have start/end time
-                (start.dateTime === undefined ||
-                  end.dateTime === undefined ||
-                  // Event lasts more than one day
-                  start.dateTime.split('T')[0] !== end.dateTime.split('T')[0])
+                // Event does not have a start and end time
+                start.dateTime === undefined &&
+                end.dateTime === undefined
               )
                 return ['', {}];
               const dates = resolveEventDates(timeMin, timeMax, start, end);
@@ -290,10 +287,14 @@ export const isMidnight = (date: Date): boolean =>
 function resolveEventDates(
   timeMin: Date,
   timeMax: Date,
+  /**
+   * Events may start/end in different time zones. Normalize all to be in the
+   * local time zone and use that for charting purposes.
+   */
   start: CalendarEvent['start'],
   end: CalendarEvent['end'],
 ): readonly [start: Date, end: Date] | undefined {
-  // Date is defined instead of DateTime for multi-day events
+  // Date is defined instead of DateTime for all-day or multi-day events
   const unboundedStartDate =
     typeof start.dateTime === 'string'
       ? new Date(start.dateTime)
@@ -307,25 +308,26 @@ function resolveEventDates(
         ? dateToDateTime(end.date)
         : undefined;
 
+  // Not sure if this case ever happens
   if (unboundedStartDate === undefined || unboundedEndDate === undefined)
     return undefined;
 
   // Multi-date events might begin/end outside of current preview range
-  const startDate = new Date(
+  const boundedStartDate = new Date(
     Math.max(unboundedStartDate.getTime(), timeMin.getTime()),
   );
-  const endDate = new Date(
+  const boundedEndDate = new Date(
     Math.min(unboundedEndDate.getTime(), timeMax.getTime()),
   );
-  return [startDate, endDate];
+  return [boundedStartDate, boundedEndDate];
 }
 
 /**
- * Convert date to dateTime (using midnight in current time zone)
+ * Convert date to dateTime (using midnight between the end of previous day and
+ * the start of this date's date in the local time zone)
  */
 export function dateToDateTime(dateString: string): Date {
   const date = new Date(dateString);
-  // FEATURE: time zone support (use calendar time zone)
   date.setHours(24);
   return date;
 }
