@@ -57,15 +57,16 @@ export function useEvents(
   endDate: Date | undefined,
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
-  // Clear temporary cache when overlay is closed
+  /*
+   * Clear temporary cache when overlay is closed because the events could be
+   * edited while overlay is closed, making this cache stale
+   */
   const clearCache = startDate === undefined || endDate === undefined;
   if (clearCache) eventsStore.current = {};
   const calendars = React.useContext(CalendarsContext);
 
   const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
-  React.useEffect(() => {
-    if (ignoreAllDayEvents) eventsStore.current = {};
-  }, [ignoreAllDayEvents]);
+  const previousIgnoreAllDayEvents = React.useRef(ignoreAllDayEvents);
 
   const virtualCalendars = useVirtualCalendars();
   const { token } = React.useContext(AuthContext);
@@ -81,6 +82,13 @@ export function useEvents(
         endDate === undefined
       )
         return undefined;
+
+      // Re-compute by clearing the cache if this pref changes
+      if (ignoreAllDayEvents !== previousIgnoreAllDayEvents.current) {
+        previousIgnoreAllDayEvents.current = ignoreAllDayEvents;
+        eventsStore.current = {};
+      }
+
       await Promise.all(
         calendars.map(async ({ id }) => {
           const daysBetween = getDatesBetween(startDate, endDate);
