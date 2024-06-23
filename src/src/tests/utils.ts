@@ -1,3 +1,4 @@
+import { output } from '../components/Errors/exceptions';
 import type { IR, RA } from '../utils/types';
 
 /**
@@ -58,7 +59,7 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
     });
   }
 
-  if (items.length === 0) throw new Error('No items in a theory');
+  if (items.length === 0) return output.throw('No items in a theory');
   // If there is just 1 test, don't use describe()
   else if (
     items.length === 1 &&

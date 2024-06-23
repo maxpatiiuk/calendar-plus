@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { awaitElement } from '../Contexts/CalendarsContext';
-
-let portalRoot: HTMLElement | undefined = undefined;
-const portalStack = new Set<unknown>();
+import { output } from '../Errors/exceptions';
 
 /**
  * A React Portal wrapper
@@ -13,54 +11,67 @@ const portalStack = new Set<unknown>();
  * @remarks
  * Based on https://blog.logrocket.com/learn-react-portals-by-example/
  *
- * Used when an elements needs to be renreded outside of the bounds of
+ * Used when an elements needs to be rendered outside of the bounds of
  * the container that has overflow:hidden
  */
-export function Portal({
+export function usePortal(children: JSX.Element): {
+  element: HTMLElement;
+  portal: JSX.Element;
+} {
+  const element = React.useMemo(() => document.createElement('div'), []);
+  React.useEffect(() => () => element.remove(), [element]);
+
+  return {
+    element,
+    portal: (
+      <PortalContext.Provider value={element}>
+        {ReactDOM.createPortal(children, element)}
+      </PortalContext.Provider>
+    ),
+  };
+}
+
+let overlayRoot: HTMLElement | undefined = undefined;
+const overlayPortalStack = new Set<unknown>();
+
+export function OverlayPortal({
   children,
 }: {
   readonly children: JSX.Element;
 }): JSX.Element {
-  const element = React.useMemo(() => {
-    const element = document.createElement('div');
-    element.className = 'h-full';
-    return element;
-  }, []);
+  const { element, portal } = usePortal(children);
 
   React.useEffect(() => {
+    element.className = 'h-full';
     const portalId = {};
-    portalStack.add(portalId);
+    overlayPortalStack.add(portalId);
 
     const mainContainer = findMainContainer();
     if (mainContainer === undefined)
-      throw new Error('Unable to find main container');
+      return output.throw('Unable to find main container');
 
     // Hide Google Calendar container when the overlay is shown
     mainContainer.classList.add('hidden');
 
     // Create a container that would house the React portal
-    if (portalRoot === undefined) {
-      portalRoot = document.createElement('div');
-      portalRoot.className = 'h-full';
+    if (overlayRoot === undefined) {
+      overlayRoot = document.createElement('div');
+      overlayRoot.className = 'h-full';
 
       // Nearest parent for both main content and portal container
       const commonContainer = mainContainer.parentElement!;
-      commonContainer.append(portalRoot);
+      commonContainer.append(overlayRoot);
     }
-    portalRoot.append(element);
+    overlayRoot.append(element);
 
     return (): void => {
-      element.remove();
-      portalStack.delete(portalId);
-      if (portalStack.size === 0) mainContainer.classList.remove('hidden');
+      overlayPortalStack.delete(portalId);
+      if (overlayPortalStack.size === 0)
+        mainContainer.classList.remove('hidden');
     };
   }, [element]);
 
-  return (
-    <PortalContext.Provider value={element}>
-      {ReactDOM.createPortal(children, element)}
-    </PortalContext.Provider>
-  );
+  return portal;
 }
 
 /**

@@ -6,6 +6,7 @@ import { isDefined } from '../../utils/types';
 import { Button, H3 } from '../Atoms';
 import { downloadFile } from '../Molecules/FilePicker';
 import { usePref } from '../Preferences/usePref';
+import { output } from '../Errors/exceptions';
 
 export function WidgetContainer({
   header,
@@ -41,7 +42,7 @@ export function WidgetContainer({
                 exportFormat === 'json'
                   ? JSON.stringify(getJsonExport(), null, 4)
                   : objectToTsv(getTsvExport(), exportFormat),
-              ).catch(console.error)
+              ).catch(output.error)
             }
           >
             {commonText('export')}

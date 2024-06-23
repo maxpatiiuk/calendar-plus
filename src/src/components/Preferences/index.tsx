@@ -14,6 +14,7 @@ import type {
 import { noLabelRenderers, preferenceDefinitions } from './definitions';
 import { usePref } from './usePref';
 import { dateToIso } from '../Atoms/Internationalization';
+import { output } from '../Errors/exceptions';
 
 export function PreferencesPage({
   onClose: handleClose,
@@ -53,7 +54,7 @@ export function PreferencesPage({
                   JSON.stringify(data, null, 4),
                 ),
               )
-              .catch(console.error)
+              .catch(output.error)
           }
         >
           {commonText('exportAllSettings')}
@@ -147,7 +148,7 @@ function Import({
             .then((text) => JSON.parse(text))
             .then(async (data) => chrome.storage.sync.set(data))
             .then(() => globalThis.location.reload())
-            .catch(console.error)
+            .catch(output.error)
         }
       />
     </>

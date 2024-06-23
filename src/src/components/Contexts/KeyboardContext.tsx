@@ -12,15 +12,14 @@ import {
   platform,
   resolveModifiers,
 } from '../Molecules/KeyboardShortcut';
+import { output } from '../Errors/exceptions';
 
 /**
  * Allows to register a key listener
  */
 export const KeyboardContext = React.createContext<
   (shortcut: KeyboardShortcuts, callback: () => void) => () => void
->(() => {
-  throw new Error('KeyboardListener is not initialized');
-});
+>(() => output.throw('KeyboardListener is not initialized'));
 KeyboardContext.displayName = 'KeyboardContext';
 
 export function KeyboardListener({

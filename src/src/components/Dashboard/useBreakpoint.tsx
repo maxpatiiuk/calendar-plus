@@ -1,5 +1,6 @@
 import React from 'react';
 import { PortalContext } from '../Molecules/Portal';
+import { output } from '../Errors/exceptions';
 
 /**
  * Find a TailWind breakpoint corresponding to current portal container width
@@ -7,7 +8,7 @@ import { PortalContext } from '../Molecules/Portal';
 export function useBreakpoint(): BreakPoint {
   const container = React.useContext(PortalContext);
   if (container === undefined)
-    throw new Error('Cannot invoke usePortalWidth outside a portal');
+    return output.throw('Cannot invoke usePortalWidth outside a portal');
 
   const [breakpoint, setBreakpoint] = React.useState(() =>
     resolveBreakpoint(container.clientWidth),

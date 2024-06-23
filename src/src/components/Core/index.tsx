@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 
 import { App } from './App';
 import { Contexts } from '../Contexts/Contexts';
+import { output } from '../Errors/exceptions';
 
 /**
  * Find a place where to mount our app. To make extension resilient to Google
@@ -39,4 +40,4 @@ if (typeof container === 'object') {
       </Contexts>
     </React.StrictMode>,
   );
-} else console.error('Failed to attach Calendar Plus plugin');
+} else output.error('Failed to attach Calendar Plus plugin');

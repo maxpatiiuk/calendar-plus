@@ -6,6 +6,7 @@ import type { GetSet } from '../../utils/types';
 import { listenEvent } from '../Background/messages';
 import { awaitElement } from './CalendarsContext';
 import { SettingsContext } from './SettingsContext';
+import { output } from '../Errors/exceptions';
 
 /**
  * Keep track of what week/month/year is currently displayed
@@ -88,7 +89,7 @@ function useCurrentTracker(
       setCurrentView(parsed);
       if (parsed?.view === 'customday' || parsed?.view === 'customweek')
         detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
-          console.error,
+          output.error,
         );
     }
 
@@ -221,7 +222,7 @@ function resolveBoundaries(
       firstDay: new Date(selectedDay.getFullYear(), 0, 1),
       lastDay: new Date(selectedDay.getFullYear() + 1, 0, 1),
     };
-  else throw new Error('unknown view');
+  else return output.throw('unknown view');
 }
 
 async function detectCustomViewSize([

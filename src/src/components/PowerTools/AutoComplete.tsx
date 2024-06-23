@@ -10,6 +10,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
 import { Synonym } from '../Widgets/Synonyms';
+import { output } from '../Errors/exceptions';
 
 const indicator = document.createElement('div');
 indicator.id = 'calendar-plus-autocomplete-indicator';
@@ -107,10 +108,10 @@ export function AutoComplete(): JSX.Element {
               .trim();
 
           if (calendars === undefined)
-            console.error('Unable to retrieve calendars');
+            output.error('Unable to retrieve calendars');
           const calendar = calendars?.find(({ id }) => id === match.calendar);
           if (calendar === undefined) {
-            console.error('Unable to find current calendar');
+            output.error('Unable to find current calendar');
             return;
           }
 
@@ -132,7 +133,7 @@ export function AutoComplete(): JSX.Element {
             .at(-1);
           const combobox = closestSibling(calendarIcon, '[role="combobox"]');
           if (combobox === undefined) {
-            console.error('Unable to find the calendars combobox');
+            output.error('Unable to find the calendars combobox');
             return;
           }
 
@@ -153,12 +154,12 @@ export function AutoComplete(): JSX.Element {
             );
 
             if (listbox === undefined) {
-              console.error('Unable to find the calendars listbox');
+              output.error('Unable to find the calendars listbox');
               return;
             }
             const option = findOption(calendar, listbox);
             if (option === undefined) {
-              console.error('Unable to find the calendar option');
+              output.error('Unable to find the calendar option');
               return;
             }
             option.click();
@@ -278,7 +279,7 @@ function findCalendarsButton(parent: HTMLElement): HTMLElement | undefined {
     '[aria-expanded] [data-key="calendar"]',
   );
   if (calendarsButton === null) {
-    console.warn('Unable to find calendar selector box');
+    output.warn('Unable to find calendar selector box');
     return undefined;
   }
   return calendarsButton;

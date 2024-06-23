@@ -1,7 +1,7 @@
 import { GetOrSet } from '../utils/types';
 import React from 'react';
-import { crash } from '../components/Errors/assert';
 import { LoadingContext } from '../components/Contexts/Contexts';
+import { output } from '../components/Errors/exceptions';
 
 const loadingTimeout = 1000;
 
@@ -50,7 +50,7 @@ export function useAsyncState<T>(
     let timeout = setTimeout(() => setState(undefined), loadingTimeout);
     const wrapped = loadingScreen
       ? loading
-      : (promise: Promise<unknown>): void => void promise.catch(crash);
+      : (promise: Promise<unknown>): void => void promise.catch(output.error);
     wrapped(
       Promise.resolve(callback())
         .then((newState) => (destructorCalled ? undefined : setState(newState)))

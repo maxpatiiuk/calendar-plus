@@ -7,6 +7,7 @@ import {
   awaitElement,
   CalendarListEntry,
 } from './CalendarsContext';
+import { output } from '../Errors/exceptions';
 
 export function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
@@ -93,7 +94,7 @@ function useSideBar(): HTMLElement | undefined {
   React.useEffect(() => {
     awaitElement(findSideBar).then((sideBar) => {
       if (sideBar === undefined) {
-        console.error('Unable to find the sidebar');
+        output.error('Unable to find the sidebar');
         return;
       }
 
@@ -107,7 +108,7 @@ function useSideBar(): HTMLElement | undefined {
       };
 
       if (!checkCollapsed()) return;
-      console.log(
+      output.log(
         'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
       );
       resizeObserver = new ResizeObserver(checkCollapsed);
@@ -131,7 +132,7 @@ function parseCheckbox(
   checkbox: HTMLInputElement,
 ): readonly [id: string, checked: boolean] | undefined {
   if (calendars === undefined) {
-    console.log(
+    output.log(
       'Calendar Plus: Unable to identify visible calendars before user signs in',
     );
     return undefined;

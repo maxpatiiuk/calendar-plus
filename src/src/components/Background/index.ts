@@ -7,11 +7,12 @@ import type { State } from 'typesafe-reducer';
 import type { Requests } from './messages';
 import { emitEvent } from './messages';
 import { formatUrl } from '../../utils/queryString';
+import { output } from '../Errors/exceptions';
 
 /** Based on https://stackoverflow.com/a/50548409/8584605 */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo?.status === 'complete')
-    emitEvent(tabId, { type: 'TabUpdate' }).catch(console.trace);
+    emitEvent(tabId, { type: 'TabUpdate' }).catch(output.trace);
 });
 
 chrome.action.onClicked.addListener(() => {
@@ -32,7 +33,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     )
       .then(sendResponse)
       .catch((error) => {
-        console.error(error);
+        output.error(error);
         sendResponse({ type: 'Error', error: error.message });
       });
     return true;

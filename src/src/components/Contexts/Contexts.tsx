@@ -3,7 +3,6 @@ import React from 'react';
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
 import type { RA } from '../../utils/types';
-import { crash, error } from '../Errors/assert';
 import { ErrorBoundary } from '../Errors/ErrorBoundary';
 import { PreferencesProvider } from '../Preferences/Context';
 import { AuthenticationProvider } from './AuthContext';
@@ -12,6 +11,7 @@ import { TrackCurrentView } from './CurrentViewContext';
 import { KeyboardListener } from './KeyboardContext';
 import { SettingsProvider } from './SettingsContext';
 import { VersionsContextProvider } from './VersionsContext';
+import { output } from '../Errors/exceptions';
 
 /**
  * Provide contexts used by other components
@@ -44,7 +44,7 @@ export function Contexts({
           holders.current = holders.current.filter((item) => item !== holderId);
           if (holders.current.length === 0) handleLoaded();
         })
-        .catch(crash);
+        .catch(output.error);
     },
     [handleLoading, handleLoaded],
   );
@@ -83,5 +83,5 @@ export function Contexts({
  */
 export const LoadingContext = React.createContext<
   (promise: Promise<unknown>) => void
->(() => error('Not defined'));
+>(() => output.throw('Loading context not yet defined'));
 LoadingContext.displayName = 'LoadingContext';

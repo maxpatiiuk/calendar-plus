@@ -4,6 +4,8 @@
  * @module
  */
 
+import { output } from '../components/Errors/exceptions';
+
 // Record
 export type R<V> = Record<string, V>;
 // Immutable record
@@ -34,7 +36,8 @@ export type WritableArray<T> = T[];
 /** Cast a type as defined. Throws at runtime if it is not defined */
 export function defined<T>(value: T | undefined, message?: string): T {
   // eslint-disable-next-line functional/no-throw-statement
-  if (value === undefined) throw new Error(message ?? 'Value is not defined');
+  if (value === undefined)
+    return output.throw(message ?? 'Value is not defined');
   else return value;
 }
 

@@ -251,7 +251,7 @@ function Row({
               className="invisible"
               icon="chevronRight"
               title="hidden"
-              onClick={console.error}
+              onClick={undefined}
             />
             <CalendarIndicator color={backgroundColor} />
           </>

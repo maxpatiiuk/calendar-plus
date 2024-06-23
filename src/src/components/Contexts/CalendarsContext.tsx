@@ -9,6 +9,7 @@ import type { RA } from '../../utils/types';
 import { multiSortFunction } from '../../utils/utils';
 import { AuthContext } from './AuthContext';
 import { useVisibilityChangeSpy } from './useVisibilityChangeSpy';
+import { output } from '../Errors/exceptions';
 
 /**
  * Holds a list of user's calendars. If user changed visibility of some calendar,
@@ -59,7 +60,7 @@ export function CalendarsSpy({
           },
         ),
       ).catch((error) => {
-        console.error(error);
+        output.error(error);
         return undefined;
       });
       if (response === undefined) return undefined;

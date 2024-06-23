@@ -1,15 +1,14 @@
 import React from 'react';
 import { sendRequest } from '../Background/messages';
 import { useStorage } from '../../hooks/useStorage';
+import { output } from '../Errors/exceptions';
 
 /**
  * Holds user token (if authenticated) and callback to authenticate
  */
 export const AuthContext = React.createContext<Auth>({
   token: undefined,
-  handleAuthenticate: () => {
-    throw new Error('AuthContext is not defined');
-  },
+  handleAuthenticate: () => output.throw('AuthContext is not defined'),
 });
 AuthContext.displayName = 'AuthContext';
 
@@ -63,7 +62,7 @@ export function AuthenticationProvider({
         ? sendRequest('RefreshToken', { refreshToken, oldToken })
             .then(resolve)
             .catch((error) => {
-              console.error(error);
+              output.error(error);
               return authenticate();
             })
         : authenticate()

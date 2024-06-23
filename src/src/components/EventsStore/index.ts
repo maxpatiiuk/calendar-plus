@@ -14,6 +14,7 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
 import { AuthContext } from '../Contexts/AuthContext';
+import { output } from '../Errors/exceptions';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -200,7 +201,7 @@ async function fetchEvents(
       },
     ),
   ).catch((error) => {
-    console.error(error);
+    output.error(error);
     return undefined;
   });
   if (response === undefined) return undefined;

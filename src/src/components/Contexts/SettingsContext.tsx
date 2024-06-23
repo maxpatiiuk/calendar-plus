@@ -3,6 +3,7 @@ import React from 'react';
 import { useStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
 import { AuthContext } from './AuthContext';
+import { output } from '../Errors/exceptions';
 
 /**
  * Holds relevant user's Google Calendar settings. Can be expanded in the future
@@ -33,7 +34,7 @@ export function SettingsProvider({
           ? setWeekStart(Number.parseInt(value))
           : undefined,
       )
-      .catch(console.error);
+      .catch(output.error);
   }, [isAuthenticated, setWeekStart]);
 
   const userSettings = React.useMemo(

@@ -8,6 +8,7 @@ import { camelToHuman } from '../utils/utils';
 import type { IR, RA, RR } from '../utils/types';
 import { isFunction } from '../utils/types';
 import { f } from '../utils/functools';
+import { output } from '../components/Errors/exceptions';
 
 export const languages = ['en-us'] as const;
 
@@ -41,9 +42,9 @@ export type Dictionary = IR<Value>;
 function assertExhaustive(key: string): never {
   const errorMessage = `
     Trying to access the value for a non-existent localization key "${key}"`;
-  if (process.env.NODE_ENV === 'development') throw new Error(errorMessage);
+  if (process.env.NODE_ENV === 'development') return output.throw(errorMessage);
   else {
-    console.error(errorMessage);
+    output.error(errorMessage);
     // Convert a camel case key to a human readable form
     const value: any = camelToHuman(key);
 

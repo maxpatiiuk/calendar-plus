@@ -4,6 +4,7 @@
 
 import { commonText } from '../../localization/common';
 import { LANGUAGE } from '../../localization/utils';
+import { output } from '../Errors/exceptions';
 import type { RA } from '../../utils/types';
 import { capitalize } from '../../utils/utils';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
@@ -151,7 +152,7 @@ export function getRelativeDate(date: Readonly<Date>): string {
      * future
      */
     // Throw new Error('Future dates are not supported');
-    console.error('Future dates are not supported');
+    output.error('Future dates are not supported');
     return relativeDate.format(0, 'second');
   } else if (timePassed <= MINUTE)
     return relativeDate.format(-Math.round(timePassed / SECOND), 'second');

@@ -3,6 +3,7 @@
  */
 
 import { State } from 'typesafe-reducer';
+import { output } from '../Errors/exceptions';
 
 type Authenticate = State<
   'Authenticate',
@@ -68,8 +69,7 @@ export const sendRequest = async <
         response.type === 'Error' &&
         'error' in response
       ) {
-        console.error(response.error);
-        throw new Error(response.error);
+        return output.throw(response.error);
       } else return response as SHAPE['response'];
     });
 

@@ -9,7 +9,7 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import { KeyboardContext } from '../Contexts/KeyboardContext';
 import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
-import { Portal } from '../Molecules/Portal';
+import { OverlayPortal } from '../Molecules/Portal';
 import { AutoComplete } from '../PowerTools/AutoComplete';
 import { BetterEditRecurring } from '../PowerTools/BetterEditRecurring';
 import { CondenseInterface } from '../PowerTools/CondenseInterface';
@@ -18,6 +18,8 @@ import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
 import { usePref } from '../Preferences/usePref';
 import { FirstAuthScreen } from './FirstAuthScreen';
+import { useStorage } from '../../hooks/useStorage';
+import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
 
 /**
  * Entrypoint react component for the extension
@@ -54,6 +56,7 @@ export function App(): JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
   const [showFirstAuth, setShowFirstAuth] = React.useState(false);
+  const [devMode] = useStorage('devMode');
 
   return (
     <>
@@ -78,7 +81,7 @@ export function App(): JSX.Element | null {
             />
           )}
           {isOpen && Array.isArray(calendars) ? (
-            <Portal>
+            <OverlayPortal>
               <main
                 className={`
                   relative z-[1000] box-border flex h-full flex-col gap-2
@@ -94,10 +97,11 @@ export function App(): JSX.Element | null {
                   <PreferencesPage onClose={(): void => setState('main')} />
                 )}
               </main>
-            </Portal>
+            </OverlayPortal>
           ) : undefined}
         </>
       ) : undefined}
+      {devMode && <DevModeConsoleOverlay />}
       {debugOverlay}
       <AutoComplete />
       <GhostEvents />

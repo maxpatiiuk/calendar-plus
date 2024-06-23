@@ -1,5 +1,6 @@
 import { IR, RA } from './types';
 import { unsafeGetAuth } from '../components/Contexts/AuthContext';
+import { output } from '../components/Errors/exceptions';
 
 const http = {
   notAuthorized: 401,
@@ -45,15 +46,15 @@ export const ajax = async (
       retryAuth &&
       typeof handleAuth === 'function'
     ) {
-      console.log('Unauthorized, retrying with new token');
+      output.log('Unauthorized, retrying with new token');
       return handleAuth().then(() =>
         ajax(url, { ...options, body, headers, retryAuth: false }),
       );
     }
 
-    const error = `Failed to fetch ${url}: ${response.status} ${response.statusText}`;
-    console.error(error);
-    throw new Error(error);
+    return output.throw(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
   });
 
 /**
@@ -63,7 +64,7 @@ function putToken(url: string): { readonly Authorization: string } | undefined {
   if (isGoogleApiUrl(url)) {
     const token = unsafeGetAuth()?.token;
     if (token === undefined)
-      throw new Error(
+      return output.throw(
         `Tried to access Google API before authentication: ${url}`,
       );
     else return { Authorization: `Bearer ${token}` };

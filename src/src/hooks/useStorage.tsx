@@ -11,6 +11,7 @@ import type { VirtualCalendar } from '../components/Widgets/VirtualCalendars';
 import type { GetSet, IR, R, RA } from '../utils/types';
 import { ensure, setDevelopmentGlobal } from '../utils/types';
 import { useAsyncState } from './useAsyncState';
+import { output } from '../components/Errors/exceptions';
 
 type StorageItem<T> = {
   readonly type: 'local' | 'sync';
@@ -73,6 +74,10 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
     type: 'sync',
     defaultValue: 0 as number,
   },
+  devMode: {
+    type: 'sync',
+    defaultValue: false as boolean,
+  },
 } as const);
 
 export type StorageDefinitions = typeof storageDefinitions;
@@ -98,7 +103,7 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
       cacheVersions[name] === version
     )
       return;
-    console.log('Cache version mismatch detected', { name, cacheVersions });
+    output.log('Cache version mismatch detected', { name, cacheVersions });
     if (cacheVersions[name] === undefined) setValue(defaultValue);
     setCacheVersions({ ...cacheVersions, [name]: version });
   }, [name, cacheVersions, setCacheVersions, setValue]);
@@ -149,7 +154,7 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
       // LOW: possible race condition here
       fetchValue()
         .then((value) => (destructorCalled ? undefined : setValue(value)))
-        .catch(console.error);
+        .catch(output.error);
     }
     chrome.storage[type].onChanged.addListener(callback);
     return (): void => {
@@ -168,13 +173,13 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
       if (isOverLimit)
         chrome.storage.sync
           .set(splitValue(name, jsonValue))
-          .catch(console.error);
+          .catch(output.error);
       else
         chrome.storage[type]
           .set({
             [name]: value,
           })
-          .catch(console.error);
+          .catch(output.error);
     },
     [setValue, name, type],
   );

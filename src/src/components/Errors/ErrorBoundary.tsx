@@ -7,6 +7,7 @@
 
 import React from 'react';
 import type { State } from 'typesafe-reducer';
+import { output } from './exceptions';
 
 type ErrorBoundaryState =
   | State<
@@ -43,7 +44,7 @@ export class ErrorBoundary extends React.Component<
     error: Error,
     errorInfo: { readonly componentStack: string },
   ): void {
-    console.error(error.toString());
+    output.error(error.toString());
     this.setState({
       type: 'Error',
       error,
