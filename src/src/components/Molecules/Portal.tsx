@@ -31,7 +31,6 @@ export function usePortal(children: JSX.Element): {
   };
 }
 
-let overlayRoot: HTMLElement | undefined = undefined;
 const overlayPortalStack = new Set<unknown>();
 
 export function OverlayPortal({
@@ -53,16 +52,9 @@ export function OverlayPortal({
     // Hide Google Calendar container when the overlay is shown
     mainContainer.classList.add('hidden');
 
-    // Create a container that would house the React portal
-    if (overlayRoot === undefined) {
-      overlayRoot = document.createElement('div');
-      overlayRoot.className = 'h-full';
-
-      // Nearest parent for both main content and portal container
-      const commonContainer = mainContainer.parentElement!;
-      commonContainer.append(overlayRoot);
-    }
-    overlayRoot.append(element);
+    // Nearest parent for both main content and portal container
+    const commonContainer = mainContainer.parentElement!;
+    commonContainer.append(element);
 
     return (): void => {
       overlayPortalStack.delete(portalId);
@@ -77,14 +69,26 @@ export function OverlayPortal({
 /**
  * Find container that shows Google Calendar's main content
  */
-export const findMainContainer = (): Element | undefined =>
-  document.querySelector('[role="main"]') ?? undefined;
+export const findMainContainer = (): HTMLElement | undefined =>
+  document.querySelector<HTMLElement>('[role="main"]') ?? undefined;
 
-const awaitMainContainer = async (): Promise<HTMLElement | undefined> =>
-  awaitElement(() => findMainContainer()?.parentElement ?? undefined);
+/**
+ * Not listening for main directly, but rather for it's parent because main
+ * element can be re-created (when going to settings page), but it's parent
+ * appears to be stable
+ */
+export const mainElementPromise = awaitElement(
+  () => findMainContainer()?.parentElement ?? undefined,
+).then((element) => {
+  mainElement = element;
+  return element;
+});
+
+export let mainElement: HTMLElement | undefined;
+const getMainElementPromise = () => mainElementPromise;
 
 export function useMainContainer(): HTMLElement | undefined {
-  return useAsyncState(awaitMainContainer, false)[0];
+  return useAsyncState(getMainElementPromise, false)[0];
 }
 
 export const PortalContext = React.createContext<Element | undefined>(

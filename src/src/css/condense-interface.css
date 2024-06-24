@@ -80,12 +80,8 @@
   }
 
   /* Reduce height of day header */
-  body.condense-interface
-    [role='main']
-    [role='grid']
-    [role='row']
-    [role='columnheader'] {
-    height: 35px !important;
+  body.condense-interface [role='main'] [role='grid'] [role='row'] {
+    height: unset !important;
   }
 
   /* Place week day name next to day number */

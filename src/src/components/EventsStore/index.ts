@@ -13,8 +13,11 @@ import {
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
-import { AuthContext } from '../Contexts/AuthContext';
+import { parseEventsFromDom } from '../DomReading';
 import { output } from '../Errors/exceptions';
+import { CurrentView } from '../Contexts/CurrentViewContext';
+import { useDomMutation } from '../DomReading/useDomMutation';
+import { domParseError } from '../DomReading/utils';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -53,15 +56,19 @@ type CalendarEvent = Pick<
  * calendar, and cache the computations for future use.
  */
 export function useEvents(
-  startDate: Date | undefined,
-  endDate: Date | undefined,
+  currentView: CurrentView | undefined,
+  // Don't make network requests until the overlay is opened
+  isOpen: boolean,
+  readSource: 'dom' | 'api' | undefined,
+  setDomReadingEnabled: (shouldFallback: boolean) => void,
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
+
   /*
    * Clear temporary cache when overlay is closed because the events could be
    * edited while overlay is closed, making this cache stale
    */
-  const clearCache = startDate === undefined || endDate === undefined;
+  const clearCache = !isOpen || currentView === undefined;
   if (clearCache) eventsStore.current = {};
   const calendars = React.useContext(CalendarsContext);
 
@@ -69,97 +76,147 @@ export function useEvents(
   const previousIgnoreAllDayEvents = React.useRef(ignoreAllDayEvents);
 
   const virtualCalendars = useVirtualCalendars();
-  const { token } = React.useContext(AuthContext);
-  const isAuthenticated = typeof token === 'string';
+
+  const isReadyToRead =
+    calendars !== undefined &&
+    currentView !== undefined &&
+    readSource !== undefined;
+
+  const observeDomMutations = isReadyToRead && readSource === 'dom';
+  const bumpCount = useDomMutation(observeDomMutations);
 
   const [durations] = useAsyncState(
     React.useCallback(async () => {
-      if (
-        !isAuthenticated ||
-        eventsStore === undefined ||
-        calendars === undefined ||
-        startDate === undefined ||
-        endDate === undefined
-      )
-        return undefined;
+      if (!isReadyToRead) return undefined;
 
-      // Re-compute by clearing the cache if this pref changes
+      /*
+       * Don't try to parse DOM until first bump, to ensure the DOM is there
+       * to be read
+       */
+      const delayDomReading = bumpCount === 0 && readSource === 'dom';
+      if (delayDomReading) return undefined;
+
+      const { firstDay: startDate, lastDay: endDate } = currentView;
+
+      // If this pref changes, force re-compute by clearing the cache
       if (ignoreAllDayEvents !== previousIgnoreAllDayEvents.current) {
         previousIgnoreAllDayEvents.current = ignoreAllDayEvents;
         eventsStore.current = {};
       }
 
-      await Promise.all(
-        calendars.map(async ({ id }) => {
-          const daysBetween = getDatesBetween(startDate, endDate);
-          const bounds = calculateBounds(
-            eventsStore,
-            id,
-            startDate,
-            daysBetween,
-          );
-          if (bounds === undefined) return;
-          const [timeMin, timeMax] = bounds;
-          const events = await fetchEvents(id, timeMin, timeMax);
-          if (events === undefined) return;
+      const guessCalendar = (
+        calendarId: string,
+        input: string,
+      ): string | undefined =>
+        virtualCalendars.find(
+          (subcategory) =>
+            subcategory.calendarId === calendarId &&
+            ruleMatchers[subcategory.rule](input, subcategory.value),
+        )?.virtualCalendar;
 
-          const guessCalendar = (input: string): string | undefined =>
-            virtualCalendars.find(
-              ({ calendarId, rule, value }) =>
-                calendarId === id && ruleMatchers[rule](input, value),
-            )?.virtualCalendar;
+      const daysBetween = getDatesBetween(startDate, endDate);
+      const daysBetweenStrings = daysBetween.map(dateToString);
 
-          const durations = group(
-            events.map(({ summary, start, end }) => {
-              if (
-                ignoreAllDayEvents &&
-                // Event does not have a start and end time
-                start.dateTime === undefined &&
-                end.dateTime === undefined
-              )
-                return ['', {}];
-              const dates = resolveEventDates(timeMin, timeMax, start, end);
-              if (dates === undefined) return ['', {}];
-              const [startDate, endDate] = dates;
-              const data = calculateEventDuration(startDate, endDate);
-              return [guessCalendar(summary) ?? '', data] as const;
-            }),
-          );
-
-          /*
-           * Need to initialize the cache entries, even if empty so that the
-           * code can later detect that this region was already fetched.
-           * Thus, need to be careful and only initialize the days for which
-           * data was actually fetched
+      if (readSource === 'dom') {
+        const domParsed = parseEventsFromDom(
+          startDate,
+          endDate,
+          ignoreAllDayEvents,
+        );
+        if (domParsed === undefined) {
+          /**
+           * Failed to read the DOM. Disabling DOM reading for the rest of the
+           * session to be safe
            */
-          eventsStore.current[id] ??= {};
-          eventsStore.current[id][''] ??= {};
-          const fetched = eventsStore.current[id][''];
-          daysBetween.forEach((date) => {
-            fetched[date] ??= blankHours();
-          });
-
-          durations.forEach(([virtualCalendar, durations]) => {
-            eventsStore.current[id][virtualCalendar] ??= {};
-            const calendarDurations = eventsStore.current[id][virtualCalendar];
-            durations.forEach((durations) =>
-              Object.entries(durations).forEach(([date, durations]) => {
-                calendarDurations[date] ??= blankHours();
-                durations.forEach((duration, hour) => {
-                  calendarDurations[date].total += duration;
-                  calendarDurations[date].hourly[hour] = duration;
-                });
-              }),
+          setDomReadingEnabled(false);
+          return;
+        }
+        const allDurations = group(
+          domParsed.flatMap((column, columnIndex) =>
+            column.map((event) => {
+              const data = calculateEventDuration(
+                timeToDate(event.startTime, daysBetween[columnIndex]),
+                timeToDate(event.endTime, daysBetween[columnIndex]),
+              );
+              return [
+                event.calendarId,
+                [guessCalendar(event.calendarId, event.summary) ?? '', data],
+              ] as const;
+            }),
+          ),
+        );
+        const knownIds = new Set(calendars.map(({ id }) => id));
+        const unknownCalendarId = allDurations.find(
+          ([calendarId]) => !knownIds.has(calendarId),
+        );
+        if (unknownCalendarId) {
+          domParseError(
+            `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist)`,
+          );
+          setDomReadingEnabled(false);
+          return;
+        }
+        allDurations.forEach(([calendarId, durations]) =>
+          updateEventStore(
+            daysBetweenStrings,
+            calendarId,
+            eventsStore.current,
+            durations,
+            true,
+          ),
+        );
+      } else {
+        await Promise.all(
+          calendars.map(async (calendar) => {
+            const bounds = calculateBounds(
+              eventsStore,
+              calendar.id,
+              startDate,
+              daysBetweenStrings,
             );
-          });
-        }),
-      );
+            if (bounds === undefined) return;
+            const [timeMin, timeMax] = bounds;
+
+            const events = await fetchEvents(calendar.id, timeMin, timeMax);
+            if (events === undefined) return;
+
+            const durations = events.map<DurationsToAdd[number]>(
+              ({ summary, start, end }) => {
+                if (
+                  ignoreAllDayEvents &&
+                  // Event does not have a start and end time
+                  start.dateTime === undefined &&
+                  end.dateTime === undefined
+                )
+                  return ['', {}];
+                const dates = resolveEventDates(timeMin, timeMax, start, end);
+                if (dates === undefined) return ['', {}];
+                const [startDate, endDate] = dates;
+                const data = calculateEventDuration(startDate, endDate);
+                return [
+                  guessCalendar(calendar.id, summary) ?? '',
+                  data,
+                ] as const;
+              },
+            );
+
+            updateEventStore(
+              daysBetweenStrings,
+              calendar.id,
+              eventsStore.current,
+              durations,
+              false,
+            );
+          }),
+        );
+      }
+
       return extractData(eventsStore.current, calendars, startDate, endDate);
     }, [
-      isAuthenticated,
+      bumpCount,
+      readSource,
       calendars,
-      startDate,
-      endDate,
+      currentView,
       ignoreAllDayEvents,
       virtualCalendars,
     ]),
@@ -255,7 +312,12 @@ export const dateToString = (date: Date): string =>
 /**
  * Return all dates in between two dates (inclusive) as strings
  */
-export const getDatesBetween = (startDate: Date, endDate: Date): RA<string> =>
+export const getDateStringsBetween = (
+  startDate: Date,
+  endDate: Date,
+): RA<string> => getDatesBetween(startDate, endDate).map(dateToString);
+
+export const getDatesBetween = (startDate: Date, endDate: Date): RA<Date> =>
   Array.from(
     {
       length: countDaysBetween(startDate, endDate),
@@ -263,7 +325,7 @@ export const getDatesBetween = (startDate: Date, endDate: Date): RA<string> =>
     (_, index) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + index);
-      return dateToString(date);
+      return date;
     },
   );
 
@@ -333,51 +395,13 @@ export function dateToDateTime(dateString: string): Date {
   return date;
 }
 
-/**
- * Extract data for the fetched date range for the visible calendars from the
- * events store
- */
-function extractData(
-  eventsStore: RawEventsStore,
-  calendars: Exclude<React.ContextType<typeof CalendarsContext>, undefined>,
-  startDate: Date,
-  endDate: Date,
-): EventsStore {
-  const daysBetween = getDatesBetween(startDate, endDate);
-  return Object.fromEntries(
-    calendars.map(({ id }) => {
-      const totals: R<WritableDayHours> = Object.fromEntries(
-        daysBetween.map((date) => [date, blankHours()]),
-      );
-      // "eventsStore" won't have an entry for current calendar if fetching failed
-      const entries = Object.entries(eventsStore?.[id] ?? {})
-        .map(([virtualCalendar, dates]) => {
-          let categoryTotal = 0;
-          return [
-            virtualCalendar,
-            Object.fromEntries(
-              daysBetween.map((date) => {
-                const total = dates[date] ?? blankHours();
-                totals[date].total += total.total;
-                total.hourly.forEach((minutes, hour) => {
-                  totals[date].hourly[hour] += minutes;
-                });
-                categoryTotal += total.total;
-                return [date, total];
-              }),
-            ),
-            categoryTotal,
-          ] as const;
-        })
-        .sort(
-          sortFunction(
-            ([_label, _durations, categoryTotal]) => categoryTotal,
-            true,
-          ),
-        );
-      return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
-    }),
-  );
+function timeToDate(time: number, baseDate?: Date): Date {
+  const date = baseDate ? new Date(baseDate) : new Date();
+  date.setHours(Math.floor(time));
+  date.setMinutes((time % 1) * 60);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  return date;
 }
 
 /**
@@ -427,6 +451,101 @@ function calculateEventDuration(
   }
 
   return results;
+}
+
+type DurationsToAdd = RA<
+  readonly [string, Readonly<Record<string, RA<number>>>]
+>;
+
+// FIXME: add test cases
+function updateEventStore(
+  daysBetween: RA<string>,
+  calendarId: string,
+  eventsStore: RawEventsStore,
+  rawDurations: DurationsToAdd,
+  reset: boolean,
+) {
+  const durations = group(rawDurations);
+
+  /*
+   * Need to initialize the cache entries, even if empty so that the
+   * code can later detect that this region was already fetched.
+   * Thus, need to be careful and only initialize the days for which
+   * data was actually fetched
+   */
+  eventsStore[calendarId] ??= {};
+  const calendarEvents = eventsStore[calendarId];
+  const allVirtualCalendars = new Set([
+    '',
+    ...Object.keys(calendarEvents),
+    ...durations.map(([virtualCalendar]) => virtualCalendar),
+  ]);
+  allVirtualCalendars.forEach((virtualCalendar) => {
+    calendarEvents[virtualCalendar] ??= {};
+    const fetched = calendarEvents[virtualCalendar];
+    daysBetween.forEach((date) => {
+      fetched[date] = (reset ? undefined : fetched[date]) ?? blankHours();
+    });
+  });
+
+  durations.forEach(([virtualCalendar, daysDurations]) => {
+    const calendarDurations = calendarEvents[virtualCalendar];
+    daysDurations.forEach((daysDurations) =>
+      Object.entries(daysDurations).forEach(([date, durations]) => {
+        durations.forEach((duration, hour) => {
+          calendarDurations[date].total += duration;
+          calendarDurations[date].hourly[hour] = duration;
+        });
+      }),
+    );
+  });
+}
+
+/**
+ * Extract data for the fetched date range for the visible calendars from the
+ * events store
+ */
+function extractData(
+  eventsStore: RawEventsStore,
+  calendars: Exclude<React.ContextType<typeof CalendarsContext>, undefined>,
+  startDate: Date,
+  endDate: Date,
+): EventsStore {
+  const daysBetween = getDateStringsBetween(startDate, endDate);
+  return Object.fromEntries(
+    calendars.map(({ id }) => {
+      const totals: R<WritableDayHours> = Object.fromEntries(
+        daysBetween.map((date) => [date, blankHours()]),
+      );
+      // "eventsStore" won't have an entry for current calendar if fetching failed
+      const entries = Object.entries(eventsStore?.[id] ?? {})
+        .map(([virtualCalendar, dates]) => {
+          let categoryTotal = 0;
+          return [
+            virtualCalendar,
+            Object.fromEntries(
+              daysBetween.map((date) => {
+                const total = dates[date] ?? blankHours();
+                totals[date].total += total.total;
+                total.hourly.forEach((minutes, hour) => {
+                  totals[date].hourly[hour] += minutes;
+                });
+                categoryTotal += total.total;
+                return [date, total];
+              }),
+            ),
+            categoryTotal,
+          ] as const;
+        })
+        .sort(
+          sortFunction(
+            ([_label, _durations, categoryTotal]) => categoryTotal,
+            true,
+          ),
+        );
+      return [id, Object.fromEntries([...entries, [summedDurations, totals]])];
+    }),
+  );
 }
 
 export const exportsForTests = {

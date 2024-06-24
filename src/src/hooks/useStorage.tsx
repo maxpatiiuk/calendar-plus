@@ -103,7 +103,7 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
       cacheVersions[name] === version
     )
       return;
-    output.log('Cache version mismatch detected', { name, cacheVersions });
+    output.warn('Cache version mismatch detected', { name, cacheVersions });
     if (cacheVersions[name] === undefined) setValue(defaultValue);
     setCacheVersions({ ...cacheVersions, [name]: version });
   }, [name, cacheVersions, setCacheVersions, setValue]);

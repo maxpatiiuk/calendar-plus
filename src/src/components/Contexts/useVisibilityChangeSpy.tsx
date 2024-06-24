@@ -8,6 +8,7 @@ import {
   CalendarListEntry,
 } from './CalendarsContext';
 import { output } from '../Errors/exceptions';
+import { SECOND } from '../Atoms/Internationalization';
 
 export function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
@@ -40,7 +41,10 @@ export function useVisibilityChangeSpy(
 
     function handleChange(): void {
       clearTimeout(timeOut);
-      setVisibleCalendars(getVisible());
+      const newVisible = getVisible();
+      const isDifferent =
+        newVisible.join(',') !== visibleCalendarsRef.current?.join(',');
+      if (isDifferent) setVisibleCalendars(newVisible);
     }
 
     // Get list of calendars loaded so far
@@ -50,7 +54,7 @@ export function useVisibilityChangeSpy(
      * that side bar hasn't been fully loaded yet. Wait and try it again
      */
     if (visible.length < visibleCalendarsRef.current!.length)
-      timeOut = setTimeout(handleChange, 2000);
+      timeOut = setTimeout(handleChange, 2 * SECOND);
     else handleChange();
 
     const observer = new MutationObserver(debounce(handleChange, 60));
@@ -138,6 +142,10 @@ function parseCheckbox(
     return undefined;
   }
   const calendarName = checkbox.ariaLabel;
+  /**
+   * Note, the "Birthdays" calendar summary can differ between languages, but
+   * fortunately, Google's API endpoint accounts for that, so we don't have to
+   */
   const calendar =
     calendars.find(({ summary }) => summary === calendarName) ??
     /*

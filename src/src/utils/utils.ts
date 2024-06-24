@@ -185,6 +185,9 @@ export function mappedFind<ITEM, RETURN_TYPE>(
   return value;
 }
 
+export const roundToTwoDecimals = (number: number): number =>
+  Math.round(number * 100) / 100;
+
 export function debounce(callback: () => void, timeout: number): () => void {
   let timer: ReturnType<typeof setTimeout>;
   return () => {
@@ -197,16 +200,25 @@ export function debounce(callback: () => void, timeout: number): () => void {
  * Based on simplified version of Underscore.js's throttle function
  */
 export function throttle(callback: () => void, wait: number): () => void {
-  let timeout: ReturnType<typeof setTimeout>;
+  let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
   let previous = 0;
 
-  return (): void => {
+  function throttled(): void {
     const time = Date.now();
-    const remaining = wait - (time - previous);
-    if (remaining <= 0 || remaining > wait) {
-      clearTimeout(timeout);
-      previous = time;
-      callback();
-    }
-  };
+    const timePassed = time - previous;
+    const remaining = wait - timePassed;
+
+    if (remaining <= 0) call();
+    else timeout ??= setTimeout(call, remaining);
+  }
+
+  function call(): void {
+    clearTimeout(timeout);
+    timeout = undefined;
+    previous = Date.now();
+
+    callback();
+  }
+
+  return throttled;
 }

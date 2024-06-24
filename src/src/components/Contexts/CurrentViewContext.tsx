@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useStorage } from '../../hooks/useStorage';
 import { f } from '../../utils/functools';
-import type { GetSet } from '../../utils/types';
+import type { GetOrSet, GetSet } from '../../utils/types';
 import { listenEvent } from '../Background/messages';
 import { awaitElement } from './CalendarsContext';
 import { SettingsContext } from './SettingsContext';
@@ -70,7 +70,7 @@ export const defaultCustomViewSize = 4;
  * Listen for changes to current URL
  */
 function useCurrentTracker(
-  setCurrentView: (newCurrentView: CurrentView | undefined) => void,
+  setCurrentView: GetOrSet<CurrentView | undefined>[1],
 ) {
   const [customViewSize = defaultCustomViewSize, setCustomViewSize] =
     useStorage('customViewSize');
@@ -86,7 +86,15 @@ function useCurrentTracker(
         customViewSize,
         weekStart,
       );
-      setCurrentView(parsed);
+      setCurrentView((currentView) =>
+        currentView?.view === parsed?.view &&
+        currentView?.selectedDay?.getDate() ===
+          parsed?.selectedDay?.getDate() &&
+        currentView?.firstDay?.getDate() === parsed?.firstDay?.getDate() &&
+        currentView?.lastDay?.getDate() === parsed?.lastDay?.getDate()
+          ? currentView
+          : parsed,
+      );
       if (parsed?.view === 'customday' || parsed?.view === 'customweek')
         detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
           output.error,
@@ -114,6 +122,13 @@ function parsePath(
   customViewSize: number,
   weekStart: number,
 ): CurrentView | undefined {
+  // If URL contains no date, then view is centered around today
+  const today = new Date();
+
+  /*
+   * Unless you changed view or when to a different week, URL does not contain
+   * the view mode or date
+   */
   if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
     const viewMode = document.querySelector('header div[data-active-view]');
     const rawViewName = viewMode?.getAttribute('data-active-view') ?? '';
@@ -121,22 +136,23 @@ function parsePath(
       rawViewName in viewMapper
         ? viewMapper[rawViewName as keyof typeof viewMapper]
         : rawViewName;
-    if (f.includes(supportedViews, viewName)) {
-      // Used to center on current date (always centered if basic path)
-      const today = new Date();
+    if (f.includes(supportedViews, viewName))
       return {
         view: viewName,
         selectedDay: today,
         ...resolveBoundaries(viewName, today, customViewSize, weekStart),
       };
-    }
   }
+
+  // If URl doesn't start with commonPrefix, we might be on the preferences page
   if (!path.startsWith(commonPrefix)) return undefined;
+
   const [viewName, ...date] = path.slice(commonPrefix.length).split('/');
   if (!f.includes(supportedViews, viewName)) return undefined;
-  const year = date[0] || new Date().getFullYear().toString();
-  const month = date[1] || (new Date().getMonth() + 1).toString();
-  const day = date[2] || new Date().getDate().toString();
+
+  const year = date[0] || today.getFullYear().toString();
+  const month = date[1] || (today.getMonth() + 1).toString();
+  const day = date[2] || today.getDate().toString();
   const selectedDay = new Date(
     Number.parseInt(year),
     // Month is 0-based

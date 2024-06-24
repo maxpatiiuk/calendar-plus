@@ -5,7 +5,7 @@ import {
   dateToDateTime,
   dateToString,
   exportsForTests,
-  getDatesBetween,
+  getDateStringsBetween,
   isMidnight,
   summedDurations,
 } from '../index';
@@ -23,7 +23,12 @@ const timeMax = new Date('2022-10-16T05:00:00.000Z');
 
 theories(calculateBounds, {
   'empty cache': {
-    in: [{ current: {} }, 'a', timeMin, getDatesBetween(timeMin, timeMax)],
+    in: [
+      { current: {} },
+      'a',
+      timeMin,
+      getDateStringsBetween(timeMin, timeMax),
+    ],
     out: [timeMin, timeMax],
   },
   'non-empty cache': {
@@ -42,7 +47,7 @@ theories(calculateBounds, {
       },
       'a',
       timeMin,
-      getDatesBetween(timeMin, timeMax),
+      getDateStringsBetween(timeMin, timeMax),
     ],
     out: [
       new Date('2022-10-12T05:00:00.000Z'),
@@ -51,7 +56,7 @@ theories(calculateBounds, {
   },
 });
 
-theories(getDatesBetween, [
+theories(getDateStringsBetween, [
   {
     in: [
       new Date('2022-10-11T11:00:00-05:00'),

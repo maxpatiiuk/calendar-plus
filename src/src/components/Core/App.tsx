@@ -20,6 +20,7 @@ import { usePref } from '../Preferences/usePref';
 import { FirstAuthScreen } from './FirstAuthScreen';
 import { useStorage } from '../../hooks/useStorage';
 import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
+import { domReadingEligibleViews } from '../DomReading';
 
 /**
  * Entrypoint react component for the extension
@@ -41,11 +42,30 @@ export function App(): JSX.Element | null {
     [isOpen, handleKeyboardShortcut, closeOverlayShortcut, openOverlayShortcut],
   );
 
+  const [domReadingEnabled, setDomReadingEnabled] = React.useState(true);
   const currentView = React.useContext(CurrentViewContext);
+
+  const { token } = React.useContext(AuthContext);
+  const isAuthenticated = typeof token === 'string';
+
+  /**
+   * Even though we can read from the DOM without authentication, we still need
+   * to make the API request to fetch the calendar list (we could read that
+   * from the DOM too, but it would be less reliable; I also plan to add more
+   * features that would require authentication, like bulk event editing).
+   */
+  const readSource =
+    !isAuthenticated || currentView === undefined
+      ? undefined
+      : domReadingEnabled && domReadingEligibleViews.has(currentView.view)
+        ? 'dom'
+        : 'api';
+
   const durations = useEvents(
-    // Don't fetch until the overlay is opened
-    isOpen ? currentView?.firstDay : undefined,
-    currentView?.lastDay,
+    currentView,
+    isOpen,
+    readSource,
+    setDomReadingEnabled,
   );
 
   const [debugOverlay] = useAsyncState(
@@ -55,8 +75,9 @@ export function App(): JSX.Element | null {
 
   const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
-  const [showFirstAuth, setShowFirstAuth] = React.useState(false);
   const [devMode] = useStorage('devMode');
+
+  const [showFirstAuth, setShowFirstAuth] = React.useState(false);
 
   return (
     <>

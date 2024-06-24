@@ -5,7 +5,8 @@ import { listen } from '../../utils/events';
 import { f } from '../../utils/functools';
 import { useMainContainer } from '../Molecules/Portal';
 import { usePref } from '../Preferences/usePref';
-import { usePageListener } from './PageListener';
+import { setMainChangeListener } from '../Molecules/mainListener';
+import { throttle } from '../../utils/utils';
 
 /**
  * Ghosted events are displayed as semi-transparent and non-clickable
@@ -30,26 +31,27 @@ export function GhostEvents(): null {
   }, [ghostEventOpacity, isDisabled]);
 
   const mainContainer = useMainContainer();
-  const doGhosting = React.useCallback(
-    (): void =>
-      mainContainer === undefined
-        ? undefined
-        : void Array.from(
-            mainContainer.querySelectorAll('[role="gridcell"] [role="button"]'),
-            (element) =>
-              ghostEventsRef.current.has(getEventName(element))
-                ? element.classList.add('ghosted')
-                : undefined,
-          ),
-    [mainContainer],
+  const doGhosting = React.useRef<() => void>(console.error);
+  doGhosting.current = (): void =>
+    mainContainer === undefined
+      ? undefined
+      : void Array.from(
+          mainContainer.querySelectorAll('[role="gridcell"] [role="button"]'),
+          (element) =>
+            ghostEventsRef.current.has(getEventName(element))
+              ? element.classList.add('ghosted')
+              : undefined,
+        );
+  React.useEffect(
+    () => setMainChangeListener(throttle(() => doGhosting.current(), 60)),
+    [],
   );
-  usePageListener(mainContainer, doGhosting);
 
   const ghostEventsRef = React.useRef(new Set());
   React.useEffect(() => {
     ghostEventsRef.current = new Set(ghostEvents);
-    doGhosting();
-  }, [ghostEvents, doGhosting]);
+    doGhosting.current();
+  }, [ghostEvents]);
 
   // Listen for key press
   React.useEffect(
