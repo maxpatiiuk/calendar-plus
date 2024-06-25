@@ -3,7 +3,7 @@ import React from 'react';
 import { useStorage } from '../../hooks/useStorage';
 import { listen } from '../../utils/events';
 import { f } from '../../utils/functools';
-import { useMainContainer } from '../Molecules/Portal';
+import { mainElement, useMainContainer } from '../Molecules/Portal';
 import { usePref } from '../Preferences/usePref';
 import { setMainChangeListener } from '../Molecules/mainListener';
 import { throttle } from '../../utils/utils';
@@ -30,18 +30,15 @@ export function GhostEvents(): null {
     );
   }, [ghostEventOpacity, isDisabled]);
 
-  const mainContainer = useMainContainer();
   const doGhosting = React.useRef<() => void>(console.error);
   doGhosting.current = (): void =>
-    mainContainer === undefined
-      ? undefined
-      : void Array.from(
-          mainContainer.querySelectorAll('[role="gridcell"] [role="button"]'),
-          (element) =>
-            ghostEventsRef.current.has(getEventName(element))
-              ? element.classList.add('ghosted')
-              : undefined,
-        );
+    void Array.from(
+      mainElement?.querySelectorAll('[role="gridcell"] [role="button"]') ?? [],
+      (element) =>
+        ghostEventsRef.current.has(getEventName(element))
+          ? element.classList.add('ghosted')
+          : undefined,
+    );
   React.useEffect(
     () => setMainChangeListener(throttle(() => doGhosting.current(), 60)),
     [],
@@ -53,6 +50,7 @@ export function GhostEvents(): null {
     doGhosting.current();
   }, [ghostEvents]);
 
+  const mainContainer = useMainContainer();
   // Listen for key press
   React.useEffect(
     () =>
