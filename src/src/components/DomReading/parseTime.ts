@@ -61,11 +61,36 @@ function extractTimes({
    * Still, just in case event name is "8" or "8:00" trim everything after the
    * last occurrence of the summary, not the first
    */
-  const ariaSummaryIndex = aria.lastIndexOf(summary);
-  if (ariaSummaryIndex === -1)
-    return domParseError(
-      `Expected event label (${aria}) to include event summary (${summary})`,
-    );
+  let ariaSummaryIndex = aria.lastIndexOf(summary);
+  if (ariaSummaryIndex === -1) {
+    /**
+     * If we failed to find summary in the aria string AND, the event summary
+     * is parenthesised, we assume it is the `(No title)` summary (event without
+     * a summary).
+     */
+    const isParenthesised = summary.startsWith('(') && summary.endsWith(')');
+    ariaSummaryIndex = isParenthesised
+      ? aria.indexOf(summary.slice(1, -1))
+      : -1;
+
+    /**
+     * In Ukrainian, summary for no-summary events will be `(Без заголовка)`,
+     * where as the aria string will include `Без назви`. Fallback in such
+     * cases to not trimming of the name from the aria string. That is ok as
+     * such name is not going to contain numbers, and thus won't interfere with
+     * the time extraction.
+     */
+    if (ariaSummaryIndex === -1 && isParenthesised)
+      ariaSummaryIndex = aria.length;
+
+    if (ariaSummaryIndex === -1) {
+      return domParseError(
+        `Expected event label (${aria}) to include event summary (${summary})`,
+      );
+    } else {
+      summary = '';
+    }
+  }
   const trimmedAria = aria.slice(0, ariaSummaryIndex);
 
   const allAriaTimes = extractTimeLikeNumbers(trimmedAria);
@@ -136,6 +161,7 @@ const shortLengthTimeNumber = 2;
 const extractTimeLikeNumbers = (string: string): string[] =>
   Array.from(normalizeNumbers(string).match(reTimeNumber) ?? []);
 
+// The regex has two different types of dashes:
 const reTimeNumber = /\d{1,2}([^-–\d]\d{2})?/gu;
 
 function parseTimeNumber(string: string, isAm: boolean): number {

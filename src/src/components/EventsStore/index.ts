@@ -181,7 +181,7 @@ export function useEvents(
             if (events === undefined) return;
 
             const durations = events.map<DurationsToAdd[number]>(
-              ({ summary, start, end }) => {
+              ({ summary = '', start, end }) => {
                 if (
                   ignoreAllDayEvents &&
                   // Event does not have a start and end time
