@@ -293,7 +293,7 @@ function readDom({
     ([calendarId]) => !knownIds.has(calendarId),
   );
   if (unknownCalendarId) {
-    return `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist)`;
+    return `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist). Known calendar IDs: ${Array.from(knownIds).join(', ')}`;
   }
 
   return allDurations;
