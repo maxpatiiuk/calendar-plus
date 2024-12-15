@@ -8,7 +8,6 @@ import { PreferencesProvider } from '../Preferences/Context';
 import { AuthenticationProvider } from './AuthContext';
 import { CalendarsSpy } from './CalendarsContext';
 import { TrackCurrentView } from './CurrentViewContext';
-import { KeyboardListener } from './KeyboardContext';
 import { SettingsProvider } from './SettingsContext';
 import { VersionsContextProvider } from './VersionsContext';
 import { output } from '../Errors/exceptions';
@@ -60,9 +59,7 @@ export function Contexts({
               <SettingsProvider>
                 <TrackCurrentView>
                   <VersionsContextProvider>
-                    <KeyboardListener>
-                      <CalendarsSpy>{children}</CalendarsSpy>
-                    </KeyboardListener>
+                    <CalendarsSpy>{children}</CalendarsSpy>
                   </VersionsContextProvider>
                 </TrackCurrentView>
               </SettingsProvider>

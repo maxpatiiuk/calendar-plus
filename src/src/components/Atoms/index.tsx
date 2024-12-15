@@ -234,3 +234,9 @@ export const Widget = wrap(
   'section',
   'flex flex-col gap-2 rounded bg-white dark:bg-neutral-800',
 );
+
+export const Key = wrap(
+  'Key',
+  'kbd',
+  'bg-gray-200 border-1 dark:border-none dark:bg-neutral-700 rounded-sm mx-1 p-0.5 text-xl',
+);

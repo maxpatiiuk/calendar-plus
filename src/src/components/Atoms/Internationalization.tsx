@@ -122,6 +122,13 @@ const numberFormatter = new Intl.NumberFormat(LANGUAGE);
 export const formatNumber = (number: number): string =>
   numberFormatter.format(number);
 
+const disjunctionFormatter = new Intl.ListFormat(LANGUAGE, {
+  style: 'long',
+  type: 'disjunction',
+});
+export const formatDisjunction = (list: RA<string>): string =>
+  disjunctionFormatter.format(list);
+
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 export const MILLISECONDS = 1;
 export const SECOND = 1000 * MILLISECONDS;

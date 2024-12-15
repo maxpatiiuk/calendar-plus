@@ -6,8 +6,8 @@ import { commonText } from '../../localization/common';
 import { preferencesText } from '../../localization/preferences';
 import type { IR } from '../../utils/types';
 import { ensure } from '../../utils/types';
-import type { KeyboardShortcuts } from '../Molecules/KeyboardShortcut';
-import { SetKeyboardShortcuts } from '../Molecules/KeyboardShortcut';
+import type { KeyboardShortcuts } from '../KeyboardShortcuts/config';
+import { SetKeyboardShortcuts } from '../KeyboardShortcuts/Shortcuts';
 import { BooleanPref, pickListPref, rangePref } from './Renderers';
 
 /**
@@ -33,9 +33,30 @@ export type PreferenceRenderer<VALUE> = (props: {
 /**
  * This is used to enforce the same generic value be used inside a PreferenceItem
  */
-const defineItem = <VALUE,>(
+const definePref = <VALUE,>(
   definition: PreferenceItem<VALUE>,
 ): PreferenceItem<VALUE> => definition;
+
+const defineKeyboardShortcut = (
+  title: string,
+  /**
+   * If defined a keyboard shortcut for one platform, it will be automatically
+   * transformed (`ctrl -> cmd`) for the other platforms.
+   *
+   * Thus, you should define keyboard shortcuts for the "other" platform only,
+   * unless you actually want to use different keyboard shortcuts on different
+   * systems.
+   */
+  defaultValue: KeyboardShortcuts | string,
+): PreferenceItem<KeyboardShortcuts> =>
+  definePref<KeyboardShortcuts>({
+    title,
+    defaultValue:
+      typeof defaultValue === 'string'
+        ? { other: [defaultValue] }
+        : defaultValue,
+    renderer: SetKeyboardShortcuts,
+  });
 
 export type GenericPreferencesCategories = IR<{
   readonly title: string;
@@ -54,7 +75,7 @@ export const preferenceDefinitions = {
   behavior: {
     title: preferencesText('behavior'),
     items: {
-      ignoreAllDayEvents: defineItem<boolean>({
+      ignoreAllDayEvents: definePref<boolean>({
         title: preferencesText('ignoreAllDayEvents'),
         renderer: BooleanPref,
         defaultValue: true,
@@ -64,25 +85,15 @@ export const preferenceDefinitions = {
   feature: {
     title: preferencesText('features'),
     items: {
-      openOverlayShortcut: defineItem<KeyboardShortcuts>({
-        title: preferencesText('openOverlayShortcut'),
-        renderer: SetKeyboardShortcuts,
-        defaultValue: {
-          linux: [{ modifiers: [], keys: ['`'] }],
-          macOS: [{ modifiers: [], keys: ['`'] }],
-          windows: [{ modifiers: [], keys: ['`'] }],
-        },
-      }),
-      closeOverlayShortcut: defineItem<KeyboardShortcuts>({
-        title: preferencesText('closeOverlayShortcut'),
-        renderer: SetKeyboardShortcuts,
-        defaultValue: {
-          linux: [{ modifiers: [], keys: ['`'] }],
-          macOS: [{ modifiers: [], keys: ['`'] }],
-          windows: [{ modifiers: [], keys: ['`'] }],
-        },
-      }),
-      ghostEventShortcut: defineItem<'cmd' | 'ctrl' | 'none' | 'shift'>({
+      openOverlayShortcut: defineKeyboardShortcut(
+        preferencesText('openOverlayShortcut'),
+        'Backquote',
+      ),
+      closeOverlayShortcut: defineKeyboardShortcut(
+        preferencesText('closeOverlayShortcut'),
+        'Backquote',
+      ),
+      ghostEventShortcut: definePref<'cmd' | 'ctrl' | 'none' | 'shift'>({
         title: preferencesText('ghostEvent'),
         description: preferencesText('ghostEventDescription'),
         renderer: pickListPref<'cmd' | 'ctrl' | 'none' | 'shift'>(
@@ -90,12 +101,12 @@ export const preferenceDefinitions = {
         ),
         defaultValue: 'shift' as const,
       }),
-      ghostEventOpacity: defineItem<number>({
+      ghostEventOpacity: definePref<number>({
         title: preferencesText('ghostedEventOpacity'),
         renderer: rangePref({ min: 0, max: 100, step: 1 }),
         defaultValue: 30,
       }),
-      condenseInterface: defineItem<boolean>({
+      condenseInterface: definePref<boolean>({
         title: preferencesText('condenseInterface'),
         renderer: BooleanPref,
         defaultValue: false,
@@ -105,13 +116,13 @@ export const preferenceDefinitions = {
   recurringEvents: {
     title: preferencesText('recurringEvents'),
     items: {
-      hideEditAll: defineItem<boolean>({
+      hideEditAll: definePref<boolean>({
         title: preferencesText('hideEditAll'),
         description: preferencesText('hideEditAllDescription'),
         renderer: BooleanPref,
         defaultValue: false,
       }),
-      lessInvasiveDialog: defineItem<boolean>({
+      lessInvasiveDialog: definePref<boolean>({
         title: preferencesText('lessInvasiveDialog'),
         description: preferencesText('lessInvasiveDialogDescription'),
         renderer: BooleanPref,
@@ -122,7 +133,7 @@ export const preferenceDefinitions = {
   export: {
     title: commonText('dataExport'),
     items: {
-      format: defineItem<'csv' | 'json' | 'tsv'>({
+      format: definePref<'csv' | 'json' | 'tsv'>({
         title: preferencesText('exportFormat'),
         renderer: pickListPref<'csv' | 'json' | 'tsv'>([
           { value: 'json', title: preferencesText('json') },

@@ -6,7 +6,6 @@ import { Button } from '../Atoms';
 import { AuthContext } from '../Contexts/AuthContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
-import { KeyboardContext } from '../Contexts/KeyboardContext';
 import { Dashboard } from '../Dashboard';
 import { useEvents } from '../EventsStore';
 import { OverlayPortal } from '../Molecules/Portal';
@@ -16,12 +15,12 @@ import { CondenseInterface } from '../PowerTools/CondenseInterface';
 import { GhostEvents } from '../PowerTools/GhostEvents';
 import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
-import { usePref } from '../Preferences/usePref';
 import { FirstAuthScreen } from './FirstAuthScreen';
 import { useStorage } from '../../hooks/useStorage';
 import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
 import { domReadingEligibleViews } from '../DomReading';
 import { ThemeDetector } from '../Contexts/ThemeColor';
+import { useKeyboardShortcut } from '../KeyboardShortcuts/hooks';
 
 /**
  * Entrypoint react component for the extension
@@ -32,15 +31,15 @@ export function App(): JSX.Element | null {
   );
   const isOpen = state !== 'closed';
 
-  const [openOverlayShortcut] = usePref('feature', 'openOverlayShortcut');
-  const [closeOverlayShortcut] = usePref('feature', 'closeOverlayShortcut');
-  const handleKeyboardShortcut = React.useContext(KeyboardContext);
-  React.useEffect(
-    () =>
-      isOpen
-        ? handleKeyboardShortcut(closeOverlayShortcut, () => setState('closed'))
-        : handleKeyboardShortcut(openOverlayShortcut, () => setState('main')),
-    [isOpen, handleKeyboardShortcut, closeOverlayShortcut, openOverlayShortcut],
+  useKeyboardShortcut(
+    'feature',
+    'openOverlayShortcut',
+    isOpen ? undefined : () => setState('main'),
+  );
+  useKeyboardShortcut(
+    'feature',
+    'closeOverlayShortcut',
+    isOpen ? () => setState('closed') : undefined,
   );
 
   const [domReadingEnabled, setDomReadingEnabled] = React.useState(true);

@@ -22,12 +22,8 @@ export const preferencesText = createDictionary({
   ignoreAllDayEvents: { 'en-us': 'Ignore All-Day Events' },
   openOverlayShortcut: { 'en-us': 'Open Overlay Shortcut' },
   closeOverlayShortcut: { 'en-us': 'Close Overlay Shortcut' },
-  ctrl: { 'en-us': 'Ctrl' },
-  cmd: { 'en-us': 'Cmd' },
-  shift: { 'en-us': 'Shift' },
-  alt: { 'en-us': 'Alt' },
-  meta: { 'en-us': 'Cmd' },
   pressKeys: { 'en-us': 'Press some keys...' },
+  noKeyAssigned: { 'en-us': 'No key assigned' },
   recurringEvents: { 'en-us': 'Recurring Events' },
   lessInvasiveDialog: {
     'en-us': 'Less Invasive "Edit recurring event" Dialog',
@@ -57,5 +53,36 @@ export const preferencesText = createDictionary({
   json: { 'en-us': 'JSON' },
   condenseInterface: {
     'en-us': 'Condense Interface',
+  },
+  alt: {
+    comment: 'Alt key on the keyboard',
+    'en-us': 'Alt',
+  },
+  macOption: {
+    comment: 'Option key on the macOS keyboard',
+    'en-us': '⌥',
+  },
+  ctrl: {
+    comment: 'Ctrl key on the keyboard',
+    'en-us': 'Ctrl',
+  },
+  macControl: {
+    comment: 'Control key on the macOS keyboard',
+    'en-us': '⌃',
+  },
+  macMeta: {
+    comment: 'Meta/Command key on the macOS keyboard',
+    'en-us': '⌘',
+  },
+  macShift: {
+    comment: 'Shift key on the macOS keyboard',
+    'en-us': '⇧',
+  },
+  shift: {
+    comment: 'Shift key on the keyboard',
+    'en-us': 'Shift',
+  },
+  keyboardShortcuts: {
+    'en-us': 'Keyboard Shortcuts',
   },
 });

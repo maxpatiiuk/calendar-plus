@@ -28,7 +28,7 @@ export function DevModeConsoleOverlay() {
             type === 'log'
               ? 'bg-white dark:bg-black'
               : type === 'warn'
-                ? 'bg-orange-300 dark:bg-orange-800'
+                ? 'bg-orange-300 dark:bg-orange-600'
                 : 'bg-red-400 dark:bg-red-700'
           }
         >

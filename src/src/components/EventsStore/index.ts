@@ -6,6 +6,7 @@ import { formatUrl } from '../../utils/queryString';
 import type { IR, R, RA, WritableArray } from '../../utils/types';
 import { findLastIndex, group, sortFunction } from '../../utils/utils';
 import {
+  formatDisjunction,
   HOUR,
   MILLISECONDS_IN_DAY,
   MINUTE,
@@ -293,7 +294,7 @@ function readDom({
     ([calendarId]) => !knownIds.has(calendarId),
   );
   if (unknownCalendarId) {
-    return `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist). Known calendar IDs: ${Array.from(knownIds).join(', ')}`;
+    return `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist). Known calendar IDs: ${formatDisjunction(Array.from(knownIds))}`;
   }
 
   return allDurations;

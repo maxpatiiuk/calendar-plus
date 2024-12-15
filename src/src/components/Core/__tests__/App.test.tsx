@@ -6,7 +6,7 @@ import { CurrentViewContext } from '../../Contexts/CurrentViewContext';
 import { testTime } from '../../../tests/helpers';
 import { act } from '@testing-library/react';
 import { VersionsContextProvider } from '../../Contexts/VersionsContext';
-import { KeyboardListener } from '../../Contexts/KeyboardContext';
+import { KeyboardListener } from '../../KeyboardShortcuts/context';
 
 test('does not render until current date is extracted', () =>
   act(() => {
