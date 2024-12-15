@@ -20,11 +20,16 @@
 
   /** Remove inconsistent spacing between elements (using gap instead) */
   .less-invasive-edit-recurring [role='dialog'] > * {
-    @apply !p-0 !m-0;
+    @apply !p-0 !m-0 !border-none;
   }
 
   /** Display 3 options horizontally */
   .less-invasive-edit-recurring [role='dialog'] [role='radiogroup'] {
     @apply !flex !gap-4 !h-full !items-center;
+  }
+
+  /** Prevent vertical scrollbar in radiogroup container */
+  .less-invasive-edit-recurring [role='dialog'] input[type='radio'] {
+    @apply !h-full;
   }
 }
