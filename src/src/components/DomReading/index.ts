@@ -4,7 +4,6 @@ import { getDatesBetween } from '../EventsStore';
 import { parseAllDayEventNode } from './allDayEvents';
 import { rawDomEventToParsed } from './parseTime';
 import { ParsedDomEvent } from './types';
-import { domParseError } from './utils';
 
 /**
  * For these views, there is enough information in the DOM to parse each event.
@@ -20,11 +19,11 @@ export function parseEventsFromDom(
   timeMin: Date,
   timeMax: Date,
   ignoreAllDayEvents: boolean,
-): RA<RA<ParsedDomEvent>> | undefined {
+): RA<RA<ParsedDomEvent>> | string {
   try {
     return parseDom(timeMin, timeMax, ignoreAllDayEvents);
   } catch (error) {
-    return domParseError(String(error));
+    return String(error);
   }
 }
 
@@ -32,15 +31,13 @@ function parseDom(
   timeMin: Date,
   timeMax: Date,
   ignoreAllDayEvents: boolean,
-): RA<RA<ParsedDomEvent>> | undefined {
+): RA<RA<ParsedDomEvent>> | string {
   const columns = document.querySelectorAll(
     '[role="gridcell"][data-column-index]',
   );
-  if (columns.length === 0)
-    return domParseError('Failed to locate day columns');
+  if (columns.length === 0) return 'Failed to locate day columns';
   const columnsContainer = columns[0].closest('[role="grid"]');
-  if (columnsContainer === null)
-    return domParseError('Failed to locate day columns');
+  if (columnsContainer === null) return 'Failed to locate day columns';
 
   const dayBefore = new Date(timeMin);
   dayBefore.setDate(dayBefore.getDate() - 1);
@@ -62,9 +59,7 @@ function parseDom(
     if (columns.length === expectedColumns * 2)
       resolvedColumns = resolvedColumns.slice(0, expectedColumns);
     else
-      return domParseError(
-        `Expected to find ${expectedColumns} columns, but found ${columns.length}`,
-      );
+      return `Expected to find ${expectedColumns} columns, but found ${columns.length}`;
   }
 
   const allDayEventColumns = Array.from(
@@ -78,9 +73,7 @@ function parseDom(
   );
 
   if (allDayEventColumns.length !== expectedColumns)
-    return domParseError(
-      `Expected to find ${expectedColumns} all day event columns, but found ${allDayEventColumns.length}`,
-    );
+    return `Expected to find ${expectedColumns} all day event columns, but found ${allDayEventColumns.length}`;
 
   const columnEvents = resolvedColumns.map((column, columnIndex) => {
     const previousDay = dates[columnIndex];
@@ -101,23 +94,24 @@ function parseDom(
 
   const flat = columnEvents.flat();
 
+  const errors = flat.filter((entry) => typeof entry === 'string').join('\n');
   // Failed parsing some event
-  if (flat.includes(undefined)) return undefined;
+  if (errors.length > 0) return errors;
 
   return columnEvents as RA<RA<ParsedDomEvent>>;
 }
 
-export const notEvent = 'notEvent';
+export const notEvent = Symbol('notEvent');
 const excludeNonEvents = (
-  maybeParsed: ParsedDomEvent | typeof notEvent | undefined,
-): maybeParsed is ParsedDomEvent | undefined => maybeParsed !== 'notEvent';
+  maybeParsed: ParsedDomEvent | typeof notEvent | string,
+): maybeParsed is ParsedDomEvent | string => maybeParsed !== 'notEvent';
 
 function parseEventNode(
   event: HTMLElement,
   previousDayNumber: number,
   todayDayNumber: number,
   nextDayNumber: number,
-): ParsedDomEvent | typeof notEvent | undefined {
+): ParsedDomEvent | typeof notEvent | string {
   const calendarId = extractCalendarId(event);
   if (calendarId === undefined) {
     return notEvent;
@@ -127,7 +121,7 @@ function parseEventNode(
   const aria = isAriaLabelFirst
     ? event.children[0]?.textContent
     : event.children[1]?.textContent;
-  if (aria == null) return domParseError('Unable to find event label');
+  if (aria == null) return 'Unable to find event label';
   const container = event.children[1 + (isAriaLabelFirst ? 0 : 1)];
   const titleContainer = container?.children[0]?.children[0]?.children[0];
   /*
@@ -135,30 +129,27 @@ function parseEventNode(
    * we have API calls to fallback to if DOM parsing fails
    */
   const summary = titleContainer?.children[0]?.textContent;
-  if (summary == null) return domParseError('Failed to extract event summary');
+  if (summary == null) return 'Failed to extract event summary';
 
   // First case for larger events; 2nd case for one-line events
   const timesContainer =
     container?.children[0]?.children[1] ?? titleContainer?.children[2];
   // For one line events with a location data, this span would contain both - pick the first text node
   const times = timesContainer?.childNodes[0].textContent;
-  if (times == null) return domParseError('Failed to extract event times');
+  if (times == null) return 'Failed to extract event times';
 
   const parent = event.parentElement;
-  if (parent === null)
-    return domParseError('Expected event node to have a parent');
+  if (parent === null) return 'Expected event node to have a parent';
 
   if (!event.style.top.endsWith('px'))
-    return domParseError('Expected event "top" style to be in px');
+    return 'Expected event "top" style to be in px';
   if (!event.style.height.endsWith('px'))
-    return domParseError('Expected event "height" style to be in px');
+    return 'Expected event "height" style to be in px';
 
   const top = Number.parseInt(event.style.top.slice(0, -2));
   const height = Number.parseInt(event.style.height.slice(0, -2));
-  if (Number.isNaN(top))
-    return domParseError('Failed to parse event "top" style');
-  if (Number.isNaN(height))
-    return domParseError('Failed to parse event "height" style');
+  if (Number.isNaN(top)) return 'Failed to parse event "top" style';
+  if (Number.isNaN(height)) return 'Failed to parse event "height" style';
 
   // FIXME: This is 0 when parent is not visible - remember last height?
   const parentMiddle = parent.clientHeight / 2;

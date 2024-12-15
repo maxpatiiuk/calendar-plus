@@ -2,13 +2,13 @@ import { roundToTwoDecimals } from '../../utils/utils';
 import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';
 import { normalizeNumbers } from './normalizeNumbers';
 import type { ParsedDomEvent, RawDomEvent } from './types';
-import { domParseError, toSpliced } from './utils';
+import { toSpliced } from './utils';
 
 export function rawDomEventToParsed(
   rawDomEvent: RawDomEvent,
-): ParsedDomEvent | undefined {
+): ParsedDomEvent | string {
   const times = extractTimes(rawDomEvent);
-  if (times === undefined) return undefined;
+  if (typeof times === 'string') return times;
 
   const [start, end] = times;
   const startTime = rawDomEvent.touchesTop
@@ -18,13 +18,9 @@ export function rawDomEventToParsed(
     ? 24
     : parseTimeNumber(end, rawDomEvent.amEnd);
   if (Number.isNaN(startTime))
-    return domParseError(
-      `Failed to parse start time from event label (${rawDomEvent.aria})`,
-    );
+    return `Failed to parse start time from event label (${rawDomEvent.aria})`;
   if (Number.isNaN(endTime))
-    return domParseError(
-      `Failed to parse end time from event label (${rawDomEvent.aria})`,
-    );
+    return `Failed to parse end time from event label (${rawDomEvent.aria})`;
 
   return {
     calendarId: rawDomEvent.calendarId,
@@ -43,10 +39,9 @@ function extractTimes({
   previousDayNumber,
   todayDayNumber,
   nextDayNumber,
-}: RawDomEvent): readonly [string, string] | undefined {
+}: RawDomEvent): readonly [string, string] | string {
   const numbers = extractTimeLikeNumbers(times);
-  if (numbers.length === 0)
-    return domParseError(`No time numbers found in ${times}`);
+  if (numbers.length === 0) return `No time numbers found in ${times}`;
 
   // Sometimes time string would include both numbers - makes our job easy
   if (numbers.length === 2) return [numbers[0], numbers[1]];
@@ -84,9 +79,7 @@ function extractTimes({
       ariaSummaryIndex = aria.length;
 
     if (ariaSummaryIndex === -1) {
-      return domParseError(
-        `Expected event label (${aria}) to include event summary (${summary})`,
-      );
+      return `Expected event label (${aria}) to include event summary (${summary})`;
     } else {
       summary = '';
     }
@@ -97,15 +90,11 @@ function extractTimes({
 
   const startTimeIndex = allAriaTimes.indexOf(numbers[0]);
   if (startTimeIndex === -1)
-    return domParseError(
-      `Expected event label (${aria}) to include event start time ${numbers[0]}`,
-    );
+    return `Expected event label (${aria}) to include event start time ${numbers[0]}`;
 
   const endTimeCandidates = toSpliced(allAriaTimes, startTimeIndex, 1);
   if (endTimeCandidates.length === 0)
-    return domParseError(
-      `Expected to find event end time in event label (${aria}) but found none`,
-    );
+    return `Expected to find event end time in event label (${aria}) but found none`;
 
   const startTime = numbers[0];
   if (endTimeCandidates.length === 1) return [startTime, endTimeCandidates[0]];
@@ -124,9 +113,7 @@ function extractTimes({
 
   const todayNumberIndex = endTimeCandidates.indexOf(todayDayNumber.toString());
   if (todayNumberIndex === -1)
-    return domParseError(
-      `Expected event label (${aria}) to include day number ${todayDayNumber}`,
-    );
+    return `Expected event label (${aria}) to include day number ${todayDayNumber}`;
 
   const timesWithoutTodayNumber = toSpliced(allAriaTimes, startTimeIndex, 1);
   if (timesWithoutTodayNumber.length === 1)
@@ -146,11 +133,11 @@ function extractTimes({
     neighboringDayNumber.toString(),
   );
   if (neighboringDayNumberIndex === -1)
-    return domParseError(`Failed to parse event label (${aria})`);
+    return `Failed to parse event label (${aria})`;
 
   const timesWithoutDayNumbers = toSpliced(allAriaTimes, startTimeIndex, 1);
   if (timesWithoutDayNumbers.length > 1)
-    return domParseError(`Failed to parse event label (${aria})`);
+    return `Failed to parse event label (${aria})`;
 
   return [startTime, timesWithoutDayNumbers[0]];
 }

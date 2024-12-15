@@ -10,14 +10,17 @@ import {
   MILLISECONDS_IN_DAY,
   MINUTE,
 } from '../Atoms/Internationalization';
-import { CalendarsContext } from '../Contexts/CalendarsContext';
+import {
+  awaitElement,
+  CalendarsContext,
+  type CalendarListEntry,
+} from '../Contexts/CalendarsContext';
 import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
 import { parseEventsFromDom } from '../DomReading';
 import { output } from '../Errors/exceptions';
 import { CurrentView } from '../Contexts/CurrentViewContext';
 import { useDomMutation } from '../DomReading/useDomMutation';
-import { domParseError } from '../DomReading/utils';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -104,10 +107,10 @@ export function useEvents(
         eventsStore.current = {};
       }
 
-      const guessCalendar = (
-        calendarId: string,
-        input: string,
-      ): string | undefined =>
+      const guessCalendar: DomReadPayload['guessCalendar'] = (
+        calendarId,
+        input,
+      ) =>
         virtualCalendars.find(
           (subcategory) =>
             subcategory.calendarId === calendarId &&
@@ -118,41 +121,37 @@ export function useEvents(
       const daysBetweenStrings = daysBetween.map(dateToString);
 
       if (readSource === 'dom') {
-        const domParsed = parseEventsFromDom(
-          startDate,
-          endDate,
-          ignoreAllDayEvents,
+        const pollInterval = 200;
+        const limit = 10;
+        let allDurations = '' as ReturnType<typeof readDom>;
+        /**
+         * While moving between time ranges or between different views, because
+         * of animations, sometimes columns both for old and new range may be
+         * temporary present in the DOM - retry read in chance it gets better.
+         */
+        await awaitElement(
+          () => {
+            allDurations = readDom({
+              calendars,
+              startDate,
+              endDate,
+              ignoreAllDayEvents,
+              daysBetween,
+              guessCalendar,
+            });
+            return typeof allDurations === 'string' ? undefined : allDurations;
+          },
+          pollInterval,
+          limit,
         );
-        if (domParsed === undefined) {
+        if (typeof allDurations === 'string') {
+          output.warn(
+            `[Calendar Plus] DOM parse error: ${allDurations}. Falling back to retrieving data from the API rather than DOM parsing (slower, but more reliable)`,
+          );
           /**
            * Failed to read the DOM. Disabling DOM reading for the rest of the
            * session to be safe
            */
-          setDomReadingEnabled(false);
-          return;
-        }
-        const allDurations = group(
-          domParsed.flatMap((column, columnIndex) =>
-            column.map((event) => {
-              const data = calculateEventDuration(
-                timeToDate(event.startTime, daysBetween[columnIndex]),
-                timeToDate(event.endTime, daysBetween[columnIndex]),
-              );
-              return [
-                event.calendarId,
-                [guessCalendar(event.calendarId, event.summary) ?? '', data],
-              ] as const;
-            }),
-          ),
-        );
-        const knownIds = new Set(calendars.map(({ id }) => id));
-        const unknownCalendarId = allDurations.find(
-          ([calendarId]) => !knownIds.has(calendarId),
-        );
-        if (unknownCalendarId) {
-          domParseError(
-            `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist)`,
-          );
           setDomReadingEnabled(false);
           return;
         }
@@ -223,6 +222,62 @@ export function useEvents(
     false,
   );
   return durations;
+}
+
+type DomReadPayload = {
+  readonly calendars: RA<CalendarListEntry>;
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly ignoreAllDayEvents: boolean;
+  readonly daysBetween: RA<Date>;
+  readonly guessCalendar: (
+    calendarId: string,
+    input: string,
+  ) => string | undefined;
+};
+
+function readDom({
+  calendars,
+  startDate,
+  endDate,
+  ignoreAllDayEvents,
+  daysBetween,
+  guessCalendar,
+}: DomReadPayload):
+  | RA<
+      readonly [
+        key: string,
+        values: RA<readonly [string, Readonly<Record<string, RA<number>>>]>,
+      ]
+    >
+  | string {
+  const domParsed = parseEventsFromDom(startDate, endDate, ignoreAllDayEvents);
+  if (typeof domParsed === 'string') {
+    return domParsed;
+  }
+  const allDurations = group(
+    domParsed.flatMap((column, columnIndex) =>
+      column.map((event) => {
+        const data = calculateEventDuration(
+          timeToDate(event.startTime, daysBetween[columnIndex]),
+          timeToDate(event.endTime, daysBetween[columnIndex]),
+        );
+        return [
+          event.calendarId,
+          [guessCalendar(event.calendarId, event.summary) ?? '', data],
+        ] as const;
+      }),
+    ),
+  );
+  const knownIds = new Set(calendars.map(({ id }) => id));
+  const unknownCalendarId = allDurations.find(
+    ([calendarId]) => !knownIds.has(calendarId),
+  );
+  if (unknownCalendarId) {
+    return `Incorrectly retrieved event calendar id as "${unknownCalendarId[0]}" (calendar by such ID does not exist)`;
+  }
+
+  return allDurations;
 }
 
 /** This is the maximum allowed by the API */
