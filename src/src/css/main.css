@@ -12,7 +12,7 @@
 @import 'tailwindcss/components';
 @import './hide-edit-all.css';
 @import './condense-interface.css';
-@import './less-invasive-batch-edit.css';
+@import './less-invasive-edit-recurring.css';
 @import './ghost-events.css';
 @import './autocomplete-indicator.css';
 

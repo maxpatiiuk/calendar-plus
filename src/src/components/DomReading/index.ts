@@ -104,7 +104,7 @@ function parseDom(
 export const notEvent = Symbol('notEvent');
 const excludeNonEvents = (
   maybeParsed: ParsedDomEvent | typeof notEvent | string,
-): maybeParsed is ParsedDomEvent | string => maybeParsed !== 'notEvent';
+): maybeParsed is ParsedDomEvent | string => maybeParsed !== notEvent;
 
 function parseEventNode(
   event: HTMLElement,

@@ -7,10 +7,11 @@ import { mappedFind } from '../../utils/utils';
 import { awaitElement } from '../Contexts/CalendarsContext';
 import { usePref } from '../Preferences/usePref';
 
-const className = 'less-invasive-batch-edit';
+const className = 'less-invasive-edit-recurring';
 
 type Elements = {
   readonly overlay: HTMLElement;
+  readonly dialog: HTMLElement;
   readonly submitButton: HTMLElement;
 };
 
@@ -59,13 +60,18 @@ export function BetterEditRecurring(): null {
     }
 
     const observer = new MutationObserver((mutationList) => {
-      const targets = f.unique(
+      const dialogContainers = f.unique(
         mutationList.map(({ target }) => target as HTMLElement),
       );
-      const overlays = targets.flatMap((target) =>
-        Array.from<HTMLElement>(target.querySelectorAll('[isfullscreen]')),
+      const pairs = dialogContainers.flatMap((dialogContainer) =>
+        Array.from(
+          dialogContainer.querySelectorAll('[role="dialog"]'),
+          (dialog) => [dialogContainer, dialog as HTMLElement] as const,
+        ),
       );
-      const potentialElements = mappedFind(overlays, findElements);
+      const potentialElements = mappedFind(pairs, ([dialogContainer, dialog]) =>
+        findElements(dialogContainer, dialog),
+      );
       potentialElements?.overlay.classList.add(className);
       elements.current = potentialElements;
     });
@@ -100,26 +106,39 @@ export function BetterEditRecurring(): null {
 /**
  * Find the three options in the "Edit recurring event" dialog.
  */
-function findElements(overlay: HTMLElement): Elements | undefined {
-  const options = overlay.querySelectorAll(
-    '[role="dialog"] [role="radiogroup"] label',
-  );
-  /**
+function findElements(
+  dialogContainer: HTMLElement,
+  dialog: HTMLElement,
+): Elements | undefined {
+  const overlay =
+    Array.from(dialogContainer.children).find((child) =>
+      child.contains(dialog),
+    ) ??
+    dialogContainer.firstElementChild ??
+    undefined;
+  if (overlay === undefined) return;
+
+  const options = dialog.querySelectorAll('[role="radiogroup"] label');
+  /*
    * When moving within day, the "All events" option is present. If moving
    * between days, that option is not present
    */
   const optionsCount = [2, 3];
   // Confirm we are in the correct dialog
-  if (options === undefined || !optionsCount.includes(options.length))
-    return undefined;
+  if (options === undefined || !optionsCount.includes(options.length)) return;
 
-  const submitButton = overlay.querySelector(
-    '[role="dialog"] [role="button"][autofocus]',
+  const hasInput = !!dialog.querySelector('input[type="number"]');
+  // This might be the "Custom recurrence" dialog - false positive.
+  if (hasInput) return;
+
+  const submitButton = dialog.querySelector(
+    'button[data-mdc-dialog-initial-focus]',
   );
-  if (submitButton === null) return undefined;
+  if (submitButton === null) return;
 
   return {
-    overlay,
+    overlay: overlay as HTMLElement,
+    dialog,
     submitButton: submitButton as HTMLElement,
   };
 }
