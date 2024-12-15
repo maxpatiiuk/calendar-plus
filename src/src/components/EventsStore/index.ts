@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAsyncState } from '../../hooks/useAsyncState';
+import { loadingTimeout } from '../../hooks/useAsyncState';
 import { ajax } from '../../utils/ajax';
 import { formatUrl } from '../../utils/queryString';
 import type { IR, R, RA, WritableArray } from '../../utils/types';
@@ -88,8 +88,17 @@ export function useEvents(
   const observeDomMutations = isReadyToRead && readSource === 'dom';
   const bumpCount = useDomMutation(observeDomMutations);
 
-  const [durations] = useAsyncState(
-    React.useCallback(async () => {
+  const [durations, setDurations] = React.useState<EventsStore | undefined>(
+    undefined,
+  );
+  React.useEffect(() => {
+    /*
+     * If callback changes, state is reset to show the loading screen if
+     * new state takes more than 1s to load
+     */
+    let timeout = setTimeout(() => setDurations(undefined), loadingTimeout);
+
+    const callback = async () => {
       if (!isReadyToRead) return undefined;
 
       /*
@@ -145,6 +154,10 @@ export function useEvents(
           limit,
         );
         if (typeof allDurations === 'string') {
+          /**
+           * Don't fail if for example we begun navigating to the search page
+           */
+          if (destructorCalled) return;
           output.warn(
             `[Calendar Plus] DOM parse error: ${allDurations}. Falling back to retrieving data from the API rather than DOM parsing (slower, but more reliable)`,
           );
@@ -211,16 +224,27 @@ export function useEvents(
       }
 
       return extractData(eventsStore.current, calendars, startDate, endDate);
-    }, [
-      bumpCount,
-      readSource,
-      calendars,
-      currentView,
-      ignoreAllDayEvents,
-      virtualCalendars,
-    ]),
-    false,
-  );
+    };
+
+    Promise.resolve(callback())
+      .then((newState) =>
+        destructorCalled ? undefined : setDurations(newState),
+      )
+      .catch(output.error)
+      .finally(() => clearTimeout(timeout));
+
+    let destructorCalled = false;
+    return (): void => {
+      destructorCalled = true;
+    };
+  }, [
+    bumpCount,
+    readSource,
+    calendars,
+    currentView,
+    ignoreAllDayEvents,
+    virtualCalendars,
+  ]);
   return durations;
 }
 
@@ -244,12 +268,7 @@ function readDom({
   daysBetween,
   guessCalendar,
 }: DomReadPayload):
-  | RA<
-      readonly [
-        key: string,
-        values: RA<readonly [string, Readonly<Record<string, RA<number>>>]>,
-      ]
-    >
+  | RA<readonly [string, RA<readonly [string, IR<RA<number>>]>]>
   | string {
   const domParsed = parseEventsFromDom(startDate, endDate, ignoreAllDayEvents);
   if (typeof domParsed === 'string') {
@@ -513,6 +532,13 @@ type DurationsToAdd = RA<
 >;
 
 // FIXME: add test cases
+
+// FIXME: remove intermediate representations to simplify code:
+// wait for all calendars to fetch
+// then update eventsStore for each calendar with fetched events for current period:
+// nullify the old data
+// for each day:
+// - find all events that touch that day, and compute how lond they touch that day and what virtual calendar they belong to
 function updateEventStore(
   daysBetween: RA<string>,
   calendarId: string,

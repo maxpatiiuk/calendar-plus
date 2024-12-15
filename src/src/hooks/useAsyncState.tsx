@@ -2,8 +2,9 @@ import { GetOrSet } from '../utils/types';
 import React from 'react';
 import { LoadingContext } from '../components/Contexts/Contexts';
 import { output } from '../components/Errors/exceptions';
+import { SECOND } from '../components/Atoms/Internationalization';
 
-const loadingTimeout = 1000;
+export const loadingTimeout = SECOND;
 
 /**
  * Like React.useState, but initial value is retrieved asynchronously
@@ -38,11 +39,7 @@ export function useAsyncState<T>(
   const [state, setState] = React.useState<T | undefined>(undefined);
   const loading = React.useContext(LoadingContext);
 
-  /**
-   * Using layout effect so that setState(undefined) runs immediately on
-   * callback change, rather than give inconsistent state.
-   */
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     /*
      * If callback changes, state is reset to show the loading screen if
      * new state takes more than 1s to load
