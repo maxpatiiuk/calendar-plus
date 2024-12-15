@@ -26,10 +26,10 @@ export function DevModeConsoleOverlay() {
           role="alert"
           className={
             type === 'log'
-              ? 'bg-white'
+              ? 'bg-white dark:bg-black'
               : type === 'warn'
-                ? 'bg-orange-300'
-                : 'bg-red-400'
+                ? 'bg-orange-300 dark:bg-orange-800'
+                : 'bg-red-400 dark:bg-red-700'
           }
         >
           {String(data[0])}

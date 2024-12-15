@@ -12,6 +12,8 @@ import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
 import { WidgetContainer } from '../Widgets/WidgetContainer';
+import { useStorage } from '../../hooks/useStorage';
+import { darkBorderColor, lightBorderColor } from './config';
 
 Chart.register(DoughnutController, ArcElement, Tooltip);
 
@@ -100,6 +102,9 @@ export function DoughnutChart({
         [commonText('minutes')]: minutes,
       }));
 
+  const [theme] = useStorage('theme');
+  const borderColor = theme === 'dark' ? darkBorderColor : lightBorderColor;
+
   return (
     <WidgetContainer
       header={commonText('doughnutChart')}
@@ -119,6 +124,7 @@ export function DoughnutChart({
             ],
           }}
           options={{
+            borderColor,
             responsive: true,
             animation: {
               duration: transitionDuration,

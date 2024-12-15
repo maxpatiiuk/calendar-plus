@@ -17,7 +17,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "/src/public/images/btn_google_signin_light_normal_web@2x.png"
+        "/src/public/images/web_dark_rd_SI@2x.webp",
+        "/src/public/images/web_light_rd_SI@2x.webp"
       ],
       "matches": ["https://calendar.google.com/*"]
     }

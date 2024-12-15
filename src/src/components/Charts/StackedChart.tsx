@@ -25,6 +25,13 @@ import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 import type { EventsStore } from '../EventsStore';
 import { summedDurations } from '../EventsStore';
 import { WidgetContainer } from '../Widgets/WidgetContainer';
+import { useStorage } from '../../hooks/useStorage';
+import {
+  darkBorderColor,
+  darkTextColor,
+  lightBorderColor,
+  lightTextColor,
+} from './config';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -69,6 +76,10 @@ export function StackedChart({
       })),
     );
 
+  const [theme] = useStorage('theme');
+  const color = theme === 'dark' ? darkTextColor : lightTextColor;
+  const borderColor = theme === 'dark' ? darkBorderColor : lightBorderColor;
+
   return (
     <WidgetContainer
       getJsonExport={isEmpty ? undefined : getJsonExport}
@@ -84,6 +95,8 @@ export function StackedChart({
           }}
           datasetIdKey="id"
           options={{
+            color,
+            borderColor,
             plugins: {
               tooltip: {
                 callbacks: {
@@ -101,6 +114,14 @@ export function StackedChart({
                 title: {
                   display: true,
                   text: commonText('date'),
+                  color,
+                },
+                ticks: {
+                  color,
+                },
+                grid: {
+                  color: borderColor,
+                  tickColor: borderColor,
                 },
                 stacked: true,
               },
@@ -108,6 +129,14 @@ export function StackedChart({
                 title: {
                   display: true,
                   text: commonText('duration'),
+                  color,
+                },
+                ticks: {
+                  color,
+                },
+                grid: {
+                  color: borderColor,
+                  tickColor: borderColor,
                 },
                 stacked: true,
               },

@@ -35,7 +35,7 @@ export function WidgetContainer({
         {buttons}
         {typeof getJsonExport === 'function' &&
         typeof getTsvExport === 'function' ? (
-          <Button.White
+          <Button.Default
             onClick={(): void =>
               void downloadFile(
                 `${header}.${exportFormat}`,
@@ -46,15 +46,15 @@ export function WidgetContainer({
             }
           >
             {commonText('export')}
-          </Button.White>
+          </Button.Default>
         ) : undefined}
         {editing !== undefined && (
-          <Button.White
+          <Button.Default
             aria-pressed={editing[0] ? true : undefined}
             onClick={(): void => editing[1](!editing[0])}
           >
             {editing[0] ? commonText('save') : commonText('edit')}
-          </Button.White>
+          </Button.Default>
         )}
       </div>
       <div className={`flex flex-1 flex-col gap-4 ${className}`}>

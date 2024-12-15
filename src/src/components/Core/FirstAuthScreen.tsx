@@ -2,6 +2,7 @@ import React from 'react';
 
 import { commonText } from '../../localization/common';
 import { Button, Link } from '../Atoms';
+import { useStorage } from '../../hooks/useStorage';
 
 /**
  * This dialog is displayed on first use promoting user to sign in with Google
@@ -22,13 +23,15 @@ export function FirstAuthScreen({
 
   const [error, setError] = React.useState<string>('');
 
+  const [theme] = useStorage('theme');
+
   return (
     <dialog
       ref={dialogRef}
       className={`
         max-w-[min(90%,theme(spacing.96))]
-        whitespace-normal rounded border-4 border-gray-300
-        [&::backdrop]:bg-gray-400 [&::backdrop]:bg-opacity-50 [&>p]:m-0
+        whitespace-normal rounded border-4 border-gray-300 dark:border-neutral-700
+        [&::backdrop]:bg-gray-400 [&::backdrop]:dark:bg-neutral-800 [&::backdrop]:!bg-opacity-50 [&>p]:m-0
       `}
       onKeyDown={(event): void =>
         event.key === 'Escape' ? handleClose() : undefined
@@ -64,10 +67,20 @@ export function FirstAuthScreen({
               .catch((error) => setError(error.toString()))
           }
         >
+          {/**
+           * To avoid splash of unstyled content, and have images pre-load
+           * faster, include both light and dark mode images, but selectively
+           * hide one of them.
+           */}
           <img
             alt={commonText('signInWithGoogle')}
-            src={imageUrl}
-            className="max-w-[200px]"
+            src={lightImageUrl}
+            className="dark:hidden max-w-[200px]"
+          />
+          <img
+            alt={commonText('signInWithGoogle')}
+            src={darkImageUrl}
+            className="light:hidden max-w-[200px]"
           />
         </button>
         {error && (
@@ -76,15 +89,18 @@ export function FirstAuthScreen({
           </p>
         )}
         <div className="flex justify-end">
-          <Button.White onClick={handleClose}>
+          <Button.Default onClick={handleClose}>
             {commonText('cancel')}
-          </Button.White>
+          </Button.Default>
         </div>
       </div>
     </dialog>
   );
 }
 
-const imageUrl = chrome.runtime.getURL(
-  '/src/public/images/btn_google_signin_light_normal_web@2x.png',
+const lightImageUrl = chrome.runtime.getURL(
+  '/src/public/images/web_light_rd_SI@2x.webp',
+);
+const darkImageUrl = chrome.runtime.getURL(
+  '/src/public/images/web_dark_rd_SI@2x.webp',
 );

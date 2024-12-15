@@ -7,15 +7,16 @@
    *   grid-cols-[repeat(4,1fr)_auto_auto_min-content_minmax(10rem,1fr)]
    * There is much more flexibility in how columns should be sized.
    */
-  .grid-table:is(table, [role~='table']) {
+  .calendar-plus-grid-table:is(table, [role~='table']) {
     @apply grid;
   }
 
-  .grid-table :is(thead, tbody, tr, [role~='rowgroup'], [role~='row']) {
+  .calendar-plus-grid-table
+    :is(thead, tbody, tr, [role~='rowgroup'], [role~='row']) {
     @apply contents;
   }
 
-  .grid-table
+  .calendar-plus-grid-table
     :is(th, td, [role~='columnheader'], [role~='rowheader'], [role~='cell']) {
     @apply flex items-center gap-1;
   }

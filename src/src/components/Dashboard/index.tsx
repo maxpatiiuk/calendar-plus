@@ -41,26 +41,26 @@ export function Dashboard({
       <PageHeader label={commonText('calendarPlus')}>
         {isEditing ? (
           <>
-            <Button.White
+            <Button.Default
               onClick={(): void => {
                 setLayout(originalLayout.current);
                 handleToggle();
               }}
             >
               {commonText('cancel')}
-            </Button.White>
-            <Button.White onClick={(): void => setLayout(defaultLayout)}>
+            </Button.Default>
+            <Button.Default onClick={(): void => setLayout(defaultLayout)}>
               {commonText('resetToDefault')}
-            </Button.White>
+            </Button.Default>
           </>
         ) : (
-          <Button.White onClick={handleOpenPreferences}>
+          <Button.Default onClick={handleOpenPreferences}>
             {commonText('preferences')}
-          </Button.White>
+          </Button.Default>
         )}
-        <Button.White onClick={handleToggle}>
+        <Button.Default onClick={handleToggle}>
           {isEditing ? commonText('save') : commonText('edit')}
-        </Button.White>
+        </Button.Default>
       </PageHeader>
       <div className="overflow-y-auto overflow-x-hidden">
         <div

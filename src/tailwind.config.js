@@ -3,6 +3,8 @@
  * https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js
  */
 
+const darkThemeSelector = '.calendar-plus-dark';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -16,8 +18,7 @@ export default {
     caretColor: false,
     sepia: false,
   },
-  // Enable dark mode if body has "dark" class names
-  darkMode: 'class',
+  darkMode: ['selector', darkThemeSelector],
   theme: {
     // Make default border radius more rounded
     borderRadius: {
@@ -65,4 +66,7 @@ export default {
       },
     },
   },
+  plugins: [
+    ({ addVariant }) => addVariant('light', `body:not(${darkThemeSelector}) &`),
+  ],
 };

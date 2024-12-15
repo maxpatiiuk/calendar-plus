@@ -14,9 +14,9 @@ import { WidgetContainer } from '../Widgets/WidgetContainer';
 import { roundToTwoDecimals } from '../../utils/utils';
 
 export type TimeChartMode = 'average' | 'total';
-const stickyColumn = 'sticky left-0 bg-white';
-const darkened = 'bg-gray-300';
-const extraDarkened = 'bg-gray-400';
+const stickyColumn = 'sticky left-0 bg-white dark:bg-neutral-700';
+const darkened = 'bg-gray-300 dark:bg-neutral-600';
+const extraDarkened = 'bg-gray-400 dark:bg-neutral-500';
 
 export function TimeChart({
   label,
@@ -81,20 +81,20 @@ export function TimeChart({
       buttons={
         <>
           <span className="sr-only">{commonText('viewMode')}</span>
-          <Button.White
+          <Button.Default
             aria-pressed={mode === 'total' ? true : undefined}
             title={commonText('viewMode')}
             onClick={(): void => setMode('total')}
           >
             {commonText('totalHours')}
-          </Button.White>
-          <Button.White
+          </Button.Default>
+          <Button.Default
             aria-pressed={mode === 'average' ? true : undefined}
             title={commonText('viewMode')}
             onClick={(): void => setMode('average')}
           >
             {commonText('averageMinutes')}
-          </Button.White>
+          </Button.Default>
           <span className="-ml-2 flex-1" />
         </>
       }
@@ -107,7 +107,7 @@ export function TimeChart({
       ) : (
         <table
           className={`
-            grid-table grid-cols-[auto_repeat(24,1fr)_1fr]
+            calendar-plus-grid-table grid-cols-[auto_repeat(24,1fr)_1fr]
             overflow-auto [&_:is(th,td)]:p-2
             [&_td]:justify-center
           `}

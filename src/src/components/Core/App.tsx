@@ -21,6 +21,7 @@ import { FirstAuthScreen } from './FirstAuthScreen';
 import { useStorage } from '../../hooks/useStorage';
 import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
 import { domReadingEligibleViews } from '../DomReading';
+import { ThemeDetector } from '../Contexts/ThemeColor';
 
 /**
  * Entrypoint react component for the extension
@@ -83,7 +84,7 @@ export function App(): JSX.Element | null {
     <>
       {typeof currentView === 'object' ? (
         <>
-          <Button.White
+          <Button.Default
             aria-pressed={isOpen ? true : undefined}
             onClick={(): void =>
               auth.token === undefined
@@ -92,7 +93,7 @@ export function App(): JSX.Element | null {
             }
           >
             {commonText('calendarPlus')}
-          </Button.White>
+          </Button.Default>
           {showFirstAuth && (
             <FirstAuthScreen
               onClose={(): void => setShowFirstAuth(false)}
@@ -106,7 +107,8 @@ export function App(): JSX.Element | null {
               <main
                 className={`
                   relative z-[1000] box-border flex h-full flex-col gap-2
-                  overflow-y-auto bg-gray-200 p-2 [&_*]:box-border
+                  overflow-y-auto bg-gray-200 dark:bg-[#141414] p-2
+                  [&_*]:box-border dark:text-[#e3e3e3]
                 `}
               >
                 {state === 'main' ? (
@@ -129,6 +131,7 @@ export function App(): JSX.Element | null {
       <HideEditAll />
       <BetterEditRecurring />
       <CondenseInterface />
+      <ThemeDetector />
     </>
   );
 }

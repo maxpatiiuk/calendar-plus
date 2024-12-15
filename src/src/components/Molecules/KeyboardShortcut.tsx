@@ -79,14 +79,14 @@ export const SetKeyboardShortcuts: PreferenceRenderer<KeyboardShortcuts> = ({
       ))}
       <div className="flex items-end gap-2">
         {!isEditing && (
-          <Button.White
+          <Button.Default
             onClick={(): void => {
               setEditingIndex(shortcuts.length);
               setShortcuts([...shortcuts, { modifiers: [], keys: [] }]);
             }}
           >
             {commonText('add')}
-          </Button.White>
+          </Button.Default>
         )}
       </div>
     </div>
@@ -153,11 +153,11 @@ function SetKeyboardShortcut({
         ))}
       </div>
       {isEditing && (
-        <Button.White onClick={(): void => handleSave(undefined)}>
+        <Button.Default onClick={(): void => handleSave(undefined)}>
           {commonText('remove')}
-        </Button.White>
+        </Button.Default>
       )}
-      <Button.White
+      <Button.Default
         aria-pressed={isEditing ? true : undefined}
         onClick={
           isEditing
@@ -166,7 +166,7 @@ function SetKeyboardShortcut({
         }
       >
         {isEditing ? commonText('save') : commonText('edit')}
-      </Button.White>
+      </Button.Default>
     </div>
   );
 }
@@ -185,7 +185,7 @@ export const resolveModifiers = (
     .sort(sortFunction((modifier) => modifier));
 
 function Key({ label }: { readonly label: string }): JSX.Element {
-  return <span className="rounded bg-gray-200 p-2">{label}</span>;
+  return <span className="rounded bg-gray-200 dark:bg-black p-2">{label}</span>;
 }
 
 export const platform: Platform =

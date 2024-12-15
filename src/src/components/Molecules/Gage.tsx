@@ -38,7 +38,7 @@ export function Gage({
       style={{ '--size': `${size}rem` } as React.CSSProperties}
     >
       <svg
-        className="relative h-full w-full stroke-gray-200"
+        className="relative h-full w-full stroke-gray-200 dark:stroke-neutral-600"
         viewBox="0 0 100 100"
       >
         <Circle radius={radius} className="translate-y-[8px]" />

@@ -149,7 +149,7 @@ function Calendars({
   );
 }
 
-const thClassName = 'bg-white top-0 sticky';
+const thClassName = 'bg-white dark:bg-neutral-600 top-0 sticky';
 
 function Table({
   children,
@@ -159,7 +159,7 @@ function Table({
   return (
     <table
       className={`
-        grid-table absolute h-full w-full
+        calendar-plus-grid-table absolute h-full w-full
         grid-cols-[min-content_auto_auto_auto_auto] overflow-auto text-left
         [&_:is(th,td)]:p-1
       `}
@@ -308,7 +308,7 @@ function EditableCalendarList({
         <tr>
           <td />
           <td colSpan={4}>
-            <Button.White
+            <Button.Default
               onClick={(): void =>
                 handleChange([
                   ...virtualCalendars,
@@ -323,7 +323,7 @@ function EditableCalendarList({
               }
             >
               {commonText('addPrediction')}
-            </Button.White>
+            </Button.Default>
           </td>
         </tr>
       </Table>

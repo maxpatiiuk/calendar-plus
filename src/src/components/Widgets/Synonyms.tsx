@@ -118,7 +118,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
               <tr>
                 <td />
                 <td colSpan={2}>
-                  <Button.White
+                  <Button.Default
                     onClick={(): void =>
                       setSynonyms([
                         ...synonyms,
@@ -127,7 +127,7 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
                     }
                   >
                     {commonText('add')}
-                  </Button.White>
+                  </Button.Default>
                 </td>
               </tr>
             )}

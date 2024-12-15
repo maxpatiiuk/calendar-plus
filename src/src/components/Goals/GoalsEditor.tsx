@@ -75,7 +75,7 @@ export function GoalsEditor({
         ) : undefined,
       )}
       <div>
-        <Button.White
+        <Button.Default
           onClick={(): void =>
             setGoals([
               ...goals,
@@ -88,7 +88,7 @@ export function GoalsEditor({
           }
         >
           {commonText('addGoal')}
-        </Button.White>
+        </Button.Default>
       </div>
     </>
   );

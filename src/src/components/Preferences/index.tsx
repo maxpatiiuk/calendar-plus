@@ -29,21 +29,21 @@ export function PreferencesPage({
   ) : (
     <>
       <PageHeader label={commonText('preferences')}>
-        <Link.White
+        <Link.LikeButton
           href="https://github.com/maxpatiiuk/calendar-plus#calendar-plus"
           rel="noreferrer"
           target="_blank"
         >
           {commonText('aboutExtension')}
-        </Link.White>
-        <Link.White
+        </Link.LikeButton>
+        <Link.LikeButton
           href="https://calendar-plus.patii.uk/privacy"
           rel="noreferrer"
           target="_blank"
         >
           {commonText('privacyPolicy')}
-        </Link.White>
-        <Button.White
+        </Link.LikeButton>
+        <Button.Default
           onClick={(): void =>
             void fetchDataForExport()
               .then(async (data) =>
@@ -58,14 +58,16 @@ export function PreferencesPage({
           }
         >
           {commonText('exportAllSettings')}
-        </Button.White>
-        <Button.White onClick={handleImport}>
+        </Button.Default>
+        <Button.Default onClick={handleImport}>
           {commonText('importAllSettings')}
-        </Button.White>
-        <Button.White onClick={(): void => setPreferences({})}>
+        </Button.Default>
+        <Button.Default onClick={(): void => setPreferences({})}>
           {commonText('resetToDefault')}
-        </Button.White>
-        <Button.White onClick={handleClose}>{commonText('close')}</Button.White>
+        </Button.Default>
+        <Button.Default onClick={handleClose}>
+          {commonText('close')}
+        </Button.Default>
       </PageHeader>
       <div className="flex flex-1 flex-col gap-4">
         {Object.entries(
@@ -90,7 +92,7 @@ export function PreferencesPage({
                         {definition.title}
                       </div>
                       {typeof definition.description === 'string' && (
-                        <span className="leading-8 text-gray-500">
+                        <span className="leading-8 text-gray-400 dark:text-neutral-400">
                           {definition.description}
                         </span>
                       )}
@@ -137,9 +139,9 @@ function Import({
   return (
     <>
       <PageHeader label={commonText('preferences')}>
-        <Button.White onClick={handleCancel}>
+        <Button.Default onClick={handleCancel}>
           {commonText('cancel')}
-        </Button.White>
+        </Button.Default>
       </PageHeader>
       <FilePicker
         acceptedFormats={['.json']}

@@ -78,6 +78,11 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
     type: 'sync',
     defaultValue: false as boolean,
   },
+  theme: {
+    // Google Calendar's theme preference is synced across devices
+    type: 'sync',
+    defaultValue: 'light' as 'dark' | 'light',
+  },
 } as const);
 
 export type StorageDefinitions = typeof storageDefinitions;

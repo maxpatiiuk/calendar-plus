@@ -38,9 +38,10 @@ const button = (name: string, classList: string) =>
 
 export const className = {
   googleButton:
-    'border border-solid p-2 rounded flex items-center gap-2 cursor-pointer',
-  buttonWhite: `bg-white border-[#dadce0] active:bg-[#dadce0]
-    [&[aria-pressed]]:bg-[#dadce0] hover:bg-gray-100`,
+    'border border-solid p-2 rounded-xl flex items-center gap-2 cursor-pointer duration-100 text-[#202020] dark:text-[#e3e3e3]',
+  buttonDefault: `bg-[#f8fafd] dark:bg-[#1c1c1c] border-[#747775]
+    dark:border-[#8e918f] active:bg-[#d7d8db] dark:active:bg-[#444444] [&[aria-pressed]]:bg-[#d7d8db] [&[aria-pressed]]:dark:bg-[#444444]
+    hover:bg-[#e9eaee] hover:dark:bg-[#303030]`,
 };
 
 export const Ul = wrap('Ul', 'ul', 'list-none p-0 m-0 flex flex-col gap-2', {
@@ -48,7 +49,7 @@ export const Ul = wrap('Ul', 'ul', 'list-none p-0 m-0 flex flex-col gap-2', {
 });
 
 export const Button = {
-  White: button('Button.White', className.buttonWhite),
+  Default: button('Button.Default', className.buttonDefault),
   Blue: button(
     'Button.Blue',
     `border-blue-600 bg-blue-600 hover:bg-blue-700 active:bg-blue-500 text-white`,
@@ -64,24 +65,29 @@ export const Button = {
         | ((event: React.MouseEvent<HTMLButtonElement>) => void)
         | undefined;
     }
-  >('Button.Icon', 'button', `icon link rounded`, ({ icon, ...props }) => ({
-    ...props,
-    'aria-label': props['aria-label'] ?? props.title,
-    type: 'button',
-    children: icons[icon],
-  })),
+  >(
+    'Button.Icon',
+    'button',
+    `calendar-plus-icon rounded`,
+    ({ icon, ...props }) => ({
+      ...props,
+      'aria-label': props['aria-label'] ?? props.title,
+      type: 'button',
+      children: icons[icon],
+    }),
+  ),
 };
 
 export const Link = {
-  White: wrap(
+  LikeButton: wrap(
     'Link.White',
     'a',
-    `${className.googleButton} ${className.buttonWhite}`,
+    `${className.googleButton} ${className.buttonDefault}`,
   ),
   Default: wrap(
     'Link.Default',
     'a',
-    '!text-blue-500 hover:underline hover:!text-blue-600',
+    '!text-blue-500 dark:!text-blue-300 hover:underline hover:!text-blue-600 dark:hover:!text-blue-500',
   ),
 };
 
@@ -226,5 +232,5 @@ export const Select = wrap<
 export const Widget = wrap(
   'Widget',
   'section',
-  'flex flex-col gap-2 rounded bg-white',
+  'flex flex-col gap-2 rounded bg-white dark:bg-neutral-800',
 );

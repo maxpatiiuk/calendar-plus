@@ -3,7 +3,7 @@ import React from 'react';
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { storageDefinitions, useStorage } from '../../hooks/useStorage';
 import { ajax } from '../../utils/ajax';
-import { randomColor } from '../../utils/colors';
+import { randomColor, reduceHexAcidity } from '../../utils/colors';
 import { formatUrl } from '../../utils/queryString';
 import type { RA } from '../../utils/types';
 import { multiSortFunction } from '../../utils/utils';
@@ -46,7 +46,7 @@ export function CalendarsSpy({
 
   const { token } = React.useContext(AuthContext);
   const isAuthenticated = typeof token === 'string';
-  const [calendars] = useAsyncState<RA<CalendarListEntry>>(
+  const [rawCalendars] = useAsyncState<RA<CalendarListEntry>>(
     React.useCallback(async () => {
       if (!isAuthenticated) return undefined;
       const response = await ajax(
@@ -81,6 +81,18 @@ export function CalendarsSpy({
         );
     }, [isAuthenticated]),
     false,
+  );
+
+  const [theme] = useStorage('theme');
+  const calendars = React.useMemo(
+    () =>
+      theme === 'dark'
+        ? rawCalendars?.map(({ backgroundColor, ...rest }) => ({
+            backgroundColor: reduceHexAcidity(backgroundColor),
+            ...rest,
+          }))
+        : rawCalendars,
+    [theme, rawCalendars],
   );
 
   /*
