@@ -61,7 +61,6 @@ type CalendarEvent = Pick<
  */
 export function useEvents(
   currentView: CurrentView | undefined,
-  // Don't make network requests until the overlay is opened
   isOpen: boolean,
   readSource: 'dom' | 'api' | undefined,
   setDomReadingEnabled: (shouldFallback: boolean) => void,
@@ -84,7 +83,9 @@ export function useEvents(
   const isReadyToRead =
     calendars !== undefined &&
     currentView !== undefined &&
-    readSource !== undefined;
+    readSource !== undefined &&
+    // Don't make network requests until the overlay is opened
+    (isOpen || readSource !== 'api');
 
   const observeDomMutations = isReadyToRead && readSource === 'dom';
   const bumpCount = useDomMutation(observeDomMutations);
@@ -101,13 +102,6 @@ export function useEvents(
 
     const callback = async () => {
       if (!isReadyToRead) return undefined;
-
-      /*
-       * Don't try to parse DOM until first bump, to ensure the DOM is there
-       * to be read
-       */
-      const delayDomReading = bumpCount === 0 && readSource === 'dom';
-      if (delayDomReading) return undefined;
 
       const { firstDay: startDate, lastDay: endDate } = currentView;
 
@@ -239,6 +233,7 @@ export function useEvents(
       destructorCalled = true;
     };
   }, [
+    isReadyToRead,
     bumpCount,
     readSource,
     calendars,
