@@ -1,9 +1,11 @@
 import { RA } from '../../utils/types';
 import { SupportedView } from '../Contexts/CurrentViewContext';
+import { devMode } from '../Contexts/devMode';
 import { getDatesBetween } from '../EventsStore';
 import { parseAllDayEventNode } from './allDayEvents';
 import { rawDomEventToParsed } from './parseTime';
 import { ParsedDomEvent, type RawDomEvent } from './types';
+import { validateParseResult } from './validate';
 
 /**
  * For these views, there is enough information in the DOM to parse each event.
@@ -165,7 +167,19 @@ function parseEventNode(
   const parseResult = rawDomEventToParsed(parsePayload);
   if (typeof parseResult === 'string')
     return `${parseResult} ${JSON.stringify(parsePayload)}`;
-  else return parseResult;
+  else if (devMode) {
+    try {
+      const validation = validateParseResult(parseResult, event);
+      if (typeof validation === 'string')
+        throw new Error(
+          `[DEV] ${validation} ${JSON.stringify(parsePayload)} ${JSON.stringify(parseResult)}`,
+        );
+    } catch (error) {
+      debugger;
+      throw error;
+    }
+  }
+  return parseResult;
 }
 
 export function extractCalendarId(event: HTMLElement): string | undefined {
