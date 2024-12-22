@@ -15,13 +15,6 @@ export type RawDomEvent = {
   readonly amEnd: boolean;
   // top <= 1
   readonly touchesTop: boolean;
-  // does not have data-dragsource-type
-  /*
-   * NOTE: if event duration is 15 min but settings say to display
-   * "15 min events as 30 min", then it may touch the bottom, despite not
-   * lasting till midnight
-   */
-  readonly touchesBottom: boolean;
   readonly previousDayNumber: number;
   readonly todayDayNumber: number;
   readonly nextDayNumber: number;

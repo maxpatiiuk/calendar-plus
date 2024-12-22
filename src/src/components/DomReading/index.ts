@@ -3,7 +3,7 @@ import { SupportedView } from '../Contexts/CurrentViewContext';
 import { getDatesBetween } from '../EventsStore';
 import { parseAllDayEventNode } from './allDayEvents';
 import { rawDomEventToParsed } from './parseTime';
-import { ParsedDomEvent } from './types';
+import { ParsedDomEvent, type RawDomEvent } from './types';
 
 /**
  * For these views, there is enough information in the DOM to parse each event.
@@ -106,6 +106,8 @@ const excludeNonEvents = (
   maybeParsed: ParsedDomEvent | typeof notEvent | string,
 ): maybeParsed is ParsedDomEvent | string => maybeParsed !== notEvent;
 
+let columnHeight = document.body.clientHeight;
+
 function parseEventNode(
   event: HTMLElement,
   previousDayNumber: number,
@@ -151,23 +153,27 @@ function parseEventNode(
   if (Number.isNaN(top)) return 'Failed to parse event "top" style';
   if (Number.isNaN(height)) return 'Failed to parse event "height" style';
 
-  // FIXME: This is 0 when parent is not visible - remember last height?
-  const parentMiddle = parent.clientHeight / 2;
-  return rawDomEventToParsed({
+  // When overlay is open, parent height becomes 0 - remember last height
+  columnHeight = parent.clientHeight === 0 ? columnHeight : parent.clientHeight;
+  const endHeight = top + height;
+  const parentMiddle = columnHeight / 2;
+  const parsePayload: RawDomEvent = {
     aria,
     summary,
     times,
     calendarId,
     amStart: top < parentMiddle,
-    amEnd: top + height < parentMiddle - 3,
+    amEnd: endHeight < parentMiddle - 3,
     touchesTop: top <= 1,
-    touchesBottom: !event.children[event.children.length - 1].hasAttribute(
-      'data-dragsource-type',
-    ),
     previousDayNumber,
     todayDayNumber,
     nextDayNumber,
-  });
+  };
+
+  const parseResult = rawDomEventToParsed(parsePayload);
+  if (typeof parseResult === 'string')
+    return `${parseResult} ${JSON.stringify(parsePayload)}`;
+  else return parseResult;
 }
 
 export function extractCalendarId(event: HTMLElement): string | undefined {

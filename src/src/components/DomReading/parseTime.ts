@@ -10,17 +10,14 @@ export function rawDomEventToParsed(
   const times = extractTimes(rawDomEvent);
   if (typeof times === 'string') return times;
 
-  const [start, end] = times;
+  const [start, end, touchesBottom] = times;
   const startTime = rawDomEvent.touchesTop
     ? 0
     : parseTimeNumber(start, rawDomEvent.amStart);
-  const endTime = rawDomEvent.touchesBottom
-    ? 24
-    : parseTimeNumber(end, rawDomEvent.amEnd);
+  const endTime = touchesBottom ? 24 : parseTimeNumber(end, rawDomEvent.amEnd);
   if (Number.isNaN(startTime))
-    return `Failed to parse start time from event label (${rawDomEvent.aria})`;
-  if (Number.isNaN(endTime))
-    return `Failed to parse end time from event label (${rawDomEvent.aria})`;
+    return `Failed to parse start time from event label`;
+  if (Number.isNaN(endTime)) return `Failed to parse end time from event label`;
 
   return {
     calendarId: rawDomEvent.calendarId,
@@ -30,23 +27,30 @@ export function rawDomEventToParsed(
   };
 }
 
+/**
+ * There are many scenarios to handle, and in some of them we could exit the
+ * function early. But, it is easier to reason about a function, and fewer edge
+ * cases to handle if every kind of input goes through all code paths.
+ */
 function extractTimes({
   times,
   aria,
   summary,
   touchesTop,
-  touchesBottom,
   previousDayNumber,
   todayDayNumber,
   nextDayNumber,
-}: RawDomEvent): readonly [string, string] | string {
+}: RawDomEvent): readonly [string, string, touchesBottom: boolean] | string {
   const numbers = extractTimeLikeNumbers(times);
-  if (numbers.length === 0) return `No time numbers found in ${times}`;
+  if (numbers.length === 0) return `No time numbers found in event dom`;
 
-  // Sometimes time string would include both numbers - makes our job easy
-  if (numbers.length === 2) return [numbers[0], numbers[1]];
+  const startTime = numbers[0];
+  /*
+   * Sometimes time string would include end time too, but to keep code path
+   * consistent, we always read end time from the aria string.
+   */
 
-  /**
+  /*
    * Exclude part of the aria string that includes the event summary and
    * calendar name to avoid them interfering with time extraction.
    *
@@ -58,7 +62,7 @@ function extractTimes({
    */
   let ariaSummaryIndex = aria.lastIndexOf(summary);
   if (ariaSummaryIndex === -1) {
-    /**
+    /*
      * If we failed to find summary in the aria string AND, the event summary
      * is parenthesised, we assume it is the `(No title)` summary (event without
      * a summary).
@@ -68,7 +72,7 @@ function extractTimes({
       ? aria.indexOf(summary.slice(1, -1))
       : -1;
 
-    /**
+    /*
      * In Ukrainian, summary for no-summary events will be `(Без заголовка)`,
      * where as the aria string will include `Без назви`. Fallback in such
      * cases to not trimming of the name from the aria string. That is ok as
@@ -79,79 +83,67 @@ function extractTimes({
       ariaSummaryIndex = aria.length;
 
     if (ariaSummaryIndex === -1) {
-      return `Expected event label (${aria}) to include event summary (${summary})`;
-    } else {
-      summary = '';
+      return `Expected event label to include event summary`;
     }
   }
   const trimmedAria = aria.slice(0, ariaSummaryIndex);
 
-  const allAriaTimes = extractTimeLikeNumbers(trimmedAria);
+  let ariaTimes = extractTimeLikeNumbers(trimmedAria);
 
-  const startTimeIndex = allAriaTimes.indexOf(numbers[0]);
+  const startTimeIndex = ariaTimes.indexOf(startTime);
   if (startTimeIndex === -1)
-    return `Expected event label (${aria}) to include event start time ${numbers[0]}`;
-
-  const endTimeCandidates = toSpliced(allAriaTimes, startTimeIndex, 1);
-  if (endTimeCandidates.length === 0)
-    return `Expected to find event end time in event label (${aria}) but found none`;
-
-  const startTime = numbers[0];
-  if (endTimeCandidates.length === 1) return [startTime, endTimeCandidates[0]];
-
-  const longEndTime = endTimeCandidates.find(
-    (time) => time.length > shortLengthTimeNumber,
-  );
-  if (longEndTime) return [startTime, longEndTime];
+    return `Expected event label to include event start time`;
+  ariaTimes = toSpliced(ariaTimes, startTimeIndex, 1);
 
   /*
-   * At this point, we know that am/pm time was used in the aria string and we
-   * know the start time, but for end time we still have multiple candidate
-   * numbers - some of the candidates are day numbers, and one of them is end
-   * time.
+   * This is the case for two day events. Aria would include the today day
+   * number, tomorrow/yesterday day number, and end time.
+   *
+   * Event must not last more than 24hrs or else it would be rendered as an
+   * all-day event, which is handled outside this function, thus the event we
+   * handle here can only span either from previous day or into next day.
    */
+  const isTwoDayEvent = ariaTimes.length > 1;
+  if (isTwoDayEvent) {
+    const todayNumberIndex = ariaTimes.indexOf(todayDayNumber.toString());
+    if (todayNumberIndex === -1)
+      return `Expected event label to include today day number`;
+    ariaTimes = toSpliced(ariaTimes, todayNumberIndex, 1);
 
-  const todayNumberIndex = endTimeCandidates.indexOf(todayDayNumber.toString());
-  if (todayNumberIndex === -1)
-    return `Expected event label (${aria}) to include day number ${todayDayNumber}`;
+    const neighboringDayNumber = touchesTop ? previousDayNumber : nextDayNumber;
+    const neighboringDayNumberIndex = ariaTimes.indexOf(
+      neighboringDayNumber.toString(),
+    );
+    if (neighboringDayNumberIndex === -1)
+      return `Expected to find the neighboring day number in the aria string`;
+    ariaTimes = toSpliced(ariaTimes, neighboringDayNumberIndex, 1);
+  }
 
-  const timesWithoutTodayNumber = toSpliced(allAriaTimes, startTimeIndex, 1);
-  if (timesWithoutTodayNumber.length === 1)
-    return [startTime, timesWithoutTodayNumber[0]];
+  if (ariaTimes.length !== 1) return `Failed to parse event label`;
 
   /**
-   * This is a multi-day event so we want to exclude the previous/next day
-   * number too
+   * We can detect `touchesTop` case from the DOM quite safely, but can't
+   * as safely detect `touchesBottom` case, so are inferring it from the aria
+   * string instead.
    */
-
-  const neighboringDayNumber = touchesTop
-    ? previousDayNumber
-    : touchesBottom
-      ? nextDayNumber
-      : todayDayNumber;
-  const neighboringDayNumberIndex = endTimeCandidates.indexOf(
-    neighboringDayNumber.toString(),
-  );
-  if (neighboringDayNumberIndex === -1)
-    return `Failed to parse event label (${aria})`;
-
-  const timesWithoutDayNumbers = toSpliced(allAriaTimes, startTimeIndex, 1);
-  if (timesWithoutDayNumbers.length > 1)
-    return `Failed to parse event label (${aria})`;
-
-  return [startTime, timesWithoutDayNumbers[0]];
+  const touchesBottom = isTwoDayEvent && !touchesTop;
+  return [startTime, ariaTimes[0], touchesBottom];
 }
 
-/** @example 1 or 11 */
+/**
+ * @example 1
+ * @example 11
+ */
 const shortLengthTimeNumber = 2;
 
-const extractTimeLikeNumbers = (string: string): string[] =>
+const extractTimeLikeNumbers = (string: string): readonly string[] =>
   Array.from(normalizeNumbers(string).match(reTimeNumber) ?? []);
 
 // The regex has two different types of dashes:
-const reTimeNumber = /\d{1,2}([^-–\d]\d{2})?/gu;
+const reTimeNumber = /(?<!\d)\d{1,2}([^-–\d]\d{2})?(?!\d)/gu;
 
 function parseTimeNumber(string: string, isAm: boolean): number {
+  // Parse without making assumptions about what the color character is
   // 1, 12
   if (string.length <= shortLengthTimeNumber)
     return normalizeAmPm(Number.parseInt(string), isAm);
@@ -164,6 +156,11 @@ function parseTimeNumber(string: string, isAm: boolean): number {
 function normalizeAmPm(number: number, isAm: boolean): number {
   // Trust the DOM over our inferred "isAm" for >=13 numbers
   if (number >= pmAmSwitch + 1) return number;
+  /**
+   * normalizeAmPm is only called with 12 if event does not touch top or does
+   * not touch bottom - thus 12 is definitely not 0 and not 24.
+   */
+  if (number === pmAmSwitch) return number;
 
   const whole = Math.floor(number);
   // Do not use % on fractional numbers as that is much slower
