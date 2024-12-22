@@ -3,6 +3,7 @@ import React from 'react';
 import { useStorage } from '../../hooks/useStorage';
 import type { GetSet } from '../../utils/types';
 import type { UserPreferences } from './helpers';
+import { setDevMode } from '../Contexts/devMode';
 
 /**
  * Hold User Preferences
@@ -23,6 +24,10 @@ export function PreferencesProvider({
     preferences[0] === undefined
       ? ([{}, () => {}] as const)
       : (preferences as GetSet<UserPreferences>);
+
+  const [devMode = false] = useStorage('devMode');
+  setDevMode(devMode);
+
   return (
     <PreferencesContext.Provider value={nonNullPreferences}>
       {children}

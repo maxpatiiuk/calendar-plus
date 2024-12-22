@@ -21,6 +21,7 @@ import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
 import { domReadingEligibleViews } from '../DomReading';
 import { ThemeDetector } from '../Contexts/ThemeColor';
 import { useKeyboardShortcut } from '../KeyboardShortcuts/hooks';
+import { devMode } from '../Contexts/devMode';
 
 /**
  * Entrypoint react component for the extension
@@ -75,7 +76,6 @@ export function App(): JSX.Element | null {
 
   const calendars = React.useContext(CalendarsContext);
   const auth = React.useContext(AuthContext);
-  const [devMode] = useStorage('devMode');
 
   const [showFirstAuth, setShowFirstAuth] = React.useState(false);
 

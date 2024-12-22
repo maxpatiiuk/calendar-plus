@@ -22,6 +22,7 @@ import { parseEventsFromDom } from '../DomReading';
 import { output } from '../Errors/exceptions';
 import { CurrentView } from '../Contexts/CurrentViewContext';
 import { useDomMutation } from '../DomReading/useDomMutation';
+import { devMode } from '../Contexts/devMode';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -149,14 +150,13 @@ export function useEvents(
           limit,
         );
         if (typeof allDurations === 'string') {
-          /**
-           * Don't fail if for example we begun navigating to the search page
-           */
+          // Don't fail if, for example, we begun navigating to the search page
           if (destructorCalled) return;
+          if (devMode) debugger;
           output.warn(
             `[Calendar Plus] DOM parse error: ${allDurations}. Falling back to retrieving data from the API rather than DOM parsing (slower, but more reliable)`,
           );
-          /**
+          /*
            * Failed to read the DOM. Disabling DOM reading for the rest of the
            * session to be safe
            */
