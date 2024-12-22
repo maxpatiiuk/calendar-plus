@@ -18,7 +18,9 @@
     {
       "resources": [
         "/src/public/images/web_dark_rd_SI@2x.webp",
-        "/src/public/images/web_light_rd_SI@2x.webp"
+        "/src/public/images/web_light_rd_SI@2x.webp",
+        "/src/dist/main.bundle.js.map",
+        "/src/dist/background.bundle.js.map"
       ],
       "matches": ["https://calendar.google.com/*"]
     }
