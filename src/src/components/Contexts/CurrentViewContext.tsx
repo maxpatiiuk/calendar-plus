@@ -30,7 +30,7 @@ const supportedViews = [
 ] as const;
 
 /**
- * Google Calendar is not always consistent it how it calls these views
+ * Google Calendar is not always consistent in how it calls these views
  */
 const viewMapper = {
   custom_days: 'customday',
@@ -76,6 +76,28 @@ function useCurrentTracker(
     useStorage('customViewSize');
 
   const { weekStart } = React.useContext(SettingsContext);
+  const [initialView, setInitialView] = React.useState<
+    SupportedView | undefined
+  >(undefined);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const rawViewName = document.body
+        .getAttribute('data-viewkey')
+        ?.toLowerCase();
+      if (!rawViewName) return;
+      const viewName =
+        rawViewName in viewMapper
+          ? viewMapper[rawViewName as keyof typeof viewMapper]
+          : rawViewName;
+      if (f.includes(supportedViews, viewName)) setInitialView(viewName);
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-viewkey'],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   React.useEffect(() => {
     let lastPath = '';
@@ -85,6 +107,7 @@ function useCurrentTracker(
         window.location.pathname,
         customViewSize,
         weekStart,
+        initialView,
       );
       setCurrentView((currentView) =>
         currentView?.view === parsed?.view &&
@@ -109,7 +132,13 @@ function useCurrentTracker(
       lastPath = window.location.pathname;
       parseUrl();
     });
-  }, [weekStart, setCurrentView, customViewSize, setCustomViewSize]);
+  }, [
+    initialView,
+    weekStart,
+    setCurrentView,
+    customViewSize,
+    setCustomViewSize,
+  ]);
 }
 
 const commonPrefix = `/calendar/u/0/r/`;
@@ -121,33 +150,42 @@ function parsePath(
   path: string,
   customViewSize: number,
   weekStart: number,
+  initialView: SupportedView | undefined,
 ): CurrentView | undefined {
   // If URL contains no date, then view is centered around today
   const today = new Date();
 
   /*
-   * Unless you changed view or when to a different week, URL does not contain
-   * the view mode or date
+   * Unless you changed view or went to a different week, URL does not contain
+   * the view mode or date.
+   * In that case, we get current view from the `body[data-viewkey]` attribute.
+   *
+   * There is also `header div[data-active-view]` which is set to initial page
+   * and not updated on changes - however, if initial page is settings page or
+   * event edit page, we won't know what the view is so can't use it.
+   *
+   * There is also `[role="main"][data-period-type]`, but it is only set for
+   * month and week views.
    */
   if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
-    const viewMode = document.querySelector('header div[data-active-view]');
-    const rawViewName = viewMode?.getAttribute('data-active-view') ?? '';
-    const viewName =
-      rawViewName in viewMapper
-        ? viewMapper[rawViewName as keyof typeof viewMapper]
-        : rawViewName;
-    if (f.includes(supportedViews, viewName))
+    if (initialView === undefined) return undefined;
+    else
       return {
-        view: viewName,
+        view: initialView,
         selectedDay: today,
-        ...resolveBoundaries(viewName, today, customViewSize, weekStart),
+        ...resolveBoundaries(initialView, today, customViewSize, weekStart),
       };
   }
 
   // If URl doesn't start with commonPrefix, we might be on the preferences page
   if (!path.startsWith(commonPrefix)) return undefined;
 
+  /**
+   * The body[data-viewkey] attribute is updated slightly later than the URL, so
+   * if we can get view name from the URL, do so.
+   */
   const [viewName, ...date] = path.slice(commonPrefix.length).split('/');
+
   if (!f.includes(supportedViews, viewName)) return undefined;
 
   const year = date[0] || today.getFullYear().toString();
