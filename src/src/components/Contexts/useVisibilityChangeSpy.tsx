@@ -9,6 +9,8 @@ import {
 } from './CalendarsContext';
 import { output } from '../Errors/exceptions';
 import { SECOND } from '../Atoms/Internationalization';
+import { CurrentViewContext } from './CurrentViewContext';
+import { useAsyncState } from '../../hooks/useAsyncState';
 
 export function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
@@ -26,7 +28,7 @@ export function useVisibilityChangeSpy(
    */
   React.useEffect(() => {
     if (sideBar === undefined || !cacheLoaded || calendars === undefined)
-      return undefined;
+      return;
 
     const getVisible = (): RA<string> =>
       Array.from(
@@ -91,36 +93,48 @@ export function useVisibilityChangeSpy(
 }
 
 function useSideBar(): HTMLElement | undefined {
-  const [sideBar, setSideBar] = React.useState<HTMLElement | undefined>(
-    undefined,
+  const isOnCalendarPage = React.useContext(CurrentViewContext) !== undefined;
+  const [sideBar] = useAsyncState(
+    React.useCallback(
+      () =>
+        isOnCalendarPage
+          ? awaitElement(findSideBar).then((sideBar) => {
+              if (sideBar === undefined) {
+                output.error('Unable to find the sidebar');
+                return;
+              }
+              return sideBar;
+            })
+          : undefined,
+      [isOnCalendarPage],
+    ),
+    false,
   );
 
+  const [isVisible, setIsVisible] = React.useState(false);
   React.useEffect(() => {
-    awaitElement(findSideBar).then((sideBar) => {
-      if (sideBar === undefined) {
-        output.error('Unable to find the sidebar');
-        return;
-      }
+    if (sideBar === undefined) return undefined;
 
-      let resizeObserver: ResizeObserver;
-      const checkCollapsed = () => {
-        // If side bar is hidden, it has width of 0
-        const isVisible = sideBar.offsetWidth > 0;
-        if (isVisible) setSideBar(sideBar);
-        else resizeObserver?.disconnect();
-        return !isVisible;
-      };
+    const checkCollapsed = () => {
+      // If side bar is hidden, it has width of 0
+      const isVisible = sideBar.offsetWidth > 0;
+      setIsVisible(isVisible);
+      if (!isVisible)
+        output.log(
+          'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
+        );
+      return !isVisible;
+    };
 
-      if (!checkCollapsed()) return;
-      output.log(
-        'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
-      );
-      resizeObserver = new ResizeObserver(checkCollapsed);
-      resizeObserver.observe(sideBar);
-    });
-  }, []);
+    checkCollapsed();
+    const resizeObserver = new ResizeObserver(checkCollapsed);
+    resizeObserver.observe(sideBar);
+    return (): void => {
+      resizeObserver.disconnect();
+    };
+  }, [sideBar]);
 
-  return sideBar;
+  return isVisible ? sideBar : undefined;
 }
 
 function findSideBar(): HTMLElement | undefined {
