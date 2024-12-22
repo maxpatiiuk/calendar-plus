@@ -33,7 +33,6 @@ export function rawDomEventToParsed(
  * cases to handle if every kind of input goes through all code paths.
  */
 function extractTimes({
-  times,
   aria,
   summary,
   touchesTop,
@@ -41,15 +40,6 @@ function extractTimes({
   todayDayNumber,
   nextDayNumber,
 }: RawDomEvent): readonly [string, string, touchesBottom: boolean] | string {
-  const numbers = extractTimeLikeNumbers(times);
-  if (numbers.length === 0) return `No time numbers found in event dom`;
-
-  const startTime = numbers[0];
-  /*
-   * Sometimes time string would include end time too, but to keep code path
-   * consistent, we always read end time from the aria string.
-   */
-
   /*
    * Exclude part of the aria string that includes the event summary and
    * calendar name to avoid them interfering with time extraction.
@@ -59,6 +49,9 @@ function extractTimes({
    *
    * Still, just in case event name is "8" or "8:00" trim everything after the
    * last occurrence of the summary, not the first
+   *
+   * The only case this would fail is when calendar name or location includes
+   * the summary AND the summary includes at least one 1-2 digit number.
    */
   let ariaSummaryIndex = aria.lastIndexOf(summary);
   if (ariaSummaryIndex === -1) {
@@ -90,11 +83,6 @@ function extractTimes({
 
   let ariaTimes = extractTimeLikeNumbers(trimmedAria);
 
-  const startTimeIndex = ariaTimes.indexOf(startTime);
-  if (startTimeIndex === -1)
-    return `Expected event label to include event start time`;
-  ariaTimes = toSpliced(ariaTimes, startTimeIndex, 1);
-
   /*
    * This is the case for two day events. Aria would include the today day
    * number, tomorrow/yesterday day number, and end time.
@@ -103,7 +91,7 @@ function extractTimes({
    * all-day event, which is handled outside this function, thus the event we
    * handle here can only span either from previous day or into next day.
    */
-  const isTwoDayEvent = ariaTimes.length > 1;
+  const isTwoDayEvent = ariaTimes.length > 2;
   if (isTwoDayEvent) {
     const todayNumberIndex = ariaTimes.indexOf(todayDayNumber.toString());
     if (todayNumberIndex === -1)
@@ -119,7 +107,7 @@ function extractTimes({
     ariaTimes = toSpliced(ariaTimes, neighboringDayNumberIndex, 1);
   }
 
-  if (ariaTimes.length !== 1) return `Failed to parse event label`;
+  if (ariaTimes.length !== 2) return `Failed to parse event label`;
 
   /**
    * We can detect `touchesTop` case from the DOM quite safely, but can't
@@ -127,7 +115,7 @@ function extractTimes({
    * string instead.
    */
   const touchesBottom = isTwoDayEvent && !touchesTop;
-  return [startTime, ariaTimes[0], touchesBottom];
+  return [ariaTimes[0], ariaTimes[1], touchesBottom];
 }
 
 /**

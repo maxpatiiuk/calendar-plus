@@ -7,7 +7,6 @@ export type RawDomEvent = {
    */
   readonly aria: string;
   readonly summary: string;
-  readonly times: string;
   readonly calendarId: string;
   // top < parent.clientHeight/2
   readonly amStart: boolean;

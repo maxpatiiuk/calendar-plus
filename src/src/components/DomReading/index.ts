@@ -133,13 +133,6 @@ function parseEventNode(
   const summary = titleContainer?.children[0]?.textContent;
   if (summary == null) return 'Failed to extract event summary';
 
-  // First case for larger events; 2nd case for one-line events
-  const timesContainer =
-    container?.children[0]?.children[1] ?? titleContainer?.children[2];
-  // For one line events with a location data, this span would contain both - pick the first text node
-  const times = timesContainer?.childNodes[0].textContent;
-  if (times == null) return 'Failed to extract event times';
-
   const parent = event.parentElement;
   if (parent === null) return 'Expected event node to have a parent';
 
@@ -160,7 +153,6 @@ function parseEventNode(
   const parsePayload: RawDomEvent = {
     aria,
     summary,
-    times,
     calendarId,
     amStart: top < parentMiddle,
     amEnd: endHeight < parentMiddle - 3,
