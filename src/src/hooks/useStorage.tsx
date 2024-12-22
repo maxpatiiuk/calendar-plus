@@ -164,7 +164,7 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
     chrome.storage[type].onChanged.addListener(callback);
     return (): void => {
       destructorCalled = true;
-      chrome.storage[type].onChanged.addListener(callback);
+      chrome.storage[type].onChanged.removeListener(callback);
     };
   }, [name, type]);
 

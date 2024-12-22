@@ -11,6 +11,7 @@ import { output } from '../Errors/exceptions';
 import { SECOND } from '../Atoms/Internationalization';
 import { CurrentViewContext } from './CurrentViewContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
+import { devMode } from './devMode';
 
 export function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
@@ -119,7 +120,7 @@ function useSideBar(): HTMLElement | undefined {
       // If side bar is hidden, it has width of 0
       const isVisible = sideBar.offsetWidth > 0;
       setIsVisible(isVisible);
-      if (!isVisible)
+      if (!isVisible && devMode)
         output.log(
           'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
         );

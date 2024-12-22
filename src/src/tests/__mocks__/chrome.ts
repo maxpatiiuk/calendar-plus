@@ -20,6 +20,10 @@ Object.defineProperty(globalThis, 'chrome', {
             localData[key] = value;
           });
         },
+        onChanged: {
+          addListener: () => undefined,
+          removeListener: () => undefined,
+        },
       },
       sync: {
         get: async (): Promise<unknown> => syncData,
@@ -27,6 +31,10 @@ Object.defineProperty(globalThis, 'chrome', {
           Object.entries(entries).forEach(([key, value]) => {
             syncData[key] = value;
           });
+        },
+        onChanged: {
+          addListener: () => undefined,
+          removeListener: () => undefined,
         },
       },
     },

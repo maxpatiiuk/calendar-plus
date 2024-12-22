@@ -125,10 +125,21 @@ function extractTimes({
 const shortLengthTimeNumber = 2;
 
 const extractTimeLikeNumbers = (string: string): readonly string[] =>
-  Array.from(normalizeNumbers(string).match(reTimeNumber) ?? []);
+  Array.from(
+    normalizeNumbers(string.replaceAll(reMonthWithNumber, '')).match(
+      reTimeNumber,
+    ) ?? [],
+    (number) =>
+      number.startsWith('0') && number.length > 1 ? number.slice(1) : number,
+  );
 
 // The regex has two different types of dashes:
-const reTimeNumber = /(?<!\d)\d{1,2}([^-–\d]\d{2})?(?!\d)/gu;
+const reTimeNumber = /(?<!\d)\d{1,2}([^-–\d\s日]\d{2})?(?!\d)/gu;
+/**
+ * In ko ja zh_TW zh_CN zh_HK vi languages, month name contains a number -
+ * exclude those.
+ */
+const reMonthWithNumber = /tháng (?:\d\d?)|(?:\d\d?)[月월]/gu;
 
 /**
  * Parse without making assumptions about what the colon character is

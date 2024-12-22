@@ -4,5 +4,5 @@
  * to better reflect the real world.
  */
 export default () => {
-  process.env.TZ = 'UTC-5:00';
+  process.env.TZ = 'America/Chicago';
 };

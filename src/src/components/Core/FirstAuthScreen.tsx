@@ -2,7 +2,6 @@ import React from 'react';
 
 import { commonText } from '../../localization/common';
 import { Button, Link } from '../Atoms';
-import { useStorage } from '../../hooks/useStorage';
 
 /**
  * This dialog is displayed on first use promoting user to sign in with Google
@@ -22,8 +21,6 @@ export function FirstAuthScreen({
   }, []);
 
   const [error, setError] = React.useState<string>('');
-
-  const [theme] = useStorage('theme');
 
   return (
     <dialog

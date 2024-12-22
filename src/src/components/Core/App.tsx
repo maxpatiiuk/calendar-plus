@@ -16,7 +16,6 @@ import { GhostEvents } from '../PowerTools/GhostEvents';
 import { HideEditAll } from '../PowerTools/HideEditAll';
 import { PreferencesPage } from '../Preferences';
 import { FirstAuthScreen } from './FirstAuthScreen';
-import { useStorage } from '../../hooks/useStorage';
 import { DevModeConsoleOverlay } from '../DebugOverlay/DevModeConsoleOverlay';
 import { domReadingEligibleViews } from '../DomReading';
 import { ThemeDetector } from '../Contexts/ThemeColor';

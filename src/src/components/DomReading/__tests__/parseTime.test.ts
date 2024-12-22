@@ -59,20 +59,26 @@ describe('parseTime', () =>
           amStart: event.amStart,
           amEnd: event.amEnd,
           touchesTop: event.touchesTop,
-          touchesBottom: event.touchesBottom,
           previousDayNumber: dayNumber - 1,
           todayDayNumber: dayNumber,
           nextDayNumber: dayNumber + 1,
         };
 
-        event.languages.forEach(([aria, times], entryIndex) => {
+        event.languages.forEach(([aria, _times], entryIndex) => {
           const isOdd = entryIndex % 2 === 1;
           const languageIndex = isOdd ? (entryIndex - 1) / 2 : entryIndex / 2;
-          test(languageCodes[languageIndex], () =>
+          const languageCode = languageCodes[languageIndex];
+          test(`${languageCode} (${aria})`, () => {
+            if (
+              typeof rawDomEventToParsed({
+                aria,
+                ...commonProps,
+              }) === 'string'
+            )
+              debugger;
             expect(
               rawDomEventToParsed({
                 aria,
-                times,
                 ...commonProps,
               }),
             ).toEqual({
@@ -80,8 +86,8 @@ describe('parseTime', () =>
               summary: event.summary,
               startTime: event.startTime,
               endTime: event.endTime,
-            }),
-          );
+            });
+          });
         });
       }),
     ),
