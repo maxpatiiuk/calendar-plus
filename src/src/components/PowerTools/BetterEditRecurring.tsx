@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useAsyncState } from '../../hooks/useAsyncState';
 import { listen } from '../../utils/events';
-import { f } from '../../utils/functools';
 import { mappedFind } from '../../utils/utils';
 import { awaitElement } from '../Contexts/CalendarsContext';
 import { usePref } from '../Preferences/usePref';
@@ -29,21 +28,21 @@ export function BetterEditRecurring(): null {
    * - Sometimes google calendar lags, and eventually opens up more than on
    *   "Edit Recurring Event" dialogs on top of each other
    */
-  const [dialogContainers] = useAsyncState(
+  const [dialogContainer] = useAsyncState(
     React.useCallback(
       async () =>
         lessInvasiveDialog
-          ? awaitElement(() => {
-              const containers = Array.from(document.body.children).filter(
-                (container) =>
-                  container.tagName === 'DIV' &&
-                  container.querySelector('iframe') === null &&
-                  container.hasAttribute('id') &&
-                  !container.hasAttribute('aria-live') &&
-                  !container.hasAttribute('aria-hidden'),
-              );
-              return containers.length === 0 ? undefined : containers;
-            })
+          ? awaitElement(
+              () =>
+                Array.from(document.body.children).find(
+                  (container) =>
+                    container.tagName === 'DIV' &&
+                    container.querySelector('iframe') === null &&
+                    container.hasAttribute('id') &&
+                    !container.hasAttribute('aria-live') &&
+                    !container.hasAttribute('aria-hidden'),
+                ) as HTMLElement | undefined,
+            )
           : undefined,
       [lessInvasiveDialog],
     ),
@@ -54,50 +53,49 @@ export function BetterEditRecurring(): null {
 
   // Listen for dialog open and find the submit button
   React.useEffect(() => {
-    if (dialogContainers === undefined) {
+    if (dialogContainer === undefined) {
       elements.current = undefined;
       return undefined;
     }
 
-    const observer = new MutationObserver((mutationList) => {
-      const dialogContainers = f.unique(
-        mutationList.map(({ target }) => target as HTMLElement),
+    const observer = new MutationObserver(() => {
+      const pairs = Array.from(
+        dialogContainer.querySelectorAll('[role="dialog"]'),
+        (dialog) => [dialogContainer, dialog as HTMLElement] as const,
       );
-      const pairs = dialogContainers.flatMap((dialogContainer) =>
-        Array.from(
-          dialogContainer.querySelectorAll('[role="dialog"]'),
-          (dialog) => [dialogContainer, dialog as HTMLElement] as const,
-        ),
-      );
+
       const potentialElements = mappedFind(pairs, ([dialogContainer, dialog]) =>
         findElements(dialogContainer, dialog),
       );
       potentialElements?.overlay.classList.add(className);
+
       elements.current = potentialElements;
     });
 
-    dialogContainers.forEach((container) =>
-      observer.observe(container, { childList: true }),
-    );
+    observer.observe(dialogContainer, { childList: true });
 
     return () => {
       observer.disconnect();
       elements.current = undefined;
     };
-  }, [dialogContainers]);
+  }, [dialogContainer]);
 
   // Submit the dialog on click outside
   React.useEffect(
     () =>
-      dialogContainers === undefined
+      dialogContainer === undefined
         ? undefined
-        : listen(document.body, 'mousedown', ({ target }) =>
-            target === null ||
-            elements.current?.overlay.contains(target as Element) !== false
-              ? undefined
-              : elements.current?.submitButton.click(),
+        : listen(
+            document.body,
+            'mousedown',
+            ({ target }) =>
+              target === null ||
+              elements.current?.overlay.contains(target as Element) !== false
+                ? undefined
+                : elements.current?.submitButton.click(),
+            { capture: true, passive: true },
           ),
-    [dialogContainers],
+    [dialogContainer],
   );
 
   return null;
