@@ -69,6 +69,13 @@ export function BetterEditRecurring(): null {
       );
       potentialElements?.overlay.classList.add(className);
 
+      if (
+        potentialElements !== undefined &&
+        elements.current?.submitButton?.isConnected
+      ) {
+        elements.current.submitButton.click();
+      }
+
       elements.current = potentialElements;
     });
 
