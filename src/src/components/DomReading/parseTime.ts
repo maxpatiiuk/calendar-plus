@@ -130,34 +130,38 @@ const extractTimeLikeNumbers = (string: string): readonly string[] =>
 // The regex has two different types of dashes:
 const reTimeNumber = /(?<!\d)\d{1,2}([^-–\d]\d{2})?(?!\d)/gu;
 
+/**
+ * Parse without making assumptions about what the colon character is
+ */
 function parseTimeNumber(string: string, isAm: boolean): number {
-  // Parse without making assumptions about what the color character is
   // 1, 12
   if (string.length <= shortLengthTimeNumber)
-    return normalizeAmPm(Number.parseInt(string), isAm);
+    return normalizeAmPm(Number.parseInt(string), 0, isAm);
   // 1:30, 12:30
   const minutes = Number.parseInt(string.slice(-2));
   const hours = Number.parseInt(string.slice(0, -3));
-  return normalizeAmPm(hours + minutes / MINUTES_IN_HOUR, isAm);
+  return normalizeAmPm(hours, minutes, isAm);
 }
 
-function normalizeAmPm(number: number, isAm: boolean): number {
-  // Trust the DOM over our inferred "isAm" for >=13 numbers
-  if (number >= pmAmSwitch + 1) return number;
+function normalizeAmPm(whole: number, minutes: number, isAm: boolean): number {
   /**
-   * normalizeAmPm is only called with 12 if event does not touch top or does
-   * not touch bottom - thus 12 is definitely not 0 and not 24.
+   * In case of >=13, trust the aria label over our inferred "isAm".
+   * In case of 12, normalizeAmPm is only called with 12 if event does not
+   * touch top or does not touch bottom - thus 12 is definitely not 0 and not 24.
    */
-  if (number === pmAmSwitch) return number;
+  const isNormalized = whole >= pmAmSwitch;
 
-  const whole = Math.floor(number);
-  // Do not use % on fractional numbers as that is much slower
   const baseWhole = whole % pmAmSwitch;
+  const normalizedWhole = isNormalized
+    ? whole
+    : isAm
+      ? baseWhole
+      : baseWhole + pmAmSwitch;
 
-  // Round to compensate for loss of precision (make 1.12 - 1 be 0.12)
-  const fraction = roundToTwoDecimals(number - whole);
-  const normalizedWhole = isAm ? baseWhole : baseWhole + pmAmSwitch;
-  return normalizedWhole + fraction;
+  const fraction = minutes / MINUTES_IN_HOUR;
+  // Round to compensate for loss of precision
+  const result = roundToTwoDecimals(normalizedWhole + fraction);
+  return result;
 }
 
 const pmAmSwitch = 12;
