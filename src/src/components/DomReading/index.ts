@@ -3,7 +3,7 @@ import { SupportedView } from '../Contexts/CurrentViewContext';
 import { devMode } from '../Contexts/devMode';
 import { getDatesBetween } from '../EventsStore';
 import { parseAllDayEventNode } from './allDayEvents';
-import { rawDomEventToParsed } from './parseTime';
+import { rawDomEventToParsed, getLanguageData } from './parseTime';
 import { ParsedDomEvent, type RawDomEvent } from './types';
 import { validateParseResult } from './validate';
 
@@ -22,12 +22,17 @@ export function parseEventsFromDom(
   timeMax: Date,
   ignoreAllDayEvents: boolean,
 ): RA<RA<ParsedDomEvent>> | string {
+  if (languageData === undefined)
+    return `Failed to find am/pm prefix data for ${language} language.`;
   try {
     return parseDom(timeMin, timeMax, ignoreAllDayEvents);
   } catch (error) {
     return String(error);
   }
 }
+
+const language = document.documentElement.lang;
+const languageData = getLanguageData(language);
 
 function parseDom(
   timeMin: Date,
@@ -78,12 +83,9 @@ function parseDom(
     return `Expected to find ${expectedColumns} all day event columns, but found ${allDayEventColumns.length}`;
 
   const columnEvents = resolvedColumns.map((column, columnIndex) => {
-    const previousDay = dates[columnIndex];
-    const today = dates[columnIndex + 1];
-    const nextDay = dates[columnIndex + 2];
     const events = Array.from(
       column.querySelectorAll<HTMLElement>('[role="button"][tabindex="0"]'),
-      (event) => parseEventNode(event, previousDay, today, nextDay),
+      parseEventNode,
     );
     const combinedEvents = ignoreAllDayEvents
       ? events
@@ -108,13 +110,8 @@ const excludeNonEvents = (
   maybeParsed: ParsedDomEvent | typeof notEvent | string,
 ): maybeParsed is ParsedDomEvent | string => maybeParsed !== notEvent;
 
-let columnHeight = document.body.clientHeight;
-
 function parseEventNode(
   event: HTMLElement,
-  previousDayNumber: number,
-  todayDayNumber: number,
-  nextDayNumber: number,
 ): ParsedDomEvent | typeof notEvent | string {
   const calendarId = extractCalendarId(event);
   if (calendarId === undefined) {
@@ -144,27 +141,16 @@ function parseEventNode(
     return 'Expected event "height" style to be in px';
 
   const top = Number.parseInt(event.style.top.slice(0, -2));
-  const height = Number.parseInt(event.style.height.slice(0, -2));
   if (Number.isNaN(top)) return 'Failed to parse event "top" style';
-  if (Number.isNaN(height)) return 'Failed to parse event "height" style';
 
-  // When overlay is open, parent height becomes 0 - remember last height
-  columnHeight = parent.clientHeight === 0 ? columnHeight : parent.clientHeight;
-  const endHeight = top + height;
-  const parentMiddle = columnHeight / 2;
   const parsePayload: RawDomEvent = {
     aria,
     summary,
     calendarId,
-    amStart: top < parentMiddle,
-    amEnd: endHeight < parentMiddle - 3,
     touchesTop: top <= 1,
-    previousDayNumber,
-    todayDayNumber,
-    nextDayNumber,
   };
 
-  const parseResult = rawDomEventToParsed(parsePayload);
+  const parseResult = rawDomEventToParsed(parsePayload, languageData!);
   if (typeof parseResult === 'string')
     return `${parseResult} ${JSON.stringify(parsePayload)}`;
   else if (devMode) {

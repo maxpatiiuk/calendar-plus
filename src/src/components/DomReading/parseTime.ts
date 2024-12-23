@@ -2,19 +2,16 @@ import { roundToTwoDecimals } from '../../utils/utils';
 import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';
 import { normalizeNumbers } from './normalizeNumbers';
 import type { ParsedDomEvent, RawDomEvent } from './types';
-import { toSpliced } from './utils';
 
+// FIXME: handle 0 duration event
 export function rawDomEventToParsed(
   rawDomEvent: RawDomEvent,
+  languageData: LanguageData,
 ): ParsedDomEvent | string {
-  const times = extractTimes(rawDomEvent);
+  const times = extractTimes(rawDomEvent, languageData);
   if (typeof times === 'string') return times;
 
-  const [start, end, touchesBottom] = times;
-  const startTime = rawDomEvent.touchesTop
-    ? 0
-    : parseTimeNumber(start, rawDomEvent.amStart);
-  const endTime = touchesBottom ? 24 : parseTimeNumber(end, rawDomEvent.amEnd);
+  const [startTime, endTime] = times;
   if (Number.isNaN(startTime))
     return `Failed to parse start time from event label`;
   if (Number.isNaN(endTime)) return `Failed to parse end time from event label`;
@@ -32,14 +29,10 @@ export function rawDomEventToParsed(
  * function early. But, it is easier to reason about a function, and fewer edge
  * cases to handle if every kind of input goes through all code paths.
  */
-function extractTimes({
-  aria,
-  summary,
-  touchesTop,
-  previousDayNumber,
-  todayDayNumber,
-  nextDayNumber,
-}: RawDomEvent): readonly [string, string, touchesBottom: boolean] | string {
+function extractTimes(
+  { aria, summary, touchesTop }: RawDomEvent,
+  languageData: LanguageData,
+): readonly [number, number] | string {
   /*
    * Exclude part of the aria string that includes the event summary and
    * calendar name to avoid them interfering with time extraction.
@@ -47,11 +40,11 @@ function extractTimes({
    * I verified that in every Google Calendar language, the start and end time
    * occurs in the string before the summary.
    *
-   * Still, just in case event name is "8" or "8:00" trim everything after the
-   * last occurrence of the summary, not the first
+   * Still, just in case event name is "8:00" trim everything after the last
+   * occurrence of the summary, not the first
    *
    * The only case this would fail is when calendar name or location includes
-   * the summary AND the summary includes at least one 1-2 digit number.
+   * the summary AND the summary includes a reTimeNumber number
    */
   let ariaSummaryIndex = aria.lastIndexOf(summary);
   if (ariaSummaryIndex === -1) {
@@ -76,38 +69,22 @@ function extractTimes({
       ariaSummaryIndex = aria.length;
 
     if (ariaSummaryIndex === -1) {
-      return `Expected event label to include event summary`;
+      return 'Expected event label to include event summary';
     }
   }
   const trimmedAria = aria.slice(0, ariaSummaryIndex);
 
-  let ariaTimes = extractTimeLikeNumbers(trimmedAria);
+  let [startTime, endTime] = extractTimeLikeNumbers(trimmedAria, languageData);
+  if (startTime === undefined) return 'Failed to extract the event start time';
+  if (endTime === undefined) return 'Failed to extract the event start time';
 
   /*
-   * This is the case for two day events. Aria would include the today day
-   * number, tomorrow/yesterday day number, and end time.
-   *
-   * Event must not last more than 24hrs or else it would be rendered as an
-   * all-day event, which is handled outside this function, thus the event we
-   * handle here can only span either from previous day or into next day.
+   * This is the case for two day events. Event must not last more than 24hrs or
+   * else it would be rendered as an all-day event, which is handled outside
+   * this function, thus the event we handle here can only span either from
+   * previous day or into next day.
    */
-  const isTwoDayEvent = ariaTimes.length > 2;
-  if (isTwoDayEvent) {
-    const todayNumberIndex = ariaTimes.indexOf(todayDayNumber.toString());
-    if (todayNumberIndex === -1)
-      return `Expected event label to include today day number`;
-    ariaTimes = toSpliced(ariaTimes, todayNumberIndex, 1);
-
-    const neighboringDayNumber = touchesTop ? previousDayNumber : nextDayNumber;
-    const neighboringDayNumberIndex = ariaTimes.indexOf(
-      neighboringDayNumber.toString(),
-    );
-    if (neighboringDayNumberIndex === -1)
-      return `Expected to find the neighboring day number in the aria string`;
-    ariaTimes = toSpliced(ariaTimes, neighboringDayNumberIndex, 1);
-  }
-
-  if (ariaTimes.length !== 2) return `Failed to parse event label`;
+  const isTwoDayEvent = endTime < startTime;
 
   /**
    * We can detect `touchesTop` case from the DOM quite safely, but can't
@@ -115,7 +92,45 @@ function extractTimes({
    * string instead.
    */
   const touchesBottom = isTwoDayEvent && !touchesTop;
-  return [ariaTimes[0], ariaTimes[1], touchesBottom];
+
+  if (touchesTop) startTime = 0;
+  if (touchesBottom) endTime = 24;
+
+  return [startTime, endTime];
+}
+
+function extractTimeLikeNumbers(
+  string: string,
+  [isPrefix, am, pm, amAlt, pmAlt]: LanguageData,
+): readonly number[] {
+  const numbers: number[] = [];
+  Array.from(
+    normalizeNumbers(string).matchAll(reTimeNumber) ?? [],
+    ({ index, 0: numberString }) => {
+      const length = numberString.length;
+      numberString =
+        numberString.startsWith('0') && numberString.length > 1
+          ? numberString.slice(1)
+          : numberString;
+      const isShort = numberString.length <= shortLengthTimeNumber;
+      const substring = isPrefix
+        ? string.slice(0, index)
+        : string.slice(index + length);
+      const isAm = isPrefix
+        ? substring.endsWith(am)
+        : substring.startsWith(am) ||
+          (amAlt !== undefined && substring.startsWith(amAlt));
+      const isPm = isPrefix
+        ? substring.endsWith(pm)
+        : substring.startsWith(pm) ||
+          (pmAlt !== undefined && substring.startsWith(pmAlt));
+
+      // Ignore day and month numbers
+      const isTimeNumber = !isShort || isAm || isPm;
+      if (isTimeNumber) numbers.push(parseTimeNumber(numberString, isAm, isPm));
+    },
+  );
+  return numbers;
 }
 
 /**
@@ -123,56 +138,140 @@ function extractTimes({
  * @example 11
  */
 const shortLengthTimeNumber = 2;
+const reTimeNumber = /(?<!\d)\d{1,2}([:.]\d{2})?(?!\d)/gu;
 
-const extractTimeLikeNumbers = (string: string): readonly string[] =>
-  Array.from(
-    normalizeNumbers(string.replaceAll(reMonthWithNumber, '')).match(
-      reTimeNumber,
-    ) ?? [],
-    (number) =>
-      number.startsWith('0') && number.length > 1 ? number.slice(1) : number,
-  );
+export type LanguageData = readonly [
+  isPrefix: boolean,
+  am: string,
+  pm: string,
+  amAlt?: string,
+  pmRight?: string,
+];
 
-// The regex has two different types of dashes:
-const reTimeNumber = /(?<!\d)\d{1,2}([^-–\d\s日]\d{2})?(?!\d)/gu;
-/**
- * In ko ja zh_TW zh_CN zh_HK vi languages, month name contains a number -
- * exclude those.
- */
-const reMonthWithNumber = /tháng (?:\d\d?)|(?:\d\d?)[月월]/gu;
+const amPmParts: Record<
+  string,
+  readonly [am: string, pm: string, amAlt?: string, pmRight?: string]
+> = {
+  af: [' vm.', ' nm.'],
+  az: [' AM', ' PM'],
+  id: ['am', 'pm'],
+  ca: ['am', 'pm'],
+  cy: [' yb', ' yh'],
+  da: ['am', 'pm'],
+  de: ['AM', 'PM'],
+  'en-GB': ['am', 'pm'],
+  en: ['am', 'pm'],
+  es: ['am', 'pm'],
+  'es-419': ['am', 'pm'],
+  eu: [' AM', ' PM'],
+  fil: ['AM', 'PM'],
+  fr: ['am', 'pm'],
+  'fr-CA': ['am', 'pm'],
+  gl: [' a.m.', ' p.m.'],
+  hr: ['AM', 'PM'],
+  zu: [' AM', ' PM'],
+  it: ['AM', 'PM'],
+  sw: [' AM', ' PM'],
+  lv: ['am', 'pm'],
+  lt: ['AM', 'PM'],
+  hu: ['am', 'pm'],
+  ms: [' PG', ' PTG'],
+  nl: ['am', 'pm'],
+  no: ['am', 'pm'],
+  pl: ['am', 'pm'],
+  'pt-BR': ['am', 'pm'],
+  'pt-PT': ['am', 'pm'],
+  ro: [' am', ' pm'],
+  sk: ['am', 'pm'],
+  sl: ['am', 'pm'],
+  fi: ['ap', 'ip'],
+  sv: ['am', 'pm'],
+  vi: ['AM', 'PM'],
+  tr: ['am', 'pm'],
+  is: [' f.h.', ' e.h.'],
+  cs: ['AM', 'PM'],
+  el: [' πμ', ' μμ'],
+  be: [' AM', ' PM'],
+  bg: [' am', ' pm'],
+  mn: [' ү.ө.', ' ү.х.', ' ц ү.ө.', ' ц ү.х.'],
+  ru: ['AM', 'PM'],
+  sr: ['am', 'pm'],
+  uk: ['дп', 'пп'],
+  kk: [' AM', ' PM'],
+  hy: [' AM', ' PM'],
+  iw: [' לפ', ' אח'],
+  ar: [' ص', ' م'],
+  ur: [' AM', ' PM'],
+  fa: [' قب', ' بع'],
+  ne: [' पूर्वाह्न', ' अपराह्न'],
+  mr: [' AM', ' PM'],
+  hi: [' am', ' pm'],
+  bn: [' AM', ' PM'],
+  pa: [' ਪੂ.ਦੁ.', ' ਬਾ.ਦੁ.'],
+  gu: [' AM', ' PM'],
+  ta: [' AM', ' PM'],
+  te: [' AM', ' PM'],
+  kn: [' ಪೂರ್ವಾಹ್ನ', ' ಅಪರಾಹ್ನ'],
+  ml: [' AM', ' PM'],
+  si: ['පෙ.ව. ', 'ප.ව. '],
+  th: ['am', 'pm'],
+  lo: [' ໂມງກ່ອນທ່ຽງ', ' ໂມງຫຼັງທ່ຽງ', ' ໂມງ​ກ່ອນທ່ຽງ', ' ຫຼັງທ່ຽງ'],
+  my: ['နံနက် ', 'ညနေ '],
+  ka: [' AM', ' PM'],
+  am: [' ጥዋት', ' ከሰዓት'],
+  km: [' AM', ' PM'],
+  'zh-HK': ['上午', '下午'],
+  'zh-CN': ['上午', '下午'],
+  'zh-TW': ['上午', '下午'],
+  ja: ['午前', '午後'],
+  ko: ['오전 ', '오후 '],
+};
+const amPmPrefixLanguages = new Set([
+  'si',
+  'my',
+  'zh-HK',
+  'zh-CN',
+  'zh-TW',
+  'ja',
+  'ko',
+]);
 
-/**
- * Parse without making assumptions about what the colon character is
- */
-function parseTimeNumber(string: string, isAm: boolean): number {
-  // 1, 12
-  if (string.length <= shortLengthTimeNumber)
-    return normalizeAmPm(Number.parseInt(string), 0, isAm);
-  // 1:30, 12:30
-  const minutes = Number.parseInt(string.slice(-2));
-  const hours = Number.parseInt(string.slice(0, -3));
-  return normalizeAmPm(hours, minutes, isAm);
+export function getLanguageData(language: string): LanguageData | undefined {
+  const languageEntry = amPmParts[language];
+  const isPrefix = amPmPrefixLanguages.has(language);
+  return languageEntry === undefined
+    ? undefined
+    : ([isPrefix, ...languageEntry] as const);
 }
 
-function normalizeAmPm(whole: number, minutes: number, isAm: boolean): number {
-  /**
-   * In case of >=13, trust the aria label over our inferred "isAm".
-   * In case of 12, normalizeAmPm is only called with 12 if event does not
-   * touch top or does not touch bottom - thus 12 is definitely not 0 and not 24.
-   */
-  const isNormalized = whole >= pmAmSwitch;
+function parseTimeNumber(string: string, isAm: boolean, isPm: boolean): number {
+  // 1, 12 VS 1:30, 12:30
+  const isShort = string.length <= shortLengthTimeNumber;
+  const minutes = isShort ? 0 : Number.parseInt(string.slice(-2));
+  const hours = Number.parseInt(isShort ? string : string.slice(0, -3));
+  return normalizeAmPm(hours, minutes, isAm, isPm);
+}
 
-  const baseWhole = whole % pmAmSwitch;
-  const normalizedWhole = isNormalized
-    ? whole
-    : isAm
-      ? baseWhole
-      : baseWhole + pmAmSwitch;
+function normalizeAmPm(
+  whole: number,
+  minutes: number,
+  isAm: boolean,
+  isPm: boolean,
+): number {
+  const hours = isAm
+    ? whole === amPmSwitch
+      ? 0
+      : whole
+    : isPm
+      ? whole === amPmSwitch
+        ? whole
+        : whole + amPmSwitch
+      : whole;
 
   const fraction = minutes / MINUTES_IN_HOUR;
   // Round to compensate for loss of precision
-  const result = roundToTwoDecimals(normalizedWhole + fraction);
+  const result = roundToTwoDecimals(hours + fraction);
   return result;
 }
 
-const pmAmSwitch = 12;
+const amPmSwitch = 12;

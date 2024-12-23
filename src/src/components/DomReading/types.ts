@@ -8,15 +8,7 @@ export type RawDomEvent = {
   readonly aria: string;
   readonly summary: string;
   readonly calendarId: string;
-  // top < parent.clientHeight/2
-  readonly amStart: boolean;
-  // top+height > parent.clientHeight/2 - 3px
-  readonly amEnd: boolean;
-  // top <= 1
   readonly touchesTop: boolean;
-  readonly previousDayNumber: number;
-  readonly todayDayNumber: number;
-  readonly nextDayNumber: number;
 };
 
 export type ParsedDomEvent = {
