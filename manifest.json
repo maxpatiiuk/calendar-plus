@@ -1,7 +1,7 @@
 {
   "name": "Calendar Plus",
   "short_name": "Calendar Plus",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "Google Calendar extension that provides insights into where your time goes. Includes power user tools, data export and customization",
   "author": "Max Patiiuk",
   "manifest_version": 3,
