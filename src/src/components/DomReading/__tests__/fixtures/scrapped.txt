@@ -137,8 +137,8 @@ den 9 juni 2024 kl. 10:15pm till den 10 juni 2024 kl. 6:30am, Sleep, Kalender: C
 10:15pm–6:30am
 Từ 22:15 9 tháng 6, 2024 đến 06:30 10 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
 22:15 – 06:30
-Từ 22:15 9 tháng 6, 2024 đến 06:30 10 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
-22:15 – 06:30
+Từ 10:15PM 9 tháng 6, 2024 đến 06:30AM 10 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
+10:15PM – 06:30AM
 9 Haziran 2024 saat 22:15 ile 10 Haziran 2024 saat 06:30 arası, Sleep, Takvim: Critical, Konum bilgisi yok, Renk: Kömür Karası, 
 22:15 - 06:30
 9 Haziran 2024 saat 10:15pm ile 10 Haziran 2024 saat 6:30am arası, Sleep, Takvim: Critical, Konum bilgisi yok, Renk: Kömür Karası, 
@@ -247,18 +247,18 @@ Từ 22:15 9 tháng 6, 2024 đến 06:30 10 tháng 6, 2024, Sleep, Lịch: Criti
 22.15 – 06.30
 2024 ජූනි 9 ප.ව. 10.15 සිට 2024 ජූනි 10 පෙ.ව. 6.30 දක්වා, Sleep, දින දර්ශනය: Critical, ස්ථානයක් නැත, වර්ණය: මිනිරන්, 
 ප.ව. 10.15 – පෙ.ව. 6.30
-9 มิถุนายน 2024 เวลา 10:15pm ถึง 10 มิถุนายน 2024 เวลา 6:30am, Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
-10:15pm ถึง 6:30am
 9 มิถุนายน 2024 เวลา 22:15 น. ถึง 10 มิถุนายน 2024 เวลา 06:30 น., Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
 22:15 น. ถึง 06:30 น.
+9 มิถุนายน 2024 เวลา 10:15pm ถึง 10 มิถุนายน 2024 เวลา 6:30am, Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
+10:15pm ถึง 6:30am
 9 ມິຖຸນາ 2024 ເວລາ 22:15 ຫາ 10 ມິຖຸນາ 2024 ເວລາ 06:30, Sleep, ປະຕິທິນ: Critical, ບໍ່ມີສະຖານທີ່, ສີ: ສີເທົາກຣາໄຟ, 
 22:15 – 06:30
 9 ມິຖຸນາ 2024 ເວລາ 10:15 ຫຼັງທ່ຽງ ຫາ 10 ມິຖຸນາ 2024 ເວລາ 6:30 ກ່ອນທ່ຽງ, Sleep, ປະຕິທິນ: Critical, ບໍ່ມີສະຖານທີ່, ສີ: ສີເທົາກຣາໄຟ, 
 10:15 ຫຼັງທ່ຽງ – 6:30 ກ່ອນທ່ຽງ
-၂၀၂၄၊ ဇွန် ၉ ညနေ ၁၀:၁၅ မှ ၂၀၂၄၊ ဇွန် ၁၀ နံနက် ၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
-ညနေ ၁၀:၁၅ – နံနက် ၆:၃၀
 ၂၀၂၄၊ ဇွန် ၉ ၂၂:၁၅ မှ ၂၀၂၄၊ ဇွန် ၁၀ ၀၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
 ၂၂:၁၅ – ၀၆:၃၀
+၂၀၂၄၊ ဇွန် ၉ ညနေ ၁၀:၁၅ မှ ၂၀၂၄၊ ဇွန် ၁၀ နံနက် ၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
+ညနေ ၁၀:၁၅ – နံနက် ၆:၃၀
 9 ივნისი, 2024, 22:15 - 10 ივნისი, 2024, 06:30, Sleep, კალენდარი: Critical, მდებარეობა უცნობია, ფერი: გრაფიტი, 
 22:15 - 06:30
 9 ივნისი, 2024, 10:15 PM - 10 ივნისი, 2024, 6:30 AM, Sleep, კალენდარი: Critical, მდებარეობა უცნობია, ფერი: გრაფიტი, 
@@ -431,8 +431,8 @@ Od 6:30am do 6:45am, Waking up, Koledar: Chore, Ni lokacije, 10. junij 2024
 6:30am
 Từ 06:30 đến 06:45, Waking up, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
 06:30
-Từ 06:30 đến 06:45, Waking up, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
-06:30
+Từ 06:30AM đến 06:45AM, Waking up, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
+06:30AM
 06:30 ile 06:45 arası, Waking up, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
 06:30
 6:30am ile 6:45am arası, Waking up, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
@@ -541,18 +541,18 @@ Từ 06:30 đến 06:45, Waking up, Lịch: Chore, Không có vị trí nào, 10
 06.30
 පෙ.ව. 6.30 සිට පෙ.ව. 6.45 දක්වා, Waking up, දින දර්ශනය: Chore, ස්ථානයක් නැත, 2024 ජූනි 10
 පෙ.ව. 6.30
-6:30am ถึง 6:45am, Waking up, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
-6:30am
 06:30 น. ถึง 06:45 น., Waking up, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
 06:30 น.
+6:30am ถึง 6:45am, Waking up, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
+6:30am
 06:30 ຫາ 06:45, Waking up, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 06:30
 6:30 ກ່ອນທ່ຽງ ຫາ 6:45 ກ່ອນທ່ຽງ, Waking up, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 6:30 ກ່ອນທ່ຽງ
-နံနက် ၆:၃၀ မှ နံနက် ၆:၄၅၊ Waking up၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-နံနက် ၆:၃၀
 ၀၆:၃၀ မှ ၀၆:၄၅၊ Waking up၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၀၆:၃၀
+နံနက် ၆:၃၀ မှ နံနက် ၆:၄၅၊ Waking up၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+နံနက် ၆:၃၀
 06:30 - 06:45, Waking up, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
 06:30
 6:30 AM - 6:45 AM, Waking up, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -725,8 +725,8 @@ Od 7:30am do 8am, Walking, Koledar: Chore, Ni lokacije, 10. junij 2024
 7:30am
 Từ 07:30 đến 08:00, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
 07:30
-Từ 07:30 đến 08:00, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
-07:30
+Từ 07:30AM đến 08:00AM, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
+07:30AM
 07:30 ile 08:00 arası, Walking, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
 07:30
 7:30am ile 8am arası, Walking, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
@@ -835,18 +835,18 @@ Từ 07:30 đến 08:00, Walking, Lịch: Chore, Không có vị trí nào, 10 t
 07.30
 පෙ.ව. 7.30 සිට පෙ.ව. 8 දක්වා, Walking, දින දර්ශනය: Chore, ස්ථානයක් නැත, 2024 ජූනි 10
 පෙ.ව. 7.30
-7:30am ถึง 8am, Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
-7:30am
 07:30 น. ถึง 08:00 น., Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
 07:30 น.
+7:30am ถึง 8am, Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
+7:30am
 07:30 ຫາ 08:00, Walking, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 07:30
 7:30 ກ່ອນທ່ຽງ ຫາ 8 ໂມງກ່ອນທ່ຽງ, Walking, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 7:30 ກ່ອນທ່ຽງ
-နံနက် ၇:၃၀ မှ နံနက် ၈၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-နံနက် ၇:၃၀
 ၀၇:၃၀ မှ ၀၈:၀၀၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၀၇:၃၀
+နံနက် ၇:၃၀ မှ နံနက် ၈၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+နံနက် ၇:၃၀
 07:30 - 08:00, Walking, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
 07:30
 7:30 AM - 8 AM, Walking, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -1019,8 +1019,8 @@ Od 8am do 8:15am, Going over emails, Koledar: Esri, Ni lokacije, 10. junij 2024
 8am
 Từ 08:00 đến 08:15, Going over emails, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
 08:00
-Từ 08:00 đến 08:15, Going over emails, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
-08:00
+Từ 08:00AM đến 08:15AM, Going over emails, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
+08:00AM
 08:00 ile 08:15 arası, Going over emails, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
 08:00
 8am ile 8:15am arası, Going over emails, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
@@ -1129,18 +1129,18 @@ Từ 08:00 đến 08:15, Going over emails, Lịch: Esri, Không có vị trí n
 08.00
 පෙ.ව. 8 සිට පෙ.ව. 8.15 දක්වා, Going over emails, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 10
 පෙ.ව. 8
-8am ถึง 8:15am, Going over emails, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
-8am
 08:00 น. ถึง 08:15 น., Going over emails, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
 08:00 น.
+8am ถึง 8:15am, Going over emails, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
+8am
 08:00 ຫາ 08:15, Going over emails, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 08:00
 8 ໂມງກ່ອນທ່ຽງ ຫາ 8:15 ກ່ອນທ່ຽງ, Going over emails, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 8 ໂມງກ່ອນທ່ຽງ
-နံနက် ၈ မှ နံနက် ၈:၁၅၊ Going over emails၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-နံနက် ၈
 ၀၈:၀၀ မှ ၀၈:၁၅၊ Going over emails၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၀၈:၀၀
+နံနက် ၈ မှ နံနက် ၈:၁၅၊ Going over emails၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+နံနက် ၈
 08:00 - 08:15, Going over emails, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
 08:00
 8 AM - 8:15 AM, Going over emails, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -1313,8 +1313,8 @@ Od 9am do 10am, Web Components Standup, Koledar: Esri, Ni lokacije, 10. junij 20
 9–10am
 Từ 09:00 đến 10:00, Web Components Standup, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
 09:00 – 10:00
-Từ 09:00 đến 10:00, Web Components Standup, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
-09:00 – 10:00
+Từ 09:00AM đến 10:00AM, Web Components Standup, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
+09:00AM – 10:00AM
 09:00 ile 10:00 arası, Web Components Standup, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
 09:00 - 10:00
 9am ile 10am arası, Web Components Standup, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
@@ -1423,18 +1423,18 @@ Từ 09:00 đến 10:00, Web Components Standup, Lịch: Esri, Không có vị t
 09.00 – 10.00
 පෙ.ව. 9 සිට පෙ.ව. 10 දක්වා, Web Components Standup, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 10
 පෙ.ව. 9 – 10
-9am ถึง 10am, Web Components Standup, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
-9 ถึง 10am
 09:00 น. ถึง 10:00 น., Web Components Standup, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
 09:00 น. ถึง 10:00 น.
+9am ถึง 10am, Web Components Standup, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
+9 ถึง 10am
 09:00 ຫາ 10:00, Web Components Standup, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 09:00 – 10:00
 9 ໂມງກ່ອນທ່ຽງ ຫາ 10 ໂມງກ່ອນທ່ຽງ, Web Components Standup, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 9 ໂມງ – 10 ໂມງກ່ອນທ່ຽງ
-နံနက် ၉ မှ နံနက် ၁၀၊ Web Components Standup၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-နံနက် ၉ – ၁၀
 ၀၉:၀၀ မှ ၁၀:၀၀၊ Web Components Standup၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၀၉:၀၀ – ၁၀:၀၀
+နံနက် ၉ မှ နံနက် ၁၀၊ Web Components Standup၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+နံနက် ၉ – ၁၀
 09:00 - 10:00, Web Components Standup, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
 09:00 - 10:00
 9 AM - 10 AM, Web Components Standup, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -1607,8 +1607,8 @@ Od 10am do 1pm, Controllers, Koledar: Esri, Ni lokacije, 10. junij 2024
 10am–1pm
 Từ 10:00 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
 10:00 – 13:00
-Từ 10:00 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
-10:00 – 13:00
+Từ 10:00AM đến 01:00PM, Controllers, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
+10:00AM – 01:00PM
 10:00 ile 13:00 arası, Controllers, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
 10:00 - 13:00
 10am ile 1pm arası, Controllers, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
@@ -1717,18 +1717,18 @@ Từ 10:00 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 1
 10.00 – 13.00
 පෙ.ව. 10 සිට ප.ව. 1 දක්වා, Controllers, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 10
 පෙ.ව. 10 – ප.ව. 1
-10am ถึง 1pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
-10am ถึง 1pm
 10:00 น. ถึง 13:00 น., Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
 10:00 น. ถึง 13:00 น.
+10am ถึง 1pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
+10am ถึง 1pm
 10:00 ຫາ 13:00, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 10:00 – 13:00
 10 ໂມງກ່ອນທ່ຽງ ຫາ 1 ໂມງຫຼັງທ່ຽງ, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 10 ໂມງກ່ອນທ່ຽງ – 1 ໂມງຫຼັງທ່ຽງ
-နံနက် ၁၀ မှ ညနေ ၁၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-နံနက် ၁၀ – ညနေ ၁
 ၁၀:၀၀ မှ ၁၃:၀၀၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၁၀:၀၀ – ၁၃:၀၀
+နံနက် ၁၀ မှ ညနေ ၁၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+နံနက် ၁၀ – ညနေ ၁
 10:00 - 13:00, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
 10:00 - 13:00
 10 AM - 1 PM, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -1901,8 +1901,8 @@ Od 1pm do 2pm, Team meeting, Koledar: Esri, Ni lokacije, 10. junij 2024
 1–2pm
 Từ 13:00 đến 14:00, Team meeting, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
 13:00 – 14:00
-Từ 13:00 đến 14:00, Team meeting, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
-13:00 – 14:00
+Từ 01:00PM đến 02:00PM, Team meeting, Lịch: Esri, Không có vị trí nào, 10 tháng 6, 2024
+01:00PM – 02:00PM
 13:00 ile 14:00 arası, Team meeting, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
 13:00 - 14:00
 1pm ile 2pm arası, Team meeting, Takvim: Esri, Konum bilgisi yok, 10 Haziran 2024
@@ -2011,18 +2011,18 @@ Từ 13:00 đến 14:00, Team meeting, Lịch: Esri, Không có vị trí nào, 
 13.00 – 14.00
 ප.ව. 1 සිට ප.ව. 2 දක්වා, Team meeting, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 10
 ප.ව. 1 – 2
-1pm ถึง 2pm, Team meeting, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
-1 ถึง 2pm
 13:00 น. ถึง 14:00 น., Team meeting, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
 13:00 น. ถึง 14:00 น.
+1pm ถึง 2pm, Team meeting, ปฏิทิน: Esri, ไม่มีสถานที่, 10 มิถุนายน 2024
+1 ถึง 2pm
 13:00 ຫາ 14:00, Team meeting, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 13:00 – 14:00
 1 ໂມງຫຼັງທ່ຽງ ຫາ 2 ໂມງຫຼັງທ່ຽງ, Team meeting, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 1 ໂມງ – 2 ໂມງຫຼັງທ່ຽງ
-ညနေ ၁ မှ ညနေ ၂၊ Team meeting၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-ညနေ ၁ – ၂
 ၁၃:၀၀ မှ ၁၄:၀၀၊ Team meeting၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၁၃:၀၀ – ၁၄:၀၀
+ညနေ ၁ မှ ညနေ ၂၊ Team meeting၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+ညနေ ၁ – ၂
 13:00 - 14:00, Team meeting, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
 13:00 - 14:00
 1 PM - 2 PM, Team meeting, კალენდარი: Esri, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -2195,8 +2195,8 @@ Od 6pm do 6:30pm, Walking, Koledar: Chore, Ni lokacije, 10. junij 2024
 6pm
 Từ 18:00 đến 18:30, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
 18:00
-Từ 18:00 đến 18:30, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
-18:00
+Từ 06:00PM đến 06:30PM, Walking, Lịch: Chore, Không có vị trí nào, 10 tháng 6, 2024
+06:00PM
 18:00 ile 18:30 arası, Walking, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
 18:00
 6pm ile 6:30pm arası, Walking, Takvim: Chore, Konum bilgisi yok, 10 Haziran 2024
@@ -2305,18 +2305,18 @@ Từ 18:00 đến 18:30, Walking, Lịch: Chore, Không có vị trí nào, 10 t
 18.00
 ප.ව. 6 සිට ප.ව. 6.30 දක්වා, Walking, දින දර්ශනය: Chore, ස්ථානයක් නැත, 2024 ජූනි 10
 ප.ව. 6
-6pm ถึง 6:30pm, Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
-6pm
 18:00 น. ถึง 18:30 น., Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
 18:00 น.
+6pm ถึง 6:30pm, Walking, ปฏิทิน: Chore, ไม่มีสถานที่, 10 มิถุนายน 2024
+6pm
 18:00 ຫາ 18:30, Walking, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 18:00
 6 ໂມງຫຼັງທ່ຽງ ຫາ 6:30 ຫຼັງທ່ຽງ, Walking, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 10 ມິຖຸນາ 2024
 6 ໂມງຫຼັງທ່ຽງ
-ညနေ ၆ မှ ညနေ ၆:၃၀၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
-ညနေ ၆
 ၁၈:၀၀ မှ ၁၈:၃၀၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၁၈:၀၀
+ညနေ ၆ မှ ညနေ ၆:၃၀၊ Walking၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၀
+ညနေ ၆
 18:00 - 18:30, Walking, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
 18:00
 6 PM - 6:30 PM, Walking, კალენდარი: Chore, მდებარეობა უცნობია, 10 ივნისი, 2024
@@ -2489,8 +2489,8 @@ Od 7:30pm do 8:15pm, WWDC24 Apple Keynote, Max Patiiuk, Lokacija: https://www.ap
 7:30pm
 Từ 19:30 đến 20:15, WWDC24 Apple Keynote, Max Patiiuk, Vị trí: https://www.apple.com/apple-events/, 10 tháng 6, 2024
 19:30
-Từ 19:30 đến 20:15, WWDC24 Apple Keynote, Max Patiiuk, Vị trí: https://www.apple.com/apple-events/, 10 tháng 6, 2024
-19:30
+Từ 07:30PM đến 08:15PM, WWDC24 Apple Keynote, Max Patiiuk, Vị trí: https://www.apple.com/apple-events/, 10 tháng 6, 2024
+07:30PM
 19:30 ile 20:15 arası, WWDC24 Apple Keynote, Max Patiiuk, Konum: https://www.apple.com/apple-events/, 10 Haziran 2024
 19:30
 7:30pm ile 8:15pm arası, WWDC24 Apple Keynote, Max Patiiuk, Konum: https://www.apple.com/apple-events/, 10 Haziran 2024
@@ -2599,18 +2599,18 @@ Từ 19:30 đến 20:15, WWDC24 Apple Keynote, Max Patiiuk, Vị trí: https://w
 19.30
 ප.ව. 7.30 සිට ප.ව. 8.15 දක්වා, WWDC24 Apple Keynote, Max Patiiuk, ස්ථානය: https://www.apple.com/apple-events/, 2024 ජූනි 10
 ප.ව. 7.30
-7:30pm ถึง 8:15pm, WWDC24 Apple Keynote, Max Patiiuk, สถานที่: https://www.apple.com/apple-events/, 10 มิถุนายน 2024
-7:30pm
 19:30 น. ถึง 20:15 น., WWDC24 Apple Keynote, Max Patiiuk, สถานที่: https://www.apple.com/apple-events/, 10 มิถุนายน 2024
 19:30 น.
+7:30pm ถึง 8:15pm, WWDC24 Apple Keynote, Max Patiiuk, สถานที่: https://www.apple.com/apple-events/, 10 มิถุนายน 2024
+7:30pm
 19:30 ຫາ 20:15, WWDC24 Apple Keynote, Max Patiiuk, ສະຖານທີ່: https://www.apple.com/apple-events/, 10 ມິຖຸນາ 2024
 19:30
 7:30 ຫຼັງທ່ຽງ ຫາ 8:15 ຫຼັງທ່ຽງ, WWDC24 Apple Keynote, Max Patiiuk, ສະຖານທີ່: https://www.apple.com/apple-events/, 10 ມິຖຸນາ 2024
 7:30 ຫຼັງທ່ຽງ
-ညနေ ၇:၃၀ မှ ညနေ ၈:၁၅၊ WWDC24 Apple Keynote၊ Max Patiiuk၊ နေရာ- https://www.apple.com/apple-events/၊ ၂၀၂၄၊ ဇွန် ၁၀
-ညနေ ၇:၃၀
 ၁၉:၃၀ မှ ၂၀:၁၅၊ WWDC24 Apple Keynote၊ Max Patiiuk၊ နေရာ- https://www.apple.com/apple-events/၊ ၂၀၂၄၊ ဇွန် ၁၀
 ၁၉:၃၀
+ညနေ ၇:၃၀ မှ ညနေ ၈:၁၅၊ WWDC24 Apple Keynote၊ Max Patiiuk၊ နေရာ- https://www.apple.com/apple-events/၊ ၂၀၂၄၊ ဇွန် ၁၀
+ညနေ ၇:၃၀
 19:30 - 20:15, WWDC24 Apple Keynote, Max Patiiuk, მდებარეობა: https://www.apple.com/apple-events/, 10 ივნისი, 2024
 19:30
 7:30 PM - 8:15 PM, WWDC24 Apple Keynote, Max Patiiuk, მდებარეობა: https://www.apple.com/apple-events/, 10 ივნისი, 2024
@@ -2784,8 +2784,8 @@ Od 8:15am do 9:30am, meet: Fred: map components, Koledar: Esri, Ni lokacije, 11.
 8:15–9:30am
 Từ 08:15 đến 09:30, meet: Fred: map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
 08:15 – 09:30
-Từ 08:15 đến 09:30, meet: Fred: map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
-08:15 – 09:30
+Từ 08:15AM đến 09:30AM, meet: Fred: map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
+08:15AM – 09:30AM
 08:15 ile 09:30 arası, meet: Fred: map components, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
 08:15 - 09:30
 8:15am ile 9:30am arası, meet: Fred: map components, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
@@ -2894,18 +2894,18 @@ Từ 08:15 đến 09:30, meet: Fred: map components, Lịch: Esri, Không có v�
 08.15 – 09.30
 පෙ.ව. 8.15 සිට පෙ.ව. 9.30 දක්වා, meet: Fred: map components, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 11
 පෙ.ව. 8.15 – 9.30
-8:15am ถึง 9:30am, meet: Fred: map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
-8:15 ถึง 9:30am
 08:15 น. ถึง 09:30 น., meet: Fred: map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
 08:15 น. ถึง 09:30 น.
+8:15am ถึง 9:30am, meet: Fred: map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
+8:15 ถึง 9:30am
 08:15 ຫາ 09:30, meet: Fred: map components, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 08:15 – 09:30
 8:15 ກ່ອນທ່ຽງ ຫາ 9:30 ກ່ອນທ່ຽງ, meet: Fred: map components, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 8:15 – 9:30 ກ່ອນທ່ຽງ
-နံနက် ၈:၁၅ မှ နံနက် ၉:၃၀၊ meet: Fred: map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
-နံနက် ၈:၁၅ – ၉:၃၀
 ၀၈:၁၅ မှ ၀၉:၃၀၊ meet: Fred: map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
 ၀၈:၁၅ – ၀၉:၃၀
+နံနက် ၈:၁၅ မှ နံနက် ၉:၃၀၊ meet: Fred: map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
+နံနက် ၈:၁၅ – ၉:၃၀
 08:15 - 09:30, meet: Fred: map components, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
 08:15 - 09:30
 8:15 AM - 9:30 AM, meet: Fred: map components, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
@@ -3078,8 +3078,8 @@ Od 10:15am do 10:45am, code: Map components, Koledar: Esri, Ni lokacije, 11. jun
 10:15am
 Từ 10:15 đến 10:45, code: Map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
 10:15
-Từ 10:15 đến 10:45, code: Map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
-10:15
+Từ 10:15AM đến 10:45AM, code: Map components, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
+10:15AM
 10:15 ile 10:45 arası, code: Map components, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
 10:15
 10:15am ile 10:45am arası, code: Map components, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
@@ -3188,18 +3188,18 @@ Từ 10:15 đến 10:45, code: Map components, Lịch: Esri, Không có vị tr�
 10.15
 පෙ.ව. 10.15 සිට පෙ.ව. 10.45 දක්වා, code: Map components, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 11
 පෙ.ව. 10.15
-10:15am ถึง 10:45am, code: Map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
-10:15am
 10:15 น. ถึง 10:45 น., code: Map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
 10:15 น.
+10:15am ถึง 10:45am, code: Map components, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
+10:15am
 10:15 ຫາ 10:45, code: Map components, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 10:15
 10:15 ກ່ອນທ່ຽງ ຫາ 10:45 ກ່ອນທ່ຽງ, code: Map components, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 10:15 ກ່ອນທ່ຽງ
-နံနက် ၁၀:၁၅ မှ နံနက် ၁၀:၄၅၊ code: Map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
-နံနက် ၁၀:၁၅
 ၁၀:၁၅ မှ ၁၀:၄၅၊ code: Map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
 ၁၀:၁၅
+နံနက် ၁၀:၁၅ မှ နံနက် ၁၀:၄၅၊ code: Map components၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
+နံနက် ၁၀:၁၅
 10:15 - 10:45, code: Map components, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
 10:15
 10:15 AM - 10:45 AM, code: Map components, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
@@ -3372,8 +3372,8 @@ Od 10:45am do 1pm, Controllers, Koledar: Esri, Ni lokacije, 11. junij 2024
 10:45am–1pm
 Từ 10:45 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
 10:45 – 13:00
-Từ 10:45 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
-10:45 – 13:00
+Từ 10:45AM đến 01:00PM, Controllers, Lịch: Esri, Không có vị trí nào, 11 tháng 6, 2024
+10:45AM – 01:00PM
 10:45 ile 13:00 arası, Controllers, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
 10:45 - 13:00
 10:45am ile 1pm arası, Controllers, Takvim: Esri, Konum bilgisi yok, 11 Haziran 2024
@@ -3482,18 +3482,18 @@ Từ 10:45 đến 13:00, Controllers, Lịch: Esri, Không có vị trí nào, 1
 10.45 – 13.00
 පෙ.ව. 10.45 සිට ප.ව. 1 දක්වා, Controllers, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 11
 පෙ.ව. 10.45 – ප.ව. 1
-10:45am ถึง 1pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
-10:45am ถึง 1pm
 10:45 น. ถึง 13:00 น., Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
 10:45 น. ถึง 13:00 น.
+10:45am ถึง 1pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 11 มิถุนายน 2024
+10:45am ถึง 1pm
 10:45 ຫາ 13:00, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 10:45 – 13:00
 10:45 ກ່ອນທ່ຽງ ຫາ 1 ໂມງຫຼັງທ່ຽງ, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 11 ມິຖຸນາ 2024
 10:45 ກ່ອນທ່ຽງ – 1 ໂມງຫຼັງທ່ຽງ
-နံနက် ၁၀:၄၅ မှ ညနေ ၁၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
-နံနက် ၁၀:၄၅ – ညနေ ၁
 ၁၀:၄၅ မှ ၁၃:၀၀၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
 ၁၀:၄၅ – ၁၃:၀၀
+နံနက် ၁၀:၄၅ မှ ညနေ ၁၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၁
+နံနက် ၁၀:၄၅ – ညနေ ၁
 10:45 - 13:00, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
 10:45 - 13:00
 10:45 AM - 1 PM, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 11 ივნისი, 2024
@@ -3666,8 +3666,8 @@ den 11 juni 2024 kl. 10:30pm till den 12 juni 2024 kl. 6:30am, Sleep, Kalender: 
 10:30pm–6:30am
 Từ 22:30 11 tháng 6, 2024 đến 06:30 12 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
 22:30 – 06:30
-Từ 22:30 11 tháng 6, 2024 đến 06:30 12 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
-22:30 – 06:30
+Từ 10:30PM 11 tháng 6, 2024 đến 06:30AM 12 tháng 6, 2024, Sleep, Lịch: Critical, Không có vị trí nào, Màu: Màu khói, 
+10:30PM – 06:30AM
 11 Haziran 2024 saat 22:30 ile 12 Haziran 2024 saat 06:30 arası, Sleep, Takvim: Critical, Konum bilgisi yok, Renk: Kömür Karası, 
 22:30 - 06:30
 11 Haziran 2024 saat 10:30pm ile 12 Haziran 2024 saat 6:30am arası, Sleep, Takvim: Critical, Konum bilgisi yok, Renk: Kömür Karası, 
@@ -3776,18 +3776,18 @@ Từ 22:30 11 tháng 6, 2024 đến 06:30 12 tháng 6, 2024, Sleep, Lịch: Crit
 22.30 – 06.30
 2024 ජූනි 11 ප.ව. 10.30 සිට 2024 ජූනි 12 පෙ.ව. 6.30 දක්වා, Sleep, දින දර්ශනය: Critical, ස්ථානයක් නැත, වර්ණය: මිනිරන්, 
 ප.ව. 10.30 – පෙ.ව. 6.30
-11 มิถุนายน 2024 เวลา 10:30pm ถึง 12 มิถุนายน 2024 เวลา 6:30am, Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
-10:30pm ถึง 6:30am
 11 มิถุนายน 2024 เวลา 22:30 น. ถึง 12 มิถุนายน 2024 เวลา 06:30 น., Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
 22:30 น. ถึง 06:30 น.
+11 มิถุนายน 2024 เวลา 10:30pm ถึง 12 มิถุนายน 2024 เวลา 6:30am, Sleep, ปฏิทิน: Critical, ไม่มีสถานที่, สี: กราไฟต์, 
+10:30pm ถึง 6:30am
 11 ມິຖຸນາ 2024 ເວລາ 22:30 ຫາ 12 ມິຖຸນາ 2024 ເວລາ 06:30, Sleep, ປະຕິທິນ: Critical, ບໍ່ມີສະຖານທີ່, ສີ: ສີເທົາກຣາໄຟ, 
 22:30 – 06:30
 11 ມິຖຸນາ 2024 ເວລາ 10:30 ຫຼັງທ່ຽງ ຫາ 12 ມິຖຸນາ 2024 ເວລາ 6:30 ກ່ອນທ່ຽງ, Sleep, ປະຕິທິນ: Critical, ບໍ່ມີສະຖານທີ່, ສີ: ສີເທົາກຣາໄຟ, 
 10:30 ຫຼັງທ່ຽງ – 6:30 ກ່ອນທ່ຽງ
-၂၀၂၄၊ ဇွန် ၁၁ ညနေ ၁၀:၃၀ မှ ၂၀၂၄၊ ဇွန် ၁၂ နံနက် ၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
-ညနေ ၁၀:၃၀ – နံနက် ၆:၃၀
 ၂၀၂၄၊ ဇွန် ၁၁ ၂၂:၃၀ မှ ၂၀၂၄၊ ဇွန် ၁၂ ၀၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
 ၂၂:၃၀ – ၀၆:၃၀
+၂၀၂၄၊ ဇွန် ၁၁ ညနေ ၁၀:၃၀ မှ ၂၀၂၄၊ ဇွန် ၁၂ နံနက် ၆:၃၀၊ Sleep၊ ပြက္ခဒိန်- Critical၊ နေရာ ထည့်မထားပါ၊ အရောင်- ခဲနက်၊ 
+ညနေ ၁၀:၃၀ – နံနက် ၆:၃၀
 11 ივნისი, 2024, 22:30 - 12 ივნისი, 2024, 06:30, Sleep, კალენდარი: Critical, მდებარეობა უცნობია, ფერი: გრაფიტი, 
 22:30 - 06:30
 11 ივნისი, 2024, 10:30 PM - 12 ივნისი, 2024, 6:30 AM, Sleep, კალენდარი: Critical, მდებარეობა უცნობია, ფერი: გრაფიტი, 
@@ -3961,8 +3961,8 @@ Od 10:45am do 1:30pm, Controllers, Koledar: Esri, Ni lokacije, 12. junij 2024
 10:45am–1:30pm
 Từ 10:45 đến 13:30, Controllers, Lịch: Esri, Không có vị trí nào, 12 tháng 6, 2024
 10:45 – 13:30
-Từ 10:45 đến 13:30, Controllers, Lịch: Esri, Không có vị trí nào, 12 tháng 6, 2024
-10:45 – 13:30
+Từ 10:45AM đến 01:30PM, Controllers, Lịch: Esri, Không có vị trí nào, 12 tháng 6, 2024
+10:45AM – 01:30PM
 10:45 ile 13:30 arası, Controllers, Takvim: Esri, Konum bilgisi yok, 12 Haziran 2024
 10:45 - 13:30
 10:45am ile 1:30pm arası, Controllers, Takvim: Esri, Konum bilgisi yok, 12 Haziran 2024
@@ -4071,18 +4071,18 @@ Từ 10:45 đến 13:30, Controllers, Lịch: Esri, Không có vị trí nào, 1
 10.45 – 13.30
 පෙ.ව. 10.45 සිට ප.ව. 1.30 දක්වා, Controllers, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 12
 පෙ.ව. 10.45 – ප.ව. 1.30
-10:45am ถึง 1:30pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 12 มิถุนายน 2024
-10:45am ถึง 1:30pm
 10:45 น. ถึง 13:30 น., Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 12 มิถุนายน 2024
 10:45 น. ถึง 13:30 น.
+10:45am ถึง 1:30pm, Controllers, ปฏิทิน: Esri, ไม่มีสถานที่, 12 มิถุนายน 2024
+10:45am ถึง 1:30pm
 10:45 ຫາ 13:30, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 12 ມິຖຸນາ 2024
 10:45 – 13:30
 10:45 ກ່ອນທ່ຽງ ຫາ 1:30 ຫຼັງທ່ຽງ, Controllers, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 12 ມິຖຸນາ 2024
 10:45 ກ່ອນທ່ຽງ – 1:30 ຫຼັງທ່ຽງ
-နံနက် ၁၀:၄၅ မှ ညနေ ၁:၃၀၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၂
-နံနက် ၁၀:၄၅ – ညနေ ၁:၃၀
 ၁၀:၄၅ မှ ၁၃:၃၀၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၂
 ၁၀:၄၅ – ၁၃:၃၀
+နံနက် ၁၀:၄၅ မှ ညနေ ၁:၃၀၊ Controllers၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၂
+နံနက် ၁၀:၄၅ – ညနေ ၁:၃၀
 10:45 - 13:30, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 12 ივნისი, 2024
 10:45 - 13:30
 10:45 AM - 1:30 PM, Controllers, კალენდარი: Esri, მდებარეობა უცნობია, 12 ივნისი, 2024
@@ -4259,8 +4259,8 @@ Od 7:30am do 3:30pm, Lit migration, Koledar: Esri, Ni lokacije, 14. junij 2024
 7:30am–3:30pm
 Từ 07:30 đến 15:30, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
 07:30 – 15:30
-Từ 07:30 đến 15:30, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
-07:30 – 15:30
+Từ 07:30AM đến 03:30PM, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
+07:30AM – 03:30PM
 07:30 ile 15:30 arası, Lit migration, Takvim: Esri, Konum bilgisi yok, 14 Haziran 2024
 07:30 - 15:30
 7:30am ile 3:30pm arası, Lit migration, Takvim: Esri, Konum bilgisi yok, 14 Haziran 2024
@@ -4369,18 +4369,18 @@ Từ 07:30 đến 15:30, Lit migration, Lịch: Esri, Không có vị trí nào,
 07.30 – 15.30
 පෙ.ව. 7.30 සිට ප.ව. 3.30 දක්වා, Lit migration, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 14
 පෙ.ව. 7.30 – ප.ව. 3.30
-7:30am ถึง 3:30pm, Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
-7:30am ถึง 3:30pm
 07:30 น. ถึง 15:30 น., Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
 07:30 น. ถึง 15:30 น.
+7:30am ถึง 3:30pm, Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
+7:30am ถึง 3:30pm
 07:30 ຫາ 15:30, Lit migration, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 14 ມິຖຸນາ 2024
 07:30 – 15:30
 7:30 ກ່ອນທ່ຽງ ຫາ 3:30 ຫຼັງທ່ຽງ, Lit migration, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 14 ມິຖຸນາ 2024
 7:30 ກ່ອນທ່ຽງ – 3:30 ຫຼັງທ່ຽງ
-နံနက် ၇:၃၀ မှ ညနေ ၃:၃၀၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
-နံနက် ၇:၃၀ – ညနေ ၃:၃၀
 ၀၇:၃၀ မှ ၁၅:၃၀၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
 ၀၇:၃၀ – ၁၅:၃၀
+နံနက် ၇:၃၀ မှ ညနေ ၃:၃၀၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
+နံနက် ၇:၃၀ – ညနေ ၃:၃၀
 07:30 - 15:30, Lit migration, კალენდარი: Esri, მდებარეობა უცნობია, 14 ივნისი, 2024
 07:30 - 15:30
 7:30 AM - 3:30 PM, Lit migration, კალენდარი: Esri, მდებარეობა უცნობია, 14 ივნისი, 2024
@@ -4553,8 +4553,8 @@ Od 5pm do 9:45pm, Lit migration, Koledar: Esri, Ni lokacije, 14. junij 2024
 5–9:45pm
 Từ 17:00 đến 21:45, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
 17:00 – 21:45
-Từ 17:00 đến 21:45, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
-17:00 – 21:45
+Từ 05:00PM đến 09:45PM, Lit migration, Lịch: Esri, Không có vị trí nào, 14 tháng 6, 2024
+05:00PM – 09:45PM
 17:00 ile 21:45 arası, Lit migration, Takvim: Esri, Konum bilgisi yok, 14 Haziran 2024
 17:00 - 21:45
 5pm ile 9:45pm arası, Lit migration, Takvim: Esri, Konum bilgisi yok, 14 Haziran 2024
@@ -4663,18 +4663,18 @@ Từ 17:00 đến 21:45, Lit migration, Lịch: Esri, Không có vị trí nào,
 17.00 – 21.45
 ප.ව. 5 සිට ප.ව. 9.45 දක්වා, Lit migration, දින දර්ශනය: Esri, ස්ථානයක් නැත, 2024 ජූනි 14
 ප.ව. 5 – 9.45
-5pm ถึง 9:45pm, Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
-5 ถึง 9:45pm
 17:00 น. ถึง 21:45 น., Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
 17:00 น. ถึง 21:45 น.
+5pm ถึง 9:45pm, Lit migration, ปฏิทิน: Esri, ไม่มีสถานที่, 14 มิถุนายน 2024
+5 ถึง 9:45pm
 17:00 ຫາ 21:45, Lit migration, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 14 ມິຖຸນາ 2024
 17:00 – 21:45
 5 ໂມງຫຼັງທ່ຽງ ຫາ 9:45 ຫຼັງທ່ຽງ, Lit migration, ປະຕິທິນ: Esri, ບໍ່ມີສະຖານທີ່, 14 ມິຖຸນາ 2024
 5 ໂມງ – 9:45 ຫຼັງທ່ຽງ
-ညနေ ၅ မှ ညနေ ၉:၄၅၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
-ညနေ ၅ – ၉:၄၅
 ၁၇:၀၀ မှ ၂၁:၄၅၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
 ၁၇:၀၀ – ၂၁:၄၅
+ညနေ ၅ မှ ညနေ ၉:၄၅၊ Lit migration၊ ပြက္ခဒိန်- Esri၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၄
+ညနေ ၅ – ၉:၄၅
 17:00 - 21:45, Lit migration, კალენდარი: Esri, მდებარეობა უცნობია, 14 ივნისი, 2024
 17:00 - 21:45
 5 PM - 9:45 PM, Lit migration, კალენდარი: Esri, მდებარეობა უცნობია, 14 ივნისი, 2024
@@ -4848,8 +4848,8 @@ Od 10:30am do 12:45pm, Meeting with Steve, Koledar: Chore, Ni lokacije, 15. juni
 10:30am–12:45pm
 Từ 10:30 đến 12:45, Meeting with Steve, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
 10:30 – 12:45
-Từ 10:30 đến 12:45, Meeting with Steve, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
-10:30 – 12:45
+Từ 10:30AM đến 12:45PM, Meeting with Steve, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
+10:30AM – 12:45PM
 10:30 ile 12:45 arası, Meeting with Steve, Takvim: Chore, Konum bilgisi yok, 15 Haziran 2024
 10:30 - 12:45
 10:30am ile 12:45pm arası, Meeting with Steve, Takvim: Chore, Konum bilgisi yok, 15 Haziran 2024
@@ -4958,18 +4958,18 @@ Từ 10:30 đến 12:45, Meeting with Steve, Lịch: Chore, Không có vị trí
 10.30 – 12.45
 පෙ.ව. 10.30 සිට ප.ව. 12.45 දක්වා, Meeting with Steve, දින දර්ශනය: Chore, ස්ථානයක් නැත, 2024 ජූනි 15
 පෙ.ව. 10.30 – ප.ව. 12.45
-10:30am ถึง 12:45pm, Meeting with Steve, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
-10:30am ถึง 12:45pm
 10:30 น. ถึง 12:45 น., Meeting with Steve, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
 10:30 น. ถึง 12:45 น.
+10:30am ถึง 12:45pm, Meeting with Steve, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
+10:30am ถึง 12:45pm
 10:30 ຫາ 12:45, Meeting with Steve, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 15 ມິຖຸນາ 2024
 10:30 – 12:45
 10:30 ກ່ອນທ່ຽງ ຫາ 12:45 ຫຼັງທ່ຽງ, Meeting with Steve, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 15 ມິຖຸນາ 2024
 10:30 ກ່ອນທ່ຽງ – 12:45 ຫຼັງທ່ຽງ
-နံနက် ၁၀:၃၀ မှ ညနေ ၁၂:၄၅၊ Meeting with Steve၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
-နံနက် ၁၀:၃၀ – ညနေ ၁၂:၄၅
 ၁၀:၃၀ မှ ၁၂:၄၅၊ Meeting with Steve၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
 ၁၀:၃၀ – ၁၂:၄၅
+နံနက် ၁၀:၃၀ မှ ညနေ ၁၂:၄၅၊ Meeting with Steve၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
+နံနက် ၁၀:၃၀ – ညနေ ၁၂:၄၅
 10:30 - 12:45, Meeting with Steve, კალენდარი: Chore, მდებარეობა უცნობია, 15 ივნისი, 2024
 10:30 - 12:45
 10:30 AM - 12:45 PM, Meeting with Steve, კალენდარი: Chore, მდებარეობა უცნობია, 15 ივნისი, 2024
@@ -5142,8 +5142,8 @@ Od 12:45pm do 1pm, Talking to Mom, Koledar: Chore, Ni lokacije, 15. junij 2024
 12:45pm
 Từ 12:45 đến 13:00, Talking to Mom, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
 12:45
-Từ 12:45 đến 13:00, Talking to Mom, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
-12:45
+Từ 12:45PM đến 01:00PM, Talking to Mom, Lịch: Chore, Không có vị trí nào, 15 tháng 6, 2024
+12:45PM
 12:45 ile 13:00 arası, Talking to Mom, Takvim: Chore, Konum bilgisi yok, 15 Haziran 2024
 12:45
 12:45pm ile 1pm arası, Talking to Mom, Takvim: Chore, Konum bilgisi yok, 15 Haziran 2024
@@ -5252,18 +5252,18 @@ Từ 12:45 đến 13:00, Talking to Mom, Lịch: Chore, Không có vị trí nà
 12.45
 ප.ව. 12.45 සිට ප.ව. 1 දක්වා, Talking to Mom, දින දර්ශනය: Chore, ස්ථානයක් නැත, 2024 ජූනි 15
 ප.ව. 12.45
-12:45pm ถึง 1pm, Talking to Mom, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
-12:45pm
 12:45 น. ถึง 13:00 น., Talking to Mom, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
 12:45 น.
+12:45pm ถึง 1pm, Talking to Mom, ปฏิทิน: Chore, ไม่มีสถานที่, 15 มิถุนายน 2024
+12:45pm
 12:45 ຫາ 13:00, Talking to Mom, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 15 ມິຖຸນາ 2024
 12:45
 12:45 ຫຼັງທ່ຽງ ຫາ 1 ໂມງຫຼັງທ່ຽງ, Talking to Mom, ປະຕິທິນ: Chore, ບໍ່ມີສະຖານທີ່, 15 ມິຖຸນາ 2024
 12:45 ຫຼັງທ່ຽງ
-ညနေ ၁၂:၄၅ မှ ညနေ ၁၊ Talking to Mom၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
-ညနေ ၁၂:၄၅
 ၁၂:၄၅ မှ ၁၃:၀၀၊ Talking to Mom၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
 ၁၂:၄၅
+ညနေ ၁၂:၄၅ မှ ညနေ ၁၊ Talking to Mom၊ ပြက္ခဒိန်- Chore၊ နေရာ ထည့်မထားပါ၊ ၂၀၂၄၊ ဇွန် ၁၅
+ညနေ ၁၂:၄၅
 12:45 - 13:00, Talking to Mom, კალენდარი: Chore, მდებარეობა უცნობია, 15 ივნისი, 2024
 12:45
 12:45 PM - 1 PM, Talking to Mom, კალენდარი: Chore, მდებარეობა უცნობია, 15 ივნისი, 2024
