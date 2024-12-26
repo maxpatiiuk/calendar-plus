@@ -80,6 +80,11 @@ export const preferenceDefinitions = {
         renderer: BooleanPref,
         defaultValue: true,
       }),
+      autocompleteFromCurrentWeek: definePref<boolean>({
+        title: preferencesText('autocompleteFromCurrentWeek'),
+        renderer: BooleanPref,
+        defaultValue: true,
+      }),
     },
   },
   feature: {

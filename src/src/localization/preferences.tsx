@@ -85,4 +85,7 @@ export const preferencesText = createDictionary({
   keyboardShortcuts: {
     'en-us': 'Keyboard Shortcuts',
   },
+  autocompleteFromCurrentWeek: {
+    'en-us': 'Autocomplete event names based on events from current week',
+  },
 });

@@ -11,6 +11,8 @@ import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
 import { Synonym } from '../Widgets/Synonyms';
 import { output } from '../Errors/exceptions';
+import { usePref } from '../Preferences/usePref';
+import { domParsedEvents } from '../EventsStore';
 
 const indicator = document.createElement('div');
 indicator.id = 'calendar-plus-autocomplete-indicator';
@@ -19,8 +21,17 @@ indicator.id = 'calendar-plus-autocomplete-indicator';
  * Provide autocomplete for calendar event names and automatically put events
  * into correct calendars based on rules defined by the user
  */
-export function AutoComplete(): JSX.Element {
+export function AutoComplete({
+  durations,
+}: {
+  durations: unknown;
+}): JSX.Element {
   const calendars = React.useContext(CalendarsContext);
+
+  const [autocompleteFromCurrentWeek] = usePref(
+    'behavior',
+    'autocompleteFromCurrentWeek',
+  );
 
   const virtualCalendars = useVirtualCalendars();
   const virtualCalendarsRef = React.useRef(virtualCalendars);
@@ -49,9 +60,28 @@ export function AutoComplete(): JSX.Element {
           element.setAttribute('list', dataListId);
 
         const guessCalendar = (input: string): string | undefined =>
-          virtualCalendarsRef.current.find(({ rule, value }) =>
-            ruleMatchers[rule](input, value),
+          virtualCalendarsRef.current.find(
+            ({ rule, value }) =>
+              rule === 'equals' && ruleMatchers[rule](input, value),
+          )?.calendarId ??
+          (autocompleteFromCurrentWeek
+            ? autocompleteFromWeek(input)
+            : undefined) ??
+          virtualCalendarsRef.current.find(
+            ({ rule, value }) =>
+              rule !== 'equals' && ruleMatchers[rule](input, value),
           )?.calendarId;
+
+        function autocompleteFromWeek(input: string): string | undefined {
+          const calendarIds = new Set(
+            getCurrentWeekEvents()
+              .filter(([summary]) => summary === input)
+              .map(([_, calendarId]) => calendarId),
+          );
+          return calendarIds.size === 1
+            ? calendarIds.values().next().value
+            : undefined;
+        }
 
         function findMatch(): (Synonym & { eventName: string }) | undefined {
           const eventName = element.value.trim();
@@ -168,7 +198,7 @@ export function AutoComplete(): JSX.Element {
           });
         }
       }),
-    [calendars, dataListId],
+    [calendars, dataListId, autocompleteFromCurrentWeek],
   );
 
   const eventNames = React.useMemo(
@@ -196,9 +226,34 @@ export function AutoComplete(): JSX.Element {
       }));
   }, [eventNames, activeMatch]);
 
+  const withInferredAutocomplete = React.useMemo(() => {
+    let currentWeekPredictions = autocompleteFromCurrentWeek
+      ? getCurrentWeekEvents()
+      : [];
+    if (activeMatch !== undefined && activeMatch.synonym.length > 0)
+      currentWeekPredictions = currentWeekPredictions.filter(
+        ([_subject, calendarId]) => calendarId === activeMatch.calendar,
+      );
+
+    const existingPredictions = new Set(
+      activeEventNames.map(({ value }) => value),
+    );
+    return [
+      ...activeEventNames,
+      ...currentWeekPredictions
+        .filter(([subject]) => !existingPredictions.has(subject))
+        .map(([subject, calendarId]) => ({
+          label: subject,
+          value: subject,
+          calendarId,
+        })),
+    ];
+    // getCurrentWeekEvents() depends on durations
+  }, [autocompleteFromCurrentWeek, durations, activeEventNames, activeMatch]);
+
   return (
     <datalist id={dataListId}>
-      {activeEventNames.map(({ label, value }, index) => (
+      {withInferredAutocomplete.map(({ label, value }, index) => (
         <option key={index} value={value}>
           {label}
         </option>
@@ -317,4 +372,30 @@ function findOption(
    * match the value in the summary field
    */
   return option ?? options[0];
+}
+
+// REFACTOR: migrate to Map once https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/filter is available
+let hashKey: typeof domParsedEvents | undefined;
+let hashedCurrentWeek: RA<readonly [string, string | undefined]> | undefined;
+function getCurrentWeekEvents(): RA<readonly [string, string | undefined]> {
+  if (
+    (hashKey === domParsedEvents && hashedCurrentWeek !== undefined) ||
+    domParsedEvents === undefined
+  )
+    return hashedCurrentWeek ?? [];
+
+  hashKey = domParsedEvents;
+  hashedCurrentWeek = Object.entries(
+    domParsedEvents
+      .flat()
+      .reduce<
+        Record<string, string | undefined>
+      >((total, { summary, calendarId }) => {
+        if (summary in total && total[summary] !== calendarId)
+          total[summary] = undefined;
+        else total[summary] = calendarId;
+        return total;
+      }, {}),
+  );
+  return hashedCurrentWeek;
 }

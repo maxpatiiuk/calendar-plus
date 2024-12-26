@@ -124,7 +124,7 @@ export function App(): JSX.Element | null {
       ) : undefined}
       {devMode && <DevModeConsoleOverlay />}
       {debugOverlay}
-      <AutoComplete />
+      <AutoComplete durations={durations} />
       <GhostEvents />
       <HideEditAll />
       <BetterEditRecurring />

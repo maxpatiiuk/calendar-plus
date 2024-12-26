@@ -23,6 +23,7 @@ import { output } from '../Errors/exceptions';
 import { CurrentView } from '../Contexts/CurrentViewContext';
 import { useDomMutation } from '../DomReading/useDomMutation';
 import { devMode } from '../Contexts/devMode';
+import type { ParsedDomEvent } from '../DomReading/types';
 
 export const summedDurations: unique symbol = Symbol('calendarTotal');
 
@@ -112,7 +113,7 @@ export function useEvents(
         eventsStore.current = {};
       }
 
-      const guessCalendar: DomReadPayload['guessCalendar'] = (
+      const guessVirtualCalendar: DomReadPayload['guessVirtualCalendar'] = (
         calendarId,
         input,
       ) =>
@@ -142,7 +143,7 @@ export function useEvents(
               endDate,
               ignoreAllDayEvents,
               daysBetween,
-              guessCalendar,
+              guessVirtualCalendar,
             });
             return typeof allDurations === 'string' ? undefined : allDurations;
           },
@@ -201,7 +202,7 @@ export function useEvents(
                 const [startDate, endDate] = dates;
                 const data = calculateEventDuration(startDate, endDate);
                 return [
-                  guessCalendar(calendar.id, summary) ?? '',
+                  guessVirtualCalendar(calendar.id, summary) ?? '',
                   data,
                 ] as const;
               },
@@ -250,11 +251,13 @@ type DomReadPayload = {
   readonly endDate: Date;
   readonly ignoreAllDayEvents: boolean;
   readonly daysBetween: RA<Date>;
-  readonly guessCalendar: (
+  readonly guessVirtualCalendar: (
     calendarId: string,
     input: string,
   ) => string | undefined;
 };
+
+export let domParsedEvents: RA<RA<ParsedDomEvent>> | undefined = undefined;
 
 function readDom({
   calendars,
@@ -262,7 +265,7 @@ function readDom({
   endDate,
   ignoreAllDayEvents,
   daysBetween,
-  guessCalendar,
+  guessVirtualCalendar,
 }: DomReadPayload):
   | RA<readonly [string, RA<readonly [string, IR<RA<number>>]>]>
   | string {
@@ -270,6 +273,8 @@ function readDom({
   if (typeof domParsed === 'string') {
     return domParsed;
   }
+  domParsedEvents = domParsed;
+
   const allDurations = group(
     domParsed.flatMap((column, columnIndex) =>
       column.map((event) => {
@@ -279,7 +284,7 @@ function readDom({
         );
         return [
           event.calendarId,
-          [guessCalendar(event.calendarId, event.summary) ?? '', data],
+          [guessVirtualCalendar(event.calendarId, event.summary) ?? '', data],
         ] as const;
       }),
     ),
