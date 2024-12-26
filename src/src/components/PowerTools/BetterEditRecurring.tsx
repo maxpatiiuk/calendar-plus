@@ -5,14 +5,7 @@ import { listen } from '../../utils/events';
 import { mappedFind } from '../../utils/utils';
 import { awaitElement } from '../Contexts/CalendarsContext';
 import { usePref } from '../Preferences/usePref';
-
-const className = 'less-invasive-edit-recurring';
-
-type Elements = {
-  readonly overlay: HTMLElement;
-  readonly dialog: HTMLElement;
-  readonly submitButton: HTMLElement;
-};
+import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 
 /**
  * Less invasive "Edit Recurring Event" dialog. Optimized for speed for power
@@ -20,6 +13,9 @@ type Elements = {
  */
 export function BetterEditRecurring(): null {
   const [lessInvasiveDialog] = usePref('recurringEvents', 'lessInvasiveDialog');
+  const currentView = React.useContext(CurrentViewContext);
+  const isInEventsView = React.useRef(false);
+  isInEventsView.current = currentView !== undefined;
 
   /**
    * Find dialog containers
@@ -49,72 +45,74 @@ export function BetterEditRecurring(): null {
     false,
   );
 
-  const elements = React.useRef<Elements | undefined>(undefined);
-
   // Listen for dialog open and find the submit button
   React.useEffect(() => {
     if (dialogContainer === undefined) {
-      elements.current = undefined;
-      return undefined;
+      return;
     }
 
     const observer = new MutationObserver(() => {
+      if (hasShiftKey.current || !isInEventsView.current) return;
+
       const pairs = Array.from(
         dialogContainer.querySelectorAll('[role="dialog"]'),
         (dialog) => [dialogContainer, dialog as HTMLElement] as const,
       );
 
-      const potentialElements = mappedFind(pairs, ([dialogContainer, dialog]) =>
-        findElements(dialogContainer, dialog),
+      const submitButton = mappedFind(pairs, ([dialogContainer, dialog]) =>
+        findSubmitButton(dialogContainer, dialog),
       );
-      potentialElements?.overlay.classList.add(className);
 
-      if (
-        potentialElements !== undefined &&
-        elements.current?.submitButton?.isConnected
-      ) {
-        elements.current.submitButton.click();
-      }
-
-      elements.current = potentialElements;
+      submitButton?.click();
     });
 
     observer.observe(dialogContainer, { childList: true });
 
     return () => {
       observer.disconnect();
-      elements.current = undefined;
     };
   }, [dialogContainer]);
 
-  // Submit the dialog on click outside
+  const hasShiftKey = React.useRef(false);
   React.useEffect(
     () =>
-      dialogContainer === undefined
-        ? undefined
-        : listen(
-            document.body,
-            'mousedown',
-            ({ target }) =>
-              target === null ||
-              elements.current?.overlay.contains(target as Element) !== false
-                ? undefined
-                : elements.current?.submitButton.click(),
-            { capture: true, passive: true },
-          ),
-    [dialogContainer],
+      lessInvasiveDialog
+        ? listen(document.body, 'keydown', (event) => {
+            if (event.key === 'Shift') {
+              hasShiftKey.current = true;
+            }
+          })
+        : undefined,
+    [lessInvasiveDialog],
+  );
+  React.useEffect(
+    () =>
+      lessInvasiveDialog
+        ? listen(document.body, 'keyup', (event) => {
+            /*
+             * For more robust solution, we could listen for blur and visibility
+             * change too. But being stuck in shift pressed state is no big deal
+             * as it just means "Edit recurring" won't be auto dismissed
+             */
+            if (event.key === 'Shift') {
+              hasShiftKey.current = false;
+            }
+          })
+        : undefined,
+    [lessInvasiveDialog],
   );
 
   return null;
 }
 
 /**
- * Find the three options in the "Edit recurring event" dialog.
+ * Ensure we are in the "Edit recurring event" dialog and find the submit
+ * button.
  */
-function findElements(
+function findSubmitButton(
   dialogContainer: HTMLElement,
   dialog: HTMLElement,
-): Elements | undefined {
+): HTMLElement | undefined {
   const overlay =
     Array.from(dialogContainer.children).find((child) =>
       child.contains(dialog),
@@ -141,9 +139,5 @@ function findElements(
   );
   if (submitButton === null) return;
 
-  return {
-    overlay: overlay as HTMLElement,
-    dialog,
-    submitButton: submitButton as HTMLElement,
-  };
+  return submitButton as HTMLElement;
 }

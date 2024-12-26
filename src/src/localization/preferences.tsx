@@ -30,11 +30,11 @@ export const preferencesText = createDictionary({
   },
   lessInvasiveDialogDescription: {
     'en-us': `
-      Any edits to a recurring event trigger an "Edit recurring event" dialog.
-      Most of the time you only want to edit "This event", thus the dialog is
-      a bit annoying. This option makes the dialog less invasive by replacing it
-      with a smaller overlay at the bottom of the screen. Additionally, if you
-      click outside the dialog, "This event" option is automatically selected.
+      Any edits to a recurring event in Google Calendar triggers an "Edit
+      recurring event" dialog. Most of the time you only want to edit "This
+      event", thus the dialog is a bit annoying. This Calendar Plus option will
+      auto-select the "This event" option from the dialog without prompting you.
+      The behavior can be temporary suppressed by holding the Shift key.
     `,
   },
   hideEditAll: { 'en-us': 'Hide edit "All Events" option' },
