@@ -14,6 +14,7 @@ import type { BreakPoint } from './useBreakpoint';
 import { useBreakpoint } from './useBreakpoint';
 import { AddWidgetButton, WidgetContent } from './Widget';
 import { WidgetEditorOverlay } from './WidgetEditorOverlay';
+import { ResetToDefaultButton } from '../Preferences';
 
 /**
  * The widget container. Also handles editing the layout
@@ -49,9 +50,9 @@ export function Dashboard({
             >
               {commonText('cancel')}
             </Button.Default>
-            <Button.Default onClick={(): void => setLayout(defaultLayout)}>
-              {commonText('resetToDefault')}
-            </Button.Default>
+            <ResetToDefaultButton
+              onClick={(): void => setLayout(defaultLayout)}
+            />
           </>
         ) : (
           <Button.Default onClick={handleOpenPreferences}>

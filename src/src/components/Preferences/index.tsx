@@ -62,9 +62,7 @@ export function PreferencesPage({
         <Button.Default onClick={handleImport}>
           {commonText('importAllSettings')}
         </Button.Default>
-        <Button.Default onClick={(): void => setPreferences({})}>
-          {commonText('resetToDefault')}
-        </Button.Default>
+        <ResetToDefaultButton onClick={(): void => setPreferences({})} />
         <Button.Default onClick={handleClose}>
           {commonText('close')}
         </Button.Default>
@@ -154,5 +152,28 @@ function Import({
         }
       />
     </>
+  );
+}
+
+export function ResetToDefaultButton({
+  onClick: handleClick,
+}: {
+  readonly onClick: () => void;
+}): JSX.Element {
+  const [confirmResetToDefault, setConfirmResetToDefault] =
+    React.useState(false);
+  return (
+    <Button.Default
+      onClick={(): void => {
+        if (confirmResetToDefault) {
+          handleClick();
+          setConfirmResetToDefault(false);
+        } else setConfirmResetToDefault(true);
+      }}
+    >
+      {confirmResetToDefault
+        ? commonText('areYouSure')
+        : commonText('resetToDefault')}
+    </Button.Default>
   );
 }

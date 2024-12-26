@@ -33,6 +33,7 @@ export const commonText = createDictionary({
   edit: { 'en-us': 'Edit' },
   cancel: { 'en-us': 'Cancel' },
   resetToDefault: { 'en-us': 'Reset to Default' },
+  areYouSure: { 'en-us': 'Are you sure?' },
   decreaseWidth: { 'en-us': 'Decrease Width' },
   increaseWidth: { 'en-us': 'Increase Width' },
   decreaseHeight: { 'en-us': 'Decrease Height' },
