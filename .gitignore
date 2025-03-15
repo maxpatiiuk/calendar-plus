@@ -1,10 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 /.vscode/
 
 # dependencies
 /src/dist/
-/src/node_modules/
+/node_modules/
 
 # testing
 /src/coverage/
@@ -19,10 +17,6 @@
 /src/.env.development.local
 /src/.env.test.local
 /src/.env.production.local
-
-/src/npm-debug.log*
-/src/yarn-debug.log*
-/src/yarn-error.log*
 
 # packaged extension
 /calendar-plus.zip

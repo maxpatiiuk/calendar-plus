@@ -17,14 +17,14 @@
     "url": "https://github.com/maxpatiiuk/calendar-stats/issues"
   },
   "scripts": {
-    "package": "npm run build && (cd .. && zip -FSr ../calendar-plus.zip . -x .github/\\* index.html .git/\\* src/node_modules/\\* backend/\\* .idea/\\* .vscode/\\*)",
-    "build": "npx webpack --mode production",
-    "watch": "npx webpack --mode development --watch",
-    "test": "npm run typeCheck && npm run unitTests",
-    "typeCheck": "tsc",
-    "unitTests": "jest",
-    "unitTests:coverage": "jest --coverage",
-    "unitTests:watch": "jest --watch"
+    "package": "(cd src && npm run build && zip -FSr ../calendar-plus.zip .)",
+    "build": "(cd src && npx webpack --mode production)",
+    "watch": "(cd src && npx webpack --mode development --watch)",
+    "test": "(cd src && npm run typeCheck && npm run unitTests)",
+    "typeCheck": "(cd src && tsc)",
+    "unitTests": "(cd src && jest)",
+    "unitTests:coverage": "(cd src && jest --coverage)",
+    "unitTests:watch": "(cd src && jest --watch)"
   },
   "dependencies": {
     "chart.js": "^4.4.2",

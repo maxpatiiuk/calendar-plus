@@ -1,15 +1,15 @@
 {
   "name": "Calendar Plus",
   "short_name": "Calendar Plus",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Google Calendar extension that provides insights into where your time goes. Includes power user tools, data export and customization",
   "author": "Max Patiiuk",
   "manifest_version": 3,
   "icons": {
-    "16": "./src/public/images/extension_icon_16x16.png",
-    "32": "./src/public/images/extension_icon_32x32.png",
-    "48": "./src/public/images/extension_icon_48x48.png",
-    "128": "./src/public/images/extension_icon_128x128.png"
+    "16": "./public/images/extension_icon_16x16.png",
+    "32": "./public/images/extension_icon_32x32.png",
+    "48": "./public/images/extension_icon_48x48.png",
+    "128": "./public/images/extension_icon_128x128.png"
   },
   "action": {
     "default_title": "See where your time went"
@@ -17,10 +17,10 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "/src/public/images/web_dark_rd_SI@2x.webp",
-        "/src/public/images/web_light_rd_SI@2x.webp",
-        "/src/dist/main.bundle.js.map",
-        "/src/dist/background.bundle.js.map"
+        "/public/images/web_dark_rd_SI@2x.webp",
+        "/public/images/web_light_rd_SI@2x.webp",
+        "/dist/main.bundle.js.map",
+        "/dist/background.bundle.js.map"
       ],
       "matches": ["https://calendar.google.com/*"]
     }
@@ -29,12 +29,12 @@
   "current_locale": "en",
   "permissions": ["identity", "storage"],
   "background": {
-    "service_worker": "./src/dist/background.bundle.js"
+    "service_worker": "./dist/background.bundle.js"
   },
   "content_scripts": [
     {
       "matches": ["https://calendar.google.com/calendar/u/0/r/*"],
-      "js": ["./src/dist/main.bundle.js"]
+      "js": ["./dist/main.bundle.js"]
     }
   ],
   "cross_origin_embedder_policy": {
