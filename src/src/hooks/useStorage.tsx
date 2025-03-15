@@ -175,16 +175,16 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
       const isOverLimit = type === 'sync' && isOverSizeLimit(name, jsonValue);
       setDevelopmentGlobal(`_${name}`, value);
       setValue(value);
-      if (isOverLimit)
-        chrome.storage.sync
-          .set(splitValue(name, jsonValue))
-          .catch(output.error);
-      else
-        chrome.storage[type]
-          .set({
-            [name]: value,
-          })
-          .catch(output.error);
+      const split = isOverLimit
+        ? splitValue(name, jsonValue)
+        : { [name]: jsonValue };
+      chrome.storage.sync
+        .set(split)
+        .then(async () => {
+          const maxItem = Object.keys(split).length;
+          await cleanupLooseChunks(name, maxItem + 1);
+        })
+        .catch(output.error);
     },
     [setValue, name, type],
   );
@@ -233,12 +233,14 @@ async function joinValue(
   name: keyof StorageDefinitions,
   value: string,
 ): Promise<string> {
+  if (!maybeJson.includes(value[0])) return value;
   try {
     return JSON.parse(`${value}${await joinStorage(name)}`);
   } catch {
     return value;
   }
 }
+const maybeJson = '{["0123456789-tfn';
 
 async function joinStorage(
   key: keyof StorageDefinitions,
@@ -249,4 +251,15 @@ async function joinStorage(
   return typeof value === 'string'
     ? `${value}${await joinStorage(key, index + 1)}`
     : '';
+}
+
+async function cleanupLooseChunks(
+  key: keyof StorageDefinitions,
+  index: number,
+): Promise<void> {
+  const fullKey = `${key}_${index}`;
+  const { [fullKey]: value } = await chrome.storage.sync.get(fullKey);
+  if (value === undefined) return;
+  chrome.storage.sync.remove(fullKey);
+  cleanupLooseChunks(key, index + 1);
 }
