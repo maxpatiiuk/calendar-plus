@@ -334,7 +334,6 @@ function findCalendarsButton(parent: HTMLElement): HTMLElement | undefined {
     '[aria-expanded] [data-key="calendar"]',
   );
   if (calendarsButton === null) {
-    output.warn('Unable to find calendar selector box');
     return undefined;
   }
   return calendarsButton;
