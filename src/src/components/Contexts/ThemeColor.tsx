@@ -19,10 +19,13 @@ import { awaitElement } from './CalendarsContext';
 import { output } from '../Errors/exceptions';
 
 export function ThemeDetector(): null {
-  const [_theme, setTheme] = useStorage('theme');
+  const [theme, setTheme] = useStorage('theme');
+  const isLoaded = theme !== undefined;
 
   useAsyncState(
     React.useCallback(async () => {
+      // Don't try to set theme if we don't yet know the current theme to remove redundant set
+      if (!isLoaded) return;
       const element = await awaitElement(
         () => document.querySelector('meta[name="theme-color"]') ?? undefined,
       );
@@ -53,7 +56,7 @@ export function ThemeDetector(): null {
         attributeFilter: ['content'],
       });
       return (): void => observer.disconnect();
-    }, [setTheme]),
+    }, [setTheme, isLoaded]),
     false,
   );
 

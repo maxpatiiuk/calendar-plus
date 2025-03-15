@@ -123,23 +123,11 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   name: NAME,
 ): GetSet<StorageDefinitions[NAME]['defaultValue'] | undefined> {
   const type = storageDefinitions[name].type;
+  const adapter = storageAdapters[type];
 
   const fetchValue = React.useCallback(
-    async () =>
-      chrome.storage[type].get(name).then(async (storage) => {
-        const value = storage[name];
-        const resolvedValue =
-          typeof value === 'string' && type === 'sync'
-            ? await joinValue(name, value)
-            : value;
-        setDevelopmentGlobal(`_${name}`, resolvedValue);
-        return (
-          (resolvedValue as
-            | StorageDefinitions[NAME]['defaultValue']
-            | undefined) ?? storageDefinitions[name].defaultValue
-        );
-      }),
-    [name, type],
+    async () => await adapter.get(name),
+    [name, adapter],
   );
 
   const [value, setValue] = useAsyncState<
@@ -171,26 +159,74 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
   const updateValue = React.useCallback(
     (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
       if (currentValue.current === value) return;
-      const jsonValue = JSON.stringify(value);
-      const isOverLimit = type === 'sync' && isOverSizeLimit(name, jsonValue);
-      setDevelopmentGlobal(`_${name}`, value);
+      adapter.set(name, value).catch(output.error);
       setValue(value);
-      const split = isOverLimit
-        ? splitValue(name, jsonValue)
-        : { [name]: jsonValue };
-      chrome.storage.sync
-        .set(split)
-        .then(async () => {
-          const maxItem = Object.keys(split).length;
-          await cleanupLooseChunks(name, maxItem + 1);
-        })
-        .catch(output.error);
     },
-    [setValue, name, type],
+    [setValue, name, adapter],
   );
 
   return [value, updateValue];
 }
+
+const createStorageAdapter = ({
+  getValue,
+  setValue,
+  shouldSplit,
+}: {
+  getValue: (name: keyof StorageDefinitions) => Promise<unknown>;
+  setValue: (values: Record<string, unknown>) => Promise<void>;
+  shouldSplit: boolean;
+}): Adapter => ({
+  async get(name) {
+    const value = await getValue(name);
+    const resolvedValue =
+      typeof value === 'string' && shouldSplit
+        ? await joinValue(name, value, getValue)
+        : value;
+    setDevelopmentGlobal(`_${name}`, resolvedValue);
+    return resolvedValue ?? storageDefinitions[name].defaultValue;
+  },
+  async set(name, value) {
+    const jsonValue = JSON.stringify(value);
+    const isOverLimit = shouldSplit && isOverSizeLimit(name, jsonValue);
+    setDevelopmentGlobal(`_${name}`, value);
+    const split = isOverLimit ? splitValue(name, jsonValue) : { [name]: value };
+    const maxItem = Object.keys(split).length;
+    await Promise.all([setValue(split), cleanupLooseChunks(name, maxItem + 1)]);
+  },
+});
+
+type Adapter = {
+  get: <NAME extends keyof StorageDefinitions>(
+    name: NAME,
+  ) => Promise<StorageDefinitions[NAME]['defaultValue'] | undefined>;
+  set: <NAME extends keyof StorageDefinitions>(
+    name: NAME,
+    value: StorageDefinitions[NAME]['defaultValue'] | undefined,
+  ) => Promise<void>;
+};
+
+export const storageAdapters = {
+  local: createStorageAdapter({
+    getValue: (name) => chrome.storage.local.get(name).then((x) => x[name]),
+    setValue: (values) => chrome.storage.local.set(values),
+    shouldSplit: false,
+  }),
+  sync: createStorageAdapter({
+    getValue: (name) => chrome.storage.sync.get(name).then((x) => x[name]),
+    setValue: (values) => chrome.storage.sync.set(values),
+    shouldSplit: true,
+  }),
+  object: (store: Record<string, unknown>) =>
+    createStorageAdapter({
+      getValue: (name) => Promise.resolve(store[name]),
+      setValue(values) {
+        Object.assign(store, values);
+        return Promise.resolve();
+      },
+      shouldSplit: true,
+    }),
+};
 
 /**
  * "sync" storage has item size limit :(
@@ -232,10 +268,11 @@ function splitValue(
 async function joinValue(
   name: keyof StorageDefinitions,
   value: string,
+  getValue: (name: keyof StorageDefinitions) => Promise<unknown>,
 ): Promise<string> {
   if (!maybeJson.includes(value[0])) return value;
   try {
-    return JSON.parse(`${value}${await joinStorage(name)}`);
+    return JSON.parse(`${value}${await joinStorage(name, getValue)}`);
   } catch {
     return value;
   }
@@ -244,12 +281,13 @@ const maybeJson = '{["0123456789-tfn';
 
 async function joinStorage(
   key: keyof StorageDefinitions,
+  getValue: (name: keyof StorageDefinitions) => Promise<unknown>,
   index = 2,
 ): Promise<string> {
   const fullKey = `${key}_${index}`;
-  const { [fullKey]: value } = await chrome.storage.sync.get(fullKey);
+  const value = await getValue(fullKey as 'weekStart');
   return typeof value === 'string'
-    ? `${value}${await joinStorage(key, index + 1)}`
+    ? `${value}${await joinStorage(key, getValue, index + 1)}`
     : '';
 }
 

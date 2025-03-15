@@ -15,6 +15,7 @@ import { noLabelRenderers, preferenceDefinitions } from './definitions';
 import { usePref } from './usePref';
 import { dateToIso } from '../Atoms/Internationalization';
 import { output } from '../Errors/exceptions';
+import { storageAdapters } from '../../hooks/useStorage';
 
 export function PreferencesPage({
   onClose: handleClose,
@@ -146,7 +147,16 @@ function Import({
         onSelected={(file) =>
           void fileToText(file)
             .then((text) => JSON.parse(text))
-            .then(async (data) => chrome.storage.sync.set(data))
+            .then(async (data) => {
+              const adapter = storageAdapters.object(data);
+              await Promise.all(
+                Object.keys(data).map(async (key) => {
+                  if (key.includes('_')) return;
+                  const value = await adapter.get(key as 'weekStart');
+                  await storageAdapters.sync.set(key as 'weekStart', value);
+                }),
+              );
+            })
             .then(() => globalThis.location.reload())
             .catch(output.error)
         }
