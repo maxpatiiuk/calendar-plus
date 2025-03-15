@@ -194,7 +194,7 @@ export const formatDateLabel = (date: Date, view: SupportedView): string =>
   dateFormatters[view].format(date);
 
 export const dateToIso = (date: Date): string =>
-  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date
+  `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
     .getDate()
     .toString()
     .padStart(2, '0')}`;

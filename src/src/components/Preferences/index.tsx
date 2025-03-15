@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useBooleanState } from '../../hooks/useBooleanState';
 import { commonText } from '../../localization/common';
-import type { IR } from '../../utils/types';
+import { isDefined, type IR } from '../../utils/types';
 import { Button, H3, Link, Widget } from '../Atoms';
 import { downloadFile, FilePicker, fileToText } from '../Molecules/FilePicker';
 import { PageHeader } from '../Molecules/PageHeader';
@@ -114,8 +114,18 @@ export function PreferencesPage({
   );
 }
 
-const fetchDataForExport = async (): Promise<IR<unknown>> =>
-  chrome.storage.sync.get();
+async function fetchDataForExport(): Promise<IR<unknown>> {
+  const data: IR<unknown> = await chrome.storage.sync.get();
+  const objectStorage = storageAdapters.object(data);
+  const entries = await Promise.all(
+    Object.keys(data).map(async (key) => {
+      if (key.includes('_')) return;
+      const value = await objectStorage.get(key as 'weekStart');
+      return [key, value] as const;
+    }),
+  );
+  return Object.fromEntries(entries.filter(isDefined));
+}
 
 function Item({
   categoryName,
