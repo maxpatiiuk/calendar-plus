@@ -7,6 +7,8 @@ import { awaitElement } from '../Contexts/CalendarsContext';
 import { usePref } from '../Preferences/usePref';
 import { CurrentViewContext } from '../Contexts/CurrentViewContext';
 
+const shiftTimeout = 10 * 1000;
+
 /**
  * Less invasive "Edit Recurring Event" dialog. Optimized for speed for power
  * users
@@ -16,6 +18,7 @@ export function BetterEditRecurring(): null {
   const currentView = React.useContext(CurrentViewContext);
   const isInEventsView = React.useRef(false);
   isInEventsView.current = currentView !== undefined;
+  const shiftTimeoutRef = React.useRef<number | undefined>(undefined);
 
   /**
    * Find dialog containers
@@ -80,6 +83,12 @@ export function BetterEditRecurring(): null {
         ? listen(document.body, 'keydown', (event) => {
             if (event.key === 'Shift') {
               hasShiftKey.current = true;
+              clearTimeout(shiftTimeoutRef.current);
+              // Detecting all the cases where keyup never fires is tricky and
+              // requires multiple listeners. Using timeout to keep it simple
+              shiftTimeoutRef.current = window.setTimeout(() => {
+                hasShiftKey.current = false;
+              }, shiftTimeout);
             }
           })
         : undefined,
@@ -89,13 +98,9 @@ export function BetterEditRecurring(): null {
     () =>
       lessInvasiveDialog
         ? listen(document.body, 'keyup', (event) => {
-            /*
-             * For more robust solution, we could listen for blur and visibility
-             * change too. But being stuck in shift pressed state is no big deal
-             * as it just means "Edit recurring" won't be auto dismissed
-             */
             if (event.key === 'Shift') {
               hasShiftKey.current = false;
+              clearTimeout(shiftTimeoutRef.current);
             }
           })
         : undefined,
