@@ -11,7 +11,6 @@ import { output } from '../Errors/exceptions';
 import { SECOND } from '../Atoms/Internationalization';
 import { CurrentViewContext } from './CurrentViewContext';
 import { useAsyncState } from '../../hooks/useAsyncState';
-import { devMode } from './devMode';
 
 export function useVisibilityChangeSpy(
   calendars: React.ContextType<typeof CalendarsContext>,
@@ -112,40 +111,13 @@ function useSideBar(): HTMLElement | undefined {
     false,
   );
 
-  const [isVisible, setIsVisible] = React.useState(false);
-  React.useEffect(() => {
-    if (sideBar === undefined) return undefined;
-
-    const checkCollapsed = () => {
-      // If side bar is hidden, it has width of 0
-      const isVisible = sideBar.offsetWidth > 0;
-      setIsVisible(isVisible);
-      if (!isVisible && devMode)
-        output.log(
-          'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
-        );
-      return !isVisible;
-    };
-
-    checkCollapsed();
-    const resizeObserver = new ResizeObserver(checkCollapsed);
-    resizeObserver.observe(sideBar);
-    return (): void => {
-      resizeObserver.disconnect();
-    };
-  }, [sideBar]);
-
-  return isVisible ? sideBar : undefined;
+  return sideBar;
 }
 
 function findSideBar(): HTMLElement | undefined {
   const sideBar = document.querySelector('#drawerMiniMonthNavigator')
     ?.parentElement as HTMLElement | null | undefined;
-  if (!sideBar) return undefined;
-  return sideBar.offsetWidth === 0 ||
-    sideBar.querySelector('input[type="checkbox"]') !== null
-    ? sideBar
-    : undefined;
+  return sideBar?.querySelector('input[type="checkbox"]') ? sideBar : undefined;
 }
 
 function parseCheckbox(
