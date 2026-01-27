@@ -139,8 +139,9 @@ function useSideBar(): HTMLElement | undefined {
 }
 
 function findSideBar(): HTMLElement | undefined {
-  const sideBar = document.querySelector<HTMLElement>('[role="complementary"]');
-  if (sideBar === null) return undefined;
+  const sideBar = document.querySelector('#drawerMiniMonthNavigator')
+    ?.parentElement as HTMLElement | null | undefined;
+  if (!sideBar) return undefined;
   return sideBar.offsetWidth === 0 ||
     sideBar.querySelector('input[type="checkbox"]') !== null
     ? sideBar
