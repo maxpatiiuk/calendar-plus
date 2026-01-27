@@ -139,11 +139,12 @@ function useSideBar(): HTMLElement | undefined {
 }
 
 function findSideBar(): HTMLElement | undefined {
-  const sideBar = document.querySelector('[role="complementary"]');
-  return (sideBar?.querySelector('input[type="checkbox"]') ?? undefined) ===
-    undefined
-    ? undefined
-    : (sideBar as HTMLElement) ?? undefined;
+  const sideBar = document.querySelector<HTMLElement>('[role="complementary"]');
+  if (sideBar === null) return undefined;
+  return sideBar.offsetWidth === 0 ||
+    sideBar.querySelector('input[type="checkbox"]') !== null
+    ? sideBar
+    : undefined;
 }
 
 function parseCheckbox(
