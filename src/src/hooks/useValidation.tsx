@@ -15,8 +15,7 @@ import type { RA } from '../utils/types';
  */
 export function useValidation<
   T extends HTMLInputElement | HTMLTextAreaElement =
-    | HTMLInputElement
-    | HTMLTextAreaElement,
+    HTMLInputElement | HTMLTextAreaElement,
 >(
   // Can set validation message from state or a prop
   message: RA<string> | string = '',
@@ -45,7 +44,9 @@ export function useValidation<
 
   // Clear validation message on typing
   React.useEffect(() => {
-    if (!inputRef.current) return undefined;
+    if (!inputRef.current) {
+      return undefined;
+    }
     const input = inputRef.current;
 
     return listen(input, 'input', (): void => {
@@ -59,12 +60,17 @@ export function useValidation<
   // Display validation message on focus
   const isFirstFocus = React.useRef<boolean>(true);
   React.useEffect(() => {
-    if (!inputRef.current) return undefined;
+    if (!inputRef.current) {
+      return undefined;
+    }
     const input = inputRef.current;
 
     return listen(input, 'focus', (): void => {
-      if (isFirstFocus.current) isFirstFocus.current = false;
-      else input.reportValidity();
+      if (isFirstFocus.current) {
+        isFirstFocus.current = false;
+      } else {
+        input.reportValidity();
+      }
     });
   }, []);
 
@@ -73,16 +79,21 @@ export function useValidation<
     type: 'auto' | 'focus' | 'silent' = 'auto',
   ): void {
     const joined = Array.isArray(message) ? message.join('\n') : message;
-    if (validationMessageRef.current === joined && type !== 'focus') return;
+    if (validationMessageRef.current === joined && type !== 'focus') {
+      return;
+    }
 
     validationMessageRef.current = joined;
     const input = inputRef.current;
-    if (!input) return;
+    if (!input) {
+      return;
+    }
     // Empty string clears validation error
     input.setCustomValidity(joined);
 
-    if (joined !== '' && type !== 'silent') input.reportValidity();
-    else if (isFirstError.current) {
+    if (joined !== '' && type !== 'silent') {
+      input.reportValidity();
+    } else if (isFirstError.current) {
       isFirstError.current = false;
       input.reportValidity();
     }

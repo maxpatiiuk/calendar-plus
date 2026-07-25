@@ -26,9 +26,13 @@ export function SettingsProvider({
   const isAuthenticated = typeof token === 'string';
   const [weekStart = 0, setWeekStart] = useStorage('weekStart');
   React.useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      return;
+    }
     ajax('https://www.googleapis.com/calendar/v3/users/me/settings/weekStart')
-      .then<{ readonly value: string }>(async (response) => response.json())
+      .then<{ readonly value: string }>(
+        async (response) => await response.json(),
+      )
       .then(({ value }) =>
         typeof value === 'string'
           ? setWeekStart(Number.parseInt(value))

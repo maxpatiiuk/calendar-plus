@@ -23,10 +23,11 @@ const parsed = fs
       ? []
       : column.split('\n\n').map((event) => {
           const [data, ...languages] = event.split('\n');
-          if (languages.length !== languageSummaryWithTimeCount)
+          if (languages.length !== languageSummaryWithTimeCount) {
             throw new Error(
               `Expected to find ${languageSummaryWithTimeCount} language entries, but got ${languages.length}`,
             );
+          }
           return {
             languages: Array.from(
               { length: languages.length / 2 },
@@ -34,7 +35,7 @@ const parsed = fs
                 languages.slice(index * 2, index * 2 + 2) as [string, string],
             ),
             ...(JSON.parse(data) as Omit<RawDomEvent, 'aria' | 'times'> &
-              Pick<ParsedDomEvent, 'startTime' | 'endTime'>),
+              Pick<ParsedDomEvent, 'endTime' | 'startTime'>),
           };
         }),
   );

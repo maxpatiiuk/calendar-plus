@@ -43,8 +43,12 @@ export function DoughnutChart({
   const isEmpty = innerData.length === 0 && outerData.length === 0;
 
   React.useEffect(() => {
-    if (outerData.length > 0) handleLoaded();
-    if (chart === undefined || outerDataRef.current === outerData) return;
+    if (outerData.length > 0) {
+      handleLoaded();
+    }
+    if (chart === undefined || outerDataRef.current === outerData) {
+      return;
+    }
     Array.from(
       {
         length: Math.max(chart.data.datasets[0].data.length, outerData.length),
@@ -91,7 +95,7 @@ export function DoughnutChart({
           virtualCalendar:
             virtualCalendar ||
             (virtualCalendars.length === 1
-              ? calendars?.[index].summary ?? index.toString()
+              ? (calendars?.[index].summary ?? index.toString())
               : commonText('other')),
           minutes,
         })),
@@ -141,7 +145,7 @@ export function DoughnutChart({
             },
           }}
           ref={(
-            chart: Chart<'doughnut', RA<number>, string> | undefined | null,
+            chart: Chart<'doughnut', RA<number>, string> | null | undefined,
           ) => setChart(chart ?? undefined)}
         />
       ) : (
@@ -170,7 +174,7 @@ function useDataSets(
           ({ label }) =>
             label ||
             (data.length === 1
-              ? calendars?.[index].summary ?? index.toString()
+              ? (calendars?.[index].summary ?? index.toString())
               : commonText('other')),
         ),
       ),
@@ -200,7 +204,7 @@ function getCategoryData(
   const categoryData =
     durations === undefined
       ? []
-      : calendars?.map(({ id, backgroundColor }) =>
+      : (calendars?.map(({ id, backgroundColor }) =>
           Object.entries(durations[id] ?? {}).map(([label, durations]) => {
             partBackgroundColors.push(backgroundColor);
             return {
@@ -211,7 +215,7 @@ function getCategoryData(
               ),
             };
           }),
-        ) ?? [];
+        ) ?? []);
   return {
     data: categoryData,
     backgroundColor: partBackgroundColors,
@@ -224,9 +228,9 @@ const getCalendarData = (
 ) =>
   durations === undefined
     ? []
-    : calendars?.map(({ id }) =>
+    : (calendars?.map(({ id }) =>
         Object.values(durations[id]?.[summedDurations] ?? {}).reduce(
           (total, durations) => total + durations.total,
           0,
         ),
-      ) ?? [];
+      ) ?? []);

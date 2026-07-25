@@ -8,7 +8,7 @@ import { usePortal } from '../Molecules/Portal';
  */
 export function DevModeConsoleOverlay() {
   const [logs, setLogs] = React.useState<
-    { type: 'log' | 'warn' | 'error'; data: unknown[] }[]
+    { type: 'error' | 'log' | 'warn'; data: unknown[] }[]
   >([]);
   React.useEffect(
     () =>

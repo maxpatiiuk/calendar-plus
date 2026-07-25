@@ -10,7 +10,7 @@ import { capitalize } from '../../utils/utils';
 import type { SupportedView } from '../Contexts/CurrentViewContext';
 
 /* This is an incomplete definition. For complete, see MDN Docs */
-// eslint-disable-next-line @typescript-eslint/no-namespace
+
 declare namespace Intl {
   class ListFormat {
     public constructor(
@@ -129,7 +129,6 @@ const disjunctionFormatter = new Intl.ListFormat(LANGUAGE, {
 export const formatDisjunction = (list: RA<string>): string =>
   disjunctionFormatter.format(list);
 
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 export const MILLISECONDS = 1;
 export const SECOND = 1000 * MILLISECONDS;
 export const MINUTE = 60 * SECOND;
@@ -140,7 +139,7 @@ export const MINUTES_IN_HOUR = HOUR / MINUTE;
 export const WEEK = 7 * DAY;
 export const MONTH = 4 * WEEK;
 export const YEAR = 12 * MONTH;
-/* eslint-enable @typescript-eslint/no-magic-numbers */
+
 const relativeDate = new Intl.RelativeTimeFormat(LANGUAGE, {
   numeric: 'auto',
   style: 'long',
@@ -161,19 +160,21 @@ export function getRelativeDate(date: Readonly<Date>): string {
     // Throw new Error('Future dates are not supported');
     output.error('Future dates are not supported');
     return relativeDate.format(0, 'second');
-  } else if (timePassed <= MINUTE)
+  } else if (timePassed <= MINUTE) {
     return relativeDate.format(-Math.round(timePassed / SECOND), 'second');
-  else if (timePassed <= HOUR)
+  } else if (timePassed <= HOUR) {
     return relativeDate.format(-Math.round(timePassed / MINUTE), 'minute');
-  else if (timePassed <= DAY)
+  } else if (timePassed <= DAY) {
     return relativeDate.format(-Math.round(timePassed / HOUR), 'hour');
-  else if (timePassed <= WEEK)
+  } else if (timePassed <= WEEK) {
     return relativeDate.format(-Math.round(timePassed / DAY), 'day');
-  else if (timePassed <= MONTH)
+  } else if (timePassed <= MONTH) {
     return relativeDate.format(-Math.round(timePassed / WEEK), 'week');
-  else if (timePassed <= YEAR)
+  } else if (timePassed <= YEAR) {
     return relativeDate.format(-Math.round(timePassed / MONTH), 'month');
-  else return relativeDate.format(-Math.round(timePassed / YEAR), 'year');
+  } else {
+    return relativeDate.format(-Math.round(timePassed / YEAR), 'year');
+  }
 }
 
 const dateFormatters = {
@@ -199,7 +200,6 @@ export const dateToIso = (date: Date): string =>
     .toString()
     .padStart(2, '0')}`;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 export const compareStrings = new Intl.Collator(
   globalThis.navigator?.language ?? 'en-us',
   {

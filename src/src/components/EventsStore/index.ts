@@ -37,18 +37,15 @@ export type WritableDayHours = {
   hourly: number[];
 };
 
-type RawEventsStore = {
-  [CALENDAR_ID in string]: {
-    [VIRTUAL_CALENDAR in string]: R<WritableDayHours>;
-  };
-};
-export type EventsStore = {
-  readonly [CALENDAR_ID in string]: {
-    readonly [summedDurations]: IR<DayHours>;
-  } & {
-    readonly [VIRTUAL_CALENDAR in string]: IR<DayHours>;
-  };
-};
+type RawEventsStore = Record<string, Record<string, R<WritableDayHours>>>;
+export type EventsStore = Readonly<
+  Record<
+    string,
+    Readonly<Record<string, IR<DayHours>>> & {
+      readonly [summedDurations]: IR<DayHours>;
+    }
+  >
+>;
 type CalendarEvent = Pick<
   gapi.client.calendar.Event,
   'end' | 'start' | 'summary'
@@ -62,7 +59,7 @@ type CalendarEvent = Pick<
 export function useEvents(
   currentView: CurrentView | undefined,
   isOpen: boolean,
-  readSource: 'dom' | 'api' | undefined,
+  readSource: 'api' | 'dom' | undefined,
   setDomReadingEnabled: (shouldFallback: boolean) => void,
 ): EventsStore | undefined {
   const eventsStore = React.useRef<RawEventsStore>({});
@@ -72,7 +69,9 @@ export function useEvents(
    * edited while overlay is closed, making this cache stale
    */
   const clearCache = !isOpen || currentView === undefined;
-  if (clearCache) eventsStore.current = {};
+  if (clearCache) {
+    eventsStore.current = {};
+  }
   const calendars = React.useContext(CalendarsContext);
 
   const [ignoreAllDayEvents] = usePref('behavior', 'ignoreAllDayEvents');
@@ -98,10 +97,12 @@ export function useEvents(
      * If callback changes, state is reset to show the loading screen if
      * new state takes more than 1s to load
      */
-    let timeout = setTimeout(() => setDurations(undefined), loadingTimeout);
+    const timeout = setTimeout(() => setDurations(undefined), loadingTimeout);
 
     const callback = async () => {
-      if (!isReadyToRead) return undefined;
+      if (!isReadyToRead) {
+        return undefined;
+      }
 
       const { firstDay: startDate, lastDay: endDate } = currentView;
 
@@ -150,8 +151,12 @@ export function useEvents(
         );
         if (typeof allDurations === 'string') {
           // Don't fail if, for example, we begun navigating to the search page
-          if (destructorCalled) return;
-          if (devMode) debugger;
+          if (destructorCalled) {
+            return;
+          }
+          if (devMode) {
+            debugger;
+          }
           output.warn(
             `[Calendar Plus] DOM parse error: ${allDurations}. Falling back to retrieving data from the API rather than DOM parsing (slower, but more reliable)`,
           );
@@ -180,23 +185,30 @@ export function useEvents(
               startDate,
               daysBetweenStrings,
             );
-            if (bounds === undefined) return;
+            if (bounds === undefined) {
+              return;
+            }
             const [timeMin, timeMax] = bounds;
 
             const events = await fetchEvents(calendar.id, timeMin, timeMax);
-            if (events === undefined) return;
+            if (events === undefined) {
+              return;
+            }
 
             const durations = events.map<DurationsToAdd[number]>(
-              ({ summary = '', start, end }) => {
+              ({ summary, start, end }) => {
                 if (
                   ignoreAllDayEvents &&
                   // Event does not have a start and end time
                   start.dateTime === undefined &&
                   end.dateTime === undefined
-                )
+                ) {
                   return ['', {}];
+                }
                 const dates = resolveEventDates(timeMin, timeMax, start, end);
-                if (dates === undefined) return ['', {}];
+                if (dates === undefined) {
+                  return ['', {}];
+                }
                 const [startDate, endDate] = dates;
                 const data = calculateEventDuration(startDate, endDate);
                 return [
@@ -265,8 +277,7 @@ function readDom({
   daysBetween,
   guessVirtualCalendar,
 }: DomReadPayload):
-  | RA<readonly [string, RA<readonly [string, IR<RA<number>>]>]>
-  | string {
+  RA<readonly [string, RA<readonly [string, IR<RA<number>>]>]> | string {
   const domParsed = parseEventsFromDom(startDate, endDate, ignoreAllDayEvents);
   if (typeof domParsed === 'string') {
     return domParsed;
@@ -333,7 +344,9 @@ async function fetchEvents(
     output.error(error);
     return undefined;
   });
-  if (response === undefined) return undefined;
+  if (response === undefined) {
+    return undefined;
+  }
   const results = await response.json();
   const events = results.items as RA<CalendarEvent>;
   const nextPageToken = results.nextPageToken as string | undefined;
@@ -370,7 +383,9 @@ function calculateBounds(
           daysBetween,
           (date) => typeof durations[date] !== 'object',
         ) + 1;
-  if (firstDayToFetch === -1) return undefined;
+  if (firstDayToFetch === -1) {
+    return undefined;
+  }
   const timeMin = new Date(startDate);
   timeMin.setDate(timeMin.getDate() + firstDayToFetch);
   const timeMax = new Date(startDate);
@@ -444,8 +459,9 @@ function resolveEventDates(
         : undefined;
 
   // Not sure if this case ever happens
-  if (unboundedStartDate === undefined || unboundedEndDate === undefined)
+  if (unboundedStartDate === undefined || unboundedEndDate === undefined) {
     return undefined;
+  }
 
   // Multi-date events might begin/end outside of current preview range
   const boundedStartDate = new Date(

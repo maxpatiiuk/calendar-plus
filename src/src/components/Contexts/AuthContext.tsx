@@ -46,31 +46,34 @@ export function AuthenticationProvider({
       readonly refreshToken?: string;
     }) {
       setToken(accessToken);
-      if (typeof refreshToken === 'string') setRefreshToken(refreshToken);
+      if (typeof refreshToken === 'string') {
+        setRefreshToken(refreshToken);
+      }
       // Make new token available sooner (next re-render is too late for ajax())
-      if (unsafeAuth !== undefined)
+      if (unsafeAuth !== undefined) {
         unsafeAuth = { ...unsafeAuth, token: accessToken };
+      }
     }
 
     const oldToken = unsafeAuth?.token;
 
-    const authenticate = () =>
-      sendRequest('Authenticate', { oldToken }).then(resolve);
+    const authenticate = async () =>
+      await sendRequest('Authenticate', { oldToken }).then(resolve);
 
     authPromise ??= (
       typeof refreshToken === 'string'
         ? sendRequest('RefreshToken', { refreshToken, oldToken })
             .then(resolve)
-            .catch((error) => {
+            .catch(async (error) => {
               output.error(error);
-              return authenticate();
+              return await authenticate();
             })
         : authenticate()
     ).finally(() => {
       authPromise = undefined;
     });
 
-    return authPromise;
+    return await authPromise;
   }, [refreshToken]);
 
   const auth = React.useMemo(

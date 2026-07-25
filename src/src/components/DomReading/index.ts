@@ -22,8 +22,9 @@ export function parseEventsFromDom(
   timeMax: Date,
   ignoreAllDayEvents: boolean,
 ): RA<RA<ParsedDomEvent>> | string {
-  if (languageData === undefined)
+  if (languageData === undefined) {
     return `Failed to find am/pm prefix data for ${language} language.`;
+  }
   try {
     return parseDom(timeMin, timeMax, ignoreAllDayEvents);
   } catch (error) {
@@ -42,9 +43,13 @@ function parseDom(
   const columns = document.querySelectorAll(
     '[role="gridcell"][data-column-index]',
   );
-  if (columns.length === 0) return 'Failed to locate day columns';
+  if (columns.length === 0) {
+    return 'Failed to locate day columns';
+  }
   const columnsContainer = columns[0].closest('[role="grid"]');
-  if (columnsContainer === null) return 'Failed to locate day columns';
+  if (columnsContainer === null) {
+    return 'Failed to locate day columns';
+  }
 
   const dayBefore = new Date(timeMin);
   dayBefore.setDate(dayBefore.getDate() - 1);
@@ -63,10 +68,11 @@ function parseDom(
      * randomly, but it doesn't matter much as MutationObserver will call
      * parseDom() again in such case.
      */
-    if (columns.length === expectedColumns * 2)
+    if (columns.length === expectedColumns * 2) {
       resolvedColumns = resolvedColumns.slice(0, expectedColumns);
-    else
+    } else {
       return `Expected to find ${expectedColumns} columns, but found ${columns.length}`;
+    }
   }
 
   const allDayEventColumns = Array.from(
@@ -79,8 +85,9 @@ function parseDom(
       ),
   );
 
-  if (allDayEventColumns.length !== expectedColumns)
+  if (allDayEventColumns.length !== expectedColumns) {
     return `Expected to find ${expectedColumns} all day event columns, but found ${allDayEventColumns.length}`;
+  }
 
   const columnEvents = resolvedColumns.map((column, columnIndex) => {
     const events = Array.from(
@@ -100,19 +107,21 @@ function parseDom(
 
   const errors = flat.filter((entry) => typeof entry === 'string').join('\n');
   // Failed parsing some event
-  if (errors.length > 0) return errors;
+  if (errors.length > 0) {
+    return errors;
+  }
 
   return columnEvents as RA<RA<ParsedDomEvent>>;
 }
 
 export const notEvent = Symbol('notEvent');
 const excludeNonEvents = (
-  maybeParsed: ParsedDomEvent | typeof notEvent | string,
+  maybeParsed: ParsedDomEvent | string | typeof notEvent,
 ): maybeParsed is ParsedDomEvent | string => maybeParsed !== notEvent;
 
 function parseEventNode(
   event: HTMLElement,
-): ParsedDomEvent | typeof notEvent | string {
+): ParsedDomEvent | string | typeof notEvent {
   const calendarId = extractCalendarId(event);
   if (calendarId === undefined) {
     return notEvent;
@@ -122,7 +131,9 @@ function parseEventNode(
   const aria = isAriaLabelFirst
     ? event.children[0]?.textContent
     : event.children[1]?.textContent;
-  if (aria == null) return 'Unable to find event label';
+  if (aria == null) {
+    return 'Unable to find event label';
+  }
   const container = event.children[1 + (isAriaLabelFirst ? 0 : 1)];
   const titleContainer = container?.children[0]?.children[0]?.children[0];
   /*
@@ -130,18 +141,26 @@ function parseEventNode(
    * we have API calls to fallback to if DOM parsing fails
    */
   const summary = titleContainer?.children[0]?.textContent;
-  if (summary == null) return 'Failed to extract event summary';
+  if (summary == null) {
+    return 'Failed to extract event summary';
+  }
 
   const parent = event.parentElement;
-  if (parent === null) return 'Expected event node to have a parent';
+  if (parent === null) {
+    return 'Expected event node to have a parent';
+  }
 
-  if (!event.style.top.endsWith('px'))
+  if (!event.style.top.endsWith('px')) {
     return 'Expected event "top" style to be in px';
-  if (!event.style.height.endsWith('px'))
+  }
+  if (!event.style.height.endsWith('px')) {
     return 'Expected event "height" style to be in px';
+  }
 
   const top = Number.parseInt(event.style.top.slice(0, -2));
-  if (Number.isNaN(top)) return 'Failed to parse event "top" style';
+  if (Number.isNaN(top)) {
+    return 'Failed to parse event "top" style';
+  }
 
   const parsePayload: RawDomEvent = {
     aria,
@@ -151,15 +170,16 @@ function parseEventNode(
   };
 
   const parseResult = rawDomEventToParsed(parsePayload, languageData!);
-  if (typeof parseResult === 'string')
+  if (typeof parseResult === 'string') {
     return `${parseResult} ${JSON.stringify(parsePayload)}`;
-  else if (devMode) {
+  } else if (devMode) {
     try {
       const validation = validateParseResult(parseResult, event);
-      if (typeof validation === 'string')
+      if (typeof validation === 'string') {
         throw new Error(
           `[DEV] ${validation} ${JSON.stringify(parsePayload)} ${JSON.stringify(parseResult)}`,
         );
+      }
     } catch (error) {
       debugger;
       throw error;

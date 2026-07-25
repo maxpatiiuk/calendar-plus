@@ -13,7 +13,9 @@ import { setMainChangeListener } from '../Molecules/mainListener';
 export function useDomMutation(enabled: boolean): number {
   const [counter, setCounter] = React.useState(0);
   React.useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      return;
+    }
     let bump: (() => void) | undefined;
     return setMainChangeListener(() => {
       // Don't bump until the grid container is created

@@ -3,10 +3,11 @@ import { ParsedDomEvent } from './types';
 
 export function parseAllDayEventNode(
   allDayEvent: HTMLElement,
-): ParsedDomEvent | typeof notEvent | string {
+): ParsedDomEvent | string | typeof notEvent {
   const eventContainer = allDayEvent.parentElement;
-  if (eventContainer === null)
+  if (eventContainer === null) {
     return 'Failed to locate all-day event container';
+  }
 
   const calendarId = extractCalendarId(eventContainer);
   if (calendarId === undefined) {

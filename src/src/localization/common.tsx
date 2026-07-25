@@ -6,7 +6,6 @@ import { createDictionary } from './utils';
 
 // Refer to "Guidelines for Programmers" in ./README.md before editing this file
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export const commonText = createDictionary({
   calendarPlus: { 'en-us': 'Calendar Plus' },
   fullDate: { 'en-us': 'Full Date' },
@@ -133,4 +132,3 @@ export const commonText = createDictionary({
     'en-us': 'Event ghosting is disabled',
   },
 });
-/* eslint-enable @typescript-eslint/naming-convention */

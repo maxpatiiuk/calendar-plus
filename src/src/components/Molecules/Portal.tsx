@@ -46,8 +46,9 @@ export function OverlayPortal({
     overlayPortalStack.add(portalId);
 
     const mainContainer = findMainContainer();
-    if (mainContainer === undefined)
+    if (mainContainer === undefined) {
       return output.throw('Unable to find main container');
+    }
 
     // Hide Google Calendar container when the overlay is shown
     mainContainer.classList.add('hidden');
@@ -58,8 +59,9 @@ export function OverlayPortal({
 
     return (): void => {
       overlayPortalStack.delete(portalId);
-      if (overlayPortalStack.size === 0)
+      if (overlayPortalStack.size === 0) {
         mainContainer.classList.remove('hidden');
+      }
     };
   }, [element]);
 
@@ -85,7 +87,7 @@ export const mainElementPromise = awaitElement(
 });
 
 export let mainElement: HTMLElement | undefined;
-const getMainElementPromise = () => mainElementPromise;
+const getMainElementPromise = async () => await mainElementPromise;
 
 export function useMainContainer(): HTMLElement | undefined {
   return useAsyncState(getMainElementPromise, false)[0];

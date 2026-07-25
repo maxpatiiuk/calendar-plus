@@ -22,8 +22,7 @@ export const LANGUAGE: Language =
 
 type Line = JSX.Element | string;
 export type Value =
-  | RR<Language, (...args: RA<never>) => Line>
-  | RR<Language, Line>;
+  RR<Language, (...args: RA<never>) => Line> | RR<Language, Line>;
 type GetValueType<VALUE extends Value> =
   VALUE extends RR<Language, infer ValueType>
     ? ValueType extends (...args: RA<never>) => Line
@@ -42,8 +41,9 @@ export type Dictionary = IR<Value>;
 function assertExhaustive(key: string): never {
   const errorMessage = `
     Trying to access the value for a non-existent localization key "${key}"`;
-  if (process.env.NODE_ENV === 'development') return output.throw(errorMessage);
-  else {
+  if (process.env.NODE_ENV === 'development') {
+    return output.throw(errorMessage);
+  } else {
     output.error(errorMessage);
     // Convert a camel case key to a human readable form
     const value: any = camelToHuman(key);
@@ -83,7 +83,7 @@ export function createDictionary<DICT extends Dictionary>(dictionary: DICT) {
       ? typeof dictionary[key][LANGUAGE] === 'function' &&
         isFunction(dictionary[key][LANGUAGE])
         ? (dictionary[key][LANGUAGE] as (...args: RA<unknown>) => Line)(...args)
-        : dictionary[key][LANGUAGE] ?? assertExhaustive(key)
+        : (dictionary[key][LANGUAGE] ?? assertExhaustive(key))
       : assertExhaustive(key)) as GetValueType<(typeof dictionary)[typeof key]>;
   // This can be used in localization tests
   resolver.dictionary = dictionary;

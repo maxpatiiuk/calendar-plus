@@ -58,9 +58,9 @@ export class ErrorBoundary extends React.Component<
         this.props.silentErrors === true &&
         process.env.NODE_ENV !== 'development') ||
       this.state.type === 'Silenced'
-    )
+    ) {
       return null;
-    else
+    } else {
       return this.state.type === 'Error' ? (
         <pre>
           Unexpected error has occurred
@@ -70,7 +70,8 @@ export class ErrorBoundary extends React.Component<
           <pre>{this.state.errorInfo.componentStack}</pre>
         </pre>
       ) : (
-        this.props.children ?? null
+        (this.props.children ?? null)
       );
+    }
   }
 }

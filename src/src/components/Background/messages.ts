@@ -39,7 +39,7 @@ type ReloadExtension = State<
   }
 >;
 
-export type Requests = Authenticate | ReloadExtension | RefreshToken;
+export type Requests = Authenticate | RefreshToken | ReloadExtension;
 
 /**
  * Send a request to the background script and await the response.
@@ -52,7 +52,7 @@ export const sendRequest = async <
   type: TYPE,
   request: SHAPE['request'],
 ): Promise<SHAPE['response']> =>
-  chrome.runtime
+  await chrome.runtime
     .sendMessage<
       State<TYPE, { readonly request: SHAPE['request'] }>,
       SHAPE['response'] | State<'Error', { readonly error: string }>
@@ -70,7 +70,9 @@ export const sendRequest = async <
         'error' in response
       ) {
         return output.throw(response.error);
-      } else return response as SHAPE['response'];
+      } else {
+        return response as SHAPE['response'];
+      }
     });
 
 type TabUpdate = State<'TabUpdate'>;
@@ -79,13 +81,14 @@ type BackgroundEvents = TabUpdate;
 /**
  * Emit an event. Must be called from a background script only
  */
-export function emitEvent(
+export async function emitEvent(
   tabId: number,
   response: BackgroundEvents,
 ): Promise<void> {
-  if (chrome.tabs === undefined)
+  if (chrome.tabs === undefined) {
     throw new Error('This must only be called from the background script');
-  return chrome.tabs.sendMessage(tabId, response);
+  }
+  return await chrome.tabs.sendMessage(tabId, response);
 }
 
 /**

@@ -48,23 +48,30 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
     const {
       in: input,
       out: output,
-      name = undefined,
+      name,
     } = Array.isArray(entry) ? { in: entry[0], out: entry[1] } : entry;
     test(name ?? createName(input, index), () => {
       const expected = expect(testFunction(...input));
-      if (output === undefined) expected.toBeUndefined();
-      else if (output === null) expected.toBeNull();
-      else if (Number.isNaN(output)) expected.toBeNaN();
-      else expected.toEqual(output);
+      if (output === undefined) {
+        expected.toBeUndefined();
+      } else if (output === null) {
+        expected.toBeNull();
+      } else if (Number.isNaN(output)) {
+        expected.toBeNaN();
+      } else {
+        expected.toEqual(output);
+      }
     });
   }
 
-  if (items.length === 0) return output.throw('No items in a theory');
+  if (items.length === 0) {
+    return output.throw('No items in a theory');
+  }
   // If there is just 1 test, don't use describe()
   else if (
     items.length === 1 &&
     (Array.isArray(items[0]) || items[0].name === undefined)
-  )
+  ) {
     runTest(
       {
         name: testFunction.name,
@@ -73,7 +80,9 @@ export function theories<ARGUMENTS_TYPE extends RA<unknown>, RETURN_TYPE>(
       },
       0,
     );
-  else describe(testFunction.name, () => items.forEach(runTest));
+  } else {
+    describe(testFunction.name, () => items.forEach(runTest));
+  }
 }
 
 function createName(input: RA<unknown>, index: number): string {
@@ -82,12 +91,15 @@ function createName(input: RA<unknown>, index: number): string {
       typeof input[0] === 'string' &&
       input[0].trim().length > 0 &&
       input[0].length < 30
-    )
+    ) {
       return input[0];
-    else if (input[0] === null) return 'null';
-    else if (input[0] === undefined) return 'undefined';
-    else if (typeof input[0] === 'number' || typeof input[0] === 'boolean')
+    } else if (input[0] === null) {
+      return 'null';
+    } else if (input[0] === undefined) {
+      return 'undefined';
+    } else if (typeof input[0] === 'number' || typeof input[0] === 'boolean') {
       return input[0].toString();
+    }
   }
   return `#${index + 1}`;
 }

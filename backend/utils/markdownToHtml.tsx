@@ -26,7 +26,7 @@ marked.use({
 
 export async function markdownToHtml(path: string): Promise<string> {
   const content = await fs.readFile(path, 'utf8');
-  return marked(content, { gfm: true, breaks: false });
+  return await marked(content, { gfm: true, breaks: false });
 }
 
 export async function markdownToJsx(path: string): Promise<JSX.Element> {

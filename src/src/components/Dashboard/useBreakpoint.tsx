@@ -7,8 +7,9 @@ import { output } from '../Errors/exceptions';
  */
 export function useBreakpoint(): BreakPoint {
   const container = React.useContext(PortalContext);
-  if (container === undefined)
+  if (container === undefined) {
     return output.throw('Cannot invoke usePortalWidth outside a portal');
+  }
 
   const [breakpoint, setBreakpoint] = React.useState(() =>
     resolveBreakpoint(container.clientWidth),

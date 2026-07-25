@@ -31,7 +31,7 @@ export function BetterEditRecurring(): null {
     React.useCallback(
       async () =>
         lessInvasiveDialog
-          ? awaitElement(
+          ? await awaitElement(
               () =>
                 Array.from(document.body.children).find(
                   (container) =>
@@ -55,7 +55,9 @@ export function BetterEditRecurring(): null {
     }
 
     const observer = new MutationObserver(() => {
-      if (hasShiftKey.current || !isInEventsView.current) return;
+      if (hasShiftKey.current || !isInEventsView.current) {
+        return;
+      }
 
       const pairs = Array.from(
         dialogContainer.querySelectorAll('[role="dialog"]'),
@@ -124,7 +126,9 @@ function findSubmitButton(
     ) ??
     dialogContainer.firstElementChild ??
     undefined;
-  if (overlay === undefined) return;
+  if (overlay === undefined) {
+    return;
+  }
 
   const options = dialog.querySelectorAll('[role="radiogroup"] label');
   /*
@@ -133,16 +137,22 @@ function findSubmitButton(
    */
   const optionsCount = [2, 3];
   // Confirm we are in the correct dialog
-  if (options === undefined || !optionsCount.includes(options.length)) return;
+  if (options === undefined || !optionsCount.includes(options.length)) {
+    return;
+  }
 
   const hasInput = !!dialog.querySelector('input[type="number"]');
   // This might be the "Custom recurrence" dialog - false positive.
-  if (hasInput) return;
+  if (hasInput) {
+    return;
+  }
 
   const submitButton = dialog.querySelector(
     'button[data-mdc-dialog-initial-focus]',
   );
-  if (submitButton === null) return;
+  if (submitButton === null) {
+    return;
+  }
 
   return submitButton as HTMLElement;
 }

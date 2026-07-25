@@ -69,7 +69,7 @@ export function App(): JSX.Element | null {
   );
 
   const [debugOverlay] = useAsyncState(
-    React.useCallback(() => debugOverlayPromise, []),
+    React.useCallback(async () => await debugOverlayPromise, []),
     false,
   );
 
@@ -95,8 +95,8 @@ export function App(): JSX.Element | null {
           {showFirstAuth && (
             <FirstAuthScreen
               onClose={(): void => setShowFirstAuth(false)}
-              onAuth={(): Promise<void> =>
-                auth.handleAuthenticate().then(() => setState('main'))
+              onAuth={async (): Promise<void> =>
+                await auth.handleAuthenticate().then(() => setState('main'))
               }
             />
           )}

@@ -48,7 +48,9 @@ export function CalendarsSpy({
   const isAuthenticated = typeof token === 'string';
   const [rawCalendars] = useAsyncState<RA<CalendarListEntry>>(
     React.useCallback(async () => {
-      if (!isAuthenticated) return undefined;
+      if (!isAuthenticated) {
+        return undefined;
+      }
       const response = await ajax(
         formatUrl(
           'https://www.googleapis.com/calendar/v3/users/me/calendarList',
@@ -63,7 +65,9 @@ export function CalendarsSpy({
         output.error(error);
         return undefined;
       });
-      if (response === undefined) return undefined;
+      if (response === undefined) {
+        return undefined;
+      }
       const results = await response.json();
       const rawCalendars = results.items as RA<RawCalendarListEntry>;
       return rawCalendars
@@ -100,8 +104,9 @@ export function CalendarsSpy({
    * don't know which calendars are hidden so show all of them
    */
   React.useEffect(() => {
-    if (isCacheEmpty && Array.isArray(calendars))
+    if (isCacheEmpty && Array.isArray(calendars)) {
       setVisibleCalendars(calendars.map(({ id }) => id));
+    }
   }, [isCacheEmpty, calendars, setVisibleCalendars]);
 
   useVisibilityChangeSpy(calendars, [visibleCalendars, setVisibleCalendars]);
@@ -128,9 +133,13 @@ export async function awaitElement<T>(
   limit = 100,
 ): Promise<T | undefined> {
   const result = callback();
-  if (result !== undefined) return result;
-  if (limit <= 0) return undefined;
-  return new Promise((resolve) =>
+  if (result !== undefined) {
+    return result;
+  }
+  if (limit <= 0) {
+    return undefined;
+  }
+  return await new Promise((resolve) =>
     setTimeout(
       () => resolve(awaitElement(callback, pollInterval, limit - 1)),
       pollInterval,

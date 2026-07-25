@@ -41,7 +41,9 @@ export function Contexts({
       promise
         .finally(() => {
           holders.current = holders.current.filter((item) => item !== holderId);
-          if (holders.current.length === 0) handleLoaded();
+          if (holders.current.length === 0) {
+            handleLoaded();
+          }
         })
         .catch(output.error);
     },

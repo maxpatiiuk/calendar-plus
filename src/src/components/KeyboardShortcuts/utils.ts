@@ -17,9 +17,9 @@ export function localizeKeyboardShortcut(shortcut: string): string {
   const nonModifiers: WritableArray<string> = [];
   for (const key of parts) {
     const localizedModifier = keyboardModifierLocalization[key as ModifierKey];
-    if (typeof localizedModifier === 'string')
+    if (typeof localizedModifier === 'string') {
       modifiers.push(localizedModifier);
-    else {
+    } else {
       nonModifiers.push(
         (hasShift ? shiftKeyLocalizations[key] : undefined) ??
           keyLocalizations[key] ??
@@ -47,17 +47,21 @@ export function localizeKeyboardShortcut(shortcut: string): string {
 export function resolvePlatformShortcuts(
   shortcut: KeyboardShortcuts,
 ): RA<string> | undefined {
-  if (keyboardPlatform in shortcut) return shortcut[keyboardPlatform];
-  else if ('other' in shortcut)
+  if (keyboardPlatform in shortcut) {
+    return shortcut[keyboardPlatform];
+  } else if ('other' in shortcut) {
     return keyboardPlatform === 'windows'
       ? shortcut.other
       : shortcut.other?.map(replaceCtrlWithMeta);
-  else if ('windows' in shortcut)
+  } else if ('windows' in shortcut) {
     return keyboardPlatform === 'other'
       ? shortcut.other
       : shortcut.other?.map(replaceCtrlWithMeta);
-  else if ('mac' in shortcut) return shortcut.other?.map(replaceMetaWithCtrl);
-  else return undefined;
+  } else if ('mac' in shortcut) {
+    return shortcut.other?.map(replaceMetaWithCtrl);
+  } else {
+    return undefined;
+  }
 }
 
 const replaceCtrlWithMeta = (shortcut: string): string =>

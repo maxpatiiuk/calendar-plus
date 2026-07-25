@@ -21,8 +21,7 @@ const button = (name: string, classList: string) =>
     'button',
     {
       readonly onClick:
-        | ((event: React.MouseEvent<HTMLButtonElement>) => void)
-        | undefined;
+        ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
     }
   >(
     name,
@@ -62,8 +61,7 @@ export const Button = {
     'button',
     IconProps & {
       readonly onClick:
-        | ((event: React.MouseEvent<HTMLButtonElement>) => void)
-        | undefined;
+        ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
     }
   >(
     'Button.Icon',
@@ -118,13 +116,14 @@ export const Input = {
         type="number"
         value={hasValue ? value : ''}
         onChange={(event): void => {
-          const rawHumber = Number.parseInt(
-            (event.target as HTMLInputElement).value,
-          );
+          const rawHumber = Number.parseInt(event.target.value);
           const number = Number.isNaN(rawHumber) ? undefined : rawHumber;
-          if (number === undefined) setHasValue(false);
-          else {
-            if (!hasValue) setHasValue(true);
+          if (number === undefined) {
+            setHasValue(false);
+          } else {
+            if (!hasValue) {
+              setHasValue(true);
+            }
             handleValueChange?.(number);
           }
 
@@ -151,8 +150,10 @@ export const Input = {
       type: 'checkbox',
       onChange(event): void {
         // Disable onChange when readOnly
-        if (props.disabled === true || isReadOnly === true) return;
-        onValueChange?.((event.target as HTMLInputElement).checked);
+        if (props.disabled === true || isReadOnly === true) {
+          return;
+        }
+        onValueChange?.(event.target.checked);
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
@@ -175,7 +176,7 @@ export const Input = {
       ...props,
       type: 'text',
       onChange(event): void {
-        onValueChange?.((event.target as HTMLInputElement).value);
+        onValueChange?.(event.target.value);
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
@@ -196,7 +197,7 @@ export const Input = {
     ({ onValueChange, isReadOnly, ...props }) => ({
       ...props,
       onChange(event): void {
-        onValueChange?.((event.target as HTMLInputElement).value);
+        onValueChange?.(event.target.value);
         props.onChange?.(event);
       },
       readOnly: isReadOnly,
@@ -216,14 +217,15 @@ export const Select = wrap<
   ({ onValueChange: handleValueChange, ...props }) => ({
     ...props,
     onChange(event): void {
-      const value = (event.target as HTMLSelectElement).value;
+      const value = event.target.value;
 
       /*
        * Workaround for Safari weirdness. See more:
        * https://github.com/specify/specify7/issues/1371#issuecomment-1115156978
        */
-      if (typeof props.size !== 'number' || props.size < 2 || value !== '')
+      if (typeof props.size !== 'number' || props.size < 2 || value !== '') {
         handleValueChange?.(value);
+      }
       props.onChange?.(event);
     },
   }),

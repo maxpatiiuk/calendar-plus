@@ -1,17 +1,9 @@
 {
   "name": "calendar-stats-backend",
-  "private": true,
-  "license": "MIT",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/maxpatiiuk/calendar-stats.git"
-  },
-  "author": "Max Patiiuk",
   "homepage": "https://github.com/maxpatiiuk/calendar-stats#readme",
-  "bugs": {
-    "url": "https://github.com/maxpatiiuk/calendar-stats/issues"
-  },
+  "private": true,
+  "type": "module",
+  "license": "MIT",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
@@ -29,5 +21,13 @@
     "@types/node": "^20.12.7",
     "@types/react": "18.2.78",
     "typescript": "^5.4.5"
+  },
+  "author": "Max Patiiuk",
+  "bugs": {
+    "url": "https://github.com/maxpatiiuk/calendar-stats/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxpatiiuk/calendar-stats.git"
   }
 }

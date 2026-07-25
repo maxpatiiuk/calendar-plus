@@ -25,7 +25,9 @@ export function ThemeDetector(): null {
   useAsyncState(
     React.useCallback(async () => {
       // Don't try to set theme if we don't yet know the current theme to remove redundant set
-      if (!isLoaded) return;
+      if (!isLoaded) {
+        return;
+      }
       const element = await awaitElement(
         () => document.querySelector('meta[name="theme-color"]') ?? undefined,
       );
@@ -39,9 +41,11 @@ export function ThemeDetector(): null {
         const newTheme = themeElement.getAttribute('content');
         const isLight = newTheme?.toLowerCase() === lightThemeSignal;
         const isDark = newTheme?.toLowerCase() === darkThemeSignal;
-        if (isLight) setTheme('light');
-        else if (isDark) setTheme('dark');
-        else {
+        if (isLight) {
+          setTheme('light');
+        } else if (isDark) {
+          setTheme('dark');
+        } else {
           output.error('Unknown theme color', { newTheme, themeElement });
           return;
         }

@@ -28,8 +28,9 @@ export function useVisibilityChangeSpy(
    * primary calendar)
    */
   React.useEffect(() => {
-    if (sideBar === undefined || !cacheLoaded || calendars === undefined)
+    if (sideBar === undefined || !cacheLoaded || calendars === undefined) {
       return;
+    }
 
     const getVisible = (): RA<string> =>
       Array.from(
@@ -47,7 +48,9 @@ export function useVisibilityChangeSpy(
       const newVisible = getVisible();
       const isDifferent =
         newVisible.join(',') !== visibleCalendarsRef.current?.join(',');
-      if (isDifferent) setVisibleCalendars(newVisible);
+      if (isDifferent) {
+        setVisibleCalendars(newVisible);
+      }
     }
 
     // Get list of calendars loaded so far
@@ -56,9 +59,11 @@ export function useVisibilityChangeSpy(
      * If side bar contains fewer elements than in the cache, it's likely
      * that side bar hasn't been fully loaded yet. Wait and try it again
      */
-    if (visible.length < visibleCalendarsRef.current!.length)
+    if (visible.length < visibleCalendarsRef.current!.length) {
       timeOut = setTimeout(handleChange, 2 * SECOND);
-    else handleChange();
+    } else {
+      handleChange();
+    }
 
     const observer = new MutationObserver(debounce(handleChange, 60));
     observer.observe(sideBar, { childList: true, subtree: true });
@@ -74,10 +79,13 @@ export function useVisibilityChangeSpy(
             'change',
             ({ target }) => {
               const element = target as HTMLInputElement;
-              if (element.tagName !== 'INPUT' || element.type !== 'checkbox')
+              if (element.tagName !== 'INPUT' || element.type !== 'checkbox') {
                 return;
+              }
               const data = parseCheckbox(calendars, element);
-              if (data === undefined) return;
+              if (data === undefined) {
+                return;
+              }
               const [calendarId, isNowChecked] = data;
               setVisibleCalendars(
                 isNowChecked
@@ -97,9 +105,9 @@ function useSideBar(): HTMLElement | undefined {
   const isOnCalendarPage = React.useContext(CurrentViewContext) !== undefined;
   const [sideBar] = useAsyncState(
     React.useCallback(
-      () =>
+      async () =>
         isOnCalendarPage
-          ? awaitElement(findSideBar).then((sideBar) => {
+          ? await awaitElement(findSideBar).then((sideBar) => {
               if (sideBar === undefined) {
                 output.error('Unable to find the sidebar');
                 return;
@@ -114,16 +122,19 @@ function useSideBar(): HTMLElement | undefined {
 
   const [isVisible, setIsVisible] = React.useState(false);
   React.useEffect(() => {
-    if (sideBar === undefined) return undefined;
+    if (sideBar === undefined) {
+      return undefined;
+    }
 
     const checkCollapsed = () => {
       // If side bar is hidden, it has width of 0
       const isVisible = sideBar.offsetWidth > 0;
       setIsVisible(isVisible);
-      if (!isVisible && devMode)
+      if (!isVisible && devMode) {
         output.log(
           'Calendar Plus: Sidebar is collapsed. Using cached visible calendars list',
         );
+      }
       return !isVisible;
     };
 
@@ -139,8 +150,9 @@ function useSideBar(): HTMLElement | undefined {
 }
 
 function findSideBar(): HTMLElement | undefined {
-  const sideBar = document.querySelector('#drawerMiniMonthNavigator')
-    ?.parentElement as HTMLElement | null | undefined;
+  const sideBar = document.querySelector(
+    '#drawerMiniMonthNavigator',
+  )?.parentElement;
   return sideBar?.querySelector('input[type="checkbox"]') ? sideBar : undefined;
 }
 

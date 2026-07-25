@@ -47,13 +47,14 @@ export function PreferencesPage({
         <Button.Default
           onClick={(): void =>
             void fetchDataForExport()
-              .then(async (data) =>
-                downloadFile(
-                  `${commonText('calendarPlus')} - ${dateToIso(
-                    new Date(),
-                  )}.json`,
-                  JSON.stringify(data, null, 4),
-                ),
+              .then(
+                async (data) =>
+                  await downloadFile(
+                    `${commonText('calendarPlus')} - ${dateToIso(
+                      new Date(),
+                    )}.json`,
+                    JSON.stringify(data, null, 4),
+                  ),
               )
               .catch(output.error)
           }
@@ -119,7 +120,9 @@ async function fetchDataForExport(): Promise<IR<unknown>> {
   const objectStorage = storageAdapters.object(data);
   const entries = await Promise.all(
     Object.keys(data).map(async (key) => {
-      if (key.includes('_')) return;
+      if (key.includes('_')) {
+        return;
+      }
       const value = await objectStorage.get(key as 'weekStart');
       return [key, value] as const;
     }),
@@ -161,7 +164,9 @@ function Import({
               const adapter = storageAdapters.object(data);
               await Promise.all(
                 Object.keys(data).map(async (key) => {
-                  if (key.includes('_')) return;
+                  if (key.includes('_')) {
+                    return;
+                  }
                   const value = await adapter.get(key as 'weekStart');
                   await storageAdapters.sync.set(key as 'weekStart', value);
                 }),
@@ -188,7 +193,9 @@ export function ResetToDefaultButton({
         if (confirmResetToDefault) {
           handleClick();
           setConfirmResetToDefault(false);
-        } else setConfirmResetToDefault(true);
+        } else {
+          setConfirmResetToDefault(true);
+        }
       }}
     >
       {confirmResetToDefault

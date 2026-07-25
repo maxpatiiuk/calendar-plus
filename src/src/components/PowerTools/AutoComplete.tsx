@@ -52,12 +52,17 @@ export function AutoComplete({
   React.useEffect(
     () =>
       listen(document.body, 'input', ({ target }) => {
-        if (!Array.isArray(calendars)) return;
+        if (!Array.isArray(calendars)) {
+          return;
+        }
         const element = target as HTMLInputElement;
-        if (!isEventNameInput(element)) return;
+        if (!isEventNameInput(element)) {
+          return;
+        }
 
-        if (!element.hasAttribute('list'))
+        if (!element.hasAttribute('list')) {
           element.setAttribute('list', dataListId);
+        }
 
         const guessCalendar = (input: string): string | undefined =>
           virtualCalendarsRef.current.find(
@@ -88,12 +93,13 @@ export function AutoComplete({
           const guessSynonym = synonymsRef.current.find(({ synonym }) =>
             eventName.startsWith(`${synonym}:`),
           );
-          if (typeof guessSynonym === 'object')
+          if (typeof guessSynonym === 'object') {
             return {
               eventName,
-              synonym: guessSynonym.synonym + ':',
+              synonym: `${guessSynonym.synonym}:`,
               calendar: guessSynonym.calendar,
             };
+          }
           const guess =
             guessCalendar(eventName) ??
             (eventName.startsWith('.')
@@ -119,9 +125,13 @@ export function AutoComplete({
           indicator.style.background =
             calendar?.backgroundColor ?? 'transparent';
           parent?.append(indicator);
-        } else indicator.remove();
+        } else {
+          indicator.remove();
+        }
 
-        if (blurListeners.has(element)) return;
+        if (blurListeners.has(element)) {
+          return;
+        }
         element.addEventListener('blur', handleBlur);
         blurListeners.set(element, handleBlur);
 
@@ -130,15 +140,19 @@ export function AutoComplete({
           blurListeners.delete(element);
 
           const match = findMatch();
-          if (match === undefined) return;
-          if (match.synonym.length > 0)
+          if (match === undefined) {
+            return;
+          }
+          if (match.synonym.length > 0) {
             element.value = match.eventName
               .slice(match.synonym.length)
               .slice()
               .trim();
+          }
 
-          if (calendars === undefined)
+          if (calendars === undefined) {
             output.error('Unable to retrieve calendars');
+          }
           const calendar = calendars?.find(({ id }) => id === match.calendar);
           if (calendar === undefined) {
             output.error('Unable to find current calendar');
@@ -146,7 +160,9 @@ export function AutoComplete({
           }
 
           const parent = findParent(element);
-          if (parent === undefined) return;
+          if (parent === undefined) {
+            return;
+          }
 
           /**
            * In full-screen editor there will be only 1 such icon.
@@ -175,7 +191,9 @@ export function AutoComplete({
 
           const trigger = expandCalendarsButton ?? combobox;
           // Don't change calendar if correct one is already selected
-          if (trigger.textContent === calendar.summary) return;
+          if (trigger.textContent === calendar.summary) {
+            return;
+          }
 
           clickAndWait(trigger, alreadyOpened, () => {
             const listbox = closestSibling(
@@ -216,8 +234,9 @@ export function AutoComplete({
   );
 
   const activeEventNames = React.useMemo(() => {
-    if (activeMatch === undefined || activeMatch.synonym.length === 0)
+    if (activeMatch === undefined || activeMatch.synonym.length === 0) {
       return eventNames;
+    }
     return eventNames
       .filter(({ calendarId }) => calendarId === activeMatch.calendar)
       .map(({ label, value }) => ({
@@ -230,10 +249,11 @@ export function AutoComplete({
     let currentWeekPredictions = autocompleteFromCurrentWeek
       ? getCurrentWeekEvents()
       : [];
-    if (activeMatch !== undefined && activeMatch.synonym.length > 0)
+    if (activeMatch !== undefined && activeMatch.synonym.length > 0) {
       currentWeekPredictions = currentWeekPredictions.filter(
         ([_subject, calendarId]) => calendarId === activeMatch.calendar,
       );
+    }
 
     const existingPredictions = new Set(
       activeEventNames.map(({ value }) => value),
@@ -269,7 +289,9 @@ function closestSibling(
   let current: HTMLElement | undefined = initial;
   while (current !== undefined) {
     const sibling = current.querySelector<HTMLElement>(selector);
-    if (sibling !== null) return sibling;
+    if (sibling !== null) {
+      return sibling;
+    }
     current = current.parentElement ?? undefined;
   }
   return undefined;
@@ -310,8 +332,9 @@ function isEventNameInput(element: HTMLInputElement): boolean {
     element.getAttribute('autoComplete') !== 'off' ||
     element.hasAttribute('aria-haspopup') ||
     element.hasAttribute('data-date')
-  )
+  ) {
     return false;
+  }
   const isInMiniEditor =
     element.hasAttribute('autofocus') && element.getAttribute('value') === '';
   const isInEditor = element.hasAttribute('placeholder');
@@ -324,8 +347,9 @@ function findParent(element: HTMLInputElement): HTMLElement | undefined {
     parent !== undefined &&
     parent.getAttribute('role') !== 'main' &&
     parent.getAttribute('role') !== 'dialog'
-  )
+  ) {
     parent = parent.parentElement ?? undefined;
+  }
   return parent;
 }
 
@@ -380,21 +404,25 @@ function getCurrentWeekEvents(): RA<readonly [string, string | undefined]> {
   if (
     (hashKey === domParsedEvents && hashedCurrentWeek !== undefined) ||
     domParsedEvents === undefined
-  )
+  ) {
     return hashedCurrentWeek ?? [];
+  }
 
   hashKey = domParsedEvents;
   hashedCurrentWeek = Object.entries(
     domParsedEvents
       .flat()
-      .reduce<
-        Record<string, string | undefined>
-      >((total, { summary, calendarId }) => {
-        if (summary in total && total[summary] !== calendarId)
-          total[summary] = undefined;
-        else total[summary] = calendarId;
-        return total;
-      }, {}),
+      .reduce<Record<string, string | undefined>>(
+        (total, { summary, calendarId }) => {
+          if (summary in total && total[summary] !== calendarId) {
+            total[summary] = undefined;
+          } else {
+            total[summary] = calendarId;
+          }
+          return total;
+        },
+        {},
+      ),
   );
   return hashedCurrentWeek;
 }

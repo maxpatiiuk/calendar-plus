@@ -85,12 +85,16 @@ function useCurrentTracker(
       const rawViewName = document.body
         .getAttribute('data-viewkey')
         ?.toLowerCase();
-      if (!rawViewName) return;
+      if (!rawViewName) {
+        return;
+      }
       const viewName =
         rawViewName in viewMapper
           ? viewMapper[rawViewName as keyof typeof viewMapper]
           : rawViewName;
-      if (f.includes(supportedViews, viewName)) setInitialView(viewName);
+      if (f.includes(supportedViews, viewName)) {
+        setInitialView(viewName);
+      }
     });
     observer.observe(document.body, {
       attributes: true,
@@ -118,17 +122,20 @@ function useCurrentTracker(
           ? currentView
           : parsed,
       );
-      if (parsed?.view === 'customday' || parsed?.view === 'customweek')
+      if (parsed?.view === 'customday' || parsed?.view === 'customweek') {
         detectCustomViewSize([customViewSize, setCustomViewSize]).catch(
           output.error,
         );
+      }
     }
 
     // Parse initial URL
     parseUrl();
 
     return listenEvent('TabUpdate', () => {
-      if (window.location.pathname === lastPath) return;
+      if (window.location.pathname === lastPath) {
+        return;
+      }
       lastPath = window.location.pathname;
       parseUrl();
     });
@@ -168,17 +175,21 @@ function parsePath(
    * month and week views.
    */
   if (path === commonPrefix || path === commonPrefix.slice(0, -1)) {
-    if (initialView === undefined) return undefined;
-    else
+    if (initialView === undefined) {
+      return undefined;
+    } else {
       return {
         view: initialView,
         selectedDay: today,
         ...resolveBoundaries(initialView, today, customViewSize, weekStart),
       };
+    }
   }
 
   // If URl doesn't start with commonPrefix, we might be on the preferences page
-  if (!path.startsWith(commonPrefix)) return undefined;
+  if (!path.startsWith(commonPrefix)) {
+    return undefined;
+  }
 
   /**
    * The body[data-viewkey] attribute is updated slightly later than the URL, so
@@ -186,7 +197,9 @@ function parsePath(
    */
   const [viewName, ...date] = path.slice(commonPrefix.length).split('/');
 
-  if (!f.includes(supportedViews, viewName)) return undefined;
+  if (!f.includes(supportedViews, viewName)) {
+    return undefined;
+  }
 
   const year = date[0] || today.getFullYear().toString();
   const month = date[1] || (today.getMonth() + 1).toString();
@@ -210,7 +223,7 @@ function resolveBoundaries(
   customViewSize: number,
   weekStart: number,
 ): { readonly firstDay: Date; readonly lastDay: Date } {
-  if (viewName === 'day')
+  if (viewName === 'day') {
     return {
       firstDay: new Date(
         selectedDay.getFullYear(),
@@ -223,7 +236,7 @@ function resolveBoundaries(
         selectedDay.getDate() + 1,
       ),
     };
-  else if (viewName === 'week') {
+  } else if (viewName === 'week') {
     const dayOfWeek = selectedDay.getDay();
     const offset = dayOfWeek < weekStart ? 7 - weekStart : -weekStart;
     const dayOffset = selectedDay.getDate() - offset - dayOfWeek;
@@ -239,7 +252,7 @@ function resolveBoundaries(
         dayOffset + 7,
       ),
     };
-  } else if (viewName === 'month')
+  } else if (viewName === 'month') {
     return {
       firstDay: new Date(selectedDay.getFullYear(), selectedDay.getMonth(), 1),
       lastDay: new Date(
@@ -248,7 +261,7 @@ function resolveBoundaries(
         0,
       ),
     };
-  else if (viewName === 'customday') {
+  } else if (viewName === 'customday') {
     return {
       firstDay: selectedDay,
       lastDay: new Date(
@@ -271,12 +284,14 @@ function resolveBoundaries(
         firstDay.getDate() + customViewSize,
       ),
     };
-  } else if (viewName === 'year')
+  } else if (viewName === 'year') {
     return {
       firstDay: new Date(selectedDay.getFullYear(), 0, 1),
       lastDay: new Date(selectedDay.getFullYear() + 1, 0, 1),
     };
-  else return output.throw('unknown view');
+  } else {
+    return output.throw('unknown view');
+  }
 }
 
 async function detectCustomViewSize([
@@ -290,12 +305,16 @@ async function detectCustomViewSize([
         ?.querySelectorAll('[data-start-date-key] [data-datekey]') ?? [];
     return items.length === 0 ? undefined : items;
   });
-  if (dateKeys === undefined) return;
+  if (dateKeys === undefined) {
+    return;
+  }
   // Find out how many days are displayed
   const duration = new Set(
     Array.from(dateKeys, (dateKey) => dateKey.getAttribute('data-datekey')),
   ).size;
-  if (duration !== customViewSize) setCustomViewSize(duration);
+  if (duration !== customViewSize) {
+    setCustomViewSize(duration);
+  }
 }
 
 export const exportsForTests = {

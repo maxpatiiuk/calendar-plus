@@ -9,12 +9,17 @@ export function rawDomEventToParsed(
   languageData: LanguageData,
 ): ParsedDomEvent | string {
   const times = extractTimes(rawDomEvent, languageData);
-  if (typeof times === 'string') return times;
+  if (typeof times === 'string') {
+    return times;
+  }
 
   const [startTime, endTime] = times;
-  if (Number.isNaN(startTime))
+  if (Number.isNaN(startTime)) {
     return `Failed to parse start time from event label`;
-  if (Number.isNaN(endTime)) return `Failed to parse end time from event label`;
+  }
+  if (Number.isNaN(endTime)) {
+    return `Failed to parse end time from event label`;
+  }
 
   return {
     calendarId: rawDomEvent.calendarId,
@@ -32,7 +37,7 @@ export function rawDomEventToParsed(
 function extractTimes(
   { aria, summary, touchesTop }: RawDomEvent,
   languageData: LanguageData,
-): readonly [number, number] | string {
+): string | readonly [number, number] {
   /*
    * Exclude part of the aria string that includes the event summary and
    * calendar name to avoid them interfering with time extraction.
@@ -65,8 +70,9 @@ function extractTimes(
      * such name is not going to contain numbers, and thus won't interfere with
      * the time extraction.
      */
-    if (ariaSummaryIndex === -1 && isParenthesised)
+    if (ariaSummaryIndex === -1 && isParenthesised) {
       ariaSummaryIndex = aria.length;
+    }
 
     if (ariaSummaryIndex === -1) {
       return 'Expected event label to include event summary';
@@ -75,8 +81,12 @@ function extractTimes(
   const trimmedAria = aria.slice(0, ariaSummaryIndex);
 
   let [startTime, endTime] = extractTimeLikeNumbers(trimmedAria, languageData);
-  if (startTime === undefined) return 'Failed to extract the event start time';
-  if (endTime === undefined) return 'Failed to extract the event start time';
+  if (startTime === undefined) {
+    return 'Failed to extract the event start time';
+  }
+  if (endTime === undefined) {
+    return 'Failed to extract the event start time';
+  }
 
   /*
    * This is the case for two day events. Event must not last more than 24hrs or
@@ -93,8 +103,12 @@ function extractTimes(
    */
   const touchesBottom = isTwoDayEvent && !touchesTop;
 
-  if (touchesTop) startTime = 0;
-  if (touchesBottom) endTime = 24;
+  if (touchesTop) {
+    startTime = 0;
+  }
+  if (touchesBottom) {
+    endTime = 24;
+  }
 
   return [startTime, endTime];
 }
@@ -127,7 +141,9 @@ function extractTimeLikeNumbers(
 
       // Ignore day and month numbers
       const isTimeNumber = !isShort || isAm || isPm;
-      if (isTimeNumber) numbers.push(parseTimeNumber(numberString, isAm, isPm));
+      if (isTimeNumber) {
+        numbers.push(parseTimeNumber(numberString, isAm, isPm));
+      }
     },
   );
   return numbers;

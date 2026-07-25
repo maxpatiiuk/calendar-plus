@@ -24,8 +24,7 @@ export function WidgetContainer({
   readonly editing?: GetSet<boolean>;
   readonly getJsonExport: (() => RA<unknown>) | undefined;
   readonly getTsvExport:
-    | (() => RA<IR<number | string | undefined>>)
-    | undefined;
+    (() => RA<IR<number | string | undefined>>) | undefined;
 }): JSX.Element {
   const [exportFormat] = usePref('export', 'format');
   return (

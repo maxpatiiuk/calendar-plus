@@ -14,9 +14,11 @@ let loggedNonEnglish = false;
 export function validateParseResult(
   parseResult: ParsedDomEvent,
   event: HTMLElement,
-): undefined | string {
+): string | undefined {
   if (document.documentElement.lang !== 'en') {
-    if (loggedNonEnglish) return undefined;
+    if (loggedNonEnglish) {
+      return undefined;
+    }
     loggedNonEnglish = true;
     output.log('Calendar is not in English. Skipping DOM reading validation');
     return undefined;
@@ -25,8 +27,9 @@ export function validateParseResult(
   const ariaParts = event
     .querySelector('& > div:not([aria-hidden])')
     ?.textContent?.split(', ');
-  if (ariaParts === undefined)
+  if (ariaParts === undefined) {
     return `Failed to extract aria parts from element`;
+  }
 
   // These indexes are correct for US English, but not for many other languages
   const times = ariaParts[0].match(reTime);
@@ -44,7 +47,9 @@ export function validateParseResult(
     ? (parseResult.startTime === startTime && parseResult.endTime === 24) ||
       (parseResult.startTime === 0 && parseResult.endTime === endTime)
     : parseResult.startTime === startTime && parseResult.endTime === endTime;
-  if (isMatching) return undefined;
+  if (isMatching) {
+    return undefined;
+  }
 
   return `DOM validation extracted different times: ${startTime} - ${endTime}`;
 }

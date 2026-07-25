@@ -21,7 +21,9 @@ export function FilePicker({
   function handleFileSelected(
     event: React.ChangeEvent<HTMLInputElement>,
   ): void {
-    if (handleFileChange(event.target.files?.[0])) event.target.value = '';
+    if (handleFileChange(event.target.files?.[0])) {
+      event.target.value = '';
+    }
   }
 
   function handleFileDropped(event: React.DragEvent): void {
@@ -53,8 +55,9 @@ export function FilePicker({
       filePickerButton.current === null ||
       event.target !== filePickerButton.current ||
       filePickerButton.current.contains(event.relatedTarget as Node)
-    )
+    ) {
       return;
+    }
     setIsDragging(false);
     preventPropagation(event);
   }
@@ -115,10 +118,12 @@ export const downloadFile = async (
   fileName: string,
   text: string,
 ): Promise<void> =>
-  new Promise((resolve) => {
+  await new Promise((resolve) => {
     const iframe = document.createElement('iframe');
     iframe.addEventListener('load', () => {
-      if (iframe.contentWindow === null) return;
+      if (iframe.contentWindow === null) {
+        return;
+      }
       const element = iframe.contentWindow.document.createElement('a');
       element.setAttribute(
         'href',
@@ -149,7 +154,7 @@ export const fileToText = async (
   file: File,
   encoding = 'utf-8',
 ): Promise<string> =>
-  new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.addEventListener('load', ({ target }) =>
       typeof target?.result === 'string'

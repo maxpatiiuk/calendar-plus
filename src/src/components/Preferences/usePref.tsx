@@ -12,9 +12,9 @@ import { getPrefDefinition } from './helpers';
  */
 export function usePref<
   CATEGORY extends keyof Preferences,
-  ITEM extends CATEGORY extends keyof typeof preferenceDefinitions
+  ITEM extends (CATEGORY extends keyof typeof preferenceDefinitions
     ? string & keyof Preferences[CATEGORY]['items']
-    : never,
+    : never),
 >(
   category: CATEGORY,
   item: ITEM,
@@ -26,7 +26,9 @@ export function usePref<
   const updatePref = React.useCallback(
     (newPref: Preferences[CATEGORY]['items'][ITEM]['defaultValue']): void => {
       const isUnchanged = value === newPref;
-      if (isUnchanged) return;
+      if (isUnchanged) {
+        return;
+      }
       const isDefault = definition.defaultValue === newPref;
       if (isDefault) {
         const items = removeKey(
@@ -41,7 +43,7 @@ export function usePref<
                 [category]: items,
               },
         );
-      } else
+      } else {
         setPreferences({
           ...preferences,
           [category]: {
@@ -49,6 +51,7 @@ export function usePref<
             [item]: newPref,
           },
         });
+      }
     },
     [category, item, preferences, setPreferences],
   );

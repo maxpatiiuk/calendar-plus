@@ -33,7 +33,7 @@ export function snapshot<PROPS extends IR<unknown>>(
   props: PROPS,
   testName?: string,
 ): void {
-  const { name, displayName = name } = component as unknown as {
+  const { name, displayName } = component as unknown as {
     readonly displayName: string;
     readonly name: string;
   };

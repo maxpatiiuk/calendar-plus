@@ -12,7 +12,9 @@ const className = 'hide-edit-all';
 export function HideEditAll(): null {
   const [hideEditAll] = usePref('recurringEvents', 'hideEditAll');
   React.useEffect(() => {
-    if (!hideEditAll) return undefined;
+    if (!hideEditAll) {
+      return undefined;
+    }
     document.body.classList.add(className);
     return (): void => document.body.classList.remove(className);
   }, [hideEditAll]);

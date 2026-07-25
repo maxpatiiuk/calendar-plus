@@ -16,6 +16,8 @@ export const getPrefDefinition = <
 
 export type UserPreferences = {
   readonly [CATEGORY in keyof Preferences]?: {
-    readonly [ITEM in keyof Preferences[CATEGORY]['items']]?: Preferences[CATEGORY]['items'][ITEM]['defaultValue'];
+    readonly [
+      ITEM in keyof Preferences[CATEGORY]['items']
+    ]?: Preferences[CATEGORY]['items'][ITEM]['defaultValue'];
   };
 };

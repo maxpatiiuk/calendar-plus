@@ -40,8 +40,9 @@ export const SetKeyboardShortcuts: PreferenceRenderer<KeyboardShortcuts> = ({
   // Do not allow saving an empty shortcut
   const hasEmptyShortcut = !isEditing && shortcuts.includes('');
   React.useEffect(() => {
-    if (hasEmptyShortcut)
+    if (hasEmptyShortcut) {
       setShortcuts(shortcuts.filter((shortcut) => shortcut !== ''));
+    }
   }, [hasEmptyShortcut]);
 
   return (

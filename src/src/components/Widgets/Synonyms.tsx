@@ -57,7 +57,9 @@ export function Synonyms({ label }: { readonly label: string }): JSX.Element {
           <tbody>
             {synonyms.map(({ calendar: calendarId, synonym }, index) => {
               const calendar = calendars.find(({ id }) => id === calendarId);
-              if (calendar === undefined) return undefined;
+              if (calendar === undefined) {
+                return undefined;
+              }
               return (
                 <tr key={index}>
                   <td>

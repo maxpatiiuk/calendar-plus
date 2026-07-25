@@ -34,9 +34,11 @@ export type WritableArray<T> = T[];
 
 /** Cast a type as defined. Throws at runtime if it is not defined */
 export function defined<T>(value: T | undefined, message?: string): T {
-  if (value === undefined)
+  if (value === undefined) {
     return output.throw(message ?? 'Value is not defined');
-  else return value;
+  } else {
+    return value;
+  }
 }
 
 /** Filter undefined items out of the array */
@@ -75,8 +77,10 @@ export const isFunction = <T>(
  */
 export function setDevelopmentGlobal(name: string, value: unknown): void {
   if (process.env.NODE_ENV === 'development')
-    // @ts-expect-error
+  // @ts-expect-error
+  {
     globalThis[name] = value;
+  }
 }
 
 /**

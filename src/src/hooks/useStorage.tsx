@@ -22,11 +22,11 @@ type StorageItem<T> = {
 export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   token: {
     type: 'sync',
-    defaultValue: undefined as undefined | string,
+    defaultValue: undefined as string | undefined,
   },
   refreshToken: {
     type: 'sync',
-    defaultValue: undefined as undefined | string,
+    defaultValue: undefined as string | undefined,
   },
   layout: {
     type: 'sync',
@@ -38,7 +38,7 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   },
   preferences: {
     type: 'sync',
-    defaultValue: {} as UserPreferences,
+    defaultValue: {},
   },
   ghostEvents: {
     type: 'sync',
@@ -52,15 +52,15 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   storageVersions: {
     type: 'sync',
     // Keys are names of storage items
-    defaultValue: {} as Partial<IR<string>>,
+    defaultValue: {},
   },
   customViewSize: {
     type: 'sync',
-    defaultValue: defaultCustomViewSize as number,
+    defaultValue: defaultCustomViewSize,
   },
   timeChartMode: {
     type: 'sync',
-    defaultValue: 'total' as TimeChartMode,
+    defaultValue: 'total',
   },
   synonyms: {
     type: 'sync',
@@ -72,16 +72,16 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   },
   weekStart: {
     type: 'sync',
-    defaultValue: 0 as number,
+    defaultValue: 0,
   },
   devMode: {
     type: 'sync',
-    defaultValue: false as boolean,
+    defaultValue: false,
   },
   theme: {
     // Google Calendar's theme preference is synced across devices
     type: 'sync',
-    defaultValue: 'light' as 'dark' | 'light',
+    defaultValue: 'light',
   },
 } as const);
 
@@ -106,10 +106,13 @@ export function useStorage<NAME extends keyof StorageDefinitions>(
       version === undefined ||
       cacheVersions === undefined ||
       cacheVersions[name] === version
-    )
+    ) {
       return;
+    }
     output.warn('Cache version mismatch detected', { name, cacheVersions });
-    if (cacheVersions[name] === undefined) setValue(defaultValue);
+    if (cacheVersions[name] === undefined) {
+      setValue(defaultValue);
+    }
     setCacheVersions({ ...cacheVersions, [name]: version });
   }, [name, cacheVersions, setCacheVersions, setValue]);
 
@@ -143,7 +146,9 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
       const changed = Object.keys(changes).some(
         (key) => key.split('_')[0] === name,
       );
-      if (!changed) return;
+      if (!changed) {
+        return;
+      }
       // LOW: possible race condition here
       fetchValue()
         .then((value) => (destructorCalled ? undefined : setValue(value)))
@@ -158,7 +163,9 @@ function useSimpleStorage<NAME extends keyof StorageDefinitions>(
 
   const updateValue = React.useCallback(
     (value: StorageDefinitions[NAME]['defaultValue'] | undefined) => {
-      if (currentValue.current === value) return;
+      if (currentValue.current === value) {
+        return;
+      }
       adapter.set(name, value).catch(output.error);
       setValue(value);
     },
@@ -208,21 +215,23 @@ type Adapter = {
 
 export const storageAdapters = {
   local: createStorageAdapter({
-    getValue: (name) => chrome.storage.local.get(name).then((x) => x[name]),
-    setValue: (values) => chrome.storage.local.set(values),
+    getValue: async (name) =>
+      await chrome.storage.local.get(name).then((x) => x[name]),
+    setValue: async (values) => await chrome.storage.local.set(values),
     shouldSplit: false,
   }),
   sync: createStorageAdapter({
-    getValue: (name) => chrome.storage.sync.get(name).then((x) => x[name]),
-    setValue: (values) => chrome.storage.sync.set(values),
+    getValue: async (name) =>
+      await chrome.storage.sync.get(name).then((x) => x[name]),
+    setValue: async (values) => await chrome.storage.sync.set(values),
     shouldSplit: true,
   }),
   object: (store: Record<string, unknown>) =>
     createStorageAdapter({
-      getValue: (name) => Promise.resolve(store[name]),
-      setValue(values) {
+      getValue: async (name) => await Promise.resolve(store[name]),
+      async setValue(values) {
         Object.assign(store, values);
-        return Promise.resolve();
+        return await Promise.resolve();
       },
       shouldSplit: true,
     }),
@@ -233,7 +242,9 @@ export const storageAdapters = {
  * "local" does not
  */
 export function isOverSizeLimit(name: string, value: string): boolean {
-  if (value === undefined) return false;
+  if (value === undefined) {
+    return false;
+  }
   const size = JSON.stringify({ [name]: value }).length;
   return size > chrome.storage.sync.QUOTA_BYTES_PER_ITEM;
 }
@@ -257,7 +268,9 @@ function splitValue(
     let segment = jsonValue.slice(0, splitLength);
     const jsonLength = JSON.stringify(segment).length;
     const overSize = jsonLength - maxLength;
-    if (overSize > 0) segment = jsonValue.slice(0, splitLength - overSize);
+    if (overSize > 0) {
+      segment = jsonValue.slice(0, splitLength - overSize);
+    }
 
     storageObject[fullKey] = segment;
     jsonValue = jsonValue.slice(segment.length);
@@ -270,7 +283,9 @@ async function joinValue(
   value: string,
   getValue: (name: keyof StorageDefinitions) => Promise<unknown>,
 ): Promise<string> {
-  if (!maybeJson.includes(value[0])) return value;
+  if (!maybeJson.includes(value[0])) {
+    return value;
+  }
   try {
     return JSON.parse(`${value}${await joinStorage(name, getValue)}`);
   } catch {
@@ -297,7 +312,9 @@ async function cleanupLooseChunks(
 ): Promise<void> {
   const fullKey = `${key}_${index}`;
   const { [fullKey]: value } = await chrome.storage.sync.get(fullKey);
-  if (value === undefined) return;
+  if (value === undefined) {
+    return;
+  }
   chrome.storage.sync.remove(fullKey);
   cleanupLooseChunks(key, index + 1);
 }

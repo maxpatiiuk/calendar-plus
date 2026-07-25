@@ -31,7 +31,9 @@ export function Dashboard({
   const [layout = [], setLayout] = useStorage('layout');
   const originalLayout = React.useRef<RA<WidgetDefinition>>([]);
   React.useEffect(() => {
-    if (isEditing) originalLayout.current = layout;
+    if (isEditing) {
+      originalLayout.current = layout;
+    }
   }, [isEditing]);
 
   const breakpoint = useBreakpoint();

@@ -19,9 +19,9 @@ import { output } from '../Errors/exceptions';
  */
 export function useKeyboardShortcut<
   CATEGORY extends keyof Preferences,
-  ITEM extends CATEGORY extends keyof typeof preferenceDefinitions
+  ITEM extends (CATEGORY extends keyof typeof preferenceDefinitions
     ? string & keyof Preferences[CATEGORY]['items']
-    : never,
+    : never),
 >(category: CATEGORY, item: ITEM, callback: (() => void) | undefined): string {
   const [currentShortcuts, setShortcuts] = usePref(category, item);
 
@@ -65,7 +65,9 @@ function useKeyboardShortcutLabel(
 ): string {
   return React.useMemo(() => {
     const platformShortcuts =
-      shortcuts === undefined ? [] : resolvePlatformShortcuts(shortcuts) ?? [];
+      shortcuts === undefined
+        ? []
+        : (resolvePlatformShortcuts(shortcuts) ?? []);
     return platformShortcuts.length > 0
       ? ` (${formatDisjunction(
           platformShortcuts.map(localizeKeyboardShortcut),
@@ -81,22 +83,22 @@ export function useLegacyKeyboardShortcutHandler<T>(
 ): T {
   // Migrate from the legacy keyboard shortcut format
   const ambiguousShortcuts = currentShortcuts as
-    | KeyboardShortcuts
-    | undefined
-    | LegacyKeyboardShortcuts;
+    KeyboardShortcuts | LegacyKeyboardShortcuts | undefined;
   const isLegacyShortcut = React.useMemo(
     () =>
       Object.values(ambiguousShortcuts ?? {}).some((entry) => {
         const typedEntries = entry as
-          | LegacyKeyboardShortcuts[keyof LegacyKeyboardShortcuts]
-          | KeyboardShortcuts[keyof KeyboardShortcuts];
+          | KeyboardShortcuts[keyof KeyboardShortcuts]
+          | LegacyKeyboardShortcuts[keyof LegacyKeyboardShortcuts];
         return typedEntries?.some((shortcut) => typeof shortcut !== 'string');
       }),
     [ambiguousShortcuts],
   );
   const resolvedShortcut = isLegacyShortcut ? defaultValue : currentShortcuts;
   React.useEffect(() => {
-    if (!isLegacyShortcut) return;
+    if (!isLegacyShortcut) {
+      return;
+    }
     /**
      * Main change is that before we were using event.key. Now we use
      * event.code. I could do a best effort mapping between the two, but I don't

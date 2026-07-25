@@ -2,7 +2,7 @@
  * If extension is in development mode, print the log output on the screen
  */
 export function interceptLogs(
-  callback: (type: 'log' | 'warn' | 'error', parameters: unknown[]) => void,
+  callback: (type: 'error' | 'log' | 'warn', parameters: unknown[]) => void,
 ) {
   output.warn = (...parameters: unknown[]) => {
     callback('warn', parameters);

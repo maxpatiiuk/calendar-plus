@@ -32,7 +32,9 @@ export function useId(prefix: string): (suffix: string) => string {
 
   const resolvedPrefix = `${prefix}-`;
 
-  if (!(resolvedPrefix in idStore)) idStore[resolvedPrefix] = 0;
+  if (!(resolvedPrefix in idStore)) {
+    idStore[resolvedPrefix] = 0;
+  }
 
   if (id.current === -1) {
     id.current = idStore[resolvedPrefix];

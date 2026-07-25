@@ -44,7 +44,7 @@ export function useAsyncState<T>(
      * If callback changes, state is reset to show the loading screen if
      * new state takes more than 1s to load
      */
-    let timeout = setTimeout(() => setState(undefined), loadingTimeout);
+    const timeout = setTimeout(() => setState(undefined), loadingTimeout);
     const wrapped = loadingScreen
       ? loading
       : (promise: Promise<unknown>): void => void promise.catch(output.error);

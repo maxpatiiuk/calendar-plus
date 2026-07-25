@@ -58,21 +58,28 @@ function hexToHsl(hex: string): readonly [number, number, number] {
   const red = Number.parseInt(hex.slice(1, 3), hexRadix) / rgbMax;
   const green = Number.parseInt(hex.slice(3, 5), hexRadix) / rgbMax;
   const blue = Number.parseInt(hex.slice(5, 7), hexRadix) / rgbMax;
-  let channelMin = Math.min(red, green, blue),
-    channelMax = Math.max(red, green, blue),
-    delta = channelMax - channelMin,
-    hue = 0,
-    saturation = 0,
-    luminosity = 0;
+  const channelMin = Math.min(red, green, blue);
+  const channelMax = Math.max(red, green, blue);
+  const delta = channelMax - channelMin;
+  let hue = 0;
+  let saturation = 0;
+  let luminosity = 0;
 
-  if (delta == 0) hue = 0;
-  else if (channelMax == red) hue = ((green - blue) / delta) % 6;
-  else if (channelMax == green) hue = (blue - red) / delta + 2;
-  else hue = (red - green) / delta + 4;
+  if (delta == 0) {
+    hue = 0;
+  } else if (channelMax == red) {
+    hue = ((green - blue) / delta) % 6;
+  } else if (channelMax == green) {
+    hue = (blue - red) / delta + 2;
+  } else {
+    hue = (red - green) / delta + 4;
+  }
 
   hue = Math.round(hue * 60);
 
-  if (hue < 0) hue += 360;
+  if (hue < 0) {
+    hue += 360;
+  }
 
   luminosity = (channelMax + channelMin) / 2;
   saturation = delta == 0 ? 0 : delta / (1 - Math.abs(2 * luminosity - 1));
@@ -89,34 +96,34 @@ function hslToHex(hue: number, saturation: number, luminosity: number): string {
   saturation /= 100;
   luminosity /= 100;
 
-  let chroma = (1 - Math.abs(2 * luminosity - 1)) * saturation,
-    secondComponent = chroma * (1 - Math.abs(((hue / 60) % 2) - 1)),
-    matchLightness = luminosity - chroma / 2,
-    red = 0,
-    green = 0,
-    blue = 0;
+  const chroma = (1 - Math.abs(2 * luminosity - 1)) * saturation;
+  const secondComponent = chroma * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const matchLightness = luminosity - chroma / 2;
+  let red = 0;
+  let green = 0;
+  let blue = 0;
 
-  if (0 <= hue && hue < 60) {
+  if (hue >= 0 && hue < 60) {
     red = chroma;
     green = secondComponent;
     blue = 0;
-  } else if (60 <= hue && hue < 120) {
+  } else if (hue >= 60 && hue < 120) {
     red = secondComponent;
     green = chroma;
     blue = 0;
-  } else if (120 <= hue && hue < 180) {
+  } else if (hue >= 120 && hue < 180) {
     red = 0;
     green = chroma;
     blue = secondComponent;
-  } else if (180 <= hue && hue < 240) {
+  } else if (hue >= 180 && hue < 240) {
     red = 0;
     green = secondComponent;
     blue = chroma;
-  } else if (240 <= hue && hue < 300) {
+  } else if (hue >= 240 && hue < 300) {
     red = secondComponent;
     green = 0;
     blue = chroma;
-  } else if (300 <= hue && hue < hueMax) {
+  } else if (hue >= 300 && hue < hueMax) {
     red = chroma;
     green = 0;
     blue = secondComponent;

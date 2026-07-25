@@ -22,12 +22,19 @@ export const sortFunction =
     const [leftValue, rightValue] = reverse
       ? [mapper(right), mapper(left)]
       : [mapper(left), mapper(right)];
-    if (leftValue === rightValue) return 0;
-    else if (typeof leftValue === 'string' && typeof rightValue === 'string')
+    if (leftValue === rightValue) {
+      return 0;
+    } else if (
+      typeof leftValue === 'string' &&
+      typeof rightValue === 'string'
+    ) {
       return leftValue.localeCompare(rightValue) as -1 | 0 | 1;
+    }
     // Treat null and undefined as the same
     // eslint-disable-next-line eqeqeq
-    else if (leftValue == rightValue) return 0;
+    else if (leftValue == rightValue) {
+      return 0;
+    }
     return (leftValue ?? '') > (rightValue ?? '') ? 1 : -1;
   };
 
@@ -35,8 +42,7 @@ export const sortFunction =
 export const multiSortFunction =
   <ORIGINAL_TYPE>(
     ...payload: readonly (
-      | true
-      | ((value: ORIGINAL_TYPE) => Date | boolean | number | string)
+      true | ((value: ORIGINAL_TYPE) => Date | boolean | number | string)
     )[]
   ): ((left: ORIGINAL_TYPE, right: ORIGINAL_TYPE) => -1 | 0 | 1) =>
   (left: ORIGINAL_TYPE, right: ORIGINAL_TYPE): -1 | 0 | 1 => {
@@ -57,7 +63,9 @@ export const multiSortFunction =
       const [leftValue, rightValue] = isReverse
         ? [mapper(right), mapper(left)]
         : [mapper(left), mapper(right)];
-      if (leftValue === rightValue) continue;
+      if (leftValue === rightValue) {
+        continue;
+      }
       return typeof leftValue === 'string' && typeof rightValue === 'string'
         ? (leftValue.localeCompare(rightValue) as -1 | 0 | 1)
         : leftValue > rightValue
@@ -147,8 +155,11 @@ export function findLastIndex<T>(
   array: RA<T>,
   mapping: (item: T, index: number) => boolean,
 ): number {
-  for (let index = array.length - 1; index >= 0; index--)
-    if (mapping(array[index], index)) return index;
+  for (let index = array.length - 1; index >= 0; index--) {
+    if (mapping(array[index], index)) {
+      return index;
+    }
+  }
   return -1;
 }
 
@@ -207,8 +218,11 @@ export function throttle(callback: () => void, wait: number): () => void {
     const timePassed = time - previous;
     const remaining = wait - timePassed;
 
-    if (remaining <= 0) call();
-    else timeout ??= setTimeout(call, remaining);
+    if (remaining <= 0) {
+      call();
+    } else {
+      timeout ??= setTimeout(call, remaining);
+    }
   }
 
   function call(): void {

@@ -86,7 +86,7 @@ theories(replaceKey, {
     },
   },
   'replacing non-existed key': {
-    in: [{ a: 'a', b: 'b' }, 'c' as 'a', 'c'],
+    in: [{ a: 'a', b: 'b' }, 'c', 'c'],
     out: {
       a: 'a',
       b: 'b',
@@ -105,7 +105,7 @@ theories(removeItem, {
 
 theories(removeKey, {
   'removing a key that is present': [[{ a: 'b', c: 'd' }, 'c'], { a: 'b' }],
-  'removing a key that is not present': [[{ a: 'b' }, 'c' as 'a'], { a: 'b' }],
+  'removing a key that is not present': [[{ a: 'b' }, 'c'], { a: 'b' }],
 });
 
 theories(findLastIndex, [

@@ -40,4 +40,6 @@ if (typeof container === 'object') {
       </Contexts>
     </React.StrictMode>,
   );
-} else output.error('Failed to attach Calendar Plus plugin');
+} else {
+  output.error('Failed to attach Calendar Plus plugin');
+}

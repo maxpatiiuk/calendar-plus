@@ -65,16 +65,24 @@ export function GhostEvents(): null {
                 ctrl: ctrlKey,
                 cmd: metaKey,
               };
-              if (!keys[ghostEventShortcut]) return;
+              if (!keys[ghostEventShortcut]) {
+                return;
+              }
               const isSingleKey =
                 [shiftKey, ctrlKey, metaKey].filter(Boolean).length === 1;
-              if (!isSingleKey) return;
+              if (!isSingleKey) {
+                return;
+              }
               const eventElement = (target as HTMLElement).closest(
                 '[data-eventid]',
               );
-              if (eventElement === null) return;
+              if (eventElement === null) {
+                return;
+              }
               const eventName = getEventName(eventElement) ?? '';
-              if (eventName.length === 0) return;
+              if (eventName.length === 0) {
+                return;
+              }
               setGhostEvents(f.unique([...ghostEvents, eventName].sort()));
             },
           ),
