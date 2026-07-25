@@ -17,7 +17,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 chrome.action.onClicked.addListener(() => {
-  chrome.tabs.create({ url: 'https://calendar.google.com' });
+  void chrome.tabs.create({ url: 'https://calendar.google.com' });
 });
 
 /**
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     request !== null &&
     request.type in requestHandlers
   ) {
-    requestHandlers[request.type as 'ReloadExtension'](
+    void requestHandlers[request.type as 'ReloadExtension'](
       request.request as undefined,
     )
       .then(sendResponse)
@@ -65,7 +65,7 @@ const requestHandlers: {
    */
   async Authenticate({ oldToken }) {
     if (typeof oldToken === 'string') {
-      chrome.identity.removeCachedAuthToken({ token: oldToken });
+      void chrome.identity.removeCachedAuthToken({ token: oldToken });
     }
 
     // "redirectUrl" looks like this:
@@ -143,7 +143,7 @@ const requestHandlers: {
   },
   async RefreshToken({ refreshToken, oldToken }) {
     if (typeof oldToken === 'string') {
-      chrome.identity.removeCachedAuthToken({ token: oldToken });
+      void chrome.identity.removeCachedAuthToken({ token: oldToken });
     }
 
     const authUrl = formatUrl(authBackendUrl, {

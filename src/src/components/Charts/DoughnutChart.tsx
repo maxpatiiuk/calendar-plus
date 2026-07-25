@@ -49,22 +49,20 @@ export function DoughnutChart({
     if (chart === undefined || outerDataRef.current === outerData) {
       return;
     }
-    Array.from(
-      {
-        length: Math.max(chart.data.datasets[0].data.length, outerData.length),
-      },
-      (_, index) => {
-        writable(chart.data.datasets[0].data)[index] = outerData[index];
-      },
+    const outerLength = Math.max(
+      chart.data.datasets[0].data.length,
+      outerData.length,
     );
-    Array.from(
-      {
-        length: Math.max(chart.data.datasets[1].data.length, innerData.length),
-      },
-      (_, index) => {
-        writable(chart.data.datasets[1].data)[index] = innerData[index];
-      },
+    for (let index = 0; index < outerLength; index++) {
+      writable(chart.data.datasets[0].data)[index] = outerData[index];
+    }
+    const innerLength = Math.max(
+      chart.data.datasets[1].data.length,
+      innerData.length,
     );
+    for (let index = 0; index < innerLength; index++) {
+      writable(chart.data.datasets[1].data)[index] = innerData[index];
+    }
     chart.update();
   }, [innerData, outerData, chart, handleLoaded]);
 

@@ -23,6 +23,8 @@ export function RegexInput({
       onValueChange={handleChange}
       onBlur={(): void => {
         try {
+          // User input - don't use strict mode
+          // eslint-disable-next-line require-unicode-regexp
           new RegExp(value);
           setValidation('');
         } catch (error) {

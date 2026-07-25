@@ -12,7 +12,7 @@ export function setMainChangeListener(callback: () => void) {
  * Listen for the changes to events displayed on the page and call a callback
  * when changes are detected.
  */
-mainElementPromise.then((main) => {
+void mainElementPromise.then((main) => {
   if (main === undefined) {
     output.error('Unable to find the main element');
     return;

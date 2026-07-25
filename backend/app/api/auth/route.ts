@@ -27,7 +27,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const payload: Record<string, unknown> = {};
+  const payload: Record<string, string> = {};
   const refreshToken = request.nextUrl.searchParams.get('refreshToken');
   if (typeof refreshToken === 'string') {
     payload.refresh_token = refreshToken;
@@ -63,12 +63,12 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     const data = await response.text();
 
+    const headers = new Headers(response.headers);
+    headers.set('Access-Control-Allow-Origin', accessControlAllowOrigin);
+
     return new Response(data, {
       status: response.status,
-      headers: {
-        ...response.headers,
-        'Access-Control-Allow-Origin': accessControlAllowOrigin,
-      },
+      headers,
     });
   } catch (error: unknown) {
     return new Response(String(error), { status: 500 });

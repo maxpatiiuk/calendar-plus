@@ -118,34 +118,34 @@ function extractTimeLikeNumbers(
   [isPrefix, am, pm, amAlt, pmAlt]: LanguageData,
 ): readonly number[] {
   const numbers: number[] = [];
-  Array.from(
-    normalizeNumbers(string).matchAll(reTimeNumber) ?? [],
-    ({ index, 0: numberString }) => {
-      const length = numberString.length;
-      numberString =
-        numberString.startsWith('0') && numberString.length > 1
-          ? numberString.slice(1)
-          : numberString;
-      const isShort = numberString.length <= shortLengthTimeNumber;
-      const substring = isPrefix
-        ? string.slice(0, index)
-        : string.slice(index + length);
-      const isAm = isPrefix
-        ? substring.endsWith(am)
-        : substring.startsWith(am) ||
-          (amAlt !== undefined && substring.startsWith(amAlt));
-      const isPm = isPrefix
-        ? substring.endsWith(pm)
-        : substring.startsWith(pm) ||
-          (pmAlt !== undefined && substring.startsWith(pmAlt));
+  for (const { index, 0: numberString_ } of normalizeNumbers(string).matchAll(
+    reTimeNumber,
+  )) {
+    let numberString = numberString_;
+    const length = numberString.length;
+    numberString =
+      numberString.startsWith('0') && numberString.length > 1
+        ? numberString.slice(1)
+        : numberString;
+    const isShort = numberString.length <= shortLengthTimeNumber;
+    const substring = isPrefix
+      ? string.slice(0, index)
+      : string.slice(index + length);
+    const isAm = isPrefix
+      ? substring.endsWith(am)
+      : substring.startsWith(am) ||
+        (amAlt !== undefined && substring.startsWith(amAlt));
+    const isPm = isPrefix
+      ? substring.endsWith(pm)
+      : substring.startsWith(pm) ||
+        (pmAlt !== undefined && substring.startsWith(pmAlt));
 
-      // Ignore day and month numbers
-      const isTimeNumber = !isShort || isAm || isPm;
-      if (isTimeNumber) {
-        numbers.push(parseTimeNumber(numberString, isAm, isPm));
-      }
-    },
-  );
+    // Ignore day and month numbers
+    const isTimeNumber = !isShort || isAm || isPm;
+    if (isTimeNumber) {
+      numbers.push(parseTimeNumber(numberString, isAm, isPm));
+    }
+  }
   return numbers;
 }
 

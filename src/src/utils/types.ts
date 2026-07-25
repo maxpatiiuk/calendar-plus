@@ -76,10 +76,8 @@ export const isFunction = <T>(
  * in each place
  */
 export function setDevelopmentGlobal(name: string, value: unknown): void {
-  if (process.env.NODE_ENV === 'development')
-  // @ts-expect-error
-  {
-    globalThis[name] = value;
+  if (process.env.NODE_ENV === 'development') {
+    (globalThis as R<unknown>)[name] = value;
   }
 }
 

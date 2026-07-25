@@ -42,7 +42,7 @@ Editing the layout
 
 1. Pre-requisites:
 
-   ```
+   ```text
    Node.js 18
    Npm 8
    ```

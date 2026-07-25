@@ -315,6 +315,6 @@ async function cleanupLooseChunks(
   if (value === undefined) {
     return;
   }
-  chrome.storage.sync.remove(fullKey);
-  cleanupLooseChunks(key, index + 1);
+  await chrome.storage.sync.remove(fullKey);
+  await cleanupLooseChunks(key, index + 1);
 }

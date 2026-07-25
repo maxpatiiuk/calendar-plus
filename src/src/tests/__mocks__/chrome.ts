@@ -15,7 +15,7 @@ Object.defineProperty(globalThis, 'chrome', {
     storage: {
       local: {
         get: async (): Promise<unknown> => localData,
-        async set(entries: IR<unknown>) {
+        async set(entries: IR<unknown>): Promise<void> {
           Object.entries(entries).forEach(([key, value]) => {
             localData[key] = value;
           });
@@ -27,7 +27,7 @@ Object.defineProperty(globalThis, 'chrome', {
       },
       sync: {
         get: async (): Promise<unknown> => syncData,
-        async set(entries: IR<unknown>) {
+        async set(entries: IR<unknown>): Promise<void> {
           Object.entries(entries).forEach(([key, value]) => {
             syncData[key] = value;
           });

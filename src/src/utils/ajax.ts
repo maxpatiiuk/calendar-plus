@@ -21,19 +21,21 @@ export const ajax = async (
     retryAuth = true,
     headers,
     body,
-    ...options
+    ...requestOptions
   }: Omit<RequestInit, 'body'> & {
     // If object is passed to body, it is stringified
     readonly body?: FormData | IR<unknown> | RA<unknown> | string;
     readonly retryAuth?: boolean;
   } = {},
-): Promise<Response> =>
-  await fetch(url, {
-    ...options,
-    headers: {
-      ...putToken(url),
-      ...headers,
-    },
+): Promise<Response> => {
+  const requestHeaders = new Headers(headers);
+  for (const [name, value] of Object.entries(putToken(url) ?? {})) {
+    requestHeaders.set(name, value);
+  }
+
+  return await fetch(url, {
+    ...requestOptions,
+    headers: requestHeaders,
     body:
       typeof body === 'object' && !(body instanceof FormData)
         ? JSON.stringify(body)
@@ -51,7 +53,12 @@ export const ajax = async (
       output.log('Unauthorized, retrying with new token');
       return await handleAuth().then(
         async () =>
-          await ajax(url, { ...options, body, headers, retryAuth: false }),
+          await ajax(url, {
+            ...requestOptions,
+            body,
+            headers,
+            retryAuth: false,
+          }),
       );
     }
 
@@ -59,6 +66,7 @@ export const ajax = async (
       `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
     );
   });
+};
 
 /**
  * Include Google OAuth token if needed

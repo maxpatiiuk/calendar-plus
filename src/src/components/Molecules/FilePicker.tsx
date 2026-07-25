@@ -161,6 +161,8 @@ export const fileToText = async (
         ? resolve(target.result)
         : reject(new Error('File is not a text file')),
     );
-    fileReader.addEventListener('error', () => reject(fileReader.error));
+    fileReader.addEventListener('error', () =>
+      reject(fileReader.error ?? new Error('Failed to read file')),
+    );
     fileReader.readAsText(file, encoding);
   });

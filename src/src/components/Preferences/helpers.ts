@@ -11,7 +11,7 @@ export const getPrefDefinition = <
   category: CATEGORY,
   item: ITEM,
 ): Preferences[CATEGORY]['items'][ITEM] =>
-  // @ts-expect-error
+  // @ts-expect-error The mapped union cannot retain the correlated item key.
   preferenceDefinitions[category].items[item];
 
 export type UserPreferences = {

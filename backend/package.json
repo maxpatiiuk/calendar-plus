@@ -1,5 +1,6 @@
 {
   "name": "calendar-stats-backend",
+  "description": "Backend for the Calendar Plus browser extension",
   "homepage": "https://github.com/maxpatiiuk/calendar-stats#readme",
   "private": true,
   "type": "module",

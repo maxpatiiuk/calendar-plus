@@ -65,11 +65,11 @@ function hexToHsl(hex: string): readonly [number, number, number] {
   let saturation = 0;
   let luminosity = 0;
 
-  if (delta == 0) {
+  if (delta === 0) {
     hue = 0;
-  } else if (channelMax == red) {
+  } else if (channelMax === red) {
     hue = ((green - blue) / delta) % 6;
-  } else if (channelMax == green) {
+  } else if (channelMax === green) {
     hue = (blue - red) / delta + 2;
   } else {
     hue = (red - green) / delta + 4;
@@ -82,7 +82,7 @@ function hexToHsl(hex: string): readonly [number, number, number] {
   }
 
   luminosity = (channelMax + channelMin) / 2;
-  saturation = delta == 0 ? 0 : delta / (1 - Math.abs(2 * luminosity - 1));
+  saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * luminosity - 1));
   saturation = +(saturation * 100).toFixed(1);
   luminosity = +(luminosity * 100).toFixed(1);
 

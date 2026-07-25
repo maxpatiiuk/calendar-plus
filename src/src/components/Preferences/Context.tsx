@@ -10,7 +10,7 @@ import { setDevMode } from '../Contexts/devMode';
  */
 export const PreferencesContext = React.createContext<GetSet<UserPreferences>>([
   {},
-  () => {},
+  (): void => undefined,
 ]);
 PreferencesContext.displayName = 'PreferencesContext';
 
@@ -22,7 +22,7 @@ export function PreferencesProvider({
   const preferences = useStorage('preferences');
   const nonNullPreferences =
     preferences[0] === undefined
-      ? ([{}, () => {}] as const)
+      ? ([{}, (): void => undefined] as const)
       : (preferences as GetSet<UserPreferences>);
 
   const [devMode = false] = useStorage('devMode');

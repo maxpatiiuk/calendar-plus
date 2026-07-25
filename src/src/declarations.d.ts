@@ -19,7 +19,7 @@ declare global {
    * Fix for Array.isArray() narrowing RA<T> to any[]
    */
   interface ArrayConstructor {
-    isArray(argument: RA<any> | any): argument is RA<any>;
+    isArray(argument: any): argument is RA<any>;
   }
 
   interface Array {

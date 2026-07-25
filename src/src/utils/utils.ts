@@ -146,7 +146,7 @@ export const removeKey = <
   object: DICTIONARY,
   ...toOmit: RA<OMIT>
 ): Omit<DICTIONARY, OMIT> =>
-  // @ts-expect-error
+  // @ts-expect-error Object.fromEntries cannot preserve the omitted key type.
   Object.fromEntries(
     Object.entries(object).filter(([key]) => !f.includes(toOmit, key)),
   );
