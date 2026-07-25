@@ -32,7 +32,6 @@ export type DayHours = {
   readonly hourly: RA<number>;
 };
 
-/* eslint-disable functional/prefer-readonly-type */
 export type WritableDayHours = {
   total: number;
   hourly: number[];
@@ -43,7 +42,6 @@ type RawEventsStore = {
     [VIRTUAL_CALENDAR in string]: R<WritableDayHours>;
   };
 };
-/* eslint-enable functional/prefer-readonly-type */
 export type EventsStore = {
   readonly [CALENDAR_ID in string]: {
     readonly [summedDurations]: IR<DayHours>;
@@ -305,7 +303,6 @@ const maxResults = 2500;
 
 export const blankHours = (): WritableDayHours => ({
   total: 0,
-  // eslint-disable-next-line functional/prefer-readonly-type
   hourly: Array.from({ length: 24 }).fill(0) as number[],
 });
 

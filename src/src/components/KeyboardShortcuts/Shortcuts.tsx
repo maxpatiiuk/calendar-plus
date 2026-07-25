@@ -42,7 +42,6 @@ export const SetKeyboardShortcuts: PreferenceRenderer<KeyboardShortcuts> = ({
   React.useEffect(() => {
     if (hasEmptyShortcut)
       setShortcuts(shortcuts.filter((shortcut) => shortcut !== ''));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasEmptyShortcut]);
 
   return (

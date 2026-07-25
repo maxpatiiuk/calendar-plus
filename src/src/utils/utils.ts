@@ -163,7 +163,6 @@ export const group = <KEY, VALUE>(
 ): RA<readonly [key: KEY, values: RA<VALUE>]> =>
   Array.from(
     entries
-      // eslint-disable-next-line functional/prefer-readonly-type
       .reduce<Map<KEY, RA<VALUE>>>(
         (grouped, [key, value]) =>
           grouped.set(key, [...(grouped.get(key) ?? []), value]),

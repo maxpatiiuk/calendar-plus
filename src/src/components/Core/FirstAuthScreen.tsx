@@ -37,7 +37,6 @@ export function FirstAuthScreen({
         event.target === dialogRef.current ? handleClose() : undefined
       }
     >
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
         className="flex flex-col gap-4 p-6"
         onClick={(event): void => event.stopPropagation()}

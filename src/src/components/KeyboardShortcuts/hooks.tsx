@@ -33,10 +33,8 @@ export function useKeyboardShortcut<
 
   const hasCallback = typeof callback === 'function';
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useManualKeyboardShortcut(resolvedShortcut, callback);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const localizedShortcut = useKeyboardShortcutLabel(resolvedShortcut);
 
   return hasCallback ? localizedShortcut : '';

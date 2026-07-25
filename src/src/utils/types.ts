@@ -30,12 +30,10 @@ export type GetOrSet<T> = readonly [
  * - It makes it explicitly known that the value is meant to be mutated
  * - It doesn't trigger the "functional/prefer-readonly-type" ESLint rule.
  */
-// eslint-disable-next-line functional/prefer-readonly-type
 export type WritableArray<T> = T[];
 
 /** Cast a type as defined. Throws at runtime if it is not defined */
 export function defined<T>(value: T | undefined, message?: string): T {
-  // eslint-disable-next-line functional/no-throw-statement
   if (value === undefined)
     return output.throw(message ?? 'Value is not defined');
   else return value;
@@ -45,7 +43,6 @@ export function defined<T>(value: T | undefined, message?: string): T {
 export const isDefined = <T>(value: T | undefined): value is T =>
   value !== undefined;
 
-// eslint-disable-next-line functional/prefer-readonly-type
 export type Writable<T> = {
   -readonly [K in keyof T]: T[K];
 };

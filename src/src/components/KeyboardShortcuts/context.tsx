@@ -66,7 +66,6 @@ const keysToString = (modifiers: RA<ModifierKey>, keys: RA<string>): string =>
   [...modifiers, ...keys].join(keyJoinSymbol);
 export const keyJoinSymbol = '+';
 
-// eslint-disable-next-line functional/prefer-readonly-type
 const pressedKeys: string[] = [];
 
 // Keep this code fast as it's in the hot path

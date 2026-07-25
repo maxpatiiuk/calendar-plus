@@ -12,9 +12,7 @@ import type { IR, RA, RR } from './utils/types';
  * to overwrite the default definitions
  */
 /* eslint-disable @typescript-eslint/method-signature-style */
-/* eslint-disable functional/no-method-signature */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-/* eslint-disable functional/prefer-readonly-type */
 
 declare global {
   /**
@@ -60,6 +58,4 @@ declare global {
 }
 
 /* eslint-enable @typescript-eslint/method-signature-style */
-/* eslint-enable functional/no-method-signature */
 /* eslint-enable @typescript-eslint/consistent-type-definitions */
-/* eslint-enable functional/prefer-readonly-type */

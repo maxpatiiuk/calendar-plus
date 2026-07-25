@@ -15,7 +15,6 @@ export function localizeKeyboardShortcut(shortcut: string): string {
 
   const modifiers: WritableArray<string> = [];
   const nonModifiers: WritableArray<string> = [];
-  // eslint-disable-next-line functional/no-loop-statement
   for (const key of parts) {
     const localizedModifier = keyboardModifierLocalization[key as ModifierKey];
     if (typeof localizedModifier === 'string')

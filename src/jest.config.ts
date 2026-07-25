@@ -2,7 +2,6 @@ import type { InitialOptionsTsJest } from 'ts-jest';
 
 /* eslint-disable multiline-comment-style */
 /* eslint-disable capitalized-comments */
-/* eslint-disable write-good-comments/write-good-comments */
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
@@ -233,4 +232,3 @@ const config: InitialOptionsTsJest = {
 export default config;
 /* eslint-enable multiline-comment-style */
 /* eslint-enable capitalized-comments */
-/* eslint-enable write-good-comments/write-good-comments */
