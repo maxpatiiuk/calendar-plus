@@ -4,6 +4,7 @@ import { join } from 'node:path/posix';
 import { getLanguageData, rawDomEventToParsed } from '../parseTime';
 import { ParsedDomEvent, RawDomEvent } from '../types';
 import inspector from 'inspector';
+import { describe, expect, test } from 'vitest';
 
 const isInDebugger = inspector.url() !== undefined;
 
@@ -16,7 +17,7 @@ const languageAmPmCount = languageCount * 2;
 const languageSummaryWithTimeCount = languageAmPmCount * 2;
 
 const parsed = fs
-  .readFileSync(join(__dirname, 'fixtures/scrapped.txt'), 'utf8')
+  .readFileSync(join(import.meta.dirname, 'fixtures/scrapped.txt'), 'utf8')
   .split('\n\n\n')
   .map((column) =>
     column.length === 0

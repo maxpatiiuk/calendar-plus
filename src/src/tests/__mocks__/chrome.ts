@@ -1,9 +1,5 @@
 /**
- * There already is a library "jest-webextension-mock" which provides Chrome
- * Extension API mocks, but it does not support Manifest V3
- *
- * There is also "jest-chrome" but it does not support Jest 29 at the moment
- *
+ * Minimal Chrome Extension API mock containing only the APIs used in tests.
  */
 import type { IR, R } from '../../utils/types';
 

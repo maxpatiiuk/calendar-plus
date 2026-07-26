@@ -38,12 +38,12 @@ browser extension does not work for debugging it.
 Instead, a standalone React DevTools (an Electron app) needs to be used.
 [Installation Instructions](https://github.com/facebook/react/tree/main/packages/react-devtools#installation),
 
-Note, this will only work for when WebPack is run in development mode as we
-disabled react DevTools integration in production to reduce bundle size.
+This only works while the Vite development build is running because React
+DevTools integration is excluded from production to reduce bundle size.
 
 ## Testing
 
-Unit tests are powered by Jest. Static Typechecking is powered by TypeScript.
+Unit tests are powered by Vitest. Static type checking is powered by TypeScript.
 
 You can run both like this:
 
@@ -57,7 +57,7 @@ or:
 npm t
 ```
 
-Alternatively, you can start Jest in watch mode:
+Alternatively, start Vitest in watch mode:
 
 ```sh
 npm run unitTests:watch

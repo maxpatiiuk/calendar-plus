@@ -19,8 +19,8 @@
       "resources": [
         "/public/images/web_dark_rd_SI@2x.webp",
         "/public/images/web_light_rd_SI@2x.webp",
-        "/dist/main.bundle.js.map",
-        "/dist/background.bundle.js.map"
+        "/dist/main.js.map",
+        "/dist/background.js.map"
       ],
       "matches": ["https://calendar.google.com/*"]
     }
@@ -29,12 +29,13 @@
   "current_locale": "en",
   "permissions": ["identity", "storage"],
   "background": {
-    "service_worker": "./dist/background.bundle.js"
+    "service_worker": "./dist/background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://calendar.google.com/calendar/u/0/r/*"],
-      "js": ["./dist/main.bundle.js"]
+      "js": ["./dist/main.js"],
+      "css": ["./dist/main.css"]
     }
   ],
   "cross_origin_embedder_policy": {

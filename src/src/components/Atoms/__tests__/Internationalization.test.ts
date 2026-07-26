@@ -8,6 +8,7 @@ import {
   getRelativeDate,
   months,
 } from '../Internationalization';
+import { describe, expect, test } from 'vitest';
 
 test('months names are localized', () => {
   expect(months).toEqual([

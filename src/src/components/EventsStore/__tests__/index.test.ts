@@ -1,5 +1,5 @@
 import { theories } from '../../../tests/utils';
-import type { RA, RR } from '../../../utils/types';
+import type { RA, RR, WritableArray } from '../../../utils/types';
 import {
   countDaysBetween,
   dateToDateTime,
@@ -330,8 +330,13 @@ theories(extractData, [
   },
 ]);
 
-const getHours = (hours: RR<number, number>): RA<number> =>
-  Array.from({ length: 24 }, (_, index) => hours[index]);
+const getHours = (hours: RR<number, number>): RA<number> => {
+  const output: WritableArray<number> = [];
+  Object.entries(hours).forEach(([hour, duration]) => {
+    output[Number(hour)] = duration;
+  });
+  return output;
+};
 
 const fullDay = Array.from({ length: 24 }).fill(60);
 

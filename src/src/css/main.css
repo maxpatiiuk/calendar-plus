@@ -1,23 +1,14 @@
-/**
- * This injects Tailwind's base styles and any base styles registered by
- * plugins.
- */
-@import 'tailwindcss/base';
+@config '../../tailwind.config.js';
+@custom-variant light (body:not(.calendar-plus-dark) &);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@source '../';
+
 @import './base.css';
 
-/**
- * This injects Tailwind's component classes and any component classes
- * registered by plugins.
- */
-@import 'tailwindcss/components';
 @import './hide-edit-all.css';
 @import './condense-interface.css';
 @import './ghost-events.css';
 @import './autocomplete-indicator.css';
 
-/**
- * This injects Tailwind's utility classes and any utility classes registered
- * by plugins.
- */
-@import 'tailwindcss/utilities';
 @import './utilities.css';

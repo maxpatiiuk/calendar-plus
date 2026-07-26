@@ -1,3 +1,5 @@
+import { beforeAll, vi } from 'vitest';
+
 /**
  * Fixed timestamp to use in tests for reproducible results
  */
@@ -9,6 +11,6 @@ export const testTime = new Date('2022-08-31T03:37:10.4');
  */
 export const mockTime = (date = testTime): void =>
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(date);
+    vi.useFakeTimers();
+    vi.setSystemTime(date);
   });

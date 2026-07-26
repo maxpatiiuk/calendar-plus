@@ -1,8 +1,9 @@
 import { listen } from '../events';
+import { expect, test, vi } from 'vitest';
 
 test('listen', () => {
   const element = new EventTarget();
-  const callback = jest.fn();
+  const callback = vi.fn();
   const destructor = listen(element, 'click', callback);
   expect(callback).not.toHaveBeenCalled();
   element.dispatchEvent(new MouseEvent('click'));

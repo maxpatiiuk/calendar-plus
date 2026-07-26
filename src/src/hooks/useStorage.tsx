@@ -38,7 +38,7 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   },
   preferences: {
     type: 'sync',
-    defaultValue: {},
+    defaultValue: {} as UserPreferences,
   },
   ghostEvents: {
     type: 'sync',
@@ -52,15 +52,15 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   storageVersions: {
     type: 'sync',
     // Keys are names of storage items
-    defaultValue: {},
+    defaultValue: {} as Partial<IR<string>>,
   },
   customViewSize: {
     type: 'sync',
-    defaultValue: defaultCustomViewSize,
+    defaultValue: defaultCustomViewSize as number,
   },
   timeChartMode: {
     type: 'sync',
-    defaultValue: 'total',
+    defaultValue: 'total' as TimeChartMode,
   },
   synonyms: {
     type: 'sync',
@@ -72,16 +72,16 @@ export const storageDefinitions = ensure<IR<StorageItem<unknown>>>()({
   },
   weekStart: {
     type: 'sync',
-    defaultValue: 0,
+    defaultValue: 0 as number,
   },
   devMode: {
     type: 'sync',
-    defaultValue: false,
+    defaultValue: false as boolean,
   },
   theme: {
     // Google Calendar's theme preference is synced across devices
     type: 'sync',
-    defaultValue: 'light',
+    defaultValue: 'light' as 'dark' | 'light',
   },
 } as const);
 

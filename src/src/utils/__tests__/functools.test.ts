@@ -1,4 +1,5 @@
 import { f } from '../functools';
+import { describe, expect, test } from 'vitest';
 
 describe('f.includes', () => {
   test('positive case', () => expect(f.includes([1, 2, 3], 1)).toBe(true));

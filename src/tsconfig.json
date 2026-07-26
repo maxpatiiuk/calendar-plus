@@ -2,6 +2,6 @@
   "include": ["**/*.ts", "**/*.tsx"],
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "node", "chrome", "gapi", "gapi.client", "gapi.calendar"]
+    "types": ["node", "chrome", "gapi", "gapi.client", "gapi.calendar"]
   }
 }

@@ -1,15 +1,6 @@
-/.vscode/
-
 # dependencies
 /src/dist/
 /node_modules/
-
-# testing
-/src/coverage/
-/src/temp/
-
-# build output
-/src/build/
 
 # misc
 /src/.DS_Store

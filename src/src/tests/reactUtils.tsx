@@ -3,6 +3,7 @@ import type { RenderOptions, RenderResult } from '@testing-library/react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
+import { expect, test } from 'vitest';
 
 import type { IR } from '../utils/types';
 
@@ -33,7 +34,7 @@ export function snapshot<PROPS extends IR<unknown>>(
   props: PROPS,
   testName?: string,
 ): void {
-  const { name, displayName } = component as unknown as {
+  const { name, displayName = name } = component as unknown as {
     readonly displayName: string;
     readonly name: string;
   };

@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest';
+
 import { output } from '../components/Errors/exceptions';
 import type { IR, RA } from '../utils/types';
 

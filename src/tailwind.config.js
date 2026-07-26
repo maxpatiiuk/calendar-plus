@@ -7,17 +7,6 @@ const darkThemeSelector = '.calendar-plus-dark';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{ts,tsx}'],
-  // Disable unneeded components to reduce performance impact
-  corePlugins: {
-    // Tailwind style reset breaks Google Calendar styling
-    preflight: false,
-    float: false,
-    clear: false,
-    skew: false,
-    caretColor: false,
-    sepia: false,
-  },
   darkMode: ['selector', darkThemeSelector],
   theme: {
     // Make default border radius more rounded
@@ -66,7 +55,4 @@ export default {
       },
     },
   },
-  plugins: [
-    ({ addVariant }) => addVariant('light', `body:not(${darkThemeSelector}) &`),
-  ],
 };

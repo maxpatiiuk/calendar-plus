@@ -13,6 +13,7 @@ import {
   toggleItem,
 } from '../utils';
 import { theories } from '../../tests/utils';
+import { describe, expect, test } from 'vitest';
 
 theories(capitalize, {
   'simple case': { in: ['capitalize'], out: 'Capitalize' },
@@ -86,7 +87,7 @@ theories(replaceKey, {
     },
   },
   'replacing non-existed key': {
-    in: [{ a: 'a', b: 'b' }, 'c', 'c'],
+    in: [{ a: 'a', b: 'b' }, 'c' as 'a', 'c'],
     out: {
       a: 'a',
       b: 'b',
@@ -105,7 +106,7 @@ theories(removeItem, {
 
 theories(removeKey, {
   'removing a key that is present': [[{ a: 'b', c: 'd' }, 'c'], { a: 'b' }],
-  'removing a key that is not present': [[{ a: 'b' }, 'c'], { a: 'b' }],
+  'removing a key that is not present': [[{ a: 'b' }, 'c' as 'a'], { a: 'b' }],
 });
 
 theories(findLastIndex, [
