@@ -18,7 +18,11 @@ export type Synonym = {
 /**
  * Show list of configured calendar synonyms and allow to edit them
  */
-export function Synonyms({ label }: { readonly label: string }): JSX.Element {
+export function Synonyms({
+  label,
+}: {
+  readonly label: string;
+}): React.JSX.Element {
   const [synonyms, setSynonyms] = useStorage('synonyms');
   const editing = React.useState<boolean>(false);
   const [isEditing] = editing;

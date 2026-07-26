@@ -50,7 +50,7 @@ export function TrackCurrentView({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   const [currentView, setCurrentView] = React.useState<CurrentView | undefined>(
     undefined,
   );

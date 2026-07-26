@@ -14,9 +14,9 @@ import { output } from '../Errors/exceptions';
  * Used when an elements needs to be rendered outside of the bounds of
  * the container that has overflow:hidden
  */
-export function usePortal(children: JSX.Element): {
+export function usePortal(children: React.JSX.Element): {
   element: HTMLElement;
-  portal: JSX.Element;
+  portal: React.JSX.Element;
 } {
   const element = React.useMemo(() => document.createElement('div'), []);
   React.useEffect(() => () => element.remove(), [element]);
@@ -36,8 +36,8 @@ const overlayPortalStack = new Set<unknown>();
 export function OverlayPortal({
   children,
 }: {
-  readonly children: JSX.Element;
-}): JSX.Element {
+  readonly children: React.JSX.Element;
+}): React.JSX.Element {
   const { element, portal } = usePortal(children);
 
   React.useEffect(() => {

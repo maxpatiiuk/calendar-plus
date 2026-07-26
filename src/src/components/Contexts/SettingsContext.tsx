@@ -21,7 +21,7 @@ export function SettingsProvider({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   const { token } = React.useContext(AuthContext);
   const isAuthenticated = typeof token === 'string';
   const [weekStart = 0, setWeekStart] = useStorage('weekStart');

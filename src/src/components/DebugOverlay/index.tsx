@@ -1,10 +1,12 @@
+import type React from 'react';
+
 import { sendRequest } from '../Background/messages';
 import { output } from '../Errors/exceptions';
 
 /**
  * Used when in development. Adds a button to reload the extension
  */
-export function DebugOverlay(): JSX.Element {
+export function DebugOverlay(): React.JSX.Element {
   return (
     <div className="absolute top-0 left-0">
       <button

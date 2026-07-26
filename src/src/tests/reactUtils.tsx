@@ -56,7 +56,7 @@ export function LeakContext<T>({
   readonly children?: React.ReactNode;
   readonly context: React.Context<T>;
   readonly onLoaded: (value: T) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const value = React.useContext(context);
   React.useEffect(() => {
     handleLoaded(value);

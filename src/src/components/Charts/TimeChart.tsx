@@ -24,7 +24,7 @@ export function TimeChart({
 }: {
   readonly label: string;
   readonly durations: EventsStore | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [mode, setMode] = useStorage('timeChartMode');
 
   const calendars = React.useContext(CalendarsContext)!;
@@ -194,7 +194,7 @@ function CalendarRow({
   readonly calendar: CalendarListEntry;
   readonly times: DayHours;
   readonly durations: EventsStore[string];
-}): JSX.Element {
+}): React.JSX.Element {
   const [isCollapsed, setIsCollapsed] = React.useState(true);
   return (
     <>
@@ -231,8 +231,8 @@ function Row({
   readonly label: string;
   readonly backgroundColor: string;
   readonly times: DayHours;
-  readonly collapseButton?: JSX.Element;
-}): JSX.Element {
+  readonly collapseButton?: React.JSX.Element;
+}): React.JSX.Element {
   const max = Math.max(...hourly, 1);
   return (
     <tr>
@@ -284,7 +284,11 @@ const getOpacity = (value: number, max: number): string =>
     .toString(16)
     .padStart(2, '0');
 
-function TotalsRow({ times }: { readonly times: IR<DayHours> }): JSX.Element {
+function TotalsRow({
+  times,
+}: {
+  readonly times: IR<DayHours>;
+}): React.JSX.Element {
   const calendars = React.useContext(CalendarsContext)!;
   const totals = React.useMemo(
     () =>
@@ -322,7 +326,7 @@ function VirtualCalendarRows({
 }: {
   readonly calendar: CalendarListEntry;
   readonly durations: EventsStore[string];
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <>
       {Object.entries(durations).map(([virtualCalendar, row]) => (
@@ -345,7 +349,7 @@ function VirtualCalendarRow({
   readonly label: string;
   readonly backgroundColor: string;
   readonly row: IR<DayHours>;
-}): JSX.Element {
+}): React.JSX.Element {
   const [mode = 'total'] = useStorage('timeChartMode');
   const times = React.useMemo(() => getRowData(row, mode), [row, mode]);
   return (

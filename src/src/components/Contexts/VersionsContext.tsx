@@ -17,7 +17,7 @@ export function VersionsContextProvider({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   const value = useStorage('storageVersions');
   return (
     <VersionsContext.Provider value={value}>

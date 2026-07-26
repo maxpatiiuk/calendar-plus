@@ -6,42 +6,43 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "package": "npm run build && (cd src && zip -FSr ../calendar-plus.zip manifest.json public dist)",
     "build": "vite build --config src/vite.config.ts",
-    "watch": "vite build --config src/vite.config.ts --mode development --watch",
+    "postinstall": "husky",
+    "package": "npm run build && (cd src && zip -FSr ../calendar-plus.zip manifest.json public dist)",
     "test": "npm run typeCheck && npm run unitTests",
     "typeCheck": "node node_modules/typescript-7/bin/tsc --project src",
     "unitTests": "vitest run --config src/vite.config.ts",
     "unitTests:watch": "vitest --config src/vite.config.ts",
-    "postinstall": "husky"
+    "watch": "vite build --config src/vite.config.ts --mode development --watch"
   },
   "dependencies": {
-    "chart.js": "^4.4.2",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
-    "typesafe-reducer": "^1.0.4"
+    "chart.js": "^4.5.1",
+    "react": "^19.2.8",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.8",
+    "typesafe-reducer": "^2.0.0"
   },
   "devDependencies": {
     "@arcgis/eslint-config": "5.2.0-next.56",
     "@tailwindcss/vite": "^4.3.3",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^15.0.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.5.2",
-    "@types/chrome": "^0.0.266",
+    "@types/chrome": "^0.2.2",
     "@types/gapi": "^0.0.47",
     "@types/gapi.calendar": "^3.0.11",
     "@types/gapi.client": "^1.0.8",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.78",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
     "@types/react-devtools": "^3.6.2",
-    "@types/react-dom": "^18.2.25",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^10.2.0",
     "happy-dom": "^20.11.1",
     "husky": "^9.1.7",
-    "lint-staged": "^16.3.1",
+    "lint-staged": "^17.2.0",
     "prettier": "^3.8.1",
-    "react-devtools": "^5.0.2",
+    "react-devtools": "^7.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "typescript-7": "npm:typescript@^7.0.2",
@@ -65,6 +66,9 @@
   ],
   "directories": {
     "test": "tests"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "repository": {
     "type": "git",

@@ -25,7 +25,7 @@ import { devMode } from '../Contexts/devMode';
 /**
  * Entrypoint react component for the extension
  */
-export function App(): JSX.Element | null {
+export function App(): React.JSX.Element | null {
   const [state, setState] = React.useState<'closed' | 'main' | 'preferences'>(
     'closed',
   );

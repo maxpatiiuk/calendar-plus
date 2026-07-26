@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { commonText } from '../../localization/common';
 import { Input } from '../Atoms';
 import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';
@@ -15,7 +17,7 @@ export function DurationPicker({
   readonly value: number;
   readonly onChange: (newValue: number) => void;
   readonly maxHours?: number;
-}): JSX.Element {
+}): React.JSX.Element {
   const hours = Math.floor(value / MINUTES_IN_HOUR);
   const minutes = value % MINUTES_IN_HOUR;
   return (

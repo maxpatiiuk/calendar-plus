@@ -39,7 +39,7 @@ export function StackedChart({
   durations,
 }: {
   readonly durations: EventsStore | undefined;
-}): JSX.Element | null {
+}): React.JSX.Element | null {
   const { view } = React.useContext(CurrentViewContext)!;
   const calendars = React.useContext(CalendarsContext);
   const labels = React.useMemo(
@@ -101,7 +101,7 @@ export function StackedChart({
               tooltip: {
                 callbacks: {
                   label: ({ dataset, parsed }) =>
-                    `${dataset.label!}: ${formatHoursDuration(parsed.y)}`,
+                    `${dataset.label!}: ${formatHoursDuration(parsed.y ?? 0)}`,
                 },
               },
             },

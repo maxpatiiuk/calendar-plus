@@ -94,7 +94,7 @@ function EditKeyboardShortcut({
   readonly shortcut: string;
   readonly onSave: ((shortcut: string | undefined) => void) | undefined;
   readonly onEditStart: (() => void) | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [localState, setLocalState] = useTriggerState(shortcut);
   const parts = localState.length === 0 ? [] : localState.split(keyJoinSymbol);
   const isEditing = typeof handleSave === 'function';

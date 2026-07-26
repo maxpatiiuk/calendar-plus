@@ -26,7 +26,7 @@ export function GoalsWidget({
 }: {
   readonly label: string;
   readonly durations: EventsStore | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [goals, setGoals] = useStorage('goals');
   const calendars = React.useContext(CalendarsContext);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -95,7 +95,7 @@ function Goals({
   readonly goals: RA<Goal>;
   readonly durations: EventsStore | undefined;
   readonly calendars: RA<CalendarListEntry>;
-}): JSX.Element {
+}): React.JSX.Element {
   const hasGoals = goals.length > 0;
   return typeof durations === 'object' ? (
     <div
@@ -133,7 +133,7 @@ function GoalComponent({
   readonly goal: Goal;
   readonly durations: EventsStore;
   readonly calendars: RA<CalendarListEntry>;
-}): JSX.Element | null {
+}): React.JSX.Element | null {
   const calendar = calendars.find(({ id }) => id === calendarId);
   const currentDurations = durations[calendarId];
   const currentDuration = React.useMemo(

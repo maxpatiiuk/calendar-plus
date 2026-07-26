@@ -13,7 +13,7 @@ export function FirstAuthScreen({
 }: {
   readonly onClose: () => void;
   readonly onAuth: () => Promise<void>;
-}): JSX.Element {
+}): React.JSX.Element {
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
   React.useEffect(() => {
     dialogRef.current?.showModal();

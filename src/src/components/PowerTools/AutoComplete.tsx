@@ -25,7 +25,7 @@ export function AutoComplete({
   durations,
 }: {
   durations: unknown;
-}): JSX.Element {
+}): React.JSX.Element {
   const calendars = React.useContext(CalendarsContext);
 
   const [autocompleteFromCurrentWeek] = usePref(

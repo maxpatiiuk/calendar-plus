@@ -22,7 +22,7 @@ export function Gage({
   // Sizes in rem
   readonly size: number;
   readonly fontSize: number;
-}): JSX.Element {
+}): React.JSX.Element {
   const percentage = Math.round((value / max) * 100);
   const normalizedPercentage = Math.min(percentage, 100);
   /*
@@ -82,7 +82,7 @@ function Circle({
   ...props
 }: React.SVGProps<SVGCircleElement> & {
   readonly radius: number;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <circle
       cx={radius}

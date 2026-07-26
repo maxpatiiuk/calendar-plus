@@ -21,7 +21,7 @@ export function DoughnutChart({
   durations,
 }: {
   readonly durations: EventsStore | undefined;
-}): JSX.Element | null {
+}): React.JSX.Element | null {
   const calendars = React.useContext(CalendarsContext);
 
   /**

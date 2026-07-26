@@ -21,7 +21,7 @@ export function PreferencesPage({
   onClose: handleClose,
 }: {
   readonly onClose: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const [_, setPreferences] = React.useContext(PreferencesContext);
   const [isImporting, handleImport, handleImported] = useBooleanState();
 
@@ -138,7 +138,7 @@ function Item({
   readonly categoryName: string;
   readonly itemName: string;
   readonly definition: PreferenceItem<unknown>;
-}): JSX.Element {
+}): React.JSX.Element {
   const [value, setValue] = usePref(categoryName, itemName as never);
   return definition.renderer({ value, onChange: setValue, definition });
 }
@@ -147,7 +147,7 @@ function Import({
   onCancel: handleCancel,
 }: {
   readonly onCancel: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <>
       <PageHeader label={commonText('preferences')}>
@@ -184,7 +184,7 @@ export function ResetToDefaultButton({
   onClick: handleClick,
 }: {
   readonly onClick: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const [confirmResetToDefault, setConfirmResetToDefault] =
     React.useState(false);
   return (

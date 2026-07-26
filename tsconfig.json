@@ -1,35 +1,18 @@
 {
-  /* File Inclusion */
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
+  "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
-    /* Basic Options */
-    "isolatedModules": true,
-    "jsx": "react",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "es2022",
-    "noEmit": true,
-    "sourceMap": true,
-    "target": "ESNext",
-    "allowJs": true,
-    "checkJs": false,
-    /**/
-    /* Strict Checks */
-    "strict": true,
-    /**/
-    /* Module Resolution */
-    "esModuleInterop": true,
-    "moduleResolution": "Bundler",
-    /**/
-    /* Linter Checks */
-    "noFallthroughCasesInSwitch": true,
+    "allowUnreachableCode": false,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    /**/
-    /* Advanced */
-    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "lib": ["dom", "esnext"],
     "skipLibCheck": true
   }
 }

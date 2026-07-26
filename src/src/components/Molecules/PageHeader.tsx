@@ -11,7 +11,7 @@ export function PageHeader({
 }: {
   readonly label: string;
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="flex gap-2">
       <H2>{label}</H2>

@@ -40,12 +40,8 @@ Editing the layout
 
 ## Local Installation
 
-1. Pre-requisites:
-
-   ```text
-   Node.js 18
-   Npm 8
-   ```
+1. See the `engines` field in [package.json](./package.json) for the currently
+   supported Node.js version.
 
 2. Complete installation steps in [./backend](./backend/)
 

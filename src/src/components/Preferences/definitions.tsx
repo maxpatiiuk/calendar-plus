@@ -2,6 +2,8 @@
  * Definitions for User Interface preferences
  */
 
+import type React from 'react';
+
 import { commonText } from '../../localization/common';
 import { preferencesText } from '../../localization/preferences';
 import type { IR } from '../../utils/types';
@@ -17,8 +19,8 @@ import { BooleanPref, pickListPref, rangePref } from './Renderers';
  * https://firefox-source-docs.mozilla.org/toolkit/components/featuregates/featuregates/
  */
 export type PreferenceItem<VALUE> = {
-  readonly title: JSX.Element | string;
-  readonly description?: JSX.Element | string;
+  readonly title: React.JSX.Element | string;
+  readonly description?: React.JSX.Element | string;
   readonly defaultValue: VALUE;
   readonly renderer: PreferenceRenderer<VALUE>;
 };
@@ -28,7 +30,7 @@ export type PreferenceRenderer<VALUE> = (props: {
   readonly definition: PreferenceItem<VALUE>;
   readonly value: VALUE;
   readonly onChange: (value: VALUE) => void;
-}) => JSX.Element;
+}) => React.JSX.Element;
 
 /**
  * This is used to enforce the same generic value be used inside a PreferenceItem

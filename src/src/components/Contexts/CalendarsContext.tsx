@@ -33,7 +33,7 @@ export function CalendarsSpy({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   /*
    * Cache the list of visible calendars so that we can use it if the side menu
    * is collapsed

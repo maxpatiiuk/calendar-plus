@@ -14,7 +14,7 @@ export function FilePicker({
 }: {
   readonly onSelected: (file: File) => void;
   readonly acceptedFormats: RA<string> | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [isDragging, setIsDragging] = React.useState<boolean>(false);
   const filePickerButton = React.useRef<HTMLButtonElement>(null);
 

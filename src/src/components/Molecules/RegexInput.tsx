@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { useValidation } from '../../hooks/useValidation';
 import { Input } from '../Atoms';
 
@@ -10,7 +12,7 @@ export function RegexInput({
 }: {
   readonly value: string;
   readonly onChange: (value: string) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const { validationRef, setValidation } = useValidation();
   return (
     <Input.Text

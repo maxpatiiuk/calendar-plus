@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { commonText } from '../../localization/common';
 import type { GetSet, RA } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';
@@ -18,7 +20,7 @@ export function GoalsEditor({
   readonly goals: GetSet<RA<Goal>>;
   readonly currentView: SupportedView;
   readonly calendars: RA<CalendarListEntry>;
-}): JSX.Element {
+}): React.JSX.Element {
   const virtualCalendars = useVirtualCalendars();
   return (
     <>

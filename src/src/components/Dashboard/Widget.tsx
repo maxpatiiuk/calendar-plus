@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { commonText } from '../../localization/common';
 import type { RR } from '../../utils/types';
 import { ensure } from '../../utils/types';
@@ -24,7 +26,7 @@ const widgets = ensure<
       readonly label: string;
       readonly definition: WidgetDefinition['definition'];
       readonly durations: EventsStore | undefined;
-    }) => JSX.Element | null
+    }) => React.JSX.Element | null
   >
 >()({
   DoughnutChart,
@@ -54,7 +56,7 @@ export function WidgetContent({
 }: {
   readonly definition: WidgetDefinition['definition'];
   readonly durations: EventsStore | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const WidgetComponent = widgets[type] ?? widgets.Unknown;
   return (
     <div className="h-full p-4">
@@ -71,7 +73,7 @@ export function AddWidgetButton({
   onClick: handleClick,
 }: {
   readonly onClick: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <Button.Blue
       aria-label={commonText('addWidget')}

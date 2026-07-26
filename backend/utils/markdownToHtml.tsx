@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { githubRepository } from '../const/siteConfig';
 import { marked } from 'marked';
 import fs from 'node:fs/promises';
@@ -7,18 +9,19 @@ import 'github-markdown-css';
 // Make relative URLs be relative to the GitHub repository
 marked.use({
   renderer: {
-    image(href, title, text) {
+    image({ href, title, text }) {
       const url = new URL(
         href,
         `https://github.com/${githubRepository}/raw/main/`,
       );
       return `<img src="${url}" alt="${text}" title="${title}">`;
     },
-    link(href, title, text) {
+    link({ href, title, tokens }) {
       const url = new URL(
         href,
         `https://github.com/${githubRepository}/tree/main/`,
       );
+      const text = this.parser.parseInline(tokens);
       return `<a href="${url}" title="${title}">${text}</a>`;
     },
   },
@@ -29,7 +32,7 @@ export async function markdownToHtml(path: string): Promise<string> {
   return await marked(content, { gfm: true, breaks: false });
 }
 
-export async function markdownToJsx(path: string): Promise<JSX.Element> {
+export async function markdownToJsx(path: string): Promise<React.JSX.Element> {
   const content = await markdownToHtml(path);
   return (
     <div

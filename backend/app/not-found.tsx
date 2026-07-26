@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { localization } from '../const/localization';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-export default function NotFound(): JSX.Element {
+export default function NotFound(): React.JSX.Element {
   return <h1>{localization.notFound}</h1>;
 }
 

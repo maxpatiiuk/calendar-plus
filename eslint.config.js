@@ -16,7 +16,10 @@ export default [
       // TODO: address all of these
       '@typescript-eslint/naming-convention': 'warn',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/explicit-function-return-type': [
+        'warn',
+        { allowExpressions: true },
+      ],
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',

@@ -2,10 +2,8 @@ import React from 'react';
 
 import type { IR, RR } from '../../utils/types';
 
-type RawTagProps<TAG extends keyof React.ReactHTML> = Exclude<
-  Parameters<React.ReactHTML[TAG]>[0],
-  null | undefined
->;
+type HtmlTag = keyof React.JSX.IntrinsicElements;
+type RawTagProps<TAG extends HtmlTag> = React.ComponentPropsWithRef<TAG>;
 
 /**
  * Forbid using regular "ref" since it needs to be forwarded
@@ -14,21 +12,13 @@ type RawTagProps<TAG extends keyof React.ReactHTML> = Exclude<
  * Instead, provide ref as a forwardRef. This does not change the runtime
  * behaviour
  */
-export type TagProps<TAG extends keyof React.ReactHTML> = Omit<
-  RawTagProps<TAG>,
-  'ref'
-> & {
+export type TagProps<TAG extends HtmlTag> = Omit<RawTagProps<TAG>, 'ref'> & {
   readonly ref?: 'Use "forwardRef" instead or "ref"';
   readonly forwardRef?: RawTagProps<TAG>['ref'];
 };
 
-export type HtmlElementFromTagName<TAG extends keyof React.ReactHTML> =
-  React.ReactHTML[TAG] extends React.DetailedHTMLFactory<
-    React.AnchorHTMLAttributes<infer X>,
-    infer X
-  >
-    ? X
-    : never;
+export type HtmlElementFromTagName<TAG extends HtmlTag> =
+  React.ComponentRef<TAG>;
 
 /**
  * Add default className and props to common HTML elements in a type-safe way
@@ -36,7 +26,7 @@ export type HtmlElementFromTagName<TAG extends keyof React.ReactHTML> =
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function wrap<
-  TAG extends keyof React.ReactHTML,
+  TAG extends HtmlTag,
   /*
    * Allows to define extra props that should be passed to the wrapped component
    * For example, can make some optional props be required, forbid passing
@@ -54,7 +44,7 @@ export function wrap<
 ) {
   const wrapped = (
     props: Readonly<EXTRA_PROPS> & TagProps<TAG>,
-  ): JSX.Element => {
+  ): React.JSX.Element => {
     // Merge classNames
     const fullClassName =
       typeof props?.className === 'string'

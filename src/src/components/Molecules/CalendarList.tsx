@@ -18,7 +18,7 @@ export function CalendarList({
   readonly value: string;
   readonly calendars: RA<CalendarListEntry>;
   readonly onChange: (id: string) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <Select
       aria-label={commonText('calendar')}
@@ -49,7 +49,7 @@ export function VirtualCalendarsList({
   readonly calendarId: string;
   readonly virtualCalendars: RA<VirtualCalendar>;
   readonly onChange: (name: string | undefined) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const categories = React.useMemo(
     () =>
       f

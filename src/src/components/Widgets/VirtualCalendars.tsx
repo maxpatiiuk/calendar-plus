@@ -27,7 +27,7 @@ export function VirtualCalendars({
   label,
 }: {
   readonly label: string;
-}): JSX.Element {
+}): React.JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
   const [virtualCalendars, setVirtualCalendars] =
     useStorage('virtualCalendars');
@@ -126,7 +126,7 @@ function Calendars({
 }: {
   readonly virtualCalendars: RA<VirtualCalendar>;
   readonly calendars: RA<CalendarListEntry>;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <Table>
       {virtualCalendars.map(
@@ -155,7 +155,7 @@ function Table({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <table
       className={`
@@ -194,7 +194,7 @@ function EditableCalendarList({
   readonly virtualCalendars: RA<VirtualCalendar>;
   readonly calendars: RA<CalendarListEntry>;
   readonly onChange: (virtualCalendars: RA<VirtualCalendar>) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const categories = React.useMemo(
     () =>
       Object.fromEntries(

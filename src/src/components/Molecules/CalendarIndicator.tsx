@@ -7,7 +7,7 @@ export function CalendarIndicator({
   color,
 }: {
   readonly color: string;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div
       aria-hidden

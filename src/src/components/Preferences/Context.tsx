@@ -18,7 +18,7 @@ export function PreferencesProvider({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   const preferences = useStorage('preferences');
   const nonNullPreferences =
     preferences[0] === undefined

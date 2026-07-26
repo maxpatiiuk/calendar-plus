@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { commonText } from '../../localization/common';
 import { Label, Select } from '../Atoms';
 import type { WidgetDefinition } from './index';
@@ -14,7 +16,7 @@ export function WidgetEditor({
 }: {
   readonly definition: WidgetDefinition['definition'];
   readonly onEdit: (newWidget: WidgetDefinition['definition']) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="p-8">
       <Label.Block>

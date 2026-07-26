@@ -33,7 +33,7 @@ export function AuthenticationProvider({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   const [token, setToken] = useStorage('token');
   const [refreshToken, setRefreshToken] = useStorage('refreshToken');
 

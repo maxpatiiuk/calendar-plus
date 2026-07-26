@@ -2,6 +2,8 @@
  * Components used to render individual preference items
  */
 
+import type React from 'react';
+
 import type { RA } from '../../utils/types';
 import { Input, Select } from '../Atoms';
 import type { PreferenceRenderer } from './definitions';
@@ -9,7 +11,7 @@ import type { PreferenceRenderer } from './definitions';
 export const BooleanPref: PreferenceRenderer<boolean> = ({
   value,
   onChange: handleChange,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <span>
     <Input.Checkbox checked={value} onValueChange={handleChange} />
   </span>
@@ -26,7 +28,7 @@ export const pickListPref = <T extends string>(
   function PickListPref({
     value,
     onChange: handleChange,
-  }: Parameters<PreferenceRenderer<T>>[0]): JSX.Element {
+  }: Parameters<PreferenceRenderer<T>>[0]): React.JSX.Element {
     return (
       <Select
         value={value}
@@ -57,7 +59,7 @@ export const rangePref = ({
   function RangePref({
     value,
     onChange: handleChange,
-  }: Parameters<PreferenceRenderer<number>>[0]): JSX.Element {
+  }: Parameters<PreferenceRenderer<number>>[0]): React.JSX.Element {
     return (
       <Input.Generic
         className="p-0"

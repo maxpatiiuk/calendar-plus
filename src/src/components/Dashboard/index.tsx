@@ -25,7 +25,7 @@ export function Dashboard({
 }: {
   readonly durations: EventsStore | undefined;
   readonly onOpenPreferences: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const [isEditing, _, __, handleToggle] = useBooleanState();
 
   const [layout = [], setLayout] = useStorage('layout');

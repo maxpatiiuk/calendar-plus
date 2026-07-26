@@ -100,12 +100,14 @@ export const Input = {
     value,
     onValueChange: handleValueChange,
     width = 'w-full',
+    forwardRef,
+    ref: _,
     ...props
   }: Omit<TagProps<'input'>, 'children' | 'readOnly' | 'type'> & {
     readonly isReadOnly?: boolean;
     readonly onValueChange?: (value: number) => void;
     readonly width?: string;
-  }): JSX.Element {
+  }): React.JSX.Element {
     const [hasValue, setHasValue] = React.useState(true);
     React.useEffect(() => setHasValue(true), [value]);
     return (
@@ -113,6 +115,7 @@ export const Input = {
         {...props}
         className={`${width} ${className.googleButton} ${classList ?? ''}`}
         readOnly={isReadOnly}
+        ref={forwardRef}
         type="number"
         value={hasValue ? value : ''}
         onChange={(event): void => {

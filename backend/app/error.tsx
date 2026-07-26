@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { localization } from '../const/localization';
 
-export default function Error({ error }: { error: Error }): JSX.Element {
+export default function Error({ error }: { error: Error }): React.JSX.Element {
   return <h1>{String(error)}</h1>;
 }
 

@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { removeItem } from '../../utils/utils';
@@ -13,7 +15,7 @@ export function GhostedEvents({
   label,
 }: {
   readonly label: string;
-}): JSX.Element {
+}): React.JSX.Element {
   const [ghostedEvents, setGhostedEvents] = useStorage('ghostEvents');
   const [ghostEventShortcut] = usePref('feature', 'ghostEventShortcut');
   const isEmpty = (ghostedEvents?.length ?? 0) === 0;

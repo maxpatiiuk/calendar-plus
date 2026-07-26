@@ -4,6 +4,8 @@
  * @module
  */
 
+import type React from 'react';
+
 import { camelToHuman } from '../utils/utils';
 import type { IR, RA, RR } from '../utils/types';
 import { isFunction } from '../utils/types';
@@ -20,7 +22,7 @@ export const LANGUAGE: Language =
     ? document.documentElement.lang
     : undefined) ?? DEFAULT_LANGUAGE;
 
-type Line = JSX.Element | string;
+type Line = React.JSX.Element | string;
 export type Value =
   RR<Language, (...args: RA<never>) => Line> | RR<Language, Line>;
 type GetValueType<VALUE extends Value> =

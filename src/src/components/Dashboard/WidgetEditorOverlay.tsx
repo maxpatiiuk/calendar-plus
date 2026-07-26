@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import type { BreakPoint } from './useBreakpoint';
 import type { WidgetDefinition } from './index';
 import { widgetGridColumnSizes } from './definitions';
@@ -24,7 +26,7 @@ export function WidgetEditorOverlay({
   readonly breakpoint: BreakPoint;
   readonly widget: WidgetDefinition;
   readonly onEdit: (newWidget: WidgetDefinition | undefined) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const colSpan = widget.colSpan[breakpoint];
   const rowSpan = widget.rowSpan[breakpoint];
   const maxCols = widgetGridColumnSizes[breakpoint];

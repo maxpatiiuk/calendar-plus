@@ -18,14 +18,14 @@ export function WidgetContainer({
   getTsvExport,
 }: {
   readonly header: string;
-  readonly buttons?: JSX.Element;
+  readonly buttons?: React.JSX.Element;
   readonly children: React.ReactNode;
   readonly className?: string;
   readonly editing?: GetSet<boolean>;
   readonly getJsonExport: (() => RA<unknown>) | undefined;
   readonly getTsvExport:
     (() => RA<IR<number | string | undefined>>) | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [exportFormat] = usePref('export', 'format');
   return (
     <div className="flex h-full flex-col gap-2">

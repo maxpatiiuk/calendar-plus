@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { baseUrl, robots, twitter } from '../const/siteConfig';
-import { Metadata, Viewport } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { localization } from '../const/localization';
 
 export default function RootLayout({
   children,
 }: {
   readonly children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <html lang="en-US">
       <body style={{ minHeight: '100vh', margin: 0, background: 'black' }}>
