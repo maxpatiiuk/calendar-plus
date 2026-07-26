@@ -1,4 +1,4 @@
-import { GetOrSet } from '../utils/types';
+import type { GetOrSet } from '../utils/types';
 import React from 'react';
 import { LoadingContext } from '../components/Contexts/Contexts';
 import { output } from '../components/Errors/exceptions';

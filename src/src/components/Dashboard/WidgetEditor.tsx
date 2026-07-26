@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { commonText } from '../../localization/common';
 import { Label, Select } from '../Atoms';
 import type { WidgetDefinition } from './index';

@@ -4,8 +4,6 @@
  * All icons have the "solid" style as it is better for small icons
  */
 
-import React from 'react';
-
 export const iconClassName = 'w-6 h-6 flex-shrink-0';
 
 /**

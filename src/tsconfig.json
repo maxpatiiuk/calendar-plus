@@ -2,6 +2,14 @@
   "include": ["**/*.ts", "**/*.tsx"],
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "chrome", "gapi", "gapi.client", "gapi.calendar"]
+    "jsx": "react-jsx",
+    "types": [
+      "node",
+      "chrome",
+      "gapi",
+      "gapi.client",
+      "gapi.calendar",
+      "vite/client"
+    ]
   }
 }

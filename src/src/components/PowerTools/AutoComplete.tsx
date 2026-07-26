@@ -9,7 +9,7 @@ import type { CalendarListEntry } from '../Contexts/CalendarsContext';
 import { CalendarsContext } from '../Contexts/CalendarsContext';
 import type { MatchRule, VirtualCalendar } from '../Widgets/VirtualCalendars';
 import { matchRules } from '../Widgets/VirtualCalendars';
-import { Synonym } from '../Widgets/Synonyms';
+import type { Synonym } from '../Widgets/Synonyms';
 import { output } from '../Errors/exceptions';
 import { usePref } from '../Preferences/usePref';
 import { domParsedEvents } from '../EventsStore';

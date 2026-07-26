@@ -1,4 +1,3 @@
-import React from 'react';
 import { App } from '../App';
 import { mount } from '../../../tests/reactUtils';
 import { commonText } from '../../../localization/common';

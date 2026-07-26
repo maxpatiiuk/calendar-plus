@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { commonText } from '../../localization/common';
 import type { RR } from '../../utils/types';
 import { ensure } from '../../utils/types';

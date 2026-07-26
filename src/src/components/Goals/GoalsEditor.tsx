@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { commonText } from '../../localization/common';
 import type { GetSet, RA } from '../../utils/types';
 import { removeItem, replaceItem } from '../../utils/utils';

@@ -10,7 +10,7 @@
     "build": "vite build --config src/vite.config.ts",
     "watch": "vite build --config src/vite.config.ts --mode development --watch",
     "test": "npm run typeCheck && npm run unitTests",
-    "typeCheck": "tsc --project src",
+    "typeCheck": "node node_modules/typescript-7/bin/tsc --project src",
     "unitTests": "vitest run --config src/vite.config.ts",
     "unitTests:watch": "vitest --config src/vite.config.ts",
     "postinstall": "husky"
@@ -43,7 +43,8 @@
     "prettier": "^3.8.1",
     "react-devtools": "^5.0.2",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.4.5",
+    "typescript": "~6.0.3",
+    "typescript-7": "npm:typescript@^7.0.2",
     "vite": "^8.1.5",
     "vitest": "^4.1.10"
   },

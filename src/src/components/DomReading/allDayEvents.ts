@@ -1,5 +1,5 @@
 import { extractCalendarId, notEvent } from './index';
-import { ParsedDomEvent } from './types';
+import type { ParsedDomEvent } from './types';
 
 export function parseAllDayEventNode(
   allDayEvent: HTMLElement,

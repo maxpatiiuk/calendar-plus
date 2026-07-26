@@ -1,4 +1,4 @@
-import { GetOrSet } from '../utils/types';
+import type { GetOrSet } from '../utils/types';
 import React from 'react';
 
 /**

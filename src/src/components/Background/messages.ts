@@ -2,7 +2,7 @@
  * Message passing utils. Used both by the content and background scripts
  */
 
-import { State } from 'typesafe-reducer';
+import type { State } from 'typesafe-reducer';
 import { output } from '../Errors/exceptions';
 
 type Authenticate = State<

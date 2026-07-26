@@ -3,6 +3,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "incremental": true,
+    "tsBuildInfoFile": ".next/cache/tsconfig.tsbuildinfo",
     "jsx": "preserve",
     "plugins": [
       {

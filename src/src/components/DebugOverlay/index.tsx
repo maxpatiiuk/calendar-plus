@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { sendRequest } from '../Background/messages';
 import { output } from '../Errors/exceptions';
 

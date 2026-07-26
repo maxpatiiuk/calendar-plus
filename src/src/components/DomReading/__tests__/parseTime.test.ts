@@ -2,7 +2,7 @@ import fs from 'fs';
 import languageUrls from './fixtures/languages.json';
 import { join } from 'node:path/posix';
 import { getLanguageData, rawDomEventToParsed } from '../parseTime';
-import { ParsedDomEvent, RawDomEvent } from '../types';
+import type { ParsedDomEvent, RawDomEvent } from '../types';
 import inspector from 'inspector';
 import { describe, expect, test } from 'vitest';
 

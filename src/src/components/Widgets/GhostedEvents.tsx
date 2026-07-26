@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useStorage } from '../../hooks/useStorage';
 import { commonText } from '../../localization/common';
 import { removeItem } from '../../utils/utils';

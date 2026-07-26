@@ -11,7 +11,6 @@ function createBuild(
   emptyOutDir: boolean,
 ): BuildEnvironmentOptions {
   return {
-    target: 'es2024',
     outDir: 'dist',
     emptyOutDir,
     sourcemap: true,

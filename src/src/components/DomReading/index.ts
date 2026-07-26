@@ -1,10 +1,10 @@
-import { RA } from '../../utils/types';
-import { SupportedView } from '../Contexts/CurrentViewContext';
+import type { RA } from '../../utils/types';
+import type { SupportedView } from '../Contexts/CurrentViewContext';
 import { devMode } from '../Contexts/devMode';
 import { getDatesBetween } from '../EventsStore';
 import { parseAllDayEventNode } from './allDayEvents';
 import { rawDomEventToParsed, getLanguageData } from './parseTime';
-import { ParsedDomEvent, type RawDomEvent } from './types';
+import type { ParsedDomEvent, RawDomEvent } from './types';
 import { validateParseResult } from './validate';
 
 /**

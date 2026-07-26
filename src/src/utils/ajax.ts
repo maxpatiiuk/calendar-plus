@@ -1,4 +1,4 @@
-import { IR, RA } from './types';
+import type { IR, RA } from './types';
 import { unsafeGetAuth } from '../components/Contexts/AuthContext';
 import { output } from '../components/Errors/exceptions';
 

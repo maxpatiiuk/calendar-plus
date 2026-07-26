@@ -1,9 +1,8 @@
-import { BreakPoint } from './useBreakpoint';
-import { WidgetDefinition } from './index';
+import type { BreakPoint } from './useBreakpoint';
+import type { WidgetDefinition } from './index';
 import { widgetGridColumnSizes } from './definitions';
 import { commonText } from '../../localization/common';
 import { icons } from '../Atoms/Icon';
-import React from 'react';
 import { WidgetEditor } from './WidgetEditor';
 
 const buttonCommon = `

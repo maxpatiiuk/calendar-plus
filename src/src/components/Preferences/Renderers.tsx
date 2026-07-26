@@ -2,8 +2,6 @@
  * Components used to render individual preference items
  */
 
-import React from 'react';
-
 import type { RA } from '../../utils/types';
 import { Input, Select } from '../Atoms';
 import type { PreferenceRenderer } from './definitions';

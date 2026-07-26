@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useValidation } from '../../hooks/useValidation';
 import { Input } from '../Atoms';
 

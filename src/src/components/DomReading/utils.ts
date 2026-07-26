@@ -1,4 +1,4 @@
-import { RA } from '../../utils/types';
+import type { RA } from '../../utils/types';
 
 // REFACTOR: replace with Array.prototype.toSpliced once widely available
 export function toSpliced<T>(

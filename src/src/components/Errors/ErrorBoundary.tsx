@@ -36,11 +36,11 @@ export class ErrorBoundary extends React.Component<
   },
   ErrorBoundaryState
 > {
-  public readonly state: ErrorBoundaryState = {
+  public override readonly state: ErrorBoundaryState = {
     type: 'Main',
   };
 
-  public componentDidCatch(
+  public override componentDidCatch(
     error: Error,
     errorInfo: { readonly componentStack: string },
   ): void {
@@ -52,7 +52,7 @@ export class ErrorBoundary extends React.Component<
     });
   }
 
-  public render(): React.ReactNode {
+  public override render(): React.ReactNode {
     if (
       (this.state.type === 'Error' &&
         this.props.silentErrors === true &&

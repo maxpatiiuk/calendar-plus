@@ -20,7 +20,7 @@ import { ruleMatchers, useVirtualCalendars } from '../PowerTools/AutoComplete';
 import { usePref } from '../Preferences/usePref';
 import { parseEventsFromDom } from '../DomReading';
 import { output } from '../Errors/exceptions';
-import { CurrentView } from '../Contexts/CurrentViewContext';
+import type { CurrentView } from '../Contexts/CurrentViewContext';
 import { useDomMutation } from '../DomReading/useDomMutation';
 import { devMode } from '../Contexts/devMode';
 import type { ParsedDomEvent } from '../DomReading/types';

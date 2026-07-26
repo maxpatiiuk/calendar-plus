@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { commonText } from '../../localization/common';
 import { Input } from '../Atoms';
 import { MINUTES_IN_HOUR } from '../Atoms/Internationalization';

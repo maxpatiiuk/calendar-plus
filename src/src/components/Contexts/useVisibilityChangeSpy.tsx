@@ -1,12 +1,10 @@
 import React from 'react';
 import { listen } from '../../utils/events';
-import { GetSet, RA, isDefined } from '../../utils/types';
+import type { GetSet, RA } from '../../utils/types';
+import { isDefined } from '../../utils/types';
 import { debounce } from '../../utils/utils';
-import {
-  CalendarsContext,
-  awaitElement,
-  CalendarListEntry,
-} from './CalendarsContext';
+import type { CalendarListEntry } from './CalendarsContext';
+import { CalendarsContext, awaitElement } from './CalendarsContext';
 import { output } from '../Errors/exceptions';
 import { SECOND } from '../Atoms/Internationalization';
 import { CurrentViewContext } from './CurrentViewContext';
